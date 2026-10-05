@@ -62,12 +62,27 @@ author: TheVoidSyntax
 
 ## 🎯 QUICK START
 
+### Claude Code Commands
 ```bash
 /auto-router                    # Auto-detect and route
 /auto-router --new             # New project wizard
 /auto-router --analyze         # Analyze existing project
 /auto-router --phase 3         # Continue Phase 3
 /auto-router --status          # Show project status
+```
+
+### Standalone CLI
+```bash
+npx tsx _system/auto-router/cli.ts --smart   # Smart Dashboard
+npx tsx _system/auto-router/cli.ts --new      # New project
+npx tsx _system/auto-router/cli.ts --analyze   # Analyze project
+npx tsx _system/auto-router/cli.ts --status    # Project status
+```
+
+### Install as Global CLI
+```bash
+npm install -g auto-router
+auto-router --smart           # Run from anywhere
 ```
 
 ---
@@ -384,12 +399,12 @@ Add to `.claudeignore`:
 
 ## ✨ SMART TERMINAL INTERFACE
 
-Auto-router now features a **Smart Terminal UI** with rich colors, progress bars, and interactive selection.
+Auto-router features a **Smart Terminal UI** with rich colors, progress bars, and interactive selection.
 
 ### Commands
 ```bash
-/auto-router --smart      # Show Smart Dashboard
-/auto-router --tui        # Terminal UI Mode
+/auto-router --smart      # Show Smart Dashboard (Claude Code)
+/auto-router --status     # Show project status
 ```
 
 ### Smart Dashboard Preview

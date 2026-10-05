@@ -1,0 +1,31 @@
+{
+  "name": "auto-router",
+  "version": "6.0.0",
+  "description": "Smart Project Intelligence CLI Tool",
+  "main": "cli.ts",
+  "type": "module",
+  "bin": {
+    "auto-router": "./cli.ts"
+  },
+  "scripts": {
+    "start": "tsx cli.ts",
+    "smart": "tsx cli.ts --smart",
+    "help": "tsx cli.ts --help"
+  },
+  "keywords": [
+    "claude",
+    "skill",
+    "router",
+    "project",
+    "intelligence"
+  ],
+  "author": "TheVoidSyntax",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "tsx": "^4.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
