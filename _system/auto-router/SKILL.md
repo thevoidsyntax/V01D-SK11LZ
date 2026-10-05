@@ -382,5 +382,55 @@ Add to `.claudeignore`:
 
 ---
 
+## ✨ SMART TERMINAL INTERFACE
+
+Auto-router now features a **Smart Terminal UI** with rich colors, progress bars, and interactive selection.
+
+### Commands
+```bash
+/auto-router --smart      # Show Smart Dashboard
+/auto-router --tui        # Terminal UI Mode
+```
+
+### Smart Dashboard Preview
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  🚀 AUTO-ROUTER v6.0 ✨ SMART PROJECT INTELLIGENCE              ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║  📁 my-api  │  🎯 Phase 2  │  📊 MVP                            ║
+║  Tech: Fastify + PostgreSQL + Redis                               ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║  Intent: CREATE  │  Confidence: 🏆 HIGH                           ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║  ✅ KEYWORD-MATCHED (Auto-invoked)                               ║
+║  ✅ /security        ████████████████████░░░░  85%  HIGH          ║
+║  ✅ /identity        ██████████████░░░░░░░░░  60%  HIGH          ║
+║  ⭐ RECOMMENDED                                                  ║
+║  [ ] /api-design      ██████████░░░░░░░░░░░░  45%  MED          ║
+║  [ ] /database        ████████░░░░░░░░░░░░░░░  40%  MED          ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║  [1-5] Select  │  [Enter] Continue  │  [Q] Quit                   ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+### Smart Actions Menu
+```
+╔══════════════════════════════════════════╗
+║  🧠 SMART ACTIONS                       ║
+╠══════════════════════════════════════════╣
+║  [1] 🚀 New Project   - Start new    ║
+║  [2] 📊 Analyze      - Scan project  ║
+║  [3] ✨ Workflow     - Templates     ║
+║  [4] ⚙️ Settings   - Configure     ║
+╚══════════════════════════════════════════╝
+```
+
+### Related Files
+| File | Purpose |
+|------|---------|
+| `smart-ui.ts` | Rich terminal UI components |
+
+---
+
 *Version: 6.0.0 | Author: TheVoidSyntax*
-*Features: Intent Detection | Confidence Scoring | Learning System | Pattern Recognition*
+*Features: Intent Detection | Confidence Scoring | Learning System | Pattern Recognition | Smart Terminal UI*
