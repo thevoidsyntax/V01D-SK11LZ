@@ -2,10 +2,49 @@
 name: testing
 description: "Testing strategy best practices including unit, integration, E2E, mutation, property-based, and visual testing."
 version: "1.1.0"
-priority: low
+priority: high
 phase: any
-source: merged (local + Jeffallan/claude-skills:test-master)
+category: [ai-process]
+tech_stack:
+  languages: [typescript, javascript, python, go, java]
+scale: [all]
+auto_invoke:
+  enabled: true
+  conditions:
+    - has_file: "**/tests/**"
+      reason: "Test directory detected"
+    - has_file: "**/*.test.ts"
+      reason: "Test files detected"
+    - has_file: "**/__tests__/**"
+      reason: "Test directory detected"
+  skill_tier: context
+triggers:
+  phrases:
+    - "test"
+    - "testing"
+    - "unit test"
+    - "integration test"
+    - "e2e"
+    - "end to end"
+    - "vitest"
+    - "jest"
+    - "playwright"
+    - "cypress"
+    - "coverage"
+    - "tdd"
+    - "bdd"
+    - "mutation"
+capabilities: [implementation, analysis, review]
+quality:
+  rules_count: 25
+  examples_count: 40
+  stability: stable
+integrates_with: [auto-route, ai-process, diagnosing-bugs]
 dependencies: [fullstack-guardian, diagnosing-bugs]
+source:
+  origin: merged
+  sources: ["Jeffallan/claude-skills:test-master"]
+author: Claude
 ---
 
 # TESTING MODULE

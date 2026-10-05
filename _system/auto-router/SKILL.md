@@ -1,541 +1,566 @@
 ---
 name: auto-router
-version: 5.2.0
-description: "Supercharged intelligent project analyzer and skill router with auto-detection, dynamic skills discovery, skip-implemented, dependency resolution, phase awareness, and implementation automation"
+version: "6.0.0"
+description: "Ultimate intelligent project router with keyword detection, state persistence, phase auto-tracking, and comprehensive skill automation"
 priority: critical
 phase: any
-auto_invoke: true
-core: true
+category: [process]
+tech_stack:
+  languages: [all]
+scale: [all]
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: "/auto-router"
+      reason: "Primary entry point"
+    - command: "/auto-route"
+      reason: "Primary entry point (alias)"
+    - command: "/autoroute"
+      reason: "Primary entry point (no dash)"
+    - phrase: ["project baru", "new project", "create project", "init project"]
+      reason: "New project intent detected"
+    - phrase: ["analyze", "audit", "scan project"]
+      reason: "Analysis intent detected"
+    - phrase: ["recommend", "suggest", "skill"]
+      reason: "Recommendation intent detected"
+integrates_with:
+  - project-init
+  - analyze-project
+  - workflow-authoring
+capabilities:
+  - discovery
+  - implementation
+  - analysis
+quality:
+  rules_count: 50
+  examples_count: 20
+  stability: stable
+source:
+  origin: local
+author: TheVoidSyntax
 ---
 
-# 🚀 AUTO-ROUTER v5.2
+# 🚀 AUTO-ROUTER v6.0 - ULTIMATE PROJECT INTELLIGENCE
 
-**Single entry point for all project operations.**
+**The single command to rule them all.**
 
-Intelligent project analyzer that:
-1. **Detects** project state (new/partial/existing)
-2. **Discovers** skills dynamically from ~/.claude/skills/
-3. **Analyzes** existing projects for tech stack and gaps
-4. **Routes** to appropriate skills automatically
-5. **Filters** already-implemented features
-6. **Improves** project quality with recommendations
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    🚀 AUTO-ROUTER v6.0 ULTIMATE                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   ██████╗  ██████╗  ██████╗ ████████╗ ██████╗  ██████╗ ██╗     ███████╗  │
+│   ██╔══██╗██╔═══██╗██╔═══██╗╚══██╔══╝██╔═══██╗██╔═══██╗██║     ██╔════╝  │
+│   ██████╔╝██║   ██║██║   ██║   ██║   ██║   ██║██║   ██║██║     █████╗    │
+│   ██╔═══╝ ██║   ██║██║   ██║   ██║   ██║   ██║██║   ██║██║     ██╔══╝    │
+│   ██║     ╚██████╔╝╚██████╔╝   ██║   ╚██████╔╝╚██████╔╝███████╗███████╗  │
+│   ╚═╝      ╚═════╝  ╚═════╝    ╚═╝    ╚═════╝  ╚═════╝ ╚══════╝╚══════╝  │
+│                                                                             │
+│   ███████╗███████╗ ██████╗ █████╗ ██████╗ ███████╗                         │
+│   ██╔════╝██╔════╝██╔════╝██╔══██╗██╔══██╗██╔════╝                         │
+│   █████╗  ███████╗██║     ███████║██████╔╝█████╗                           │
+│   ██╔══╝  ╚════██║██║     ██╔══██║██╔═══╝ ██╔══╝                           │
+│   ███████╗███████║╚██████╗██║  ██║██║     ███████╗                         │
+│   ╚══════╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝     ╚══════╝                         │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
-## 🎯 USAGE
+## 🎯 QUICK START
+
+```bash
+# Primary command - works everywhere
+/auto-router
+
+# Aliases
+/auto-route
+/autoroute
+
+# Specific modes
+/auto-router --new                    # New project
+/auto-router --analyze                # Analyze existing
+/auto-router --phase 3                # Continue Phase 3
+/auto-router --skills=api-design       # Specific skills
+```
+
+---
+
+## 🔥 NEW IN v6.0
+
+### ✨ Keyword Detection Engine
+Skills now auto-activate based on **what you say**, not just what files exist:
 
 ```
-/auto-router                           # Auto-detect and route
-/auto-router --new                     # Force new project mode
-/auto-router --analyze                 # Analyze existing project
-/auto-router --phase [N]              # Continue from Phase N
-/auto-router --skills=skill1,skill2   # Select specific skills
-/auto-router --quick                   # Quick scan mode
-/auto-router --deep                   # Deep analysis mode
-/auto-router --workflow=TEMPLATE       # Use workflow template
+User: "I need to add JWT authentication"
+     ↓
+auto-router detects: ['auth', 'jwt', 'login']
+     ↓
+Auto-invokes: /security, /identity
 ```
+
+### 💾 State Persistence
+Your project state now persists across sessions:
+- Track completed phases
+- Remember invoked skills
+- Resume where you left off
+
+### 🔄 Phase Auto-Tracking
+When you complete a phase:
+```
+/auto-router --phase-complete 3
+     ↓
+Updates CLAUDE.md automatically
+Marks Phase 3 as ✅ DONE
+```
+
+---
+
+## 📋 COMMAND REFERENCE
+
+### Core Commands
+
+| Command | Description |
+|---------|-------------|
+| `/auto-router` | Auto-detect and route |
+| `/auto-router --new` | Create new project |
+| `/auto-router --analyze` | Analyze existing project |
+| `/auto-router --phase [N]` | Continue Phase N |
+| `/auto-router --skills=s1,s2` | Activate specific skills |
+
+### Advanced Commands
+
+| Command | Description |
+|---------|-------------|
+| `--quick` | Fast scan mode |
+| `--deep` | Deep analysis mode |
+| `--auto-fix` | Auto-fix issues |
+| `--workflow=NAME` | Run workflow template |
+| `--status` | Show project status |
+| `--recommend` | Get recommendations |
+
+### Phase Commands
+
+| Command | Description |
+|---------|-------------|
+| `--phase-complete [N]` | Mark Phase N done |
+| `--phase-progress [N]` | Mark Phase N in progress |
+| `--phase-next` | Move to next phase |
+
+---
+
+## 🧠 KEYWORD DETECTION SYSTEM
+
+### How It Works
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│  INPUT: "I need to add JWT authentication to my API"         │
+│                                                                │
+│  ↓ KEYWORD EXTRACTION                                         │
+│                                                                │
+│  Detected keywords:                                            │
+│  • auth          (score: 25)                                 │
+│  • jwt           (score: 25)                                  │
+│  • api           (score: 30)                                  │
+│  • authentication (score: 25)                                 │
+│                                                                │
+│  ↓ SKILL MATCHING                                              │
+│                                                                │
+│  Matched skills:                                               │
+│  • /security     (total: 75)  → AUTO-INVOKE                 │
+│  • /identity     (total: 50)  → AUTO-INVOKE                 │
+│  • /api-design   (total: 30)  → RECOMMEND                   │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘
+```
+
+### Keyword → Skill Mapping
+
+| Keyword Category | Skills | Example Phrases |
+|-----------------|--------|-----------------|
+| **auth** | security, identity | "login", "jwt", "oauth", "password", "session" |
+| **database** | database, data-engineering | "postgres", "mongodb", "query", "migration" |
+| **api** | api-design, api-client | "rest", "endpoint", "graphql", "route" |
+| **docker** | docker, deployment | "container", "dockerize", "docker-compose" |
+| **testing** | testing, tdd | "test", "vitest", "jest", "coverage" |
+| **performance** | performance, observability | "slow", "optimize", "bundle", "monitor" |
+| **architecture** | architecture-patterns, domain-modeling | "ddd", "hexagonal", "microservices" |
+| **security** | audit, security | "audit", "vulnerability", "owasp", "scan" |
+| **debug** | diagnosing-bugs, reliability | "bug", "debug", "error", "crash" |
 
 ---
 
 ## 🔄 DETECTION FLOW
 
 ```
-/auto-router invoked
-        │
-        ▼
-┌───────────────────────┐
-│   DETECT PROJECT      │
-│   STATE               │
-└───────────┬───────────┘
-            │
-    ┌───────┼───────┬────────────┐
-    ▼       ▼       ▼            ▼
- [EMPTY] [PARTIAL] [EXISTING] [COMMAND]
-    │       │          │           │
-    ▼       ▼          ▼           ▼
- project-  OFFER    FULL      DIRECT
-   init   OPTIONS   ANALYSIS   ROUTE
-```
-
-### State: EMPTY (No project)
-- No `package.json`, `.git`, `requirements.txt`, etc.
-- **Action:** Auto-invoke project-init workflow
-
-### State: PARTIAL (Incomplete)
-- Has `.git` but no package files, OR
-- Has files but missing critical components
-- **Action:** Offer initialization or completion options
-
-### State: EXISTING (Active project)
-- Has complete project structure with commits
-- **Action:** Full analysis + skill recommendations
-
----
-
-## 📊 TECH STACK DETECTION
-
-### Detection Priority
-
-| Priority | Files | What it Detects |
-|----------|-------|-----------------|
-| 1 | `.git/` | Existing project |
-| 1 | `package.json`, `go.mod`, `Cargo.toml` | Language |
-| 2 | `CLAUDE.md` | Phase awareness |
-| 3 | `docker-compose.yml`, `Dockerfile` | DevOps |
-| 4 | `knexfile.ts`, `prisma/schema.prisma` | Database |
-
-### Tech → Skills Mapping
-
-| Tech Stack | Recommended Skills |
-|------------|-------------------|
-| **Node.js + Express/Fastify** | fullstack-guardian, api-designer, security-reviewer |
-| **Node.js + NestJS** | fullstack-guardian, api-designer, architecture-designer |
-| **Next.js / React** | react-expert, fullstack-guardian, api-designer |
-| **Python + FastAPI/Django** | api-designer, security-reviewer, test-master |
-| **PostgreSQL** | database, data-engineering skills |
-| **Redis** | scalability, caching skills |
-| **Docker/K8s** | devops-engineer, monitoring-expert |
-| **TypeScript** | typescript-pro (if not using) |
-
----
-
-## 🎯 SKILL SELECTION
-
-### Scoring Algorithm
-
-Each skill gets a relevance score based on:
-
-```
-Total Score = 
-  + CORE (always +10)
-  + TECH_MATCH (+25 per match)
-  + PHASE_MATCH (+30 if required by phase)
-  + SCALE_MATCH (+15)
-  + DEPENDENCY_RESOLVED (+5 per resolved dep)
-```
-
-### Skill Categories
-
-**CORE (Always Invoked):**
-- git, docker, ci-cd, code-quality, deployment, logging, config
-
-**CONTEXT (Auto-invoked based on detection):**
-- api-designer, security-reviewer, database, frontend, observability
-
-**OPTIONAL (User-selected):**
-- microservices-architect, cloud-architect, ml-engineering, etc.
-
----
-
-## 🔍 PHASE-AWARE SELECTION
-
-### Phase → Skills Mapping
-
-| Phase | Primary Skills | Secondary Skills |
-|-------|---------------|------------------|
-| **Foundation** | fullstack-guardian | api-designer, typescript-pro |
-| **Core Features** | fullstack-guardian | api-designer, test-master |
-| **Feature Dev** | fullstack-guardian | code-reviewer, debugging-wizard |
-| **Polish** | code-reviewer | test-master, security-reviewer |
-| **Infrastructure** | devops-engineer | monitoring-expert, architecture-designer |
-| **Launch** | security-reviewer | monitoring-expert |
-
-### Reading Phase from CLAUDE.md
-
-The auto-router parses CLAUDE.md for phase info:
-
-```
-Phase 4: Reporting, Dashboard [IN PROGRESS]
-```
-
-Detects: `Phase 4`, status `in-progress`, suggests Phase 4 skills.
-
----
-
-## 🔄 DYNAMIC SKILL DISCOVERY
-
-### Scan Global Skills Directory
-
-```
-~/.claude/skills/
-├── git/
-├── docker/
-├── ci-cd/
-├── code-quality/
-├── deployment/
-├── logging/
-├── config/
-├── api-design/
-├── security/
-├── database/
-├── frontend/
-├── performance/
-├── scalability/
-├── observability/
-├── caveman/              ← Token optimization
-├── chisle/               ← Token optimization
-├── anti-slop/            ← Token optimization
-├── ui-ux-pro-max/        ← UI/UX premium
-├── ui-skills/            ← UI/UX basic
-├── skillspector/         ← Quality scoring
-├── reticle/              ← Vision tracking
-├── ... (all skills)
-```
-
-### Discovery Algorithm
-
-```
-1. Scan ~/.claude/skills/ directory
-2. For each skill folder:
-   - Read SKILL.md metadata
-   - Extract: name, priority, phase, dependencies, tech_stack
-3. Score each skill:
-   - Matches project tech stack? +25
-   - Matches current phase? +30
-   - Dependencies resolved? +10
-   - Not already implemented? +5
-4. Sort by score descending
-5. Present top skills for invocation
-```
-
-### Skill Metadata Schema
-
-Each skill should have this header:
-
-```markdown
----
-name: skill-name
-version: 1.0.0
-priority: critical|high|medium|low
-phase: phase-1|phase-2|...|any
-dependencies:
-  - other-skill
-tech_stack:
-  - nodejs
-  - postgresql
----
+                    ┌─────────────────────────────────────────┐
+                    │         /auto-router invoked           │
+                    └───────────────────┬─────────────────────┘
+                                        │
+                    ┌───────────────────┴───────────────────┐
+                    │                                       │
+                    ▼                                       ▼
+            ┌───────────────┐                       ┌───────────────┐
+            │  NEW PROJECT?  │                       │ EXISTING?     │
+            └───────┬───────┘                       └───────┬───────┘
+                    │                                       │
+            ┌───────┴───────┐                       ┌───────┴───────┐
+            ▼               ▼                       ▼               ▼
+      ┌──────────┐   ┌──────────┐           ┌──────────┐   ┌──────────┐
+      │ --new    │   │ Auto     │           │ Analyze  │   │ --status │
+      │ flag set │   │ detect   │           │ Tech     │   │ Show     │
+      └────┬─────┘   └────┬─────┘           │ Stack    │   │ Progress │
+           │               │                 └────┬─────┘   └──────────┘
+           ▼               ▼                       │
+    ┌──────────┐   ┌──────────┐           ┌──────┴──────┐
+    │ project- │   │ Check    │           │             │
+    │ init     │   │ keywords │           ▼             │
+    │ flow     │   └────┬─────┘     ┌────────────┐     │
+    └──────────┘        │           │ Skill      │     │
+                         ▼           │ Selection  │◄────┘
+                   ┌──────────┐      └──────┬─────┘
+                   │ Invoke   │             │
+                   │ matching │             ▼
+                   │ skills   │      ┌────────────┐
+                   └──────────┘      │ Show       │
+                                      │ recommendations
+                                      └────────────┘
 ```
 
 ---
 
-## ✅ SKIP ALREADY IMPLEMENTED
+## 📊 KEYWORD → SKILL MATRIX
 
-### File System Checks
-
-Before invoking a skill, auto-router checks:
-
-| File/Pattern | Skip Skill | Reason |
-|-------------|-----------|---------|
-| `Dockerfile` | /docker | Docker configured |
-| `docker-compose.yml` | /docker | Docker Compose exists |
-| `.git/` | /git | Git initialized |
-| `src/infrastructure/database/` | /database | DB layer exists |
-| `src/domain/entities/` | /domain-modeling | Domain exists |
-| `src/api/routes/` | /api-design | Routes exist |
-| `tests/` | /testing | Tests exist |
-| `.github/workflows/` | /ci-cd | CI/CD configured |
-| `.env.example` | /config | Config template exists |
-
-### Skip Logic
-
+### Security & Auth
 ```
-IF file exists AND skill matches:
-  → Show "⚠️ Skipped: /skill (already implemented)"
-  → Do NOT invoke
-ELSE:
-  → Invoke skill
-  → Show "✅ Invoked: /skill"
+Keywords: auth, login, jwt, oauth, password, session, mfa, 2fa, permission, role
+Skills: /security, /identity
+Score: 25-30 per keyword
 ```
 
-### Example Output
-
+### Database & Data
 ```
-┌─────────────────────────────────────────────────────────┐
-│  ✅ ALREADY IMPLEMENTED (Skipped)                      │
-│                                                         │
-│  ⚠️ /docker - Dockerfile exists                       │
-│  ⚠️ /git - Git initialized                          │
-│  ⚠️ /database - Repository pattern exists            │
-│  ⚠️ /security - JWT auth implemented                 │
-│  ⚠️ /logging - Pino configured                       │
-│                                                         │
-│  ✅ INVOKED (New needs)                               │
-│                                                         │
-│  ✅ /api-design - Hardware endpoints needed            │
-│  ✅ /performance - Optimization before launch          │
-│  ✅ /observability - Hardware monitoring              │
-└─────────────────────────────────────────────────────────┘
+Keywords: postgres, mysql, mongodb, database, sql, query, migration, schema, cache
+Skills: /database, /data-engineering, /scalability
+Score: 25-30 per keyword
 ```
 
----
-
-## ⚙️ DEPENDENCY RESOLUTION
-
-### Skill Dependency Graph
-
+### API & Backend
 ```
-/config
-  └── /git
-        └── /docker
-              └── /ci-cd
-                    └── /deployment
-
-/database
-  ├── /security
-  └── /api-design
-        └── /graphql, /messaging
-
-/frontend
-  └── /performance
-        └── /observability
+Keywords: rest, api, endpoint, route, http, request, response, graphql, grpc
+Skills: /api-design, /api-client
+Score: 25-30 per keyword
 ```
 
-### Resolution Order
-
+### DevOps & Deployment
 ```
-1. Build dependency graph
-2. Topological sort (Kahn's algorithm)
-3. Handle circular dependencies (warn and skip)
-4. Invoke in dependency order
+Keywords: docker, kubernetes, k8s, ci, cd, pipeline, deploy, terraform, aws
+Skills: /docker, /kubernetes, /ci-cd, /deployment, /terraform
+Score: 25-30 per keyword
+```
+
+### Frontend & UI
+```
+Keywords: react, vue, angular, ui, component, css, responsive, mobile
+Skills: /frontend, /performance
+Score: 20-25 per keyword
+```
+
+### Testing & Quality
+```
+Keywords: test, unit test, integration, e2e, vitest, jest, tdd, coverage
+Skills: /testing, /tdd, /code-quality
+Score: 25-30 per keyword
+```
+
+### Architecture & Patterns
+```
+Keywords: architecture, ddd, clean architecture, hexagonal, microservices, domain
+Skills: /architecture-patterns, /domain-modeling
+Score: 25-30 per keyword
+```
+
+### Observability & Monitoring
+```
+Keywords: log, logging, monitor, metrics, prometheus, trace, opentelemetry
+Skills: /logging, /observability
+Score: 20-25 per keyword
+```
+
+### Debugging & Reliability
+```
+Keywords: bug, fix, debug, error, exception, crash, slo, sla, incident
+Skills: /diagnosing-bugs, /reliability
+Score: 25-30 per keyword
+```
+
+### Documentation
+```
+Keywords: docs, readme, documentation, comment, changelog
+Skills: /documentation, /anti-slop
+Score: 15-20 per keyword
 ```
 
 ---
 
-## 🚀 POWER FEATURES
+## 💾 STATE PERSISTENCE
 
-### 1. Workflow Templates
+### What Gets Saved
 
 ```
+~/.claude/state/projects.json
+
+{
+  "projectPath": {
+    "path": "/path/to/project",
+    "projectName": "my-app",
+    "lastAnalyzed": "2024-01-15T10:30:00Z",
+    "techStack": { "frameworks": ["fastify"], "databases": ["postgresql"] },
+    "scale": "small",
+    "currentPhase": 3,
+    "activeSkills": ["/security", "/database"],
+    "invokedSkills": ["/git", "/docker", "/ci-cd"],
+    "completedTasks": ["Phase 1", "Phase 2"],
+    "recommendations": [...],
+    "history": [
+      { "date": "...", "action": "...", "result": "success" }
+    ]
+  }
+}
+```
+
+### Commands
+
+```bash
+/auto-router --status          # Show current project status
+/auto-router --history         # Show invocation history
+/auto-router --reset           # Reset project state
+```
+
+---
+
+## 🔄 PHASE AUTO-TRACKING
+
+### Mark Phase Complete
+
+```bash
+/auto-router --phase-complete 3
+```
+
+This will:
+1. Update CLAUDE.md: `Phase 3: ... [✅ DONE]`
+2. Save state: `currentPhase: 4`
+3. Offer: Next phase recommendations
+
+### Move to Next Phase
+
+```bash
+/auto-router --phase-next
+```
+
+---
+
+## 🎯 SKILL SELECTION ALGORITHM
+
+### Scoring System
+
+```
+┌────────────────────────────────────────────────────────────┐
+│  SKILL RELEVANCE SCORE                                     │
+├────────────────────────────────────────────────────────────┤
+│                                                            │
+│  Base Score: 0                                            │
+│                                                            │
+│  +───────────────────────────────                          │
+│  │ KEYWORD MATCH (per keyword)     +25-50                 │
+│  +───────────────────────────────                          │
+│  │ TECH STACK MATCH                 +25                    │
+│  +───────────────────────────────                          │
+│  │ PHASE REQUIREMENT                +30                    │
+│  +───────────────────────────────                          │
+│  │ CORE SKILL                      +50                    │
+│  +───────────────────────────────                          │
+│  │ PREVIOUS INVOCATION             +10                    │
+│  +───────────────────────────────                          │
+│  │ SCALE MATCH                     +15                    │
+│  +───────────────────────────────                          │
+│                                                            │
+│  ─────────────────────────────────────                     │
+│  THRESHOLD: 50 → AUTO-INVOKE                              │
+│  THRESHOLD: 30-49 → RECOMMEND                             │
+│  THRESHOLD: <30 → SKIP                                    │
+│                                                            │
+└────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📁 WORKFLOW TEMPLATES
+
+### Available Templates
+
+```bash
 /auto-router --workflow=rest-api
 /auto-router --workflow=fullstack-web
 /auto-router --workflow=microservices
 /auto-router --workflow=cli-tool
+/auto-router --workflow=library
+/auto-router --workflow=mobile-app
+/auto-router --workflow=data-pipeline
 ```
 
-Available templates (see `workflows.md`):
-- `rest-api` - Fastify/Express + PostgreSQL
-- `fullstack-web` - Next.js + Fastify
-- `microservices` - Distributed system
-- `cli-tool` - Command-line utility
-- `library` - NPM/PyPI library
-
-### 2. Enhanced Options
-
-| Option | Description |
-|--------|-------------|
-| `--quick` | Fast scan, minimal output |
-| `--deep` | Full analysis with progress |
-| `--auto-fix` | Apply suggested fixes |
-| `--save` | Save config for project |
-| `--load` | Load saved config |
-
-### 3. Auto-Fix Integration
+### Template Previews
 
 ```
-/auto-router --auto-fix
-```
+┌─────────────────────────────────────────────────────────────┐
+│  WORKFLOW: rest-api                                        │
+├─────────────────────────────────────────────────────────────┤
+│  Duration: 3-5 days                                        │
+│  Phases: design → scaffold → implement → secure → test → deploy │
+│  Skills: api-design, fullstack-guardian, security, testing   │
+└─────────────────────────────────────────────────────────────┘
 
-Automatically:
-- Runs npm audit / security scans
-- Fixes vulnerabilities (with consent)
-- Applies code quality improvements
-
----
-
-## 📋 ANALYSIS OUTPUT
-
-### Report Format
-
-```markdown
-# 📊 Project Analysis Report
-
-## Project State: EXISTING
-
-## Tech Stack
-| Category | Technology | Confidence |
-|----------|------------|------------|
-| Backend | Fastify | 95% |
-| Database | PostgreSQL | 90% |
-| Cache | Redis | 80% |
-
-## Architecture: DDD-Lite
-Directories: src/domain/, src/application/, src/infrastructure/
-
-## Scale: MEDIUM
-- Dependencies: ~45
-- Estimated LOC: 15K-30K
-
-## Recommended Skills
-✅ fullstack-guardian (primary)
-✅ api-designer (API detected)
-✅ security-reviewer (auth detected)
-✅ test-master (testing stack detected)
-
-## Suggestions
-⚠️ Add monitoring (no observability stack detected)
-⚠️ Add rate limiting
-⚠️ Add health endpoints
+┌─────────────────────────────────────────────────────────────┐
+│  WORKFLOW: fullstack-web                                   │
+├─────────────────────────────────────────────────────────────┤
+│  Duration: 5-10 days                                      │
+│  Phases: architecture → backend → frontend → test → deploy │
+│  Skills: architecture, fullstack, frontend, testing       │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 📁 RELATED FILES
+## 🎨 EXAMPLE INTERACTIONS
+
+### Example 1: New Project with Keywords
+```
+User: /auto-router --new
+System: Creating new project...
+User: I want a REST API with PostgreSQL and JWT auth
+
+System: Detected keywords:
+  • api (+30)
+  • database (+30)
+  • postgres (+25)
+  • auth (+25)
+  • jwt (+25)
+
+Auto-invoking:
+  ✅ /api-design (85)
+  ✅ /database (55)
+  ✅ /security (50)
+  ✅ /docker (core)
+  ✅ /git (core)
+```
+
+### Example 2: Adding Feature
+```
+User: I need to add Redis caching to speed up my API
+
+System: Detected keywords:
+  • cache (+25)
+  • performance (+20)
+  • api (+30)
+
+Auto-invoking:
+  ✅ /scalability (45)
+  ✅ /performance (50)
+  📋 Recommending: /observability
+
+Implementation plan:
+  1. Add Redis client configuration
+  2. Implement cache middleware
+  3. Add cache invalidation strategy
+  4. Add cache metrics
+```
+
+### Example 3: Debugging
+```
+User: My API is returning 500 errors and I can't figure out why
+
+System: Detected keywords:
+  • error (+25)
+  • api (+30)
+  • bug (+30)
+
+Auto-invoking:
+  ✅ /diagnosing-bugs (55)
+  ✅ /logging (core)
+
+Running diagnostic:
+  1. Check error logs...
+  2. Analyze stack traces...
+  3. Review recent changes...
+```
+
+---
+
+## 🔧 CONFIGURATION
+
+### Skill Priorities
+
+Edit `~/.claude/state/skills.json` to customize:
+
+```json
+{
+  "skillPriorities": {
+    "security": "always",
+    "docker": "auto",
+    "testing": "recommend"
+  },
+  "keywordSensitivity": 0.7,
+  "autoInvokeThreshold": 50
+}
+```
+
+### Ignore Files
+
+Add to `.claudeignore`:
+
+```
+# Don't auto-invoke these skills
+/skip:ml-engineering
+/skip:mobile
+```
+
+---
+
+## 📚 RELATED FILES
 
 | File | Purpose |
 |------|---------|
-| `detector.ts` | Project state & tech stack detection |
+| `detector.ts` | Project detection & keyword analysis |
 | `selector.ts` | Dynamic skill selection algorithm |
-| `registry.md` | Complete skill metadata |
 | `workflows.md` | Workflow templates |
-| `TEST_GUIDE.md` | Test scenarios |
-| `ARCHITECTURE.md` | Full architecture docs |
+| `registry.md` | Complete skill registry |
 
 ---
 
-## 🔗 QUICK ACTIONS
+## 🚀 USAGE TIPS
 
-### Start New Project
+### 1. Be Descriptive
 ```
-/auto-router --new
+❌ "fix bug"
+✅ "debug 500 error in user authentication endpoint"
 ```
+More keywords = better skill matching
 
-### Analyze Current Project
+### 2. Mention Tech Stack
 ```
-/auto-router --analyze
-```
-
-### Continue Phase Work
-```
-/auto-router --phase 5
+❌ "add auth"
+✅ "add JWT authentication to Fastify API"
 ```
 
-### Quick Skill Activation
+### 3. Specify Intent
 ```
-/auto-router --skills=fullstack-guardian,security-reviewer
-```
-
-### Run Full Workflow
-```
-/auto-router --workflow=fullstack-web
+❌ "improve"
+✅ "optimize database queries for better performance"
 ```
 
 ---
 
-## 💡 IMPROVEMENTS ADDED
-
-Based on best practices, auto-router now suggests:
-
-1. **Observability** - Health endpoints, metrics, tracing
-2. **Security** - Rate limiting, input validation, headers
-3. **Performance** - Connection pooling, caching, compression
-4. **Developer Experience** - Pre-commit hooks, error handling
-5. **Resilience** - Retry policies, circuit breakers
-6. **Testing** - Coverage targets, contract testing
-
----
-
-*Version: 5.2.0 | Auto-invoke: enabled | Core skill: true*
-*Features: Dynamic Discovery | Skip Implemented | Dependency Resolution*
-
----
-
-## 🚀 SUPERCHARGED FEATURES (v5.2)
-
-### What's New (v5.2)
-
-| Feature | Description |
-|---------|-------------|
-| **Dynamic Discovery** | Scan ~/.claude/skills/ for all available skills |
-| **Skip Implemented** | Auto-detect and skip already implemented features |
-| **Dependency Resolution** | Invoke skills in correct dependency order |
-| **Token Optimization** | Auto-suggest caveman/chisle for large projects |
-| **UI/UX Premium** | Auto-suggest ui-ux-pro-max for frontend work |
-
-### Quick Start
-
-```bash
-/auto-router                        # Auto-detect and route
-/auto-router --new                # New project
-/auto-router --analyze            # Analyze existing
-/auto-router --implement           # Auto-implement suggestions
-/auto-router --quick-wins         # Apply easy fixes
-/auto-router --workflow=NAME      # Run workflow
-/auto-router --phase [N]          # Continue phase
-```
-
-### Dynamic Skill Discovery Flow
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│  DYNAMIC SKILL DISCOVERY                                   │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│  1. SCAN ~/.claude/skills/                              │
-│     └─ List all skill folders                           │
-│                                                             │
-│  2. READ METADATA                                        │
-│     └─ Parse SKILL.md headers                          │
-│                                                             │
-│  3. MATCH TO PROJECT                                     │
-│     ├─ Tech stack match? +25                           │
-│     ├─ Phase match? +30                                 │
-│     ├─ Dependencies met? +10                            │
-│     └─ Not implemented? +5                              │
-│                                                             │
-│  4. SORT & PRESENT                                       │
-│     └─ Top skills for invocation                        │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Skip Implemented Flow
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│  SKIP ALREADY IMPLEMENTED                                  │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│  Check files exist:                                       │
-│  ├─ Dockerfile → Skip /docker                           │
-│  ├─ .git → Skip /git                                     │
-│  ├─ src/infrastructure/database/ → Skip /database      │
-│  └─ ...                                                  │
-│                                                             │
-│  Result:                                                  │
-│  ├─ Skipped: 5 skills (already done)                   │
-│  └─ Invoked: 3 skills (new needs)                       │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Power Features
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│  ⚡ POWER FEATURES                                         │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│  1. Auto-Fix Mode                                          │
-│     → /auto-route --fix                                   │
-│     → Audit + Security + Tests + Auto-fix                  │
-│                                                             │
-│  2. Quick Wins                                             │
-│     → /auto-route --quick-wins                            │
-│     → High impact, low effort (5-30 min each)             │
-│                                                             │
-│  3. Smart Implementation                                   │
-│     → /auto-route --implement --id=REC-001                │
-│     → Backup → Implement → Test → Commit                   │
-│     → One-click rollback if needed                         │
-│                                                             │
-│  4. Workflow Templates                                     │
-│     → /auto-route --workflow=full-audit                   │
-│     → /auto-route --workflow=security-review              │
-│     → Custom workflow support                              │
-│                                                             │
-│  5. Dependency Visualization                               │
-│     → /auto-route --visualize                             │
-│     → See skill relationships                              │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-```
+*Version: 6.0.0 | Author: TheVoidSyntax | Ultimate Mode: ENABLED*
+*Features: Keyword Detection | State Persistence | Phase Auto-Tracking | Workflow Templates*

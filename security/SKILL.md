@@ -16,6 +16,32 @@ auto_invoke:
     - has_file: "**/auth/**"
       reason: "Auth code detected"
   skill_tier: core
+triggers:
+  phrases:
+    - "auth"
+    - "authentication"
+    - "login"
+    - "jwt"
+    - "oauth"
+    - "password"
+    - "session"
+    - "mfa"
+    - "2fa"
+    - "permission"
+    - "role"
+    - "access control"
+    - "rbac"
+    - "abac"
+    - "encrypt"
+    - "decrypt"
+    - "hash"
+    - "crypto"
+    - "tls"
+    - "ssl"
+    - "security"
+    - "vulnerability"
+    - "owasp"
+    - "secure"
 capabilities: [implementation, review, analysis]
 quality:
   rules_count: 20

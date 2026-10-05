@@ -16,6 +16,28 @@ auto_invoke:
     - phase: phase-4
       reason: "Monitoring phase"
   skill_tier: context
+triggers:
+  phrases:
+    - "monitor"
+    - "monitoring"
+    - "metrics"
+    - "prometheus"
+    - "grafana"
+    - "dashboard"
+    - "alert"
+    - "trace"
+    - "tracing"
+    - "opentelemetry"
+    - "jaeger"
+    - "zipkin"
+    - "log"
+    - "logging"
+    - "pino"
+    - "winston"
+    - "structured log"
+    - "observability"
+    - "slo"
+    - "sla"
 capabilities: [implementation, analysis]
 quality:
   rules_count: 18

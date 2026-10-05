@@ -9,11 +9,27 @@ tech_stack:
   services: [kubernetes, aws, gcp, azure]
 scale: [medium, large, enterprise]
 auto_invoke:
-  enabled: false
+  enabled: true
   conditions:
     - phase: phase-6
       reason: "Launch phase requires reliability"
-  skill_tier: optional
+  skill_tier: context
+triggers:
+  phrases:
+    - "slo"
+    - "sla"
+    - "uptime"
+    - "reliability"
+    - "incident"
+    - "on-call"
+    - "runbook"
+    - "error handling"
+    - "exception"
+    - "crash"
+    - "fallback"
+    - "retry"
+    - "circuit breaker"
+    - "resilience"
 capabilities: [implementation, analysis]
 quality:
   rules_count: 15

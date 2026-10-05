@@ -15,6 +15,22 @@ auto_invoke:
     - tech_stack: [express, fastify, nestjs, django, fastapi]
       reason: "Web framework detected"
   skill_tier: context
+triggers:
+  phrases:
+    - "api"
+    - "rest"
+    - "graphql"
+    - "grpc"
+    - "endpoint"
+    - "route"
+    - "http"
+    - "request"
+    - "response"
+    - "crud"
+    - "validation"
+    - "schema"
+    - "openapi"
+    - "swagger"
 capabilities: [implementation, review, generation]
 quality:
   rules_count: 12

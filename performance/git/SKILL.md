@@ -14,6 +14,18 @@ auto_invoke:
     - always: true
       reason: "Core skill for any project"
   skill_tier: core
+triggers:
+  phrases:
+    - "git"
+    - "commit"
+    - "branch"
+    - "merge"
+    - "rebase"
+    - "pull"
+    - "push"
+    - "version control"
+    - "github"
+    - "gitlab"
 capabilities: [implementation, review]
 quality:
   rules_count: 15

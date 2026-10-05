@@ -4,8 +4,50 @@ description: "Frontend development best practices including React 19, state mana
 version: "1.1.0"
 priority: medium
 phase: any
-source: merged (local + Jeffallan/claude-skills:react-expert)
+category: [frontend]
+tech_stack:
+  frameworks: [react, vue, angular, svelte]
+  languages: [typescript, javascript]
+scale: [all]
+auto_invoke:
+  enabled: true
+  conditions:
+    - has_file: "**/components/**"
+      reason: "Frontend components detected"
+    - has_file: "**/pages/**"
+      reason: "Frontend pages detected"
+    - has_file: "**/*.jsx"
+      reason: "React/Vue components detected"
+    - has_file: "**/*.tsx"
+      reason: "React components detected"
+  skill_tier: context
+triggers:
+  phrases:
+    - "react"
+    - "vue"
+    - "angular"
+    - "svelte"
+    - "frontend"
+    - "component"
+    - "ui"
+    - "css"
+    - "tailwind"
+    - "state management"
+    - "redux"
+    - "zustand"
+    - "hook"
+    - "render"
+capabilities: [implementation, review]
+quality:
+  rules_count: 20
+  examples_count: 30
+  stability: stable
+integrates_with: [auto-route, typescript-pro, testing]
 dependencies: [typescript-pro, testing]
+source:
+  origin: merged
+  sources: ["Jeffallan/claude-skills:react-expert"]
+author: Claude
 ---
 
 # FRONTEND MODULE

@@ -9,11 +9,25 @@ tech_stack:
   languages: [all]
 scale: [all]
 auto_invoke:
-  enabled: false
+  enabled: true
   conditions:
     - command: "/audit"
       reason: "Audit invocation"
+    - phrase: ["audit", "security audit", "vulnerability scan", "code review", "full scan", "deep scan"]
+      reason: "Audit intent detected"
   skill_tier: core
+triggers:
+  phrases:
+    - "audit"
+    - "security audit"
+    - "vulnerability"
+    - "scan for issues"
+    - "find bugs"
+    - "code review"
+    - "review code"
+    - "check for errors"
+    - "deep scan"
+    - "comprehensive review"
 capabilities: [analysis, review]
 quality:
   rules_count: 20

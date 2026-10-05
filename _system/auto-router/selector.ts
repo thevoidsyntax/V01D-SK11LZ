@@ -1,51 +1,69 @@
 /**
- * AUTO-ROUTE v4.0 - Skill Selector
+ * AUTO-ROUTE v6.0 - Ultimate Skill Selector
  *
- * Dynamic skill selection based on project detection results.
+ * Features:
+ * - Keyword-based selection
+ * - Context-aware recommendations
+ * - Dependency resolution
  */
 
-import { glob } from 'glob';
-import { readFile } from 'fs/promises';
-import { join } from 'path';
-import { existsSync, readdirSync, statSync } from 'fs';
-import type { DetectionResult, TechStack } from './detector';
+import { existsSync, readdirSync, readFileSync } from 'fs';
+import { join, dirname } from 'path';
+import { detectSkillsFromInput, type KeywordMatch } from './detector';
 
 export interface Skill {
   name: string;
   path: string;
   description: string;
-  category: SkillCategory;
-  isCore: boolean;
-  score: number;
-  reasons: string[];
-  dependencies: string[];
-  scales: Scale[];
-  triggers: string[];
-  priority: 'high' | 'medium' | 'low';
+  version: string;
+  category: string[];
+  priority: 'critical' | 'high' | 'medium' | 'low';
+  phase: string | string[];
+  tech_stack?: {
+    languages?: string[];
+    frameworks?: string[];
+    databases?: string[];
+    services?: string[];
+  };
+  auto_invoke?: {
+    enabled: boolean;
+    conditions?: {
+      has_file?: string;
+      tech_stack?: string[];
+      command?: string;
+      phrase?: string[];
+      phase?: string;
+      reason?: string;
+    }[];
+  };
+  triggers?: {
+    commands?: string[];
+    phrases?: string[];
+    files?: string[];
+  };
+  dependencies?: string[];
+  conflicts?: string[];
+  scale?: string[];
+  capabilities?: string[];
 }
-
-export type SkillCategory =
-  | 'backend'
-  | 'frontend'
-  | 'database'
-  | 'devops'
-  | 'security'
-  | 'observability'
-  | 'data'
-  | 'mobile'
-  | 'ml'
-  | 'team'
-  | 'infrastructure'
-  | 'other';
-
-export type Scale = 'mvp' | 'small' | 'medium' | 'large' | 'enterprise';
 
 export interface SelectionResult {
   core: Skill[];
   context: Skill[];
   optional: Skill[];
   skipped: Skill[];
+  keywordMatched: Skill[];
+  recommendations: Recommendation[];
   dependencies: DependencyNode[];
+}
+
+export interface Recommendation {
+  skill: string;
+  title: string;
+  description: string;
+  score: number;
+  reason: string;
+  priority: 'high' | 'medium' | 'low';
 }
 
 export interface DependencyNode {
@@ -55,128 +73,170 @@ export interface DependencyNode {
   loadOrder: number;
 }
 
-interface SkillMetadata {
-  category?: string;
-  core?: boolean;
-  scale?: Scale[];
-  triggers?: string[];
-  dependencies?: string[];
-  priority?: string;
-  description?: string;
+interface DetectionContext {
+  projectPath: string;
+  techStack: {
+    frameworks: string[];
+    databases: string[];
+    languages: string[];
+    devops: string[];
+  };
+  currentPhase?: number;
+  scale: string;
+  existingSkills: string[];
 }
 
 // Score weights
 const SCORE_WEIGHTS = {
-  CORE: 10,
+  CORE: 50,
+  KEYWORD: 30,
   TECH_MATCH: 25,
   PHASE_MATCH: 30,
   SCALE_MATCH: 15,
-  DEPENDENCY_RESOLVED: 5,
+  DEPENDENCY_RESOLVED: 10,
+  PREVIOUS_INVOCATION: 10,
 };
 
-export async function selectSkills(
-  detection: DetectionResult,
-  options: { includeSkills?: string[]; excludeSkills?: string[] }
-): Promise<SelectionResult> {
-  // Discover all available skills
-  const allSkills = await discoverSkills();
+// Core skills that always invoke
+const CORE_SKILLS = [
+  'git',
+  'docker',
+  'ci-cd',
+  'code-quality',
+  'deployment',
+  'logging',
+  'config',
+  'security',
+];
 
-  // Calculate relevance scores
-  const scored = allSkills.map(skill => ({
-    skill,
-    score: calculateScore(skill, detection),
-    reasons: getReasons(skill, detection),
-  }));
+export function selectSkills(
+  context: DetectionContext,
+  userInput?: string,
+  options?: { includeSkills?: string[]; excludeSkills?: string[] }
+): SelectionResult {
+  // Discover skills
+  const allSkills = discoverSkills();
+
+  // Get keyword matches from user input
+  const keywordMatches = userInput ? detectSkillsFromInput(userInput) : [];
+
+  // Calculate scores
+  const scored = allSkills.map(skill => {
+    const score = calculateScore(skill, context, keywordMatches);
+    const reasons = getReasons(skill, context, keywordMatches);
+    return { skill, score, reasons };
+  });
 
   // Sort by score descending
   scored.sort((a, b) => b.score - a.score);
 
-  // Apply includes/excludes
-  let filtered = scored;
-
-  if (options.excludeSkills?.length) {
-    filtered = filtered.filter(
-      s => !options.excludeSkills!.includes(s.skill.name)
-    );
-  }
-
-  if (options.includeSkills?.length) {
-    // Boost included skills
-    filtered = filtered.map(s => {
-      if (options.includeSkills!.includes(s.skill.name)) {
-        return { ...s, score: s.score + 50 };
-      }
-      return s;
-    });
-    filtered.sort((a, b) => b.score - a.score);
-  }
-
   // Separate by category
-  const core = filtered
-    .filter(s => s.skill.isCore || s.score >= SCORE_WEIGHTS.CORE)
+  const core = scored
+    .filter(s => CORE_SKILLS.includes(s.skill.name.toLowerCase()) || s.skill.priority === 'critical')
     .map(s => s.skill);
 
-  const context = filtered
-    .filter(s => !s.skill.isCore && s.score >= 20 && s.score < SCORE_WEIGHTS.CORE)
+  const keywordMatched = scored
+    .filter(s => keywordMatches.some(k => k.skill === s.skill.name) && s.score >= 30)
     .map(s => s.skill);
 
-  const optional = filtered
-    .filter(s => !s.skill.isCore && s.score < 20)
+  const context_ = scored
+    .filter(s =>
+      !CORE_SKILLS.includes(s.skill.name.toLowerCase()) &&
+      s.score >= 30 &&
+      s.score < 50 &&
+      !keywordMatched.includes(s.skill)
+    )
+    .map(s => s.skill);
+
+  const optional = scored
+    .filter(s =>
+      s.score >= 20 &&
+      s.score < 30 &&
+      !core.includes(s.skill) &&
+      !keywordMatched.includes(s.skill)
+    )
     .map(s => s.skill);
 
   const skipped = allSkills.filter(
-    s => !core.includes(s) && !context.includes(s) && !optional.includes(s)
+    s =>
+      !core.includes(s) &&
+      !keywordMatched.includes(s) &&
+      !context_.includes(s) &&
+      !optional.includes(s)
   );
 
+  // Apply includes/excludes
+  let selected = [...core, ...keywordMatched, ...context_, ...optional];
+
+  if (options?.excludeSkills?.length) {
+    selected = selected.filter(s => !options.excludeSkills!.includes(s.name));
+  }
+
+  if (options?.includeSkills?.length) {
+    const additional = allSkills.filter(s => options.includeSkills!.includes(s.name));
+    selected.push(...additional);
+  }
+
   // Resolve dependencies
-  const allSelectedNames = [...core, ...context, ...optional].map(s => s.name);
-  const dependencies = resolveDependencies(allSelectedNames, allSkills);
+  const dependencies = resolveDependencies(selected.map(s => s.name), allSkills);
+
+  // Generate recommendations
+  const recommendations = scored
+    .filter(s => s.score >= 30 && s.score < 50)
+    .slice(0, 5)
+    .map(s => ({
+      skill: s.skill.name,
+      title: s.skill.name.replace(/-/g, ' '),
+      description: s.skill.description,
+      score: s.score,
+      reason: s.reasons.join(', '),
+      priority: s.score >= 45 ? 'high' : s.score >= 35 ? 'medium' : 'low',
+    }));
 
   return {
     core,
-    context,
+    context: context_,
     optional,
     skipped,
+    keywordMatched,
+    recommendations,
     dependencies,
   };
 }
 
-export async function discoverSkills(): Promise<Skill[]> {
-  const skillsDir = getSkillsDirectory();
+function discoverSkills(): Skill[] {
+  const skillsDir = join(process.env.HOME || process.env.USERPROFILE || '', '.claude', 'skills');
   const skills: Skill[] = [];
 
-  if (!existsSync(skillsDir)) {
-    return skills;
-  }
+  if (!existsSync(skillsDir)) return skills;
 
-  const entries = readdirSync(skillsDir, { withFileTypes: true });
+  const categories = readdirSync(skillsDir, { withFileTypes: true });
 
-  for (const entry of entries) {
-    if (!entry.isDirectory()) continue;
-    if (entry.name.startsWith('.') || entry.name === 'node_modules') continue;
+  for (const category of categories) {
+    if (!category.isDirectory()) continue;
+    if (category.name.startsWith('.')) continue;
+    if (category.name.startsWith('_')) continue;
 
-    const skillPath = join(skillsDir, entry.name);
-    const skillFile = join(skillPath, 'SKILL.md');
+    const categoryPath = join(skillsDir, category.name);
+    const entries = readdirSync(categoryPath, { withFileTypes: true });
 
-    if (existsSync(skillFile)) {
-      try {
-        const metadata = await parseSkillMetadata(skillFile);
-        skills.push({
-          name: entry.name,
-          path: skillPath,
-          description: metadata.description || `Skill: ${entry.name}`,
-          category: (metadata.category as SkillCategory) || 'other',
-          isCore: metadata.core || false,
-          score: 0, // Calculated per detection
-          reasons: [], // Calculated per detection
-          dependencies: metadata.dependencies || [],
-          scales: metadata.scale || ['mvp', 'small', 'medium', 'large', 'enterprise'],
-          triggers: metadata.triggers || [],
-          priority: (metadata.priority as Skill['priority']) || 'medium',
-        });
-      } catch {
-        // Skip invalid skills
-        console.warn(`Failed to parse skill: ${entry.name}`);
+    for (const entry of entries) {
+      if (!entry.isDirectory()) continue;
+
+      const skillPath = join(categoryPath, entry.name);
+      const skillFiles = ['SKILL.md', 'skill.md'];
+
+      for (const skillFile of skillFiles) {
+        const fullPath = join(skillPath, skillFile);
+        if (existsSync(fullPath)) {
+          try {
+            const skill = parseSkillMetadata(fullPath, category.name);
+            skills.push(skill);
+          } catch {
+            // Skip invalid skills
+          }
+          break;
+        }
       }
     }
   }
@@ -184,154 +244,201 @@ export async function discoverSkills(): Promise<Skill[]> {
   return skills;
 }
 
-async function parseSkillMetadata(skillFile: string): Promise<SkillMetadata> {
-  const content = await readFile(skillFile, 'utf-8');
+function parseSkillMetadata(skillFile: string, category: string): Skill {
+  const content = readFileSync(skillFile, 'utf-8');
+  const result: Partial<Skill> = {};
 
   // Parse YAML frontmatter
   const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
+
   if (frontmatterMatch) {
-    try {
-      return parseYamlFrontmatter(frontmatterMatch[1]);
-    } catch {
-      // Fall through to tag parsing
+    const yaml = frontmatterMatch[1];
+
+    // Extract fields
+    const nameMatch = yaml.match(/^name:\s*(.+)$/m);
+    const descMatch = yaml.match(/^description:\s*["']?([^"'\n]+)["']?/m);
+    const versionMatch = yaml.match(/^version:\s*["']?([^"'\n]+)["']?/m);
+    const priorityMatch = yaml.match(/^priority:\s*(\w+)/m);
+
+    if (nameMatch) result.name = nameMatch[1].trim();
+    if (descMatch) result.description = descMatch[1].trim();
+    if (versionMatch) result.version = versionMatch[1].trim();
+    if (priorityMatch) result.priority = priorityMatch[1] as Skill['priority'];
+
+    // Parse category
+    const categoryMatch = yaml.match(/^category:\s*\[?([^\]\n]+)\]?/m);
+    if (categoryMatch) {
+      result.category = categoryMatch[1].split(',').map(s => s.trim().replace(/[\[\]]/g, ''));
+    } else {
+      result.category = [category];
     }
-  }
 
-  // Parse @tags
-  return {
-    category: extractFirstTag(content, '@category'),
-    core: hasAnyTag(content, ['@core', '@always']),
-    scale: extractAllTags(content, '@scale') as Scale[],
-    triggers: extractAllTags(content, '@trigger'),
-    dependencies: extractAllTags(content, '@requires'),
-    priority: extractFirstTag(content, '@priority'),
-    description: extractFirstTag(content, '@description'),
-  };
-}
+    // Parse phase
+    const phaseMatch = yaml.match(/^phase:\s*(\w+|\[[^\]]+\])/m);
+    if (phaseMatch) {
+      result.phase = phaseMatch[1].replace(/[\[\]]/g, '');
+    }
 
-function parseYamlFrontmatter(yaml: string): SkillMetadata {
-  const result: SkillMetadata = {};
-  const lines = yaml.split('\n');
+    // Parse tech_stack
+    if (yaml.includes('tech_stack:')) {
+      const techMatch = yaml.match(/tech_stack:\s*\n([\s\S]*?)(?=\n\w|\n---|$)/);
+      if (techMatch) {
+        const techContent = techMatch[1];
+        result.tech_stack = {};
 
-  for (const line of lines) {
-    const match = line.match(/^(\w+):\s*(.+)$/);
-    if (match) {
-      const [, key, value] = match;
-      const cleanValue = value.replace(/^["']|["']$/g, '').trim();
+        const frameworks = techContent.match(/frameworks?:\s*\[([^\]]+)\]/);
+        if (frameworks) result.tech_stack.frameworks = frameworks[1].split(',').map(s => s.trim());
 
-      switch (key) {
-        case 'category':
-        case 'description':
-        case 'priority':
-          (result as Record<string, unknown>)[key] = cleanValue;
-          break;
-        case 'core':
-        case 'always':
-          (result as Record<string, unknown>)[key] = cleanValue === 'true';
-          break;
-        case 'scale':
-        case 'triggers':
-        case 'dependencies':
-          (result as Record<string, unknown>)[key] = cleanValue.split(',').map(s => s.trim());
-          break;
+        const databases = techContent.match(/databases?:\s*\[([^\]]+)\]/);
+        if (databases) result.tech_stack.databases = databases[1].split(',').map(s => s.trim());
+
+        const languages = techContent.match(/languages?:\s*\[([^\]]+)\]/);
+        if (languages) result.tech_stack.languages = languages[1].split(',').map(s => s.trim());
+
+        const services = techContent.match(/services?:\s*\[([^\]]+)\]/);
+        if (services) result.tech_stack.services = services[1].split(',').map(s => s.trim());
+      }
+    }
+
+    // Parse auto_invoke
+    if (yaml.includes('auto_invoke:')) {
+      const autoInvokeMatch = yaml.match(/auto_invoke:\s*\n([\s\S]*?)(?=\n\w|\n---|$)/);
+      if (autoInvokeMatch) {
+        result.auto_invoke = {
+          enabled: !autoInvokeMatch[1].includes('enabled: false'),
+        };
       }
     }
   }
 
-  return result;
+  return {
+    name: result.name || skillFile.split(/[/\\]/).slice(-2, -1)[0],
+    path: skillFile,
+    description: result.description || extractFirstLine(content),
+    version: result.version || '1.0.0',
+    category: result.category || [category],
+    priority: result.priority || 'medium',
+    phase: result.phase || 'any',
+    ...result,
+  } as Skill;
 }
 
-function extractFirstTag(content: string, tag: string): string | undefined {
-  const match = content.match(new RegExp(`${tag}:\\s*(.+?)(?:\\n|$)`));
-  return match?.[1]?.trim();
-}
-
-function extractAllTags(content: string, tag: string): string[] {
-  const regex = new RegExp(`${tag}:\\s*(.+?)(?:\\n|$)`, 'g');
-  const matches: string[] = [];
-  let match;
-  while ((match = regex.exec(content)) !== null) {
-    matches.push(...match[1].split(',').map(s => s.trim()));
+function extractFirstLine(content: string): string {
+  const lines = content.split('\n');
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (trimmed && !trimmed.startsWith('#') && !trimmed.startsWith('---')) {
+      return trimmed.substring(0, 100);
+    }
   }
-  return matches;
+  return '';
 }
 
-function hasAnyTag(content: string, tags: string[]): boolean {
-  return tags.some(tag => content.includes(tag));
-}
-
-function calculateScore(skill: Skill, detection: DetectionResult): number {
+function calculateScore(
+  skill: Skill,
+  context: DetectionContext,
+  keywordMatches: KeywordMatch[]
+): number {
   let score = 0;
 
   // Core skill bonus
-  if (skill.isCore) {
+  if (CORE_SKILLS.includes(skill.name.toLowerCase())) {
     score += SCORE_WEIGHTS.CORE;
   }
 
+  // Keyword match
+  const keywordMatch = keywordMatches.find(k => k.skill === skill.name);
+  if (keywordMatch) {
+    score += SCORE_WEIGHTS.KEYWORD + keywordMatch.score;
+  }
+
   // Tech stack match
-  const techMatches = getTechMatches(skill, detection.techStack);
-  if (techMatches.length > 0) {
-    score += SCORE_WEIGHTS.TECH_MATCH;
+  if (skill.tech_stack) {
+    const { frameworks, databases, languages, services } = skill.tech_stack;
+
+    if (frameworks?.some(f => context.techStack.frameworks.includes(f))) {
+      score += SCORE_WEIGHTS.TECH_MATCH;
+    }
+
+    if (databases?.some(d => context.techStack.databases.includes(d))) {
+      score += SCORE_WEIGHTS.TECH_MATCH;
+    }
+
+    if (languages?.some(l => context.techStack.languages.includes(l))) {
+      score += SCORE_WEIGHTS.TECH_MATCH - 5;
+    }
+
+    if (services?.some(s => context.techStack.devops.includes(s))) {
+      score += SCORE_WEIGHTS.TECH_MATCH;
+    }
   }
 
   // Phase match
-  if (detection.phase?.requiredSkills?.includes(skill.name)) {
-    score += SCORE_WEIGHTS.PHASE_MATCH;
+  if (context.currentPhase && skill.phase !== 'any') {
+    const phases = Array.isArray(skill.phase) ? skill.phase : [skill.phase];
+    if (phases.some(p => p === `phase-${context.currentPhase}` || p === String(context.currentPhase))) {
+      score += SCORE_WEIGHTS.PHASE_MATCH;
+    }
   }
 
   // Scale match
-  if (skill.scales.includes(detection.scale)) {
+  if (skill.scale?.includes(context.scale)) {
     score += SCORE_WEIGHTS.SCALE_MATCH;
+  }
+
+  // Previous invocation
+  if (context.existingSkills.includes(skill.name)) {
+    score += SCORE_WEIGHTS.PREVIOUS_INVOCATION;
   }
 
   return score;
 }
 
-function getReasons(skill: Skill, detection: DetectionResult): string[] {
+function getReasons(
+  skill: Skill,
+  context: DetectionContext,
+  keywordMatches: KeywordMatch[]
+): string[] {
   const reasons: string[] = [];
 
-  if (skill.isCore) {
-    reasons.push('Core skill (always invoked)');
+  // Core skill
+  if (CORE_SKILLS.includes(skill.name.toLowerCase())) {
+    reasons.push('Core skill');
   }
 
-  const techMatches = getTechMatches(skill, detection.techStack);
-  if (techMatches.length > 0) {
-    reasons.push(`Tech stack: ${techMatches.join(', ')}`);
+  // Keyword match
+  const keywordMatch = keywordMatches.find(k => k.skill === skill.name);
+  if (keywordMatch) {
+    reasons.push(`Keywords: ${keywordMatch.matchedPhrases.join(', ')}`);
   }
 
-  if (detection.phase?.requiredSkills?.includes(skill.name)) {
-    reasons.push(`Required by ${detection.phase.current}`);
+  // Tech match
+  if (skill.tech_stack) {
+    const matches: string[] = [];
+
+    if (skill.tech_stack.frameworks?.some(f => context.techStack.frameworks.includes(f))) {
+      matches.push(...skill.tech_stack.frameworks.filter(f => context.techStack.frameworks.includes(f)));
+    }
+
+    if (skill.tech_stack.databases?.some(d => context.techStack.databases.includes(d))) {
+      matches.push(...skill.tech_stack.databases.filter(d => context.techStack.databases.includes(d)));
+    }
+
+    if (matches.length > 0) {
+      reasons.push(`Tech: ${matches.join(', ')}`);
+    }
   }
 
-  if (skill.scales.includes(detection.scale)) {
-    reasons.push(`Scale: ${detection.scale}`);
+  // Phase match
+  if (context.currentPhase && skill.phase !== 'any') {
+    reasons.push(`Phase ${context.currentPhase}`);
   }
 
   return reasons;
 }
 
-function getTechMatches(skill: Skill, techStack: TechStack): string[] {
-  const matches: string[] = [];
-
-  const allTech = [
-    ...techStack.frameworks,
-    ...techStack.databases,
-    ...techStack.languages,
-    ...techStack.devops,
-    ...techStack.cache,
-  ];
-
-  for (const trigger of skill.triggers) {
-    if (allTech.some(t => t.includes(trigger) || trigger.includes(t))) {
-      matches.push(trigger);
-    }
-  }
-
-  return matches;
-}
-
-export function resolveDependencies(
-  skills: string[],
+function resolveDependencies(
+  skillNames: string[],
   allSkills: Skill[]
 ): DependencyNode[] {
   const skillMap = new Map(allSkills.map(s => [s.name, s]));
@@ -342,15 +449,16 @@ export function resolveDependencies(
   function visit(skillName: string): void {
     if (resolvedSet.has(skillName)) return;
     if (visiting.has(skillName)) {
-      throw new CyclicDependencyError(skillName, skills);
+      console.warn(`Cyclic dependency detected: ${skillName}`);
+      return;
     }
 
     visiting.add(skillName);
 
     const skill = skillMap.get(skillName);
-    if (skill) {
+    if (skill?.dependencies) {
       for (const dep of skill.dependencies) {
-        if (skills.includes(dep) && !resolvedSet.has(dep)) {
+        if (skillNames.includes(dep) && !resolvedSet.has(dep)) {
           visit(dep);
         }
       }
@@ -359,20 +467,20 @@ export function resolveDependencies(
     visiting.delete(skillName);
     resolvedSet.add(skillName);
 
-    const dependents = skills.filter(s => {
+    const dependents = skillNames.filter(s => {
       const s2 = skillMap.get(s);
-      return s2?.dependencies.includes(skillName);
+      return s2?.dependencies?.includes(skillName);
     });
 
     resolved.push({
       skill: skillName,
-      dependencies: skill?.dependencies.filter(d => skills.includes(d)) || [],
+      dependencies: skill?.dependencies?.filter(d => skillNames.includes(d)) || [],
       dependents,
       loadOrder: resolved.length,
     });
   }
 
-  for (const skill of skills) {
+  for (const skill of skillNames) {
     if (!resolvedSet.has(skill)) {
       visit(skill);
     }
@@ -381,55 +489,71 @@ export function resolveDependencies(
   return resolved;
 }
 
-class CyclicDependencyError extends Error {
-  constructor(
-    public skill: string,
-    public chain: string[]
-  ) {
-    super(`Cyclic dependency detected involving skill: ${skill}`);
-    this.name = 'CyclicDependencyError';
-  }
-}
-
-function getSkillsDirectory(): string {
-  // Standard Claude Code skills directory
-  const home = process.env.HOME || process.env.USERPROFILE || '';
-  return join(home, '.claude', 'skills');
-}
-
-// Utility: Generate selection prompt
 export function generateSelectionPrompt(result: SelectionResult): string {
   const lines: string[] = [];
 
-  lines.push('```');
-  lines.push('╔════════════════════════════════════════════════════════════════════╗');
-  lines.push('║                     🎯 SELECT OPTIONAL SKILLS                       ║');
-  lines.push('╠════════════════════════════════════════════════════════════════════╣');
+  lines.push('\n```');
+  lines.push('╔════════════════════════════════════════════════════════════════════════════╗');
+  lines.push('║                     🎯 SKILL SELECTION RESULTS                            ║');
+  lines.push('╚════════════════════════════════════════════════════════════════════════════╝');
 
-  if (result.optional.length > 0) {
-    lines.push('║                                                                    ║');
-    lines.push('║  AVAILABLE SKILLS:                                                 ║');
-    lines.push('║                                                                    ║');
-
-    result.optional.forEach((skill, index) => {
-      const name = skill.name.padEnd(20);
-      const desc = skill.description.substring(0, 40).padEnd(40);
-      lines.push(`║  [${String(index + 1).padStart(2)}] /${name} ${desc}║`);
-    });
-
-    lines.push('║                                                                    ║');
-    lines.push('╠════════════════════════════════════════════════════════════════════╣');
+  // Core skills
+  if (result.core.length > 0) {
+    lines.push('║');
+    lines.push('║  🟢 CORE SKILLS (Auto-activated):');
+    for (const skill of result.core) {
+      lines.push(`║    ✅ /${skill.name.padEnd(20)} - ${skill.description.substring(0, 40)}`);
+    }
   }
 
-  lines.push('║                                                                    ║');
-  lines.push('║  SHORTCUTS:                                                         ║');
-  lines.push('║  • all       → Activate all optional skills                       ║');
-  lines.push('║  • none      → Skip optional skills                                ║');
-  lines.push('║  • recommend → Auto-recommend based on stack                       ║');
-  lines.push('║                                                                    ║');
-  lines.push('║  Enter numbers (e.g., 1,3,5) or shortcut:                        ║');
-  lines.push('╚════════════════════════════════════════════════════════════════════╝');
-  lines.push('```');
+  // Keyword matched
+  if (result.keywordMatched.length > 0) {
+    lines.push('║');
+    lines.push('║  🔵 KEYWORD-MATCHED (Auto-invoked):');
+    for (const skill of result.keywordMatched) {
+      lines.push(`║    ✅ /${skill.name.padEnd(20)} - ${skill.description.substring(0, 40)}`);
+    }
+  }
+
+  // Context skills
+  if (result.context.length > 0) {
+    lines.push('║');
+    lines.push('║  🟡 CONTEXT SKILLS (Recommended):');
+    for (const skill of result.context.slice(0, 5)) {
+      lines.push(`║    📋 /${skill.name.padEnd(20)} - ${skill.description.substring(0, 40)}`);
+    }
+  }
+
+  // Optional
+  if (result.optional.length > 0) {
+    lines.push('║');
+    lines.push('║  ⚪ OPTIONAL SKILLS:');
+    lines.push('║    [Select by number or "all"]');
+    result.optional.slice(0, 5).forEach((skill, i) => {
+      lines.push(`║    [${i + 1}] /${skill.name.padEnd(18)} - ${skill.description.substring(0, 35)}`);
+    });
+  }
+
+  // Recommendations
+  if (result.recommendations.length > 0) {
+    lines.push('║');
+    lines.push('║  💡 RECOMMENDATIONS:');
+    for (const rec of result.recommendations.slice(0, 3)) {
+      lines.push(`║    📌 /${rec.skill.padEnd(18)} (${rec.priority}) - ${rec.reason}`);
+    }
+  }
+
+  lines.push('║');
+  lines.push('╠════════════════════════════════════════════════════════════════════════════╣');
+  lines.push('║');
+  lines.push('║  ACTIONS:');
+  lines.push('║    • Press Enter to continue with auto-selected skills');
+  lines.push('║    • Type numbers to add optional skills (e.g., 1,3,5)');
+  lines.push('║    • Type "all" to select all optional skills');
+  lines.push('║    • Type "none" to skip optional skills');
+  lines.push('║');
+  lines.push('╚════════════════════════════════════════════════════════════════════════════╝');
+  lines.push('```\n');
 
   return lines.join('\n');
 }

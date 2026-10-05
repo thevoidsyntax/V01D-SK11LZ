@@ -17,7 +17,26 @@ auto_invoke:
       reason: "Prisma schema detected"
     - has_file: "**/knexfile*"
       reason: "Knex config detected"
+    - tech_stack: [postgresql, mysql, mongodb, sqlite]
+      reason: "Database tech stack detected"
   skill_tier: context
+triggers:
+  phrases:
+    - "database"
+    - "postgres"
+    - "postgresql"
+    - "mysql"
+    - "mongodb"
+    - "sqlite"
+    - "sql"
+    - "query"
+    - "migration"
+    - "schema"
+    - "prisma"
+    - "knex"
+    - "orm"
+    - "table"
+    - "index"
 capabilities: [implementation, analysis]
 quality:
   rules_count: 15

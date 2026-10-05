@@ -16,6 +16,20 @@ auto_invoke:
     - has_file: "**/docker-compose*.yml"
       reason: "Docker Compose project detected"
   skill_tier: core
+triggers:
+  phrases:
+    - "docker"
+    - "container"
+    - "containerize"
+    - "dockerfile"
+    - "docker-compose"
+    - "kubernetes"
+    - "k8s"
+    - "pod"
+    - "deployment"
+    - "helm"
+    - "ingress"
+    - "service mesh"
 capabilities: [implementation, review]
 quality:
   rules_count: 12

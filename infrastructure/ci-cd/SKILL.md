@@ -16,6 +16,18 @@ auto_invoke:
     - has_file: ".gitlab-ci.yml"
       reason: "GitLab CI detected"
   skill_tier: core
+triggers:
+  phrases:
+    - "ci"
+    - "cd"
+    - "pipeline"
+    - "github actions"
+    - "gitlab ci"
+    - "jenkins"
+    - "deploy"
+    - "deployment"
+    - "automation"
+    - "workflow"
 capabilities: [implementation, review]
 quality:
   rules_count: 10
