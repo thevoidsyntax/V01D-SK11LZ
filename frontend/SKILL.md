@@ -1,7 +1,11 @@
 ---
 name: frontend
-description: "Frontend development best practices including state management, error boundaries, and performance optimization."
-version: "1.0"
+description: "Frontend development best practices including React 19, state management, error boundaries, and performance optimization."
+version: "1.1.0"
+priority: medium
+phase: any
+source: merged (local + Jeffallan/claude-skills:react-expert)
+dependencies: [typescript-pro, testing]
 ---
 
 # FRONTEND MODULE
@@ -242,4 +246,76 @@ Kamu adalah Frontend Specialist. Gunakan rules ini untuk setiap aspek frontend d
 
 ---
 
-**Invok:** `/frontend` | **Priority:** MEDIUM | **Version:** 1.0
+## React 19 Patterns
+
+### Server Component Example (Next.js)
+
+```tsx
+// app/users/page.tsx — Server Component
+import { db } from '@/lib/db';
+
+interface User {
+  id: string;
+  name: string;
+}
+
+export default async function UsersPage() {
+  const users: User[] = await db.user.findMany();
+
+  return (
+    <ul>
+      {users.map((user) => (
+        <li key={user.id}>{user.name}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+### React 19 Form with useActionState
+
+```tsx
+'use client';
+import { useActionState } from 'react';
+
+async function submitForm(_prev: string, formData: FormData): Promise<string> {
+  const name = formData.get('name') as string;
+  return `Hello, ${name}!`;
+}
+
+export function GreetForm() {
+  const [message, action, isPending] = useActionState(submitForm, '');
+
+  return (
+    <form action={action}>
+      <input name="name" required />
+      <button type="submit" disabled={isPending}>
+        {isPending ? 'Submitting...' : 'Submit'}
+      </button>
+      {message && <p>{message}</p>}
+    </form>
+  );
+}
+```
+
+---
+
+## Constraints
+
+### MUST DO
+- Use TypeScript with strict mode
+- Implement error boundaries
+- Use `key` props correctly
+- Clean up effects
+- Use semantic HTML and ARIA
+- Memoize when passing callbacks
+
+### MUST NOT DO
+- Mutate state directly
+- Use array index as key for dynamic lists
+- Create functions inside JSX
+- Forget useEffect cleanup
+
+---
+
+**Invok:** `/frontend` | **Priority:** MEDIUM | **Version:** 1.1.0

@@ -1,7 +1,32 @@
 ---
 name: security
-description: "Enterprise security standards including authentication, authorization, secrets management, and encryption best practices."
-version: "1.0"
+description: Enterprise security standards including authentication, authorization, and encryption best practices
+version: "1.1.0"
+category: [security]
+priority: high
+phase: any
+tech_stack:
+  languages: [typescript, javascript, python, go, java, all]
+scale: [small, medium, large, enterprise]
+auto_invoke:
+  enabled: true
+  conditions:
+    - phase: phase-1
+      reason: "Security should be in foundation"
+    - has_file: "**/auth/**"
+      reason: "Auth code detected"
+  skill_tier: core
+capabilities: [implementation, review, analysis]
+quality:
+  rules_count: 20
+  examples_count: 35
+  stability: stable
+integrates_with: [auto-route, api-design, compliance]
+dependencies: [devops-engineer]
+source:
+  origin: merged
+  sources: ["Jeffallan/claude-skills:security-reviewer", "Jeffallan/claude-skills:secure-code-guardian"]
+author: Claude
 ---
 
 # SECURITY MODULE
@@ -39,6 +64,70 @@ Kamu adalah Security Specialist. Gunakan rules ini untuk setiap aspek keamanan d
 - **XSS Prevention:** Escape semua output sesuai context (HTML, JavaScript, URL, CSS). Gunakan Content Security Policy (CSP) headers.
 - **Command Injection:** Jangan pernah pass user input ke system shell tanpa sanitization yang ketat. Gunakan allowlist untuk command arguments.
 - **Serialization Attacks:** Jangan deserialize untrusted data tanpa validation. Pertimbangkan untuk menggunakan JSON-only APIs.
+
+### Password Hashing (bcrypt)
+```typescript
+import bcrypt from 'bcrypt';
+
+const SALT_ROUNDS = 12;
+
+export async function hashPassword(plaintext: string): Promise<string> {
+  return bcrypt.hash(plaintext, SALT_ROUNDS);
+}
+
+export async function verifyPassword(plaintext: string, hash: string): Promise<boolean> {
+  return bcrypt.compare(plaintext, hash);
+}
+```
+
+### Parameterized SQL Query
+```typescript
+import { Pool } from 'pg';
+const pool = new Pool();
+
+export async function getUserByEmail(email: string) {
+  const { rows } = await pool.query(
+    'SELECT id, email, role FROM users WHERE email = $1',
+    [email]
+  );
+  return rows[0] ?? null;
+}
+```
+
+### Input Validation with Zod
+```typescript
+import { z } from 'zod';
+
+const LoginSchema = z.object({
+  email: z.string().email().max(254),
+  password: z.string().min(8).max(128),
+});
+
+export function validateLoginInput(raw: unknown) {
+  const result = LoginSchema.safeParse(raw);
+  if (!result.success) {
+    throw new Error('Invalid credentials format');
+  }
+  return result.data;
+}
+```
+
+### JWT Validation
+```typescript
+import jwt from 'jsonwebtoken';
+
+const JWT_SECRET = process.env.JWT_SECRET!;
+
+export function verifyToken(token: string): jwt.JwtPayload {
+  const payload = jwt.verify(token, JWT_SECRET, {
+    algorithms: ['HS256'],
+    issuer: 'your-app',
+    audience: 'your-app',
+  });
+  if (typeof payload === 'string') throw new Error('Invalid token payload');
+  return payload;
+}
+```
 
 ## 5. SECURITY HEADERS
 - **Content-Security-Policy:** Definisikan CSP yang restrictive untuk prevent XSS dan injection attacks.
@@ -107,4 +196,58 @@ Kamu adalah Security Specialist. Gunakan rules ini untuk setiap aspek keamanan d
 
 ---
 
-**Invok:** `/security` | **Priority:** HIGH | **Version:** 1.0
+## Security Review Workflow
+
+### Core Workflow
+1. **Scope** — Map attack surface and critical paths. Confirm written authorization before proceeding.
+2. **Scan** — Run SAST, dependency, and secrets tools:
+   - `semgrep --config=auto .`
+   - `bandit -r ./src`
+   - `gitleaks detect --source=.`
+   - `npm audit --audit-level=moderate`
+   - `trivy fs .`
+3. **Review** — Manual review of auth, input handling, and crypto
+4. **Test and classify** — Verify findings, rate severity (Critical/High/Medium/Low/Info)
+5. **Report** — Document with location, impact, and remediation
+
+### Security Output Template
+```
+ID: FIND-001
+Severity: High (CVSS 8.1)
+Title: SQL Injection in user search endpoint
+File: src/api/users.py, line 42
+Description: User-supplied input is concatenated directly into SQL query
+Impact: An attacker can read, modify, or delete database contents
+Remediation: Use parameterized queries
+References: CWE-89, OWASP A03:2021
+```
+
+---
+
+## Constraints
+
+### MUST DO
+- Hash passwords with bcrypt/argon2 (never MD5/SHA-1)
+- Use parameterized queries (never string-interpolated SQL)
+- Validate and sanitize all user input
+- Implement rate limiting on auth endpoints
+- Set security headers (CSP, HSTS, X-Frame-Options)
+- Log security events
+- Store secrets in environment variables
+- Check authentication/authorization first
+- Run automated tools before manual review
+- Provide specific file/line locations
+
+### MUST NOT DO
+- Store passwords in plaintext
+- Trust user input without validation
+- Expose sensitive data in logs
+- Use weak/deprecated algorithms
+- Hardcode secrets in code
+- Skip manual review (tools miss things)
+- Test on production without authorization
+- Ignore "low" severity issues
+
+---
+
+**Invok:** `/security` | **Priority:** HIGH | **Version:** 1.1.0

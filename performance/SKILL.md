@@ -1,7 +1,28 @@
 ---
 name: performance
-description: "Performance engineering best practices including profiling, benchmarking, and performance budgets."
-version: "1.0"
+description: Performance engineering best practices including profiling, benchmarking, and optimization
+version: "1.0.0"
+category: [backend, frontend]
+priority: medium
+phase: phase-6
+tech_stack:
+  languages: [typescript, javascript, python, go, java]
+scale: [medium, large, enterprise]
+auto_invoke:
+  enabled: false
+  conditions:
+    - phase: phase-6
+      reason: "Optimization phase"
+  skill_tier: optional
+capabilities: [analysis, implementation]
+quality:
+  rules_count: 12
+  examples_count: 15
+  stability: stable
+integrates_with: [scalability, reliability]
+source:
+  origin: local
+author: Claude
 ---
 
 # PERFORMANCE MODULE
