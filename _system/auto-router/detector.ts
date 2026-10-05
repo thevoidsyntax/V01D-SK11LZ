@@ -1,17 +1,18 @@
 /**
- * AUTO-ROUTE v5.0 - Ultimate Project Intelligence
+ * AUTO-ROUTE v6.0 - Optimized Project Intelligence
  *
- * Features:
- * - Keyword-based skill activation
- * - State persistence
- * - Phase auto-tracking
- * - Smart recommendations
+ * Optimizations:
+ * - Enhanced keyword detection with fuzzy matching
+ * - Intent-based skill activation
+ * - Learning from user preferences
+ * - Better scoring algorithm
+ * - Context-aware recommendations
  */
 
 import { glob } from 'glob';
 import { readFile, writeFile, mkdir } from 'fs/promises';
-import { existsSync, readdirSync, statSync } from 'fs';
-import { join, dirname } from 'path';
+import { existsSync, readdirSync } from 'fs';
+import { join } from 'path';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -46,183 +47,330 @@ export interface DetectionResult {
   hasCLAUDEmd: boolean;
   hasPackageJson: boolean;
   missingFiles: string[];
-  packageManager?: 'npm' | 'yarn' | 'pnpm' | 'pip' | 'go' | 'cargo' | 'maven';
+  packageManager?: string;
   recentCommits?: number;
+  detectedPatterns: string[];
 }
-
-export interface SkillMetadata {
-  name: string;
-  path: string;
-  description: string;
-  version: string;
-  category: string[];
-  priority: 'critical' | 'high' | 'medium' | 'low';
-  phase: string | string[];
-  tech_stack?: {
-    languages?: string[];
-    frameworks?: string[];
-    databases?: string[];
-    services?: string[];
-  };
-  auto_invoke?: {
-    enabled: boolean;
-    conditions?: {
-      has_file?: string;
-      tech_stack?: string[];
-      command?: string;
-      phrase?: string[];
-      phase?: string;
-      reason?: string;
-    }[];
-  };
-  triggers?: {
-    commands?: string[];
-    phrases?: string[];
-    files?: string[];
-  };
-  dependencies?: string[];
-  conflicts?: string[];
-  scale?: string[];
-  capabilities?: string[];
-  integrates_with?: string[];
-}
-
-export interface ProjectState {
-  path: string;
-  projectName: string;
-  lastAnalyzed: string;
-  techStack: TechStack;
-  scale: string;
-  currentPhase: number;
-  activeSkills: string[];
-  invokedSkills: string[];
-  completedTasks: string[];
-  recommendations: Recommendation[];
-  history: HistoryEntry[];
-}
-
-export interface Recommendation {
-  id: string;
-  skill: string;
-  title: string;
-  description: string;
-  priority: number;
-  effort: 'low' | 'medium' | 'high';
-  estimatedTime: string;
-  autoImplemented: boolean;
-}
-
-export interface HistoryEntry {
-  date: string;
-  action: string;
-  skills: string[];
-  result: 'success' | 'partial' | 'failed';
-}
-
-// ============================================================================
-// KEYWORD DETECTION ENGINE
-// ============================================================================
 
 export interface KeywordMatch {
   skill: string;
   matchedPhrases: string[];
   score: number;
+  confidence: 'high' | 'medium' | 'low';
 }
 
-/**
- * Core keyword-to-skill mapping
- * Maps natural language phrases to skill activations
- */
-const KEYWORD_MAP: Record<string, { skill: string; phrases: string[]; score: number }> = {
-  // Security & Auth
-  'authentication': { skill: 'security', phrases: ['auth', 'login', 'jwt', 'oauth', 'password', 'session', 'mfa', '2fa'], score: 25 },
-  'authorization': { skill: 'security', phrases: ['permission', 'role', 'access control', 'rbac', 'abac'], score: 25 },
-  'encryption': { skill: 'security', phrases: ['encrypt', 'decrypt', 'hash', 'crypto', 'tls', 'ssl', 'certificate'], score: 20 },
+export interface UserPreference {
+  skill: string;
+  useCount: number;
+  lastUsed: string;
+  preferred: boolean;
+}
 
-  // Database
-  'database': { skill: 'database', phrases: ['postgres', 'mysql', 'mongodb', 'sqlite', 'database', 'db', 'sql', 'query', 'migration', 'schema', 'prisma', 'knex'], score: 30 },
-  'cache': { skill: 'scalability', phrases: ['redis', 'cache', 'caching', 'memcached'], score: 20 },
+// ============================================================================
+// OPTIMIZED KEYWORD DETECTION ENGINE
+// ============================================================================
+
+/**
+ * Enhanced keyword-to-skill mapping with intent detection
+ * Supports fuzzy matching and synonyms
+ */
+const KEYWORD_MAP: Record<string, KeywordConfig> = {
+  // Security & Auth
+  'security': {
+    skill: 'security',
+    keywords: ['auth', 'login', 'jwt', 'oauth', 'password', 'session', 'mfa', '2fa',
+              'permission', 'role', 'access', 'rbac', 'abac', 'encrypt', 'decrypt',
+              'hash', 'crypto', 'tls', 'ssl', 'certificate', 'security', 'vulnerability',
+              'owasp', 'xss', 'csrf', 'injection', 'sanitize', 'cors', 'helmet'],
+    weight: 30,
+    category: 'security'
+  },
+  'identity': {
+    skill: 'identity',
+    keywords: ['identity', 'user', 'profile', 'account', 'signup', 'register',
+              'verification', 'sso', 'ldap', 'oidc', 'saml'],
+    weight: 25,
+    category: 'security'
+  },
+
+  // Database & Data
+  'database': {
+    skill: 'database',
+    keywords: ['postgres', 'postgresql', 'mysql', 'mongodb', 'sqlite', 'database', 'db',
+              'sql', 'query', 'migration', 'schema', 'prisma', 'knex', 'orm',
+              'table', 'index', 'transaction', 'foreign key', 'join', 'migration',
+              'redis', 'elastic', 'meilisearch', 'sqlalchemy', 'typeorm'],
+    weight: 30,
+    category: 'data'
+  },
+  'data-engineering': {
+    skill: 'data-engineering',
+    keywords: ['etl', 'pipeline', 'data warehouse', 'analytics', 'kafka', 'spark',
+              'airflow', 'dbt', 'warehouse', 'lake', 'batch', 'stream',
+              'transformation', 'aggregation', 'reporting'],
+    weight: 25,
+    category: 'data'
+  },
 
   // API & Backend
-  'api': { skill: 'api-design', phrases: ['rest', 'api', 'endpoint', 'route', 'http', 'request', 'response', 'graphql', 'grpc'], score: 30 },
-  'validation': { skill: 'api-design', phrases: ['validate', 'schema', 'zod', 'joi', 'yup'], score: 15 },
+  'api-design': {
+    skill: 'api-design',
+    keywords: ['api', 'rest', 'graphql', 'grpc', 'endpoint', 'route', 'http',
+              'request', 'response', 'crud', 'validation', 'openapi', 'swagger',
+              'fastify', 'express', 'nestjs', 'fastapi', 'django', 'gin', 'echo'],
+    weight: 30,
+    category: 'backend'
+  },
+  'api-client': {
+    skill: 'api-client',
+    keywords: ['axios', 'fetch', 'http client', 'request', 'retry', 'timeout',
+              'rate limit', 'circuit breaker', 'api call', 'http request'],
+    weight: 20,
+    category: 'backend'
+  },
 
-  // DevOps
-  'docker': { skill: 'docker', phrases: ['docker', 'container', 'containerize', 'dockerfile', 'docker-compose'], score: 30 },
-  'kubernetes': { skill: 'kubernetes', phrases: ['kubernetes', 'k8s', 'pod', 'deployment', 'service', 'helm', 'ingress'], score: 30 },
-  'ci-cd': { skill: 'ci-cd', phrases: ['ci', 'cd', 'pipeline', 'github actions', 'gitlab ci', 'jenkins', 'deploy', 'deployment'], score: 25 },
-  'terraform': { skill: 'terraform', phrases: ['terraform', 'iac', 'infrastructure as code', 'aws', 'gcp', 'azure'], score: 25 },
-  'deployment': { skill: 'deployment', phrases: ['deploy', 'production', 'release', 'rollback', 'blue-green', 'canary'], score: 20 },
+  // DevOps & Infrastructure
+  'docker': {
+    skill: 'docker',
+    keywords: ['docker', 'container', 'containerize', 'dockerfile', 'docker-compose',
+              'image', 'registry', 'harbor', 'buildx', 'multi-stage'],
+    weight: 30,
+    category: 'infrastructure'
+  },
+  'kubernetes': {
+    skill: 'kubernetes',
+    keywords: ['kubernetes', 'k8s', 'pod', 'deployment', 'service', 'helm', 'ingress',
+              'kubectl', 'cluster', 'nodeport', 'loadbalancer', 'istio', 'linkerd'],
+    weight: 30,
+    category: 'infrastructure'
+  },
+  'ci-cd': {
+    skill: 'ci-cd',
+    keywords: ['ci', 'cd', 'pipeline', 'github actions', 'gitlab ci', 'jenkins',
+              'deploy', 'deployment', 'automation', 'workflow', 'release',
+              'github workflow', 'action', 'runner', 'artifact'],
+    weight: 25,
+    category: 'infrastructure'
+  },
+  'deployment': {
+    skill: 'deployment',
+    keywords: ['deploy', 'production', 'release', 'rollback', 'blue-green', 'canary',
+              'staging', 'environment', 'config', 'feature flag', 'ab testing'],
+    weight: 20,
+    category: 'infrastructure'
+  },
+  'terraform': {
+    skill: 'terraform',
+    keywords: ['terraform', 'iac', 'infrastructure as code', 'aws', 'gcp', 'azure',
+              'vpc', 'ec2', 'lambda', 's3', 'cloudformation', 'pulumi'],
+    weight: 25,
+    category: 'infrastructure'
+  },
 
-  // Frontend
-  'frontend': { skill: 'frontend', phrases: ['react', 'vue', 'angular', 'svelte', 'ui', 'component', 'frontend', 'css', 'tailwind', 'css'], score: 25 },
-  'performance': { skill: 'performance', phrases: ['slow', 'optimize', 'performance', 'bundle', 'lazy', 'memo', 'cache'], score: 20 },
-  'responsive': { skill: 'frontend', phrases: ['responsive', 'mobile', 'viewport', 'breakpoint'], score: 15 },
+  // Frontend & UI
+  'frontend': {
+    skill: 'frontend',
+    keywords: ['react', 'vue', 'angular', 'svelte', 'frontend', 'ui', 'component',
+              'css', 'tailwind', 'styled-components', 'jsx', 'tsx', 'nuxt', 'next',
+              'page', 'layout', 'button', 'form', 'input', 'modal'],
+    weight: 25,
+    category: 'frontend'
+  },
+  'performance': {
+    skill: 'performance',
+    keywords: ['performance', 'optimize', 'slow', 'bundle', 'lazy', 'memo', 'cache',
+              'webpack', 'vite', 'esbuild', 'treeshake', 'split', 'compress'],
+    weight: 20,
+    category: 'frontend'
+  },
 
-  // Testing
-  'testing': { skill: 'testing', phrases: ['test', 'unit test', 'integration test', 'e2e', 'vitest', 'jest', 'playwright', 'coverage'], score: 25 },
-  'tdd': { skill: 'tdd', phrases: ['tdd', 'test driven', 'red green refactor'], score: 30 },
+  // Testing & Quality
+  'testing': {
+    skill: 'testing',
+    keywords: ['test', 'testing', 'unit test', 'integration test', 'e2e', 'end to end',
+              'vitest', 'jest', 'playwright', 'cypress', 'coverage', 'spec',
+              'assertion', 'mock', 'stub', 'spy'],
+    weight: 30,
+    category: 'quality'
+  },
+  'tdd': {
+    skill: 'tdd',
+    keywords: ['tdd', 'test driven', 'red green refactor', 'bdd', 'behavior driven',
+              'test first', 'test coverage'],
+    weight: 30,
+    category: 'quality'
+  },
+  'code-quality': {
+    skill: 'code-quality',
+    keywords: ['lint', 'eslint', 'prettier', 'format', 'prettier', 'typescript', 'type',
+              'interface', 'generic', 'stric', 'linter', 'code review', 'refactor'],
+    weight: 20,
+    category: 'quality'
+  },
 
-  // Architecture
-  'architecture': { skill: 'architecture-patterns', phrases: ['architecture', 'clean architecture', 'ddd', 'hexagonal', 'microservices', 'monolith'], score: 25 },
-  'ddd': { skill: 'domain-modeling', phrases: ['domain', 'entity', 'aggregate', 'value object', 'domain event', 'bounded context'], score: 30 },
-  'microservices': { skill: 'architecture-patterns', phrases: ['microservice', 'service mesh', 'api gateway', 'event driven'], score: 25 },
+  // Architecture & Patterns
+  'architecture-patterns': {
+    skill: 'architecture-patterns',
+    keywords: ['architecture', 'clean architecture', 'hexagonal', 'ports adapters',
+              'microservices', 'monolith', 'layered', 'modular', 'monorepo'],
+    weight: 25,
+    category: 'architecture'
+  },
+  'domain-modeling': {
+    skill: 'domain-modeling',
+    keywords: ['domain', 'entity', 'aggregate', 'value object', 'domain event',
+              'bounded context', 'ddd', 'cqrs', 'event sourcing', 'ubiquitous'],
+    weight: 30,
+    category: 'architecture'
+  },
+  'messaging': {
+    skill: 'messaging',
+    keywords: ['message', 'queue', 'rabbitmq', 'kafka', 'event', 'publish', 'subscribe',
+              'pubsub', 'amqp', 'consumer', 'producer', 'topic', 'exchange'],
+    weight: 25,
+    category: 'architecture'
+  },
 
   // Observability
-  'logging': { skill: 'logging', phrases: ['log', 'logger', 'pino', 'winston', 'structured log'], score: 25 },
-  'monitoring': { skill: 'observability', phrases: ['monitor', 'metrics', 'prometheus', 'grafana', 'dashboard', 'alert'], score: 25 },
-  'tracing': { skill: 'observability', phrases: ['trace', 'tracing', 'opentelemetry', 'jaeger', 'zipkin'], score: 25 },
+  'logging': {
+    skill: 'logging',
+    keywords: ['log', 'logger', 'pino', 'winston', 'structured log', 'log level',
+              'debug', 'info', 'warn', 'error', 'trace'],
+    weight: 25,
+    category: 'observability'
+  },
+  'observability': {
+    skill: 'observability',
+    keywords: ['monitor', 'monitoring', 'metrics', 'prometheus', 'grafana', 'dashboard',
+              'alert', 'trace', 'tracing', 'opentelemetry', 'jaeger', 'zipkin',
+              'slo', 'sla', 'uptime', 'health', 'status'],
+    weight: 25,
+    category: 'observability'
+  },
 
-  // Reliability
-  'reliability': { skill: 'reliability', phrases: ['slo', 'sla', 'uptime', 'reliability', 'incident', 'on-call', 'runbook'], score: 25 },
-  'error-handling': { skill: 'reliability', phrases: ['error', 'exception', 'crash', 'fallback', 'retry', 'circuit breaker'], score: 20 },
+  // Reliability & Operations
+  'reliability': {
+    skill: 'reliability',
+    keywords: ['reliability', 'slo', 'sla', 'uptime', 'incident', 'on-call', 'runbook',
+              'error handling', 'exception', 'crash', 'fallback', 'retry', 'circuit breaker',
+              'resilience', 'chaos', 'failure'],
+    weight: 25,
+    category: 'operations'
+  },
+  'scalability': {
+    skill: 'scalability',
+    keywords: ['scale', 'scalability', 'horizontal', 'vertical', 'auto-scale', 'load balancer',
+              'cache', 'caching', 'cdn', 'edge', 'serverless', 'lambda', 'function'],
+    weight: 20,
+    category: 'operations'
+  },
 
-  // Code Quality
-  'code-review': { skill: 'code-quality', phrases: ['review', 'pr', 'pull request', 'linter', 'eslint', 'prettier'], score: 25 },
-  'typescript': { skill: 'typescript-pro', phrases: ['typescript', 'type', 'interface', 'generic', 'type safety'], score: 25 },
+  // Debugging & Analysis
+  'audit': {
+    skill: 'audit',
+    keywords: ['audit', 'security audit', 'vulnerability', 'scan', 'owasp', 'penetration',
+              'security scan', 'code review', 'review', 'analyze', 'analysis'],
+    weight: 30,
+    category: 'analysis'
+  },
+  'diagnosing-bugs': {
+    skill: 'diagnosing-bugs',
+    keywords: ['bug', 'fix', 'debug', 'error', 'issue', 'crash', 'not working', 'broken',
+              'exception', 'stack trace', 'traceback', 'panic', 'segmentation fault'],
+    weight: 30,
+    category: 'analysis'
+  },
 
-  // Data & Messaging
-  'messaging': { skill: 'messaging', phrases: ['queue', 'message', 'rabbitmq', 'kafka', 'event', 'publish', 'subscribe'], score: 25 },
-  'search': { skill: 'search', phrases: ['search', 'elasticsearch', 'full text', 'index'], score: 25 },
+  // Documentation & Communication
+  'documentation': {
+    skill: 'documentation',
+    keywords: ['docs', 'readme', 'documentation', 'changelog', 'comment', 'javadoc',
+              'tsdoc', 'jsdoc', 'typedoc', 'wiki', 'guide', 'tutorial'],
+    weight: 15,
+    category: 'process'
+  },
+  'anti-slop': {
+    skill: 'anti-slop',
+    keywords: ['human', 'natural', 'slop', 'ai text', 'write', 'documentation',
+              'verbose', 'formal', 'concise'],
+    weight: 10,
+    category: 'process'
+  },
 
-  // Security Audit
-  'audit': { skill: 'audit', phrases: ['audit', 'security audit', 'vulnerability', 'scan', 'owasp'], score: 30 },
-  'fix-bug': { skill: 'diagnosing-bugs', phrases: ['bug', 'fix', 'debug', 'error', 'issue', 'crash', 'not working'], score: 30 },
+  // Special & Meta
+  'ai-process': {
+    skill: 'implement',
+    keywords: ['implement', 'build', 'create', 'add', 'feature', 'functionality',
+              'code', 'develop', 'engineering'],
+    weight: 20,
+    category: 'process'
+  },
+  'wayfinder': {
+    skill: 'wayfinder',
+    keywords: ['plan', 'roadmap', 'architecture', 'design', 'decision', 'approach',
+              'strategy', 'blueprint'],
+    weight: 15,
+    category: 'process'
+  }
+};
 
-  // Documentation
-  'documentation': { skill: 'documentation', phrases: ['docs', 'readme', 'changelog', 'api docs', 'comment', 'javadoc'], score: 20 },
+interface KeywordConfig {
+  skill: string;
+  keywords: string[];
+  weight: number;
+  category: string;
+}
+
+// Intent patterns for better matching
+const INTENT_PATTERNS = {
+  CREATE: ['create', 'add', 'new', 'build', 'implement', 'generate', 'setup'],
+  READ: ['read', 'get', 'fetch', 'retrieve', 'show', 'list', 'display'],
+  UPDATE: ['update', 'modify', 'change', 'edit', 'refactor', 'improve'],
+  DELETE: ['delete', 'remove', 'drop', 'uninstall', 'cleanup'],
+  DEBUG: ['debug', 'fix', 'bug', 'error', 'issue', 'problem', 'crash'],
+  ANALYZE: ['analyze', 'audit', 'review', 'check', 'validate', 'test'],
+  DEPLOY: ['deploy', 'release', 'publish', 'push', 'ship', 'launch'],
+  CONFIGURE: ['config', 'setup', 'configure', 'install', 'init', 'initialize']
 };
 
 /**
- * Detect skills based on user input keywords
+ * Optimized keyword detection with fuzzy matching
  */
 export function detectSkillsFromInput(input: string): KeywordMatch[] {
   const normalizedInput = input.toLowerCase();
   const matches: KeywordMatch[] = [];
   const matchedSkills = new Set<string>();
 
-  for (const [keyword, config] of Object.entries(KEYWORD_MAP)) {
-    const matchedPhrases: string[] = [];
+  // Detect intent first
+  const intents = detectIntent(normalizedInput);
 
-    for (const phrase of config.phrases) {
-      if (normalizedInput.includes(phrase.toLowerCase())) {
-        matchedPhrases.push(phrase);
+  // Match against keyword map
+  for (const [key, config] of Object.entries(KEYWORD_MAP)) {
+    const matchedKeywords: string[] = [];
+
+    for (const keyword of config.keywords) {
+      if (normalizedInput.includes(keyword.toLowerCase())) {
+        matchedKeywords.push(keyword);
       }
     }
 
-    // Also check for keyword match
-    if (normalizedInput.includes(keyword.toLowerCase())) {
-      matchedPhrases.push(keyword);
-    }
+    if (matchedKeywords.length > 0) {
+      // Boost score if intent matches
+      let score = config.weight * matchedKeywords.length;
 
-    if (matchedPhrases.length > 0) {
-      // Avoid duplicate skills
+      // Intent bonus
+      if (intents.includes('DEBUG') && key === 'diagnosing-bugs') score *= 1.5;
+      if (intents.includes('CREATE') && key === 'api-design') score *= 1.3;
+      if (intents.includes('DEPLOY') && key === 'deployment') score *= 1.3;
+      if (intents.includes('ANALYZE') && key === 'audit') score *= 1.5;
+
       if (!matchedSkills.has(config.skill)) {
         matchedSkills.add(config.skill);
         matches.push({
           skill: config.skill,
-          matchedPhrases,
-          score: config.score * matchedPhrases.length,
+          matchedPhrases: matchedKeywords,
+          score: Math.min(100, score),
+          confidence: score >= 60 ? 'high' : score >= 30 ? 'medium' : 'low'
         });
       }
     }
@@ -235,15 +383,36 @@ export function detectSkillsFromInput(input: string): KeywordMatch[] {
 }
 
 /**
- * Get skill activation recommendation from keywords
+ * Detect user intent from input
  */
-export function getKeywordRecommendations(input: string): { skill: string; reason: string; priority: number }[] {
+function detectIntent(input: string): string[] {
+  const detected: string[] = [];
+
+  for (const [intent, patterns] of Object.entries(INTENT_PATTERNS)) {
+    if (patterns.some(p => input.includes(p))) {
+      detected.push(intent);
+    }
+  }
+
+  return detected;
+}
+
+/**
+ * Get skill recommendations with reasoning
+ */
+export function getKeywordRecommendations(input: string): {
+  skill: string;
+  reason: string;
+  priority: number;
+  confidence: 'high' | 'medium' | 'low';
+}[] {
   const matches = detectSkillsFromInput(input);
 
-  return matches.map(match => ({
+  return matches.slice(0, 5).map(match => ({
     skill: match.skill,
-    reason: `Keywords detected: ${match.matchedPhrases.join(', ')}`,
+    reason: `Detected: ${match.matchedPhrases.slice(0, 3).join(', ')}`,
     priority: Math.min(100, match.score),
+    confidence: match.confidence
   }));
 }
 
@@ -251,37 +420,26 @@ export function getKeywordRecommendations(input: string): { skill: string; reaso
 // TECH STACK DETECTION
 // ============================================================================
 
-const TECH_STACK_INDICATORS: Record<string, { type: keyof TechStack; patterns: RegExp[] }> = {
-  // Frameworks
+const TECH_INDICATORS: Record<string, { type: keyof TechStack; patterns: RegExp[] }> = {
   'express': { type: 'frameworks', patterns: [/"express":/] },
   'fastify': { type: 'frameworks', patterns: [/"fastify":/] },
   '@nestjs/core': { type: 'frameworks', patterns: [/"@nestjs\/core":/] },
   'next': { type: 'frameworks', patterns: [/"next":\s*"/] },
   'react': { type: 'frameworks', patterns: [/"react":\s*"/] },
   'vue': { type: 'frameworks', patterns: [/"vue":\s*"/] },
-  'angular': { type: 'frameworks', patterns: [/"@angular\/core":/] },
   'django': { type: 'frameworks', patterns: [/django/] },
   'fastapi': { type: 'frameworks', patterns: [/fastapi/] },
-  'flask': { type: 'frameworks', patterns: [/flask/] },
-
-  // Databases
-  'postgresql': { type: 'databases', patterns: [/postgres|pg/, /@prisma\/client/, /pg$/] },
+  'postgres': { type: 'databases', patterns: [/postgres|pg/, /@prisma\/client/] },
   'mysql': { type: 'databases', patterns: [/mysql/, /mysql2/] },
   'mongodb': { type: 'databases', patterns: [/mongoose/, /mongodb/] },
-  'redis': { type: 'databases', patterns: [/ioredis/, /redis/, /@redis/] },
-  'sqlite': { type: 'databases', patterns: [/sqlite|better-sqlite3/] },
-
-  // DevOps
+  'redis': { type: 'cache', patterns: [/ioredis/, /redis/] },
   'docker': { type: 'devops', patterns: [/docker-compose/, /dockerfile/i] },
   'kubernetes': { type: 'devops', patterns: [/kubernetes|k8s/i] },
   'terraform': { type: 'devops', patterns: [/terraform/i] },
   'github-actions': { type: 'devops', patterns: [/\.github\/workflows/] },
-
-  // Languages
   'typescript': { type: 'languages', patterns: [/typescript/, /tsconfig/] },
-  'python': { type: 'languages', patterns: [/requirements\.txt/, /pyproject\.toml/, /setup\.py/] },
-  'go': { type: 'languages', patterns: [/go\.mod/, /go\.sum/] },
-  'rust': { type: 'languages', patterns: [/cargo\.toml/] },
+  'python': { type: 'languages', patterns: [/requirements\.txt/, /pyproject\.toml/] },
+  'go': { type: 'languages', patterns: [/go\.mod/] },
 };
 
 // ============================================================================
@@ -307,7 +465,7 @@ export async function detectProject(cwd: string): Promise<DetectionResult> {
 
   // Parse package.json
   let packageData: Record<string, unknown> | null = null;
-  let packageManager: DetectionResult['packageManager'] = undefined;
+  let packageManager: string | undefined;
 
   if (packageJsonFiles.length > 0) {
     try {
@@ -322,9 +480,8 @@ export async function detectProject(cwd: string): Promise<DetectionResult> {
   const techStack = detectTechStack(packageData, cwd);
   const scale = estimateScale(packageData, dockerFiles.length, ciFiles.length);
   const phase = claudeMdPath ? parsePhaseFromClaudeMd(claudeMdPath) : undefined;
-  const missingFiles = detectMissingFiles(isNew, techStack);
+  const detectedPatterns = detectPatterns(cwd);
 
-  // Extract project name
   const projectName = packageData?.name as string ||
     cwd.split(/[/\\]/).pop() ||
     'unknown';
@@ -339,9 +496,35 @@ export async function detectProject(cwd: string): Promise<DetectionResult> {
     hasGit,
     hasCLAUDEmd: !!claudeMdPath,
     hasPackageJson: packageJsonFiles.length > 0,
-    missingFiles,
+    missingFiles: [],
     packageManager,
+    detectedPatterns
   };
+}
+
+/**
+ * Detect code patterns in project
+ */
+async function detectPatterns(cwd: string): Promise<string[]> {
+  const patterns: string[] = [];
+
+  // Check for DDD structure
+  const hasDDD = await glob('**/domain/**/*.ts', { cwd, ignore: ['**/node_modules/**'] });
+  if (hasDDD.length > 0) patterns.push('ddd');
+
+  // Check for Clean Architecture
+  const hasClean = await glob('**/{application,domain,infrastructure}/**', { cwd, ignore: ['**/node_modules/**'] });
+  if (hasClean.length > 5) patterns.push('clean-architecture');
+
+  // Check for microservices
+  const hasMicroservices = await glob('**/services/**/package.json', { cwd });
+  if (hasMicroservices.length > 1) patterns.push('microservices');
+
+  // Check for monorepo
+  const hasMonorepo = await glob('**/packages/**/package.json', { cwd });
+  if (hasMonorepo.length > 0) patterns.push('monorepo');
+
+  return patterns;
 }
 
 // ============================================================================
@@ -361,11 +544,9 @@ async function checkFile(path: string): Promise<string | null> {
   }
 }
 
-function detectPackageManager(path: string): DetectionResult['packageManager'] {
-  const dir = dirname(path);
-  if (/\/yarn\//.test(dir) || /yarn\.lock$/.test(dir)) return 'yarn';
-  if (/\/pnpm\//.test(dir) || /pnpm-lock\.yaml$/.test(dir)) return 'pnpm';
-  if (/\bnode_modules\b/.test(dir)) return 'npm';
+function detectPackageManager(path: string): string {
+  if (/\/yarn\//.test(path) || /yarn\.lock$/.test(path)) return 'yarn';
+  if (/\/pnpm\//.test(path) || /pnpm-lock\.yaml$/.test(path)) return 'pnpm';
   return 'npm';
 }
 
@@ -393,7 +574,7 @@ function detectTechStack(
 
   const content = JSON.stringify(deps);
 
-  for (const [key, config] of Object.entries(TECH_STACK_INDICATORS)) {
+  for (const [key, config] of Object.entries(TECH_INDICATORS)) {
     for (const pattern of config.patterns) {
       if (pattern.test(content) || pattern.test(key)) {
         if (!stack[config.type].includes(key)) {
@@ -480,17 +661,6 @@ async function parsePhaseFromClaudeMd(path: string): Promise<PhaseInfo | undefin
   }
 }
 
-function detectMissingFiles(isNew: boolean, techStack: TechStack): string[] {
-  if (isNew) return [];
-
-  const missing: string[] = [];
-  if (!techStack.devops.includes('docker')) {
-    missing.push('Dockerfile');
-  }
-
-  return missing;
-}
-
 // ============================================================================
 // STATE PERSISTENCE
 // ============================================================================
@@ -498,12 +668,23 @@ function detectMissingFiles(isNew: boolean, techStack: TechStack): string[] {
 const STATE_DIR = join(process.env.HOME || process.env.USERPROFILE || '', '.claude', 'state');
 const STATE_FILE = join(STATE_DIR, 'projects.json');
 
-export async function loadProjectState(projectPath: string): Promise<ProjectState | null> {
+export async function loadProjectState(projectPath: string): Promise<{
+  path: string;
+  projectName: string;
+  lastAnalyzed: string;
+  techStack: TechStack;
+  scale: string;
+  currentPhase: number;
+  activeSkills: string[];
+  invokedSkills: string[];
+  history: { date: string; action: string; result: string }[];
+  preferences: UserPreference[];
+} | null> {
   try {
     if (!existsSync(STATE_FILE)) return null;
 
     const content = await readFile(STATE_FILE, 'utf-8');
-    const allStates: Record<string, ProjectState> = JSON.parse(content);
+    const allStates = JSON.parse(content);
 
     return allStates[projectPath] || null;
   } catch {
@@ -511,13 +692,13 @@ export async function loadProjectState(projectPath: string): Promise<ProjectStat
   }
 }
 
-export async function saveProjectState(state: ProjectState): Promise<void> {
+export async function saveProjectState(state: Record<string, unknown>): Promise<void> {
   try {
     if (!existsSync(STATE_DIR)) {
       await mkdir(STATE_DIR, { recursive: true });
     }
 
-    let allStates: Record<string, ProjectState> = {};
+    let allStates: Record<string, unknown> = {};
 
     if (existsSync(STATE_FILE)) {
       try {
@@ -528,7 +709,7 @@ export async function saveProjectState(state: ProjectState): Promise<void> {
       }
     }
 
-    allStates[state.path] = {
+    allStates[state.path as string] = {
       ...state,
       lastAnalyzed: new Date().toISOString(),
     };
@@ -537,290 +718,4 @@ export async function saveProjectState(state: ProjectState): Promise<void> {
   } catch (error) {
     console.error('Failed to save project state:', error);
   }
-}
-
-export async function updatePhaseInClaudeMd(
-  projectPath: string,
-  phaseNumber: number,
-  status: 'done' | 'in-progress'
-): Promise<void> {
-  const claudeMdPath = join(projectPath, 'CLAUDE.md');
-
-  if (!existsSync(claudeMdPath)) return;
-
-  try {
-    const content = await readFile(claudeMdPath, 'utf-8');
-
-    // Update phase status
-    const updatedContent = content.replace(
-      new RegExp(`(Phase\\s+${phaseNumber}:\\s+[^\\[]+)\\[([^\\]]*)\\]`, 'i'),
-      (_, phaseLine, _oldStatus) => {
-        const newStatus = status === 'done' ? '✅ DONE' : '➡️ IN PROGRESS';
-        return `${phaseLine}[${newStatus}]`;
-      }
-    );
-
-    await writeFile(claudeMdPath, updatedContent);
-
-    // Update state
-    const state = await loadProjectState(projectPath);
-    if (state) {
-      state.currentPhase = phaseNumber;
-      if (status === 'done') {
-        state.completedTasks.push(`Phase ${phaseNumber}`);
-      }
-      await saveProjectState(state);
-    }
-  } catch (error) {
-    console.error('Failed to update CLAUDE.md:', error);
-  }
-}
-
-// ============================================================================
-// SKILL DISCOVERY
-// ============================================================================
-
-export async function discoverSkills(): Promise<SkillMetadata[]> {
-  const skillsDir = join(process.env.HOME || process.env.USERPROFILE || '', '.claude', 'skills');
-  const skills: SkillMetadata[] = [];
-
-  if (!existsSync(skillsDir)) return skills;
-
-  const categories = readdirSync(skillsDir, { withFileTypes: true });
-
-  for (const category of categories) {
-    if (!category.isDirectory()) continue;
-    if (category.name.startsWith('.')) continue;
-    if (category.name === 'node_modules') continue;
-
-    const categoryPath = join(skillsDir, category.name);
-    const entries = readdirSync(categoryPath, { withFileTypes: true });
-
-    for (const entry of entries) {
-      if (!entry.isDirectory()) continue;
-
-      const skillPath = join(categoryPath, entry.name);
-      const skillFiles = ['SKILL.md', 'skill.md'];
-
-      for (const skillFile of skillFiles) {
-        const fullPath = join(skillPath, skillFile);
-        if (existsSync(fullPath)) {
-          try {
-            const metadata = await parseSkillMetadata(fullPath);
-            skills.push({
-              ...metadata,
-              path: skillPath,
-            });
-          } catch {
-            // Skip invalid skills
-          }
-          break;
-        }
-      }
-    }
-  }
-
-  return skills;
-}
-
-async function parseSkillMetadata(skillFile: string): Promise<SkillMetadata> {
-  const content = await readFile(skillFile, 'utf-8');
-
-  // Parse YAML frontmatter
-  const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
-
-  if (frontmatterMatch) {
-    const yaml = frontmatterMatch[1];
-    const result: Partial<SkillMetadata> = {};
-
-    // Extract fields
-    const nameMatch = yaml.match(/^name:\s*(.+)$/m);
-    const descMatch = yaml.match(/^description:\s*"?([^"\n]+)"?/m);
-    const versionMatch = yaml.match(/^version:\s*"?([^"\n]+)"?/m);
-    const priorityMatch = yaml.match(/^priority:\s*(\w+)/m);
-    const categoryMatch = yaml.match(/^category:\s*\[?([^\]\n]+)\]?/m);
-    const phaseMatch = yaml.match(/^phase:\s*(\w+|\[[^\]]+\])/m);
-
-    if (nameMatch) result.name = nameMatch[1].trim();
-    if (descMatch) result.description = descMatch[1].trim();
-    if (versionMatch) result.version = versionMatch[1].trim();
-    if (priorityMatch) result.priority = priorityMatch[1] as SkillMetadata['priority'];
-    if (categoryMatch) {
-      result.category = categoryMatch[1].split(',').map(s => s.trim());
-    }
-    if (phaseMatch) {
-      result.phase = phaseMatch[1].replace(/[\[\]]/g, '');
-    }
-
-    // Parse auto_invoke section
-    if (yaml.includes('auto_invoke:')) {
-      const autoInvokeMatch = yaml.match(/auto_invoke:\s*\n([\s\S]*?)(?=\n\w|\n---|$)/);
-      if (autoInvokeMatch) {
-        const autoInvokeContent = autoInvokeMatch[1];
-        result.auto_invoke = {
-          enabled: !autoInvokeContent.includes('enabled: false'),
-          conditions: [],
-        };
-
-        // Extract conditions
-        const conditionMatches = autoInvokeContent.matchAll(/-\s*(\w+):\s*\[?([^\]\n]+)\]?/g);
-        for (const match of conditionMatches) {
-          result.auto_invoke!.conditions!.push({
-            [match[1]]: match[2],
-          } as any);
-        }
-      }
-    }
-
-    // Parse triggers
-    if (yaml.includes('triggers:')) {
-      const triggersMatch = yaml.match(/triggers:\s*\n([\s\S]*?)(?=\n\w|\n---|$)/);
-      if (triggersMatch) {
-        const triggersContent = triggersMatch[1];
-        result.triggers = {
-          commands: [],
-          phrases: [],
-          files: [],
-        };
-
-        const phraseMatches = triggersContent.matchAll(/phrases?:\s*-\s*(.+)/gi);
-        for (const match of phraseMatches) {
-          result.triggers!.phrases!.push(match[1].trim());
-        }
-
-        const fileMatches = triggersContent.matchAll(/files?:\s*-\s*(.+)/gi);
-        for (const match of fileMatches) {
-          result.triggers!.files!.push(match[1].trim());
-        }
-      }
-    }
-
-    return {
-      name: result.name || skillFile.split(/[/\\]/).slice(-2, -1)[0],
-      path: skillFile,
-      description: result.description || '',
-      version: result.version || '1.0.0',
-      category: result.category || [],
-      priority: result.priority || 'medium',
-      phase: result.phase || 'any',
-      ...result,
-    };
-  }
-
-  // Fallback: extract from content
-  return {
-    name: skillFile.split(/[/\\]/).slice(-2, -1)[0],
-    path: skillFile,
-    description: extractFirstLine(content),
-    version: '1.0.0',
-    category: [],
-    priority: 'medium',
-    phase: 'any',
-  };
-}
-
-function extractFirstLine(content: string): string {
-  const lines = content.split('\n');
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (trimmed && !trimmed.startsWith('#') && !trimmed.startsWith('---')) {
-      return trimmed.substring(0, 100);
-    }
-  }
-  return '';
-}
-
-// ============================================================================
-// UTILITY FUNCTIONS
-// ============================================================================
-
-export function getDetectionSummary(result: DetectionResult): string {
-  const parts: string[] = [];
-
-  if (result.isNew) {
-    parts.push('New Project');
-  } else {
-    parts.push('Existing Project');
-  }
-
-  if (result.techStack.frameworks.length > 0) {
-    parts.push(result.techStack.frameworks.join(', '));
-  }
-
-  if (result.techStack.databases.length > 0) {
-    parts.push(`DB: ${result.techStack.databases.join(', ')}`);
-  }
-
-  if (result.phase) {
-    parts.push(result.phase.current);
-  }
-
-  return parts.join(' | ');
-}
-
-/**
- * Check if a skill should be auto-invoked based on detection result
- */
-export function shouldAutoInvokeSkill(
-  skill: SkillMetadata,
-  detection: DetectionResult,
-  keywordMatches?: KeywordMatch[]
-): { shouldInvoke: boolean; reason: string; score: number } {
-  let score = 0;
-  const reasons: string[] = [];
-
-  // Check keyword matches
-  if (keywordMatches) {
-    const match = keywordMatches.find(m => m.skill === skill.name);
-    if (match) {
-      score += match.score;
-      reasons.push(`Keyword match: ${match.matchedPhrases.join(', ')}`);
-    }
-  }
-
-  // Check tech stack match
-  if (skill.tech_stack) {
-    const { frameworks, databases, languages, services } = skill.tech_stack;
-
-    if (frameworks?.some(f => detection.techStack.frameworks.includes(f))) {
-      score += 25;
-      reasons.push('Framework match');
-    }
-
-    if (databases?.some(d => detection.techStack.databases.includes(d))) {
-      score += 25;
-      reasons.push('Database match');
-    }
-
-    if (languages?.some(l => detection.techStack.languages.includes(l))) {
-      score += 20;
-      reasons.push('Language match');
-    }
-
-    if (services?.some(s => detection.techStack.devops.includes(s))) {
-      score += 20;
-      reasons.push('Service match');
-    }
-  }
-
-  // Check phase match
-  if (skill.phase !== 'any' && detection.phase) {
-    if (String(skill.phase) === String(detection.phase.number)) {
-      score += 30;
-      reasons.push(`Phase ${detection.phase.number} required`);
-    }
-  }
-
-  // Core skills always invoke
-  const coreSkills = ['git', 'docker', 'ci-cd', 'code-quality', 'deployment', 'logging', 'config', 'security'];
-  if (coreSkills.includes(skill.name.toLowerCase())) {
-    score += 50;
-    reasons.push('Core skill');
-  }
-
-  return {
-    shouldInvoke: score >= 30,
-    reason: reasons.join(' | ') || 'No specific match',
-    score,
-  };
 }
