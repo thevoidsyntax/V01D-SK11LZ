@@ -118,19 +118,16 @@ const CORE_SKILLS = new Set([
   // Quality & Testing
   'code-quality', 'logging', 'config', 'testing',
 
-  // Security
-  'security',
+  // Security (hacker-style)
+  'security', 'pentest',
 
   // Architecture & Patterns (always for any scale)
-  'tdd',
-  'diagnosing-bugs',
-  'domain-modeling',
-  'architecture-patterns'
+  'tdd', 'diagnosing-bugs', 'domain-modeling', 'architecture-patterns'
 ]);
 
 // Skill categories for grouping
 const SKILL_CATEGORIES: Record<string, string[]> = {
-  'security': ['security', 'identity', 'compliance'],
+  'security': ['security', 'pentest', 'identity', 'compliance'],
   'database': ['database', 'data-engineering', 'messaging'],
   'api': ['api-design', 'api-client'],
   'infrastructure': ['docker', 'kubernetes', 'terraform', 'ci-cd', 'deployment'],

@@ -150,11 +150,23 @@ These skills are **always auto-invoked** regardless of project size or scale:
 | **DevOps** | `/docker`, `/ci-cd`, `/deployment` | Containers, pipelines, deploy |
 | **Quality** | `/code-quality`, `/testing` | Linting, testing |
 | **Config** | `/config`, `/logging` | Environment, logging |
-| **Security** | `/security` | Security best practices |
+| **Security** | `/security`, `/pentest` | Security + Pentesting tools |
 | **Architecture** | `/tdd`, `/domain-modeling`, `/architecture-patterns` | TDD, DDD, system design |
 | **Debugging** | `/diagnosing-bugs` | Debug assistance |
 
-**Total: 12 CORE skills** always active for any project size.
+**Total: 13 CORE skills** always active for any project size.
+
+### Pentest Tools in `/pentest`
+
+| Tool | Purpose |
+|------|---------|
+| **Nuclei** | CVE/vulnerability scanner |
+| **OWASP ZAP** | Web app scanner |
+| **SQLMap** | SQL injection |
+| **dalfox** | XSS scanner |
+| **FFUF** | API/URL fuzzer |
+| **Subfinder** | Subdomain enumeration |
+| **Hydra** | Brute force |
 
 ---
 
