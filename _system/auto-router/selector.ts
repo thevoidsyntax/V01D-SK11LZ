@@ -121,6 +121,12 @@ const CORE_SKILLS = new Set([
   // Security (hacker-style)
   'security', 'pentest',
 
+  // Frontend & UI (always for web projects)
+  'frontend', 'ui-ux-pro-max',
+
+  // Performance & Observability
+  'performance', 'observability',
+
   // Architecture & Patterns (always for any scale)
   'tdd', 'diagnosing-bugs', 'domain-modeling', 'architecture-patterns'
 ]);
