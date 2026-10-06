@@ -112,8 +112,20 @@ const SCORE_WEIGHTS = {
 
 // Core skills that always invoke
 const CORE_SKILLS = new Set([
-  'git', 'docker', 'ci-cd', 'code-quality', 'deployment',
-  'logging', 'config', 'security'
+  // Version Control & DevOps
+  'git', 'docker', 'ci-cd', 'deployment',
+
+  // Quality & Testing
+  'code-quality', 'logging', 'config', 'testing',
+
+  // Security
+  'security',
+
+  // Architecture & Patterns (always for any scale)
+  'tdd',
+  'diagnosing-bugs',
+  'domain-modeling',
+  'architecture-patterns'
 ]);
 
 // Skill categories for grouping
