@@ -11,7 +11,7 @@ scale: [all]
 auto_invoke:
   enabled: true
   conditions:
-    - command: ["/auto-router", "/auto-route", "/autoroute"]
+    - command: ["/autor", "/ar", "/auto-router", "/auto-route", "/autoroute"]
       reason: "Primary entry point"
     - phrase: ["project baru", "new project", "create project", "init project", "analyze", "audit"]
       reason: "Project operation intent"
