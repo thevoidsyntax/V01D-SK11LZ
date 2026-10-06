@@ -4,7 +4,7 @@ description: "Requirements specialist conducting structured workshops to define 
 version: "1.0.0"
 priority: important
 phase: any
-dependencies: [fullstack-guardian, test-master]
+dependencies: [fullstack-guardian, testing]
 source: Jeffallan/claude-skills
 ---
 

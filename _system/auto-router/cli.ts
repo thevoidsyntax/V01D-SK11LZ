@@ -21,7 +21,7 @@ import {
   type SkillDisplay,
   type ProjectDisplay
 } from './smart-ui';
-import { detectSkillsFromInput, getKeywordRecommendations, loadProjectState } from './detector';
+import { detectSkillsFromInput, getKeywordRecommendations, loadProjectState, detectIntentSimple, detectTechStack } from './detector';
 import { selectSkills } from './selector';
 
 // ============================================================================
@@ -123,8 +123,13 @@ async function runSmartMode(options: CliOptions) {
   // Get current directory
   const cwd = process.cwd();
 
-  // Load project state if exists
-  const projectState = await loadProjectState(cwd);
+  // Load project state if exists (with error handling)
+  let projectState = null;
+  try {
+    projectState = await loadProjectState(cwd);
+  } catch (err) {
+    console.warn('[cli] Failed to load project state:', err instanceof Error ? err.message : err);
+  }
 
   // Get user input from environment or default
   const userInput = process.env.AUTO_ROUTER_INPUT || '';
@@ -249,62 +254,32 @@ async function runSkillSelection(
 }
 
 function detectIntentFromInput(input: string): string {
-  const lower = input.toLowerCase();
-
-  if (/debug|fix|error|bug|crash/.test(lower)) return 'DEBUG';
-  if (/create|add|build|implement|new/.test(lower)) return 'CREATE';
-  if (/analyze|audit|review|check|scan/.test(lower)) return 'ANALYZE';
-  if (/deploy|release|publish|ship/.test(lower)) return 'DEPLOY';
-  if (/test|spec|expect/.test(lower)) return 'TEST';
-
-  return 'EXPLORE';
+  return detectIntentSimple(input.toLowerCase());
 }
 
 async function detectTechStack(cwd: string): Promise<string[]> {
-  const techStack: string[] = [];
-
-  // Check for package.json
   const packageJsonPath = join(cwd, 'package.json');
+
+  let packageData: Record<string, unknown> | null = null;
+
   if (existsSync(packageJsonPath)) {
     try {
       const content = readFileSync(packageJsonPath, 'utf-8');
-      const pkg = JSON.parse(content);
-      const deps = {
-        ...(pkg.dependencies || {}),
-        ...(pkg.devDependencies || {}),
-      };
-
-      const allDeps = Object.keys(deps).join(' ');
-
-      if (/fastify/.test(allDeps)) techStack.push('fastify');
-      if (/express/.test(allDeps)) techStack.push('express');
-      if (/@nestjs/.test(allDeps)) techStack.push('nestjs');
-      if (/next/.test(allDeps)) techStack.push('next');
-      if (/react/.test(allDeps)) techStack.push('react');
-      if (/vue/.test(allDeps)) techStack.push('vue');
-      if (/typescript/.test(allDeps)) techStack.push('typescript');
-      if (/postgres|pg|@prisma/.test(allDeps)) techStack.push('postgres');
-      if (/mysql/.test(allDeps)) techStack.push('mysql');
-      if (/mongodb|mongoose/.test(allDeps)) techStack.push('mongodb');
-      if (/redis|ioredis/.test(allDeps)) techStack.push('redis');
-      if (/docker/.test(allDeps)) techStack.push('docker');
-      if (/kubernetes|k8s/.test(allDeps)) techStack.push('kubernetes');
+      packageData = JSON.parse(content);
     } catch {
-      // Ignore parse errors
+      // Continue with null packageData
     }
   }
 
-  // Check for requirements.txt (Python)
-  if (existsSync(join(cwd, 'requirements.txt'))) {
-    techStack.push('python');
-  }
+  const stack = detectTechStack(packageData, cwd);
 
-  // Check for go.mod (Go)
-  if (existsSync(join(cwd, 'go.mod'))) {
-    techStack.push('go');
-  }
-
-  return techStack;
+  return [
+    ...stack.frameworks,
+    ...stack.databases,
+    ...stack.languages,
+    ...stack.devops,
+    ...stack.cache
+  ];
 }
 
 // ============================================================================
@@ -328,7 +303,13 @@ async function runAnalyzeMode() {
 async function runStatusMode() {
   clearScreen();
   const cwd = process.cwd();
-  const projectState = await loadProjectState(cwd);
+
+  let projectState = null;
+  try {
+    projectState = await loadProjectState(cwd);
+  } catch (err) {
+    console.warn('[cli] Failed to load project state:', err instanceof Error ? err.message : err);
+  }
 
   if (projectState) {
     const status = drawProjectStatus({

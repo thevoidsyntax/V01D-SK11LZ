@@ -746,8 +746,8 @@ class WorkflowExecutor {
   ): Promise<StepResult> {
     const startTime = Date.now();
     
-    // Check conditions
-    if (step.conditions?.if && !eval(step.conditions.if)) {
+    // Check conditions using safe expression evaluator
+    if (step.conditions?.if && !this.evaluateCondition(step.conditions.if, context)) {
       return {
         success: true,
         output: 'SKIPPED',
@@ -755,7 +755,7 @@ class WorkflowExecutor {
         timestamp: new Date()
       };
     }
-    
+
     if (step.conditions?.skip) {
       return {
         success: true,
@@ -804,6 +804,37 @@ class WorkflowExecutor {
       duration: Date.now() - startTime,
       timestamp: new Date()
     };
+  }
+
+  /**
+   * Safe condition evaluator - prevents code injection attacks
+   * Only allows: comparisons, logical operators, and context property access
+   */
+  private evaluateCondition(expr: string, context: WorkflowContext): boolean {
+    // Whitelist-based safe expression evaluator
+    const allowed = /^[\s\w.!&|><=!]+$/;
+    if (!allowed.test(expr)) {
+      console.warn(`[Security] Blocked unsafe expression: ${expr}`);
+      return false;
+    }
+
+    try {
+      // Build safe context for evaluation
+      const ctx = {
+        phase: context.phase,
+        skill: context.skill,
+        vars: context.variables || {},
+        step: context.currentStep,
+        results: context.results || {}
+      };
+
+      // Use Function constructor with restricted scope
+      const safeEval = new Function('ctx', `with(ctx) { return !!(${expr}); }`);
+      return safeEval(ctx);
+    } catch (e) {
+      console.warn(`[Security] Condition evaluation failed: ${expr}`, e);
+      return false;
+    }
   }
 }
 ```

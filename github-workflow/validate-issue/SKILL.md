@@ -1,6 +1,7 @@
 ---
 name: validate-issue
 description: Use when the user asks to validate, review, or check a GitHub issue against the code. Returns a cited update decision with a complexity score.
+version: "1.1.0"
 ---
 
 # validate-issue

@@ -4,7 +4,7 @@ description: "Designs cloud architectures, creates migration plans, and produces
 version: "1.0.0"
 priority: important
 phase: any
-dependencies: [devops-engineer, security-reviewer]
+dependencies: [devops-engineer, security]
 source: Jeffallan/claude-skills
 ---
 

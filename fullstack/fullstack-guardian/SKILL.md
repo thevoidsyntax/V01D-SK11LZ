@@ -4,7 +4,7 @@ description: "Security-focused full-stack developer implementing features across
 version: "1.0.0"
 priority: critical
 phase: any
-dependencies: [secure-code-guardian, test-master]
+dependencies: [security, testing]
 source: Jeffallan/claude-skills
 ---
 

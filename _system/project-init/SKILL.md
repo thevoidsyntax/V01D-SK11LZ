@@ -456,18 +456,21 @@ PORT=3000
 LOG_LEVEL=debug
 
 # Database
-DATABASE_URL=postgresql://user:password@localhost:5432/dbname
+# ⚠️ Replace with real credentials in .env (not committed to git)
+DATABASE_URL=postgresql://user:${DB_PASSWORD}@localhost:5432/dbname
 DATABASE_POOL_SIZE=10
 
 # Redis (if selected)
 REDIS_URL=redis://localhost:6379
 
 # Authentication (if selected)
+# ⚠️ Generate a secure random string: openssl rand -base64 32
 JWT_SECRET=your-super-secret-key-change-in-production
 JWT_EXPIRY=7d
 
 # External Services
 EXTERNAL_API_URL=https://api.example.com
+# ⚠️ Replace with actual API key from service provider
 EXTERNAL_API_KEY=your-api-key
 
 # Feature Flags
@@ -548,8 +551,9 @@ services:
   postgres:
     image: postgres:15-alpine
     environment:
+      # ⚠️ Use strong passwords in production - override in .env
       POSTGRES_USER: ${DB_USER:-app}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
       POSTGRES_DB: ${DB_NAME:-app}
     ports:
       - "5432:5432"
@@ -729,7 +733,8 @@ jobs:
       postgres:
         image: postgres:15
         env:
-          POSTGRES_PASSWORD: password
+          # ⚠️ Use secrets for CI - see GitHub Actions secrets
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD || 'changeme' }}
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -740,21 +745,22 @@ jobs:
     
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-      
+
       - run: npm ci
-      
+
       - run: npm run typecheck
-      
+
       - run: npm run lint
-      
+
       - run: npm run test -- --coverage
         env:
-          DATABASE_URL: postgresql://postgres:password@localhost:5432/test
+          # ⚠️ Use secrets for DATABASE_URL in production
+          DATABASE_URL: postgresql://postgres:${{ secrets.POSTGRES_PASSWORD || 'changeme' }}@localhost:5432/test
           NODE_ENV: test
       
       - uses: actions/upload-artifact@v4

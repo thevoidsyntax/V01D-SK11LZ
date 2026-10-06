@@ -169,6 +169,11 @@ function padEnd(str: string, len: number): string {
  * Draw progress bar
  */
 export function drawProgressBar(value: number, max: number, width: number = 20): string {
+  // Guard against division by zero
+  if (max === 0 || !Number.isFinite(max)) {
+    return `${COLORS.dim}${'░'.repeat(width)}${COLORS.reset}`;
+  }
+
   const percentage = Math.min(100, Math.max(0, (value / max) * 100));
   const filled = Math.round((value / max) * width);
   const empty = width - filled;

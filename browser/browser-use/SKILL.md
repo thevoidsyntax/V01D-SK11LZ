@@ -8,6 +8,7 @@ description: |
   - Test web applications with login sessions
   - Handle bot-protected sites (requires cloud browser)
   When simple HTTP requests (curl/fetch) suffice for public data, prefer that approach.
+version: "1.1.0"
 ---
 
 # Browser Use - AI Agent Browser Automation

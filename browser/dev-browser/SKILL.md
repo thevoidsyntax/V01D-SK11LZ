@@ -4,6 +4,7 @@ description: |
   Browser automation for coding agents using dev-browser (JS/Bun + Puppeteer).
   Use for fast E2E testing, web scraping, and UI automation with persistent browser state.
   Perfect for Claude Code - lightweight (~13ms overhead), JS-native, persistent tabs.
+version: "1.1.0"
 ---
 
 # Dev-Browser - Fast Browser Automation for Coding Agents

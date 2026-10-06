@@ -1,6 +1,7 @@
 ---
 name: create-release
 description: Use when the user asks to "create a release", "cut a release", "tag a version", "publish release notes", or ship a new versioned GitHub release for the current repo.
+version: "1.1.0"
 ---
 
 # create-release

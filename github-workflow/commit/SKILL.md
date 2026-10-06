@@ -1,6 +1,7 @@
 ---
 name: commit
 description: "Guided conventional commit creation using Haiku model. Analyzes git changes and creates properly formatted commit messages following conventional commits standard."
+version: "1.1.0"
 agentConfig:
   model: haiku
 ---

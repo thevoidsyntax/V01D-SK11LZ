@@ -40,10 +40,10 @@ quality:
   examples_count: 40
   stability: stable
 integrates_with: [auto-route, ai-process, diagnosing-bugs]
-dependencies: [fullstack-guardian, diagnosing-bugs]
+dependencies: [diagnosing-bugs]
 source:
   origin: merged
-  sources: ["Jeffallan/claude-skills:test-master"]
+  sources: ["ai-process/testing"]
 author: Claude
 ---
 

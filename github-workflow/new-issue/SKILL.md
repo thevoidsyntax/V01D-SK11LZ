@@ -1,6 +1,7 @@
 ---
 name: new-issue
 description: Use when the user says "new issue", "create an issue", "file an issue", "/new-issue", or asks to turn a bug, idea, or discussion into a GitHub issue. Takes an optional description of what the issue should cover; with no input, derives the issue from what was discussed in the current conversation. Verifies claims against the code before filing and produces a complete, complexity-scored issue, never a stub.
+version: "1.1.0"
 ---
 
 # new-issue

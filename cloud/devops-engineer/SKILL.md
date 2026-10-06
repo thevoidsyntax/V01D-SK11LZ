@@ -4,7 +4,7 @@ description: "Senior DevOps engineer specializing in CI/CD pipelines, infrastruc
 version: "1.0.0"
 priority: critical
 phase: any
-dependencies: [cloud-architect, monitoring-expert]
+dependencies: [observability]
 source: Jeffallan/claude-skills
 ---
 

@@ -385,7 +385,7 @@ export function detectSkillsFromInput(input: string): KeywordMatch[] {
 /**
  * Detect user intent from input
  */
-function detectIntent(input: string): string[] {
+export function detectIntent(input: string): string[] {
   const detected: string[] = [];
 
   for (const [intent, patterns] of Object.entries(INTENT_PATTERNS)) {
@@ -395,6 +395,14 @@ function detectIntent(input: string): string[] {
   }
 
   return detected;
+}
+
+/**
+ * Detect user intent from input (returns single intent string)
+ */
+export function detectIntentSimple(input: string): string {
+  const intents = detectIntent(input);
+  return intents[0] || 'EXPLORE';
 }
 
 /**
@@ -472,15 +480,16 @@ export async function detectProject(cwd: string): Promise<DetectionResult> {
       const content = await readFile(packageJsonFiles[0], 'utf-8');
       packageData = JSON.parse(content);
       packageManager = detectPackageManager(packageJsonFiles[0]);
-    } catch {
-      // Invalid JSON
+    } catch (err) {
+      // Log but continue with null packageData
+      console.warn(`[detector] Failed to parse package.json:`, err instanceof Error ? err.message : err);
     }
   }
 
   const techStack = detectTechStack(packageData, cwd);
   const scale = estimateScale(packageData, dockerFiles.length, ciFiles.length);
   const phase = claudeMdPath ? parsePhaseFromClaudeMd(claudeMdPath) : undefined;
-  const detectedPatterns = detectPatterns(cwd);
+  const detectedPatterns = await detectPatterns(cwd);
 
   const projectName = packageData?.name as string ||
     cwd.split(/[/\\]/).pop() ||
@@ -504,25 +513,30 @@ export async function detectProject(cwd: string): Promise<DetectionResult> {
 
 /**
  * Detect code patterns in project
+ * Optimized: parallel glob() calls using Promise.all()
  */
 async function detectPatterns(cwd: string): Promise<string[]> {
+  // Run all glob patterns in parallel for better performance
+  const [dddResults, cleanResults, microservicesResults, monorepoResults] = await Promise.all([
+    glob('**/domain/**/*.ts', { cwd, ignore: ['**/node_modules/**'] }),
+    glob('**/{application,domain,infrastructure}/**', { cwd, ignore: ['**/node_modules/**'] }),
+    glob('**/services/**/package.json', { cwd }),
+    glob('**/packages/**/package.json', { cwd })
+  ]);
+
   const patterns: string[] = [];
 
   // Check for DDD structure
-  const hasDDD = await glob('**/domain/**/*.ts', { cwd, ignore: ['**/node_modules/**'] });
-  if (hasDDD.length > 0) patterns.push('ddd');
+  if (dddResults.length > 0) patterns.push('ddd');
 
   // Check for Clean Architecture
-  const hasClean = await glob('**/{application,domain,infrastructure}/**', { cwd, ignore: ['**/node_modules/**'] });
-  if (hasClean.length > 5) patterns.push('clean-architecture');
+  if (cleanResults.length > 5) patterns.push('clean-architecture');
 
   // Check for microservices
-  const hasMicroservices = await glob('**/services/**/package.json', { cwd });
-  if (hasMicroservices.length > 1) patterns.push('microservices');
+  if (microservicesResults.length > 1) patterns.push('microservices');
 
   // Check for monorepo
-  const hasMonorepo = await glob('**/packages/**/package.json', { cwd });
-  if (hasMonorepo.length > 0) patterns.push('monorepo');
+  if (monorepoResults.length > 0) patterns.push('monorepo');
 
   return patterns;
 }
@@ -550,7 +564,10 @@ function detectPackageManager(path: string): string {
   return 'npm';
 }
 
-function detectTechStack(
+/**
+ * Detect tech stack from package.json data or file system
+ */
+export function detectTechStack(
   packageData: Record<string, unknown> | null,
   cwd: string
 ): TechStack {
@@ -687,7 +704,9 @@ export async function loadProjectState(projectPath: string): Promise<{
     const allStates = JSON.parse(content);
 
     return allStates[projectPath] || null;
-  } catch {
+  } catch (err) {
+    // Log corrupted state file but return null to allow fresh start
+    console.warn(`[detector] Failed to load project state from ${STATE_FILE}:`, err instanceof Error ? err.message : err);
     return null;
   }
 }
@@ -714,8 +733,34 @@ export async function saveProjectState(state: Record<string, unknown>): Promise<
       lastAnalyzed: new Date().toISOString(),
     };
 
-    await writeFile(STATE_FILE, JSON.stringify(allStates, null, 2));
+    // Atomic write using rename: write to temp file first, then atomic rename
+    // This prevents race conditions between concurrent processes
+    const tempFile = `${STATE_FILE}.tmp.${Date.now()}.${Math.random().toString(36).slice(2, 8)}`;
+    const newContent = JSON.stringify(allStates, null, 2);
+
+    // Write to temp file first
+    await writeFile(tempFile, newContent, 'utf-8');
+
+    // Atomic rename (overwrites existing STATE_FILE atomically on POSIX)
+    // On Windows, this may not be fully atomic but is still safer than direct write
+    try {
+      const { rename } = await import('fs/promises');
+      await rename(tempFile, STATE_FILE);
+    } catch (err) {
+      // Fallback: if rename fails (e.g., cross-device), try direct write
+      // This is less safe but better than nothing
+      console.warn(`[detector] Atomic rename failed, falling back to direct write:`, err instanceof Error ? err.message : err);
+      await writeFile(STATE_FILE, newContent, 'utf-8');
+      // Clean up temp file
+      try {
+        const { unlink } = await import('fs/promises');
+        await unlink(tempFile);
+      } catch (cleanupErr) {
+        // Best effort cleanup - temp file will be ignored on next run
+        console.warn(`[detector] Temp file cleanup failed:`, cleanupErr instanceof Error ? cleanupErr.message : cleanupErr);
+      }
+    }
   } catch (error) {
-    console.error('Failed to save project state:', error);
+    console.error('[detector] Failed to save project state:', error);
   }
 }

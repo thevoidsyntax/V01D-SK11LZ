@@ -1,6 +1,7 @@
 ---
 name: sync-docs
 description: Use when the user asks to sync, update, or refresh CLAUDE.md, AGENTS.md, SKILL.md, and README.md to reflect recent commits or PRs. Triggers on phrases like "sync docs", "update CLAUDE.md", "update AGENTS.md", "update SKILL.md", "update README", "reflect recent changes", or "document the recent PRs".
+version: "1.1.0"
 ---
 
 # sync-docs

@@ -350,10 +350,10 @@ pip install browser-use
 
 | Template | Path | Use Case |
 |---------|------|----------|
-| REST API | `skills/project-init/templates/rest-api.md` | Node.js + TypeScript + PostgreSQL |
-| Full-Stack Web | `skills/project-init/templates/fullstack-web.md` | Next.js + React + Prisma |
-| ML Pipeline | `skills/project-init/templates/ml-pipeline.md` | Python + MLflow + Airflow |
-| ERP | `skills/project-init/templates/erp.md` | NestJS + PostgreSQL + React |
+| REST API | `_system/project-init/templates/rest-api.md` | Node.js + TypeScript + PostgreSQL |
+| Full-Stack Web | `_system/project-init/templates/fullstack-web.md` | Next.js + React + Prisma |
+| ML Pipeline | `_system/project-init/templates/ml-pipeline.md` | Python + MLflow + Airflow |
+| ERP | `_system/project-init/templates/erp.md` | NestJS + PostgreSQL + React |
 
 ---
 

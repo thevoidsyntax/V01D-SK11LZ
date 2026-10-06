@@ -110,6 +110,31 @@ const SCORE_WEIGHTS = {
   CONFLICT: -50,      // Skill conflicts
 };
 
+// Score thresholds for skill categorization (exported for testing)
+export const SCORE_THRESHOLDS = {
+  CORE_MIN: 50,           // Minimum score for core/keyword-matched
+  CONTEXT_MIN: 40,        // Minimum score for context skills
+  CONTEXT_MAX: 60,       // Maximum score for context (above = core/keyword)
+  OPTIONAL_MIN: 25,      // Minimum score for optional skills
+  OPTIONAL_MAX: 40,      // Maximum score for optional (above = context)
+  RECOMMENDATION_MIN: 30, // Minimum score for recommendations
+  RECOMMENDATION_MAX: 50, // Maximum score for recommendations
+  RECOMMENDATION_SLICE: 8, // Max number of recommendations to show
+  PHRASE_SLICE: 3,        // Max phrases to show in reasons
+  PATTERN_BOOST: 20,      // Boost for pattern matches
+  TECH_MATCH_OFFSET: 5,  // Offset for language match (less weight)
+};
+
+// UI display constants
+const UI_CONSTANTS = {
+  DESCRIPTION_TRUNCATE: 100,  // Truncate skill descriptions
+  SKILL_PAD: 18,              // Pad skill names
+  SKILL_PAD_LONG: 20,        // Pad longer skill names
+  REASON_TRUNCATE: 30,       // Truncate reason text
+  REASON_SLICE: 4,            // Max reasons to show
+  MAX_LINES: 5,              // Max context skills to show
+};
+
 // Core skills that always invoke
 const CORE_SKILLS = new Set([
   // Version Control & DevOps
@@ -166,28 +191,28 @@ export function selectSkills(
   // Sort by score descending
   scored.sort((a, b) => b.score - a.score);
 
-  // Categorize skills
+  // Categorize skills using thresholds
   const core = scored
     .filter(s => CORE_SKILLS.has(s.skill.name.toLowerCase()) || s.skill.priority === 'critical')
     .map(s => s.skill);
 
   const keywordMatched = scored
-    .filter(s => keywordMatches.some(k => k.skill === s.skill.name) && s.score >= 40)
+    .filter(s => keywordMatches.some(k => k.skill === s.skill.name) && s.score >= SCORE_THRESHOLDS.CONTEXT_MIN)
     .map(s => s.skill);
 
   const context_ = scored
     .filter(s =>
       !CORE_SKILLS.has(s.skill.name.toLowerCase()) &&
-      s.score >= 40 &&
-      s.score < 60 &&
+      s.score >= SCORE_THRESHOLDS.CONTEXT_MIN &&
+      s.score < SCORE_THRESHOLDS.CONTEXT_MAX &&
       !keywordMatched.includes(s.skill)
     )
     .map(s => s.skill);
 
   const optional = scored
     .filter(s =>
-      s.score >= 25 &&
-      s.score < 40 &&
+      s.score >= SCORE_THRESHOLDS.OPTIONAL_MIN &&
+      s.score < SCORE_THRESHOLDS.OPTIONAL_MAX &&
       !core.includes(s.skill) &&
       !keywordMatched.includes(s.skill)
     )
@@ -270,8 +295,9 @@ function calculateScore(
       score += SCORE_WEIGHTS.TECH_MATCH;
     }
 
+    // Languages get slightly less weight than frameworks/databases
     if (languages?.some(l => context.techStack.languages.includes(l))) {
-      score += SCORE_WEIGHTS.TECH_MATCH - 5;
+      score += SCORE_WEIGHTS.TECH_MATCH - SCORE_THRESHOLDS.TECH_MATCH_OFFSET;
     }
 
     if (services?.some(s => context.techStack.devops.includes(s))) {
@@ -306,17 +332,17 @@ function calculateScore(
 
   // 7. Pattern match
   if (context.patterns.length > 0) {
-    // DDD pattern
+    // DDD pattern boost
     if (context.patterns.includes('ddd') && skill.name === 'domain-modeling') {
-      score += 20;
+      score += SCORE_THRESHOLDS.PATTERN_BOOST;
     }
-    // Microservices pattern
+    // Microservices pattern boost
     if (context.patterns.includes('microservices') && skill.name === 'architecture-patterns') {
-      score += 20;
+      score += SCORE_THRESHOLDS.PATTERN_BOOST;
     }
   }
 
-  // 8. Conflict penalty
+  // 8. Conflict penalty (SCORE_WEIGHTS.CONFLICT is already negative)
   if (skill.conflicts) {
     for (const conflict of skill.conflicts) {
       if (context.existingSkills.includes(conflict)) {
@@ -343,7 +369,7 @@ function getReasons(
   // Keyword match
   const keywordMatch = keywordMatches.find(k => k.skill === skill.name);
   if (keywordMatch) {
-    reasons.push(`Keywords: ${keywordMatch.matchedPhrases.slice(0, 3).join(', ')}`);
+    reasons.push(`Keywords: ${keywordMatch.matchedPhrases.slice(0, SCORE_THRESHOLDS.PHRASE_SLICE).join(', ')}`);
   }
 
   // Tech match
@@ -383,6 +409,7 @@ function getConfidence(
   if (skill.tech_stack && Object.values(skill.tech_stack).some(v => v && v.length > 0)) factors++;
   if (context.currentPhase && skill.phase !== 'any') factors++;
 
+  // 3+ factors = high, 2+ = medium, else low
   if (factors >= 3) return 'high';
   if (factors >= 2) return 'medium';
   return 'low';
@@ -395,6 +422,7 @@ function calculateOverallConfidence(
   const highConfidence = scored.filter(s => s.confidence === 'high').length;
   const matchedHighConfidence = keywordMatches.filter(k => k.confidence === 'high').length;
 
+  // High if many high-confidence skills found
   if (highConfidence >= 5 || matchedHighConfidence >= 3) return 'high';
   if (highConfidence >= 2 || matchedHighConfidence >= 1) return 'medium';
   return 'low';
@@ -405,8 +433,8 @@ function generateRecommendations(
   keywordMatches: KeywordMatch[]
 ): Recommendation[] {
   return scored
-    .filter(s => s.score >= 30 && s.score < 50)
-    .slice(0, 8)
+    .filter(s => s.score >= SCORE_THRESHOLDS.RECOMMENDATION_MIN && s.score < SCORE_THRESHOLDS.RECOMMENDATION_MAX)
+    .slice(0, SCORE_THRESHOLDS.RECOMMENDATION_SLICE)
     .map(s => ({
       skill: s.skill.name,
       title: formatTitle(s.skill.name),
@@ -452,8 +480,9 @@ function discoverSkills(): Skill[] {
           try {
             const skill = parseSkillMetadata(fullPath, category.name);
             skills.push(skill);
-          } catch {
-            // Skip invalid skills
+          } catch (err) {
+            // Log error but continue processing other skills
+            console.warn(`[auto-router] Skipping invalid skill at ${fullPath}:`, err instanceof Error ? err.message : err);
           }
           break;
         }
@@ -579,7 +608,7 @@ function extractFirstLine(content: string): string {
   for (const line of lines) {
     const trimmed = line.trim();
     if (trimmed && !trimmed.startsWith('#') && !trimmed.startsWith('---')) {
-      return trimmed.substring(0, 100);
+      return trimmed.substring(0, UI_CONSTANTS.DESCRIPTION_TRUNCATE);
     }
   }
   return '';
@@ -593,6 +622,21 @@ function resolveDependencies(
   const resolved: DependencyNode[] = [];
   const visiting = new Set<string>();
   const resolvedSet = new Set<string>();
+  const skillNamesSet = new Set(skillNames);
+
+  // Pre-compute dependents map to avoid O(N²) in hot path
+  const dependentsMap = new Map<string, string[]>();
+  for (const skill of skillNames) {
+    const s = skillMap.get(skill);
+    if (s?.dependencies) {
+      for (const dep of s.dependencies) {
+        if (!dependentsMap.has(dep)) {
+          dependentsMap.set(dep, []);
+        }
+        dependentsMap.get(dep)!.push(skill);
+      }
+    }
+  }
 
   function visit(skillName: string): void {
     if (resolvedSet.has(skillName)) return;
@@ -604,7 +648,7 @@ function resolveDependencies(
     const skill = skillMap.get(skillName);
     if (skill?.dependencies) {
       for (const dep of skill.dependencies) {
-        if (skillNames.includes(dep) && !resolvedSet.has(dep)) {
+        if (skillNamesSet.has(dep) && !resolvedSet.has(dep)) {
           visit(dep);
         }
       }
@@ -613,14 +657,12 @@ function resolveDependencies(
     visiting.delete(skillName);
     resolvedSet.add(skillName);
 
-    const dependents = skillNames.filter(s => {
-      const s2 = skillMap.get(s);
-      return s2?.dependencies?.includes(skillName);
-    });
+    // Use pre-computed dependents map (O(1) lookup)
+    const dependents = dependentsMap.get(skillName) || [];
 
     resolved.push({
       skill: skillName,
-      dependencies: skill?.dependencies?.filter(d => skillNames.includes(d)) || [],
+      dependencies: skill?.dependencies?.filter(d => skillNamesSet.has(d)) || [],
       dependents,
       loadOrder: resolved.length,
     });
@@ -655,7 +697,7 @@ export function generateSelectionPrompt(result: SelectionResult): string {
     lines.push('║');
     lines.push('║  🟢 CORE SKILLS (Always Active):');
     for (const skill of result.core) {
-      lines.push(`║     ✅ /${skill.name.padEnd(20)} ${skill.description.substring(0, 35)}`);
+      lines.push(`║     ✅ /${skill.name.padEnd(UI_CONSTANTS.SKILL_PAD_LONG)} ${skill.description.substring(0, 35)}`);
     }
   }
 
@@ -664,7 +706,7 @@ export function generateSelectionPrompt(result: SelectionResult): string {
     lines.push('║');
     lines.push('║  🔵 KEYWORD-MATCHED (Auto-invoked):');
     for (const skill of result.keywordMatched) {
-      lines.push(`║     ✅ /${skill.name.padEnd(20)} ${skill.description.substring(0, 35)}`);
+      lines.push(`║     ✅ /${skill.name.padEnd(UI_CONSTANTS.SKILL_PAD_LONG)} ${skill.description.substring(0, 35)}`);
     }
   }
 
@@ -672,8 +714,8 @@ export function generateSelectionPrompt(result: SelectionResult): string {
   if (result.context.length > 0) {
     lines.push('║');
     lines.push('║  🟡 CONTEXT SKILLS (Recommended):');
-    for (const skill of result.context.slice(0, 5)) {
-      lines.push(`║     📋 /${skill.name.padEnd(18)} ${skill.description.substring(0, 35)}`);
+    for (const skill of result.context.slice(0, UI_CONSTANTS.MAX_LINES)) {
+      lines.push(`║     📋 /${skill.name.padEnd(UI_CONSTANTS.SKILL_PAD)} ${skill.description.substring(0, 35)}`);
     }
   }
 
@@ -681,9 +723,9 @@ export function generateSelectionPrompt(result: SelectionResult): string {
   if (result.recommendations.length > 0) {
     lines.push('║');
     lines.push('║  💡 RECOMMENDATIONS:');
-    for (const rec of result.recommendations.slice(0, 4)) {
+    for (const rec of result.recommendations.slice(0, UI_CONSTANTS.REASON_SLICE)) {
       const priorityIcon = rec.priority === 'high' ? '🔴' : rec.priority === 'medium' ? '🟡' : '🟢';
-      lines.push(`║     ${priorityIcon} /${rec.skill.padEnd(18)} (${rec.reason.substring(0, 30)})`);
+      lines.push(`║     ${priorityIcon} /${rec.skill.padEnd(UI_CONSTANTS.SKILL_PAD)} (${rec.reason.substring(0, UI_CONSTANTS.REASON_TRUNCATE)})`);
     }
   }
 

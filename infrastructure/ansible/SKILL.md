@@ -1,6 +1,7 @@
 ---
 name: ansible
 description: Ansible configuration management, playbook design, roles, inventory management, and automation patterns.
+version: "1.1.0"
 ---
 
 # Ansible - Configuration Management
