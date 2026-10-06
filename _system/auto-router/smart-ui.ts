@@ -199,12 +199,12 @@ export function drawDashboard(data: {
   // Header
   lines.push('');
   lines.push(`${COLORS.brightCyan}${COLORS.bold}╔══════════════════════════════════════════════════════════════════════════╗${COLORS.reset}`);
-  lines.push(`${COLORS.brightCyan}${COLORS.bold}║${COLORS.reset}  ${COLORS.brightCyan}${ICCONS.rocket} AUTO-ROUTER v6.0 ${COLORS.brightBlue}${ICCONS.sparkles} SMART PROJECT INTELLIGENCE${COLORS.reset}   ${COLORS.brightCyan}${COLORS.bold}║${COLORS.reset}`);
+  lines.push(`${COLORS.brightCyan}${COLORS.bold}║${COLORS.reset}  ${COLORS.brightCyan}${ICONS.rocket} AUTO-ROUTER v6.0 ${COLORS.brightBlue}${ICONS.sparkles} SMART PROJECT INTELLIGENCE${COLORS.reset}   ${COLORS.brightCyan}${COLORS.bold}║${COLORS.reset}`);
   lines.push(`${COLORS.brightCyan}${COLORS.bold}╚══════════════════════════════════════════════════════════════════════════╝${COLORS.reset}`);
   lines.push('');
 
   // Project info bar
-  const projectInfo = `${ICCONS.folder} ${data.project.name}  ${COLORS.dim}|${COLORS.reset}  ${ICCONS.target} Phase ${data.project.phase}  ${COLORS.dim}|${COLORS.reset}  ${ICCONS.chart} ${data.project.scale}`;
+  const projectInfo = `${ICONS.folder} ${data.project.name}  ${COLORS.dim}|${COLORS.reset}  ${ICONS.target} Phase ${data.project.phase}  ${COLORS.dim}|${COLORS.reset}  ${ICONS.chart} ${data.project.scale}`;
   lines.push(`  ${projectInfo}`);
 
   // Tech stack
@@ -232,7 +232,7 @@ export function drawDashboard(data: {
 
   // Skills section
   lines.push(`  ${COLORS.brightWhite}${COLORS.bold}${drawLine(60, 'heavy')}${COLORS.reset}`);
-  lines.push(`  ${COLORS.brightWhite}${COLORS.bold}${ICCONS.check} KEYWORD-MATCHED (Auto-invoked)${COLORS.reset}`);
+  lines.push(`  ${COLORS.brightWhite}${COLORS.bold}${ICONS.check} KEYWORD-MATCHED (Auto-invoked)${COLORS.reset}`);
   lines.push(`  ${COLORS.dim}${drawLine(60, 'single')}${COLORS.reset}`);
 
   const keywordSkills = data.skills.filter(s => s.selected);
@@ -244,14 +244,14 @@ export function drawDashboard(data: {
     for (const skill of keywordSkills.slice(0, 5)) {
       const bar = drawProgressBar(skill.score, 100, 25);
       const confIcon = skill.confidence === 'high' ? COLORS.green : skill.confidence === 'medium' ? COLORS.yellow : COLORS.red;
-      const checkbox = `${COLORS.green}${ICCONS.check}${COLORS.reset}`;
+      const checkbox = `${COLORS.green}${ICONS.check}${COLORS.reset}`;
       lines.push(`  ${checkbox} ${COLORS.cyan}/${skill.name.padEnd(18)}${bar} ${skill.score.toString().padStart(3)}%  ${confIcon}${skill.confidence.toUpperCase()}${COLORS.reset}`);
     }
   }
 
   lines.push('');
   lines.push(`  ${COLORS.brightWhite}${COLORS.bold}${drawLine(60, 'heavy')}${COLORS.reset}`);
-  lines.push(`  ${COLORS.brightWhite}${COLORS.bold}${ICCONS.star} RECOMMENDED${COLORS.reset}`);
+  lines.push(`  ${COLORS.brightWhite}${COLORS.bold}${ICONS.star} RECOMMENDED${COLORS.reset}`);
   lines.push(`  ${COLORS.dim}${drawLine(60, 'single')}${COLORS.reset}`);
 
   if (otherSkills.length === 0) {
@@ -266,7 +266,7 @@ export function drawDashboard(data: {
 
   lines.push('');
   lines.push(`  ${COLORS.brightWhite}${COLORS.bold}${drawLine(60, 'heavy')}${COLORS.reset}`);
-  lines.push(`  ${COLORS.dim}  ${ICCONS.arrow} Select [1-5] to toggle  ${COLORS.dim}|${COLORS.reset}  ${COLORS.cyan}[Enter] Invoke & Continue${COLORS.reset}  ${COLORS.dim}|${COLORS.reset}  ${COLORS.brightYellow}[Q] Quit${COLORS.reset}`);
+  lines.push(`  ${COLORS.dim}  ${ICONS.arrow} Select [1-5] to toggle  ${COLORS.dim}|${COLORS.reset}  ${COLORS.cyan}[Enter] Invoke & Continue${COLORS.reset}  ${COLORS.dim}|${COLORS.reset}  ${COLORS.brightYellow}[Q] Quit${COLORS.reset}`);
 
   return lines.join('\n');
 }
@@ -280,7 +280,7 @@ export function drawQuickActions(): string {
 
   lines.push('');
   lines.push(`${COLORS.brightMagenta}${COLORS.bold}╔══════════════════════════════════════════╗${COLORS.reset}`);
-  lines.push(`${COLORS.brightMagenta}${COLORS.bold}║${COLORS.reset}  ${COLORS.brightMagenta}${ICCONS.brain} SMART ACTIONS${COLORS.reset}                    ${COLORS.brightMagenta}${COLORS.bold}║${COLORS.reset}`);
+  lines.push(`${COLORS.brightMagenta}${COLORS.bold}║${COLORS.reset}  ${COLORS.brightMagenta}${ICONS.brain} SMART ACTIONS${COLORS.reset}                    ${COLORS.brightMagenta}${COLORS.bold}║${COLORS.reset}`);
   lines.push(`${COLORS.brightMagenta}${COLORS.bold}╚══════════════════════════════════════════╝${COLORS.reset}`);
   lines.push('');
 
@@ -309,7 +309,7 @@ export function drawSkillDetail(skill: SkillDisplay): string {
 
   lines.push('');
   lines.push(`${COLORS.brightGreen}${COLORS.bold}╔════════════════════════════════════════════════════════════╗${COLORS.reset}`);
-  lines.push(`${COLORS.brightGreen}${COLORS.bold}║${COLORS.reset}  ${COLORS.brightGreen}${ICCONS.check} SELECTED SKILL${COLORS.reset}                                         ${COLORS.brightGreen}${COLORS.bold}║${COLORS.reset}`);
+  lines.push(`${COLORS.brightGreen}${COLORS.bold}║${COLORS.reset}  ${COLORS.brightGreen}${ICONS.check} SELECTED SKILL${COLORS.reset}                                         ${COLORS.brightGreen}${COLORS.bold}║${COLORS.reset}`);
   lines.push(`${COLORS.brightGreen}${COLORS.bold}╚════════════════════════════════════════════════════════════╝${COLORS.reset}`);
   lines.push('');
 
@@ -338,7 +338,7 @@ export function drawProjectStatus(data: {
 
   lines.push('');
   lines.push(`${COLORS.brightBlue}${COLORS.bold}╔════════════════════════════════════════════════════════════╗${COLORS.reset}`);
-  lines.push(`${COLORS.brightBlue}${COLORS.bold}║${COLORS.reset}  ${COLORS.brightBlue}${ICCONS.chart} PROJECT STATUS${COLORS.reset}                                        ${COLORS.brightBlue}${COLORS.bold}║${COLORS.reset}`);
+  lines.push(`${COLORS.brightBlue}${COLORS.bold}║${COLORS.reset}  ${COLORS.brightBlue}${ICONS.chart} PROJECT STATUS${COLORS.reset}                                        ${COLORS.brightBlue}${COLORS.bold}║${COLORS.reset}`);
   lines.push(`${COLORS.brightBlue}${COLORS.bold}╚════════════════════════════════════════════════════════════╝${COLORS.reset}`);
   lines.push('');
 
@@ -354,7 +354,7 @@ export function drawProjectStatus(data: {
     lines.push(`  ${COLORS.dim}  No active skills${COLORS.reset}`);
   } else {
     for (const skill of data.activeSkills) {
-      lines.push(`  ${COLORS.green}${ICCONS.check}${COLORS.reset} ${COLORS.cyan}/${skill}${COLORS.reset}`);
+      lines.push(`  ${COLORS.green}${ICONS.check}${COLORS.reset} ${COLORS.cyan}/${skill}${COLORS.reset}`);
     }
   }
 
@@ -376,28 +376,28 @@ export function drawLoading(message: string): string {
  * Draw success message
  */
 export function drawSuccess(message: string): string {
-  return `${COLORS.green}${ICCONS.check} ${COLORS.bold}${message}${COLORS.reset}`;
+  return `${COLORS.green}${ICONS.check} ${COLORS.bold}${message}${COLORS.reset}`;
 }
 
 /**
  * Draw error message
  */
 export function drawError(message: string): string {
-  return `${COLORS.red}${ICCONS.cross} ${COLORS.bold}${message}${COLORS.reset}`;
+  return `${COLORS.red}${ICONS.cross} ${COLORS.bold}${message}${COLORS.reset}`;
 }
 
 /**
  * Draw info message
  */
 export function drawInfo(message: string): string {
-  return `${COLORS.blue}${ICCONS.info} ${message}${COLORS.reset}`;
+  return `${COLORS.blue}${ICONS.info} ${message}${COLORS.reset}`;
 }
 
 /**
  * Draw warning message
  */
 export function drawWarning(message: string): string {
-  return `${COLORS.yellow}${ICCONS.warning} ${message}${COLORS.reset}`;
+  return `${COLORS.yellow}${ICONS.warning} ${message}${COLORS.reset}`;
 }
 
 /**
@@ -450,7 +450,7 @@ export function formatSkillList(skills: SkillDisplay[]): string[] {
   return skills.map((skill, i) => {
     const bar = drawProgressBar(skill.score, 100, 20);
     const confIcon = skill.confidence === 'high' ? COLORS.green : skill.confidence === 'medium' ? COLORS.yellow : COLORS.red;
-    const checkbox = skill.selected ? `${COLORS.green}${ICCONS.check}${COLORS.reset}` : `${COLORS.dim}[ ]${COLORS.reset}`;
+    const checkbox = skill.selected ? `${COLORS.green}${ICONS.check}${COLORS.reset}` : `${COLORS.dim}[ ]${COLORS.reset}`;
 
     return `  ${(i + 1).toString().padStart(2)}. ${checkbox} ${COLORS.cyan}/${skill.name.padEnd(15)} ${bar} ${skill.score}%  ${confIcon}${skill.confidence.toUpperCase()}${COLORS.reset}`;
   });

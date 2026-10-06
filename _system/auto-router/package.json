@@ -21,7 +21,9 @@
   ],
   "author": "TheVoidSyntax",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "glob": "^13.0.6"
+  },
   "devDependencies": {
     "tsx": "^4.7.0"
   },

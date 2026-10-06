@@ -596,10 +596,8 @@ function resolveDependencies(
 
   function visit(skillName: string): void {
     if (resolvedSet.has(skillName)) return;
-    if (visiting.has(skillName)) {
-      console.warn(`Cyclic dependency detected: ${skillName}`);
-      return;
-    }
+    // Skip gracefully on cycle (common in skill dependencies)
+    if (visiting.has(skillName)) return;
 
     visiting.add(skillName);
 
