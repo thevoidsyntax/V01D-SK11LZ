@@ -22,3 +22,8 @@ desktop.ini
 
 # Claude specific
 .claude/settings.local.json
+
+# autor/ is a Windows junction to _system/auto-router
+# Junction is created via: mklink /J autor _system\auto-router
+# Git on Windows follows junctions - contents are tracked via _system/auto-router/
+autor/
