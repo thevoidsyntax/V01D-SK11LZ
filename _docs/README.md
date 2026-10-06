@@ -1,152 +1,230 @@
-# My Skills
+# 🔮 V01D_RUL3Z
 
-A comprehensive collection of 64 Claude Code skills for enterprise-grade software development.
+```
+    ██████╗ ██╗   ██╗ █████╗ ██████╗ ██████╗     ███████╗██╗   ██╗███╗   ██╗ ██████╗ ██╗     ███████╗
+    ██╔══██╗██║   ██║██╔══██╗██╔══██╗██╔══██╗    ██╔════╝██║   ██║████╗  ██║██╔═══██╗██║     ██╔════╝
+    ██║  ██║██║   ██║███████║██║  ██║██║  ██║    ███████╗██║   ██║██╔██╗ ██║██║   ██║██║     █████╗  
+    ██║  ██║██║   ██║██╔══██║██║  ██║██║  ██║    ╚════██║██║   ██║██║╚██╗██║██║   ██║██║     ██╔══╝  
+    ██████╔╝╚██████╔╝██║  ██║██████╔╝██████╔╝    ███████║╚██████╔╝██║ ╚████║╚██████╔╝███████╗███████╗
+    ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═════╝ ╚═════╝     ╚══════╝ ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ ╚══════╝╚══════╝
 
-## Quick Start
+    ██████╗ ███████╗ █████╗ ██████╗ ██╗   ██╗███████╗
+    ██╔══██╗██╔════╝██╔══██╗██╔══██╗██║   ██║██╔════╝
+    ██║  ██║█████╗  ███████║██║  ██║██║   ██║███████╗
+    ██║  ██║██╔══╝  ██╔══██║██║  ██║██║   ██║╚════██║
+    ██████╔╝███████╗██║  ██║██████╔╝╚██████╔╝███████║
+    ╚═════╝ ╚══════╝╚═╝  ╚═╝╚═════╝  ╚═════╝ ╚══════╝
+```
+
+> *Dominate your codebase with intelligent, context-aware skills.*
+
+**80+** enterprise-grade skills with auto-invocation. The router detects your tech stack, project scale, and development phase to surface the most relevant skills automatically.
+
+[![Claude Code](https://img.shields.io/badge/Claude-3.5%20Sonnet-blue?style=flat-square)](https://claude.ai)
+[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
+[![Skills](https://img.shields.io/badge/Skills-80+-orange?style=flat-square)]()
+
+---
+
+## ⚡ Quick Start
 
 ```bash
-# Clone this repo to your Claude Code skills directory
+# Clone to your Claude Code skills directory
 git clone https://github.com/thevoidsyntax/my-skills.git ~/.claude/skills
 ```
 
-## Skills Overview
-
-### Core DevOps (7 skills)
-Essential skills for every project:
-
-| Skill | Description |
-|-------|-------------|
-| `/git` | Version control workflows, branching strategies, rebasing |
-| `/docker` | Multi-stage builds, security hardening, compose patterns |
-| `/ci-cd` | GitHub Actions, GitLab CI, deployment pipelines |
-| `/code-quality` | Code review standards, Fowler smells, two-axis review |
-| `/deployment` | Blue-green, canary, zero-downtime deployments |
-| `/logging` | Structured logging, correlation IDs, log management |
-| `/config` | Environment variables, secrets, feature flags |
-
-### AI Process Skills (11 skills)
-From Matt Pocock's curated collection:
-
-| Skill | Description |
-|-------|-------------|
-| `/tdd` | Test-driven development, red-green-refactor loop |
-| `/code-review` | Two-axis review: Standards + Spec |
-| `/domain-modeling` | Build domain model, CONTEXT.md discipline |
-| `/diagnosing-bugs` | 6-phase systematic debugging |
-| `/wayfinder` | Plan large work as decision tickets |
-| `/grilling` | Relentless interview for design validation |
-| `/handoff` | Compact conversation for agent handoff |
-| `/research` | Primary source investigation |
-| `/implement` | Build from spec using TDD + code-review |
-| `/codebase-design` | Deep module vocabulary |
-| `/writing-for-agents` | Write skills/docs for AI |
-
-### GitHub Workflow (8 skills)
-End-to-end GitHub automation:
-
-| Skill | Description |
-|-------|-------------|
-| `/new-issue` | Create complete GitHub issue |
-| `/validate-issue` | Fact-check issue against code |
-| `/work-on-issue` | Implement + PR in isolated worktree |
-| `/fix-pr-review` | Fix review comments |
-| `/pr-review` | Review format reference |
-| `/create-release` | Bump version + publish release |
-| `/sync-docs` | Sync CLAUDE.md/AGENTS.md |
-| `/commit` | Guided conventional commit |
-
-### Browser Automation (2 skills)
-
-| Skill | Description |
-|-------|-------------|
-| `/dev-browser` | Fast browser automation (~13ms), JS-native |
-| `/browser-use` | AI agent browser, cloud support |
-
-### Anti-AI Writing (1 skill)
-
-| Skill | Description |
-|-------|-------------|
-| `/slopbuster` | Strip 152 AI patterns, restore human voice |
-
-### Infrastructure (4 skills)
-
-| Skill | Description |
-|-------|-------------|
-| `/terraform` | Infrastructure as Code, modules, state |
-| `/ansible` | Configuration management, playbooks |
-| `/message-queue` | Kafka, RabbitMQ, SQS patterns |
-| `/graphql` | Schema design, DataLoader, subscriptions |
-
-### Project Setup (3 skills)
-
-| Skill | Description |
-|-------|-------------|
-| `/project-init` | Interactive project setup with Q&A |
-| `/analyze-project` | Tech stack detection + skill recommendations |
-| `/auto-router` | Auto-invoke relevant skills by context |
-
-### Domain Engineering (28 skills)
-
-| Category | Skills |
-|----------|--------|
-| Security & Identity | `/security`, `/identity`, `/compliance` |
-| Data & Storage | `/database`, `/data-engineering`, `/search`, `/storage` |
-| Architecture | `/architecture-patterns`, `/design-patterns`, `/integration-patterns` |
-| Cloud & Infra | `/kubernetes`, `/serverless`, `/scalability` |
-| Observability | `/observability`, `/reliability`, `/sre-operations` |
-| Web & Mobile | `/frontend`, `/mobile`, `/performance` |
-| Messaging | `/messaging` |
-| Development | `/testing`, `/api-design`, `/api-client` |
-| Operations | `/deployment`, `/networking`, `/documentation` |
-| Team | `/team-processes`, `/platform-engineering`, `/developer-experience` |
-| Specialized | `/ml-engineering`, `/python-pro`, `/finops`, `/gaming`, `/iot-edge` |
-
-## Usage
-
-### Interactive Setup
+**Core Commands:**
 ```bash
-/project-init
+/autor              # Smart Dashboard - auto-detect project
+/autor scan         # Analyze existing project  
+/autor new          # New project wizard
+/autor status       # Show saved state
 ```
-Answer questions about your project type, scale, and priorities. Core skills auto-activate, optional skills available for selection.
 
-### Analyze Existing Project
+---
+
+## 🎯 Auto-Invoke System
+
+Skills activate automatically based on context:
+
+| Context | Skills Auto-Invoke |
+|---------|------------------|
+| **Always-on** | `/git`, `/docker`, `/security`, `/testing`, `/tdd` |
+| **Has `**/tests/**`** | `/testing` |
+| **Has `**/Dockerfile`** | `/docker` |
+| **Has `kubernetes/**`** | `/kubernetes` |
+| **Has `.github/workflows/**`** | `/ci-cd` |
+| **Express/Fastify/NestJS** | `/api-design`, `/api-client` |
+| **React/Vue/Angular** | `/frontend` |
+| **Phase 5** | `/deployment` |
+| **Phase 6** | `/reliability` |
+
+---
+
+## 📦 Skills Catalog
+
+### 🚀 Project Intelligence
+
+| Skill | Description |
+|-------|-------------|
+| `/autor` | Smart router with intent detection |
+| `/project-init` | Interactive project setup |
+| `/analyze-project` | Codebase analyzer |
+
+### 🛠️ Core DevOps
+
+| Skill | Description |
+|-------|-------------|
+| `/git` | Version control & branching |
+| `/docker` | Containerization |
+| `/ci-cd` | CI/CD pipelines |
+| `/deployment` | Zero-downtime deploys |
+| `/config` | Environment & secrets |
+| `/logging` | Structured logging |
+| `/terraform` | Infrastructure as Code |
+| `/ansible` | Configuration mgmt |
+
+### 🔒 Security
+
+| Skill | Description |
+|-------|-------------|
+| `/security` | Auth & encryption |
+| `/pentest` | Vulnerability scanning |
+| `/identity` | OAuth2 & MFA |
+| `/compliance` | GDPR & SOC2 |
+
+### 🧪 Testing
+
+| Skill | Description |
+|-------|-------------|
+| `/testing` | Unit, E2E, mutation |
+| `/tdd` | Test-driven development |
+| `/code-quality` | Code review |
+| `/diagnosing-bugs` | Systematic debugging |
+
+### 🏗️ Architecture
+
+| Skill | Description |
+|-------|-------------|
+| `/architecture-patterns` | Hexagonal & microservices |
+| `/domain-modeling` | DDD & bounded contexts |
+| `/codebase-design` | Deep modules |
+
+### 🌐 Data
+
+| Skill | Description |
+|-------|-------------|
+| `/database` | SQL optimization |
+| `/api-design` | REST & gRPC |
+| `/graphql` | Schema design |
+| `/messaging` | Kafka & RabbitMQ |
+
+### 📊 Performance
+
+| Skill | Description |
+|-------|-------------|
+| `/performance` | Profiling & optimization |
+| `/observability` | Metrics & tracing |
+| `/reliability` | SLO & incident response |
+
+### ☁️ Cloud
+
+| Skill | Description |
+|-------|-------------|
+| `/kubernetes` | K8s & Helm |
+| `/serverless` | Lambda & Edge |
+| `/scalability` | Auto-scaling |
+
+### 🎨 Frontend
+
+| Skill | Description |
+|-------|-------------|
+| `/frontend` | React & Vue |
+| `/ui-ux-pro-max` | Design intelligence |
+| `/mobile` | Offline-first apps |
+
+### 🤖 AI Workflow
+
+| Skill | Description |
+|-------|-------------|
+| `/implement` | Spec → Code |
+| `/code-review` | Two-axis review |
+| `/wayfinder` | Decision tickets |
+| `/grilling` | Design interview |
+| `/handoff` | Agent handoff |
+| `/research` | Primary sources |
+
+### 🔄 GitHub
+
+| Skill | Description |
+|-------|-------------|
+| `/new-issue` | Complete issues |
+| `/work-on-issue` | Implement + PR |
+| `/fix-pr-review` | Fix comments |
+| `/create-release` | Publish releases |
+
+### 🛡️ Anti-AI
+
+| Skill | Description |
+|-------|-------------|
+| `/slopbuster` | Strip 152 AI patterns |
+| `/anti-slop` | Clean AI artifacts |
+
+### 🏢 Specialized
+
+| Skill | Description |
+|-------|-------------|
+| `/ml-engineering` | ML lifecycle |
+| `/python-pro` | Advanced Python |
+| `/typescript-pro` | Advanced TS types |
+| `/gaming` | Game servers |
+| `/iot-edge` | Edge deployment |
+
+---
+
+## ⚙️ Architecture
+
+```
+INPUT ──► /autor Router ──► Skill Selector ──► Active Skills
+         │                      │
+         ▼                      ▼
+    • Intent detection      • CORE_SKILLS (18)
+    • Tech stack scan     • Context-matched
+    • Pattern recognition  • Dependencies resolved
+    • Scale estimation   • Priority ordered
+```
+
+---
+
+## 📈 Stats
+
+| Metric | Value |
+|--------|-------|
+| **Total Skills** | 80+ |
+| **Auto-Invoke** | 45 |
+| **Always-On Core** | 18 |
+| **Categories** | 14 |
+
+---
+
+## 🤝 Contributing
+
 ```bash
-/analyze-project
-```
-Scans your codebase, detects tech stack, auto-invokes relevant skills.
-
-### Manual Invocation
-```bash
-/tdd
-/git
-/docker
-/security
+1. Fork repo
+2. Create skill: <category>/<skill-name>/SKILL.md
+3. Follow frontmatter schema
+4. Add to MANIFEST.md
+5. Submit PR
 ```
 
-## Project Types
+---
 
-| Type | Recommended Skills |
-|------|------------------|
-| REST API | api-design, security, deployment, database |
-| Full-Stack Web | frontend, api-design, security, docker, ci-cd |
-| ML Pipeline | ml-engineering, data-engineering, python-pro |
-| Enterprise | security, identity, compliance, kubernetes |
+## 📄 License
 
-## Contributing
+MIT
 
-1. Fork the repository
-2. Create a new skill directory (`skill-name/SKILL.md`)
-3. Follow the skill template structure
-4. Submit a pull request
+---
 
-## License
+*Dominate your codebase.* ██
 
-MIT License - See [LICENSE](LICENSE)
-
-## Repository Stats
-
-```
-Total Skills: 64
-Total Lines: ~18,500
-Categories: 8
-```
+**Last updated: 2026-10-06**
