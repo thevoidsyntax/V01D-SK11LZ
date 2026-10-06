@@ -47,29 +47,32 @@ Smart Project Intelligence Tool
 
 ---
 
-## 🎯 QUICK START
+## 🎯 SIMPLE COMMANDS
 
-### Claude Code Commands
-```bash
-/auto-router                    # Auto-detect and route
-/auto-router --new             # New project wizard
-/auto-router --analyze         # Analyze existing project
-/auto-router --phase 3         # Continue Phase 3
-/auto-router --status          # Show project status
+### Primary Commands
+
+| Command | Fungsi |
+|---------|--------|
+| `/autor` | Auto-detect & show Smart Dashboard |
+| `/autor new` | New project |
+| `/autor scan` | Analyze existing project |
+| `/autor status` | Show project status |
+
+### Aliases
+
+```
+/ar  = /autor
+/ar n = /autor new
+/ar s = /autor scan
 ```
 
-### Standalone CLI
-```bash
-npx tsx _system/auto-router/cli.ts --smart   # Smart Dashboard
-npx tsx _system/auto-router/cli.ts --new      # New project
-npx tsx _system/auto-router/cli.ts --analyze   # Analyze project
-npx tsx _system/auto-router/cli.ts --status    # Project status
-```
+### Examples
 
-### Install as Global CLI
-```bash
-npm install -g auto-router
-auto-router --smart           # Run from anywhere
+```
+/autor                → Smart Dashboard
+/autor new            → Start new project
+/autor scan            → Analyze current project
+/autor status          → Show saved state
 ```
 
 ---
