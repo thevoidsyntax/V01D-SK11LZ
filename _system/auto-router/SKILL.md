@@ -140,6 +140,24 @@ Automatically detects project patterns: DDD, Clean Architecture, Microservices, 
 
 ---
 
+## 🟢 CORE SKILLS (Always Auto-Invoke)
+
+These skills are **always auto-invoked** regardless of project size or scale:
+
+| Category | Skills | Function |
+|----------|--------|----------|
+| **Version Control** | `/git` | Version control |
+| **DevOps** | `/docker`, `/ci-cd`, `/deployment` | Containers, pipelines, deploy |
+| **Quality** | `/code-quality`, `/testing` | Linting, testing |
+| **Config** | `/config`, `/logging` | Environment, logging |
+| **Security** | `/security` | Security best practices |
+| **Architecture** | `/tdd`, `/domain-modeling`, `/architecture-patterns` | TDD, DDD, system design |
+| **Debugging** | `/diagnosing-bugs` | Debug assistance |
+
+**Total: 12 CORE skills** always active for any project size.
+
+---
+
 ## 🎯 INTENT PATTERNS
 
 The router understands user intents:
