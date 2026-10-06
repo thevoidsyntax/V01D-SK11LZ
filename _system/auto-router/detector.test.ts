@@ -4,8 +4,8 @@ import {
   detectIntentSimple,
   detectTechStack,
   KEYWORD_MAP,
-  INTENT_PATTERNS
-} from './detector';
+} from './keyword-engine';
+import { INTENT_PATTERNS } from './intent-detector';
 
 describe('detector.ts', () => {
   describe('KEYWORD_MAP', () => {

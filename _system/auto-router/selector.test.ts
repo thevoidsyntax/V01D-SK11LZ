@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { selectSkills, CORE_SKILLS, SCORE_WEIGHTS, SCORE_THRESHOLDS } from './selector';
 
-// Mock dependencies
-vi.mock('./detector', () => ({
-  detectSkillsFromInput: vi.fn()
+// Mock the keyword engine
+vi.mock('./keyword-engine', () => ({
+  detectSkillsFromInput: vi.fn().mockReturnValue([])
 }));
 
 describe('selector.ts', () => {

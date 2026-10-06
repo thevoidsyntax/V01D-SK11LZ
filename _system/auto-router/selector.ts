@@ -10,7 +10,7 @@
 
 import { existsSync, readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
-import { detectSkillsFromInput, type KeywordMatch } from './detector';
+import { detectSkillsFromInput, type KeywordMatch } from './keyword-engine';
 
 export interface Skill {
   name: string;
