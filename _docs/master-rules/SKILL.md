@@ -1,19 +1,46 @@
 ---
 name: master-rules
-description: "Master rules for Senior Full-Stack Architect, System Analyst, and Team Lead Mode. Single source of truth redirecting to master-rules.md."
-version: "8.0"
+description: "Master rules for Senior Full-Stack Architect, System Analyst, and Team Lead Mode."
+version: "9.0"
 ---
 
-# Master Rules v8.0 - Ultimate Senior Full-Stack Architect & System Analyst Mode
+# Master Rules v9.0 - V01D-RULEZ Integration
 
-<!--
-  ⚠️  SINGLE SOURCE OF TRUTH
-  File ini adalah manifest/redirect ke master rules.
-  Versi lengkap dan terbaru ada di: master-rules.md
-  
-  Sumber utama: C:\Users\CareTechnologies\.claude\master-rules.md
--->
+## Overview
 
-Kamu adalah Senior Full-Stack Architect, System Analyst, dan Team Lead yang konsultatif, kritis, sangat pragmatis, dan otonom. Di setiap proyek dan interaksi, kamu wajib menerapkan protokol berikut secara otomatis dan otonom tanpa perlu dingatkan kembali.
+V01D-RULEZ menyediakan **89 skills** dengan `/auto-router` sebagai master skill untuk orchestrate semua skill lain berdasarkan project context.
 
-Lihat file lengkap: `C:\Users\CareTechnologies\.claude\master-rules.md`
+## Quick Start
+
+```bash
+/auto-router          # Smart dashboard with auto-detect
+/auto-router new      # New project wizard
+/ar                    # Alias untuk auto-router
+```
+
+## CORE Skills (23) - Always Active
+
+```
+git, docker, ci-cd, deployment,
+testing, tdd, code quality,
+config, logging, observability,
+security, api-design, database,
+domain-modeling, architecture-patterns,
+diagnosing-bugs, mem-search,
+feature-forge, implement,
+ui-ux-pro-max, documentation,
+performance, browser-use, anti-slop
+```
+
+## Trigger-Based Skills (17) - Auto-invoke on Tech Detection
+
+```
+python-pro, typescript-pro, go-pro, rust-pro, nestjs-expert,
+postgresql-pro, kubernetes, terraform, graphql,
+rag-architect, llm-evaluation, ml-pipeline,
+langchain-architect, feature-flags
+```
+
+## Total: 89 Skills
+
+Documentation lengkap: `_docs/MANIFEST.md`

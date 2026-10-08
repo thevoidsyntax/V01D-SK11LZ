@@ -135,38 +135,82 @@ const UI_CONSTANTS = {
   MAX_LINES: 5,              // Max context skills to show
 };
 
-// Core skills that always invoke
+// Core skills that always invoke (universal foundation)
 const CORE_SKILLS = new Set([
-  // Version Control & DevOps
+  // Version Control & DevOps (always needed)
   'git', 'docker', 'ci-cd', 'deployment',
 
-  // Quality & Testing
-  'code-quality', 'logging', 'config', 'testing',
+  // Quality & Testing (essential for any project)
+  'code-quality', 'testing', 'tdd',
 
-  // Security (hacker-style)
-  'security', 'pentest',
+  // Config & Observability (foundation)
+  'config', 'logging', 'observability',
 
-  // Frontend & UI (always for web projects)
-  'frontend', 'ui-ux-pro-max',
+  // Security (critical for any project)
+  'security',
 
-  // Performance & Observability
-  'performance', 'observability',
+  // Backend Development (most projects need API)
+  'api-design', 'database',
 
-  // Architecture & Patterns (always for any scale)
-  'tdd', 'diagnosing-bugs', 'domain-modeling', 'architecture-patterns'
+  // Architecture & Patterns (good practices)
+  'domain-modeling', 'architecture-patterns',
+
+  // Debugging (always helpful)
+  'diagnosing-bugs',
+
+  // Memory & Context (persistent across sessions)
+  'mem-search',
+
+  // Project Foundation (requirements & docs)
+  'feature-forge',
+
+  // Implementation & Frontend (essential for most projects)
+  'implement', 'ui-ux-pro-max', 'documentation',
+
+  // Performance & Browser Automation
+  'performance', 'browser-use', 'anti-slop',
 ]);
 
 // Skill categories for grouping
 const SKILL_CATEGORIES: Record<string, string[]> = {
+  // Security & Auth
   'security': ['security', 'pentest', 'identity', 'compliance'],
-  'database': ['database', 'data-engineering', 'messaging'],
-  'api': ['api-design', 'api-client'],
-  'infrastructure': ['docker', 'kubernetes', 'terraform', 'ci-cd', 'deployment'],
-  'frontend': ['frontend', 'performance'],
-  'quality': ['testing', 'tdd', 'code-quality', 'audit'],
+
+  // Database & Data
+  'database': ['database', 'postgresql-pro', 'data-engineering', 'data-quality', 'messaging'],
+
+  // API Development
+  'api': ['api-design', 'api-client', 'nestjs-expert', 'graphql'],
+
+  // Infrastructure & DevOps
+  'infrastructure': ['docker', 'kubernetes', 'terraform', 'ci-cd', 'deployment', 'ansible', 'serverless'],
+
+  // Frontend & UI
+  'frontend': ['ui-ux-pro-max', 'ui-ux-pro-max-design-system', 'ui-ux-pro-max-styling'],
+
+  // Memory & Meta
+  'memory': ['mem-search'],
+
+  // Quality & Testing
+  'quality': ['testing', 'tdd', 'code-quality', 'audit', 'diagnosing-bugs'],
+
+  // Observability
   'observability': ['logging', 'observability', 'reliability'],
-  'architecture': ['architecture-patterns', 'domain-modeling'],
-  'process': ['implement', 'wayfinder', 'documentation', 'anti-slop']
+
+  // Architecture & Patterns
+  'architecture': ['architecture-patterns', 'domain-modeling', 'design-patterns', 'integration-patterns'],
+
+  // AI/ML (Specialized)
+  'ai-ml': ['rag-architect', 'llm-evaluation', 'ml-pipeline', 'langchain-architect', 'feature-forge'],
+
+  // Languages
+  'languages': ['python-pro', 'typescript-pro', 'go-pro', 'rust-pro'],
+
+  // Process & Workflow
+  'process': ['implement', 'wayfinder', 'documentation', 'anti-slop', 'handoff', 'grill-with-docs', 'writing-for-agents'],
+
+  // GitHub Workflow
+  'github': ['new-issue', 'validate-issue', 'work-on-issue', 'fix-pr-review', 'pr-review', 'commit', 'create-release', 'sync-docs'],
 };
 
 export function selectSkills(
@@ -455,10 +499,19 @@ function formatTitle(skillName: string): string {
 function discoverSkills(): Skill[] {
   const skillsDir = join(process.env.HOME || process.env.USERPROFILE || '', '.claude', 'skills');
   const skills: Skill[] = [];
+  const seenSkills = new Set<string>(); // Avoid duplicates
 
   if (!existsSync(skillsDir)) return skills;
 
   const categories = readdirSync(skillsDir, { withFileTypes: true });
+
+  // Helper to add skill, avoiding duplicates
+  const addSkill = (skill: Skill) => {
+    if (!seenSkills.has(skill.name)) {
+      seenSkills.add(skill.name);
+      skills.push(skill);
+    }
+  };
 
   for (const category of categories) {
     if (!category.isDirectory()) continue;
@@ -466,6 +519,23 @@ function discoverSkills(): Skill[] {
     if (category.name.startsWith('_')) continue;
 
     const categoryPath = join(skillsDir, category.name);
+
+    // 1. Check if this root-level directory has SKILL.md (flat structure)
+    const rootSkillFiles = ['SKILL.md', 'skill.md'];
+    for (const skillFile of rootSkillFiles) {
+      const rootSkillPath = join(categoryPath, skillFile);
+      if (existsSync(rootSkillPath)) {
+        try {
+          const skill = parseSkillMetadata(rootSkillPath, category.name);
+          addSkill(skill);
+        } catch (err) {
+          console.warn(`[auto-router] Skipping invalid root skill at ${rootSkillPath}:`, err instanceof Error ? err.message : err);
+        }
+        break;
+      }
+    }
+
+    // 2. Scan subdirectories (nested structure)
     const entries = readdirSync(categoryPath, { withFileTypes: true });
 
     for (const entry of entries) {
@@ -478,10 +548,9 @@ function discoverSkills(): Skill[] {
         const fullPath = join(skillPath, skillFile);
         if (existsSync(fullPath)) {
           try {
-            const skill = parseSkillMetadata(fullPath, category.name);
-            skills.push(skill);
+            const skill = parseSkillMetadata(fullPath, entry.name);
+            addSkill(skill);
           } catch (err) {
-            // Log error but continue processing other skills
             console.warn(`[auto-router] Skipping invalid skill at ${fullPath}:`, err instanceof Error ? err.message : err);
           }
           break;

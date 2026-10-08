@@ -220,7 +220,205 @@ export const KEYWORD_MAP: Record<string, KeywordConfig> = {
     weight: 5,
     confidence: 'low',
     category: 'devops'
-  }
+  },
+
+  // GO Language
+  'go-pro': {
+    skill: 'go-pro',
+    keywords: ['golang', 'go ', 'goroutine', 'channel', 'go-', 'golang'],
+    weight: 8,
+    confidence: 'high',
+    category: 'language'
+  },
+
+  // Rust Language
+  'rust-pro': {
+    skill: 'rust-pro',
+    keywords: ['rust', 'cargo', 'rustacean', 'tokio', 'ownership', 'borrowing'],
+    weight: 8,
+    confidence: 'high',
+    category: 'language'
+  },
+
+  // NestJS Framework
+  'nestjs-expert': {
+    skill: 'nestjs-expert',
+    keywords: ['nestjs', 'nest js', '@nestjs', 'nestjs/core'],
+    weight: 8,
+    confidence: 'high',
+    category: 'api'
+  },
+
+  // Feature Forge / PRD
+  'feature-forge': {
+    skill: 'feature-forge',
+    keywords: ['prd', 'product requirements', 'user story', 'requirements', 'acceptance criteria', 'functional requirements', 'ears format'],
+    weight: 10,
+    confidence: 'high',
+    category: 'process'
+  },
+
+  // RAG Architect
+  'rag-architect': {
+    skill: 'rag-architect',
+    keywords: ['rag', 'retrieval augmented', 'vector', 'embedding', 'semantic search', 'chunks', 'vector store', 'pinecone', 'qdrant'],
+    weight: 8,
+    confidence: 'high',
+    category: 'ai-ml'
+  },
+
+  // PostgreSQL
+  'postgresql-pro': {
+    skill: 'postgresql-pro',
+    keywords: ['postgresql', 'postgres', 'pg_', 'psycopg', 'pg_stat', 'explain analyze'],
+    weight: 8,
+    confidence: 'high',
+    category: 'database'
+  },
+
+  // ML Pipeline
+  'ml-pipeline': {
+    skill: 'ml-pipeline',
+    keywords: ['ml pipeline', 'machine learning', 'model training', 'experiment tracking', 'mlflow', 'kubeflow', 'feature store'],
+    weight: 8,
+    confidence: 'high',
+    category: 'ai-ml'
+  },
+
+  // LLM Evaluation
+  'llm-evaluation': {
+    skill: 'llm-evaluation',
+    keywords: ['llm evaluation', 'ai evaluation', 'benchmark', 'hallucination', 'prompt injection', 'ragas'],
+    weight: 8,
+    confidence: 'high',
+    category: 'ai-ml'
+  },
+
+  // Feature Flags
+  'feature-flags': {
+    skill: 'feature-flags',
+    keywords: ['feature flag', 'canary', 'ab test', 'progressive delivery', 'toggle', 'rollout', 'launchdarkly', 'unleash'],
+    weight: 8,
+    confidence: 'high',
+    category: 'devops'
+  },
+
+  // Data Quality
+  'data-quality': {
+    skill: 'data-quality',
+    keywords: ['data quality', 'data validation', 'great expectations', 'data testing', 'data profiling'],
+    weight: 7,
+    confidence: 'medium',
+    category: 'data'
+  },
+
+  // LangChain
+  'langchain-architect': {
+    skill: 'langchain-architect',
+    keywords: ['langchain', 'chain', 'agent', 'llm app', 'chatbot', 'tool calling'],
+    weight: 8,
+    confidence: 'high',
+    category: 'ai-ml'
+  },
+
+  // Memory & Context
+  'mem-search': {
+    skill: 'mem-search',
+    keywords: ['memory', 'remember', 'context', 'history', 'session', 'past', 'persistent'],
+    weight: 7,
+    confidence: 'medium',
+    category: 'memory'
+  },
+
+  // Implementation
+  'implement': {
+    skill: 'implement',
+    keywords: ['implement', 'build', 'create feature', 'development', 'coding', 'programming'],
+    weight: 8,
+    confidence: 'high',
+    category: 'process'
+  },
+
+  // Documentation
+  'documentation': {
+    skill: 'documentation',
+    keywords: ['documentation', 'readme', 'docs', 'comment', 'changelog', 'guide', 'tutorial'],
+    weight: 6,
+    confidence: 'medium',
+    category: 'process'
+  },
+
+  // UI/UX
+  'ui-ux-pro-max': {
+    skill: 'ui-ux-pro-max',
+    keywords: ['ui', 'ux', 'design', 'interface', 'component', 'frontend', 'css', 'tailwind', 'responsive'],
+    weight: 7,
+    confidence: 'medium',
+    category: 'frontend'
+  },
+
+  // Performance
+  'performance': {
+    skill: 'performance',
+    keywords: ['performance', 'optimize', 'speed', 'cache', 'lazy', 'bundle', 'webpack', 'vite', 'profiling', 'benchmark', 'latency'],
+    weight: 7,
+    confidence: 'medium',
+    category: 'performance'
+  },
+
+  // Browser Automation
+  'browser-use': {
+    skill: 'browser-use',
+    keywords: ['browser', 'automation', 'puppeteer', 'playwright', 'scrape', 'crawl', 'web automation', 'headless'],
+    weight: 6,
+    confidence: 'medium',
+    category: 'browser'
+  },
+
+  // Anti-AI Slop
+  'anti-slop': {
+    skill: 'anti-slop',
+    keywords: ['human-like', 'natural writing', 'no ai patterns', 'clean output', 'concise'],
+    weight: 5,
+    confidence: 'low',
+    category: 'writing'
+  },
+
+  // Kubernetes
+  'kubernetes': {
+    skill: 'kubernetes',
+    keywords: ['kubernetes', 'k8s', 'kubectl', 'helm', 'ingress', 'deployment', 'pod', 'service'],
+    weight: 8,
+    confidence: 'high',
+    category: 'devops'
+  },
+
+  // GraphQL
+  'graphql': {
+    skill: 'graphql',
+    keywords: ['graphql', 'gql', 'schema', 'resolver', 'apollo', 'relay'],
+    weight: 8,
+    confidence: 'high',
+    category: 'api'
+  },
+
+  // Terraform
+  'terraform': {
+    skill: 'terraform',
+    keywords: ['terraform', 'tf', 'infrastructure as code', 'iac', 'terraform provider'],
+    weight: 8,
+    confidence: 'high',
+    category: 'devops'
+  },
+
+  // Reliability / SRE
+  'reliability': {
+    skill: 'reliability',
+    keywords: ['slo', 'sla', 'uptime', 'reliability', 'incident', 'on-call', 'runbook', 'circuit breaker', 'resilience'],
+    weight: 7,
+    confidence: 'medium',
+    category: 'observability'
+  },
 };
 
 // ============================================================================

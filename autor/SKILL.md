@@ -142,31 +142,79 @@ Automatically detects project patterns: DDD, Clean Architecture, Microservices, 
 
 ## 🟢 CORE SKILLS (Always Auto-Invoke)
 
-These skills are **always auto-invoked** regardless of project size or scale:
+These skills are **always auto-invoked** for all projects:
 
 | Category | Skills | Function |
 |----------|--------|----------|
 | **Version Control** | `/git` | Version control |
 | **DevOps** | `/docker`, `/ci-cd`, `/deployment` | Containers, pipelines, deploy |
-| **Quality** | `/code-quality`, `/testing` | Linting, testing |
+| **Quality** | `/testing`, `/tdd`, `/code-quality` | Testing, TDD, linting |
 | **Config** | `/config`, `/logging` | Environment, logging |
-| **Security** | `/security`, `/pentest` | Security + Pentesting tools |
-| **Architecture** | `/tdd`, `/domain-modeling`, `/architecture-patterns` | TDD, DDD, system design |
+| **Security** | `/security` | Security foundation |
+| **Backend** | `/api-design`, `/database` | API & Database |
+| **Architecture** | `/domain-modeling`, `/architecture-patterns` | DDD, system design |
 | **Debugging** | `/diagnosing-bugs` | Debug assistance |
+| **Memory** | `/mem-search` | Persistent context across sessions |
+| **Requirements** | `/feature-forge` | PRD, requirements, EARS format |
+| **Implementation** | `/implement` | Build from spec with TDD |
+| **Frontend** | `/ui-ux-pro-max` | UI/UX design intelligence |
+| **Documentation** | `/documentation` | README, API docs |
+| **Performance** | `/performance` | Optimization, profiling, benchmarking |
+| **Browser** | `/browser-use`, `/anti-slop` | Browser automation, clean output |
 
-**Total: 13 CORE skills** always active for any project size.
+**Total: 23 CORE skills** always active for any project.
 
-### Pentest Tools in `/pentest`
+---
 
-| Tool | Purpose |
-|------|---------|
-| **Nuclei** | CVE/vulnerability scanner |
-| **OWASP ZAP** | Web app scanner |
-| **SQLMap** | SQL injection |
-| **dalfox** | XSS scanner |
-| **FFUF** | API/URL fuzzer |
-| **Subfinder** | Subdomain enumeration |
-| **Hydra** | Brute force |
+## 🔵 CONTEXT SKILLS (Auto-Invoke based on tech detected)
+
+These skills auto-invoke when specific tech is detected:
+
+| Tech Detected | Skills Auto-Invoke |
+|---------------|-------------------|
+| TypeScript/Node.js | `/typescript-pro`, `/api-client` |
+| Python | `/python-pro` |
+| Go | `/go-pro` |
+| Rust | `/rust-pro` |
+| NestJS | `/nestjs-expert` |
+| PostgreSQL | `/postgresql-pro` |
+| React/Vue/Angular | `/ui-ux-pro-max` |
+| Kubernetes | `/kubernetes` |
+| GraphQL | `/graphql` |
+| Terraform | `/terraform` |
+| ML/AI projects | `/rag-architect`, `/llm-evaluation`, `/ml-pipeline` |
+
+---
+
+## 🔵 AI/ML SKILLS (Specialized)
+
+| Skill | Purpose | Keywords |
+|-------|---------|----------|
+| `/rag-architect` | RAG systems, vector DB | rag, vector, embedding, semantic search |
+| `/llm-evaluation` | LLM evaluation, benchmarks | llm, benchmark, hallucination |
+| `/ml-pipeline` | ML pipelines, MLflow | ml pipeline, experiment tracking |
+| `/feature-forge` | PRD, requirements, EARS | prd, user story, requirements |
+| `/langchain-architect` | LangChain apps | langchain, agent, chain |
+
+---
+
+## 🟣 MEMORY & CONTEXT
+
+| Skill | Purpose | Install |
+|-------|---------|----------|
+| `/mem-search` | Persistent memory across sessions | `npx claude-mem install` |
+
+---
+
+## 🟡 LANGUAGE SPECIALISTS
+
+| Skill | Languages |
+|-------|-----------|
+| `/python-pro` | Python, Django, FastAPI, pandas |
+| `/typescript-pro` | TypeScript, Node.js |
+| `/go-pro` | Go, goroutines, gRPC |
+| `/rust-pro` | Rust, ownership, async |
+| `/nestjs-expert` | NestJS framework |
 
 ---
 
