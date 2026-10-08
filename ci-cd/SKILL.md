@@ -33,7 +33,7 @@ quality:
   rules_count: 10
   examples_count: 20
   stability: stable
-integrates_with: [auto-route, docker, deployment]
+integrates_with: [auto-router, docker, deployment]
 source:
   origin: local
 author: Claude

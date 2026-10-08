@@ -200,4 +200,4 @@ git bisect reset
 
 ---
 
-**Invok:** `/diagnosing-bugs` | **Priority:** HIGH | **Version:** 1.1.0
+**Invoke:** `/diagnosing-bugs` | **Priority:** HIGH | **Version:** 1.1.0

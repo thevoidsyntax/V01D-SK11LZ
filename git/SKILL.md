@@ -31,7 +31,7 @@ quality:
   rules_count: 15
   examples_count: 30
   stability: stable
-integrates_with: [auto-route, analyze-project]
+integrates_with: [auto-router, analyze-project]
 source:
   origin: local
 author: Claude

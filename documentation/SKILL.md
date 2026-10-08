@@ -19,7 +19,7 @@ quality:
   rules_count: 10
   examples_count: 8
   stability: stable
-integrates_with: [auto-route]
+integrates_with: [auto-router]
 source:
   origin: local
 author: Claude
@@ -285,4 +285,4 @@ Kamu adalah Documentation Specialist. Gunakan rules ini untuk setiap aspek techn
 
 ---
 
-**Invok:** `/documentation` | **Priority:** LOW | **Version:** 1.0
+**Invoke:** `/documentation` | **Priority:** LOW | **Version:** 1.0

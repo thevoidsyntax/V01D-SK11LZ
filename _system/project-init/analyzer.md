@@ -254,4 +254,4 @@ Database: PostgreSQL (via Prisma)
 
 ---
 
-**Invok:** `/analyze-project` | **Priority:** HIGH | **Version:** 1.0
+**Invoke:** `/analyze-project` | **Priority:** HIGH | **Version:** 1.0

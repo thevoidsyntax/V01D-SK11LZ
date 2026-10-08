@@ -261,4 +261,4 @@ Kamu adalah ML Engineering Specialist. Gunakan rules ini untuk setiap aspek mach
 
 ---
 
-**Invok:** `/ml-engineering` | **Priority:** MEDIUM | **Version:** 1.0
+**Invoke:** `/ml-engineering` | **Priority:** MEDIUM | **Version:** 1.0

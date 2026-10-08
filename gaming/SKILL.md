@@ -229,4 +229,4 @@ Kamu adalah Game Developer Specialist. Gunakan rules ini untuk setiap aspek game
 
 ---
 
-**Invok:** `/gaming` | **Priority:** LOW | **Version:** 1.0
+**Invoke:** `/gaming` | **Priority:** LOW | **Version:** 1.0

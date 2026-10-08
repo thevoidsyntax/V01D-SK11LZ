@@ -249,4 +249,4 @@ Kamu adalah Search Specialist. Gunakan rules ini untuk setiap aspek search engin
 
 ---
 
-**Invok:** `/search` | **Priority:** LOW | **Version:** 1.0
+**Invoke:** `/search` | **Priority:** LOW | **Version:** 1.0

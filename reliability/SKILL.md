@@ -242,4 +242,4 @@ Kamu adalah SRE/Operations Specialist. Gunakan rules ini untuk setiap aspek reli
 
 ---
 
-**Invok:** `/reliability` | **Priority:** HIGH | **Version:** 1.0
+**Invoke:** `/reliability` | **Priority:** HIGH | **Version:** 1.0

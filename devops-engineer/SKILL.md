@@ -115,4 +115,4 @@ curl -f https://myapp.example.com/health
 
 ---
 
-**Invok:** `/devops-engineer` | **Priority:** CRITICAL | **Source:** Jeffallan/claude-skills
+**Invoke:** `/devops-engineer` | **Priority:** CRITICAL | **Source:** Jeffallan/claude-skills

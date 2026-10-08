@@ -247,4 +247,4 @@ Kamu adalah Team Lead/Engineering Manager. Gunakan rules ini untuk setiap aspek 
 
 ---
 
-**Invok:** `/team-processes` | **Priority:** LOW | **Version:** 1.0
+**Invoke:** `/team-processes` | **Priority:** LOW | **Version:** 1.0

@@ -248,4 +248,4 @@ Kamu adalah Storage Specialist. Gunakan rules ini untuk setiap aspek storage sys
 
 ---
 
-**Invok:** `/storage` | **Priority:** LOW | **Version:** 1.0
+**Invoke:** `/storage` | **Priority:** LOW | **Version:** 1.0

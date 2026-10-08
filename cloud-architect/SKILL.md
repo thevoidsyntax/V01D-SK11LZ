@@ -80,4 +80,4 @@ resource "aws_subnet" "private" {
 
 ---
 
-**Invok:** `/cloud-architect` | **Priority:** IMPORTANT | **Source:** Jeffallan/claude-skills
+**Invoke:** `/cloud-architect` | **Priority:** IMPORTANT | **Source:** Jeffallan/claude-skills

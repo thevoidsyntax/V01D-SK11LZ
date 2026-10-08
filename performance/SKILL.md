@@ -252,4 +252,4 @@ Kamu adalah Performance Specialist. Gunakan rules ini untuk setiap aspek perform
 
 ---
 
-**Invok:** `/performance` | **Priority:** LOW | **Version:** 1.0
+**Invoke:** `/performance` | **Priority:** LOW | **Version:** 1.0

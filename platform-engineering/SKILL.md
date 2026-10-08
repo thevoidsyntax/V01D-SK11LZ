@@ -235,4 +235,4 @@ Kamu adalah Platform Engineer. Gunakan rules ini untuk setiap aspek platform eng
 
 ---
 
-**Invok:** `/platform-engineering` | **Priority:** MEDIUM | **Version:** 1.0
+**Invoke:** `/platform-engineering` | **Priority:** MEDIUM | **Version:** 1.0

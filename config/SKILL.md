@@ -19,7 +19,7 @@ quality:
   rules_count: 10
   examples_count: 15
   stability: stable
-integrates_with: [auto-route, security]
+integrates_with: [auto-router, security]
 source:
   origin: local
 author: Claude

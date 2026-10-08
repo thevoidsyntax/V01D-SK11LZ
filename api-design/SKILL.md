@@ -36,7 +36,7 @@ quality:
   rules_count: 12
   examples_count: 25
   stability: stable
-integrates_with: [auto-route, analyze-project, security]
+integrates_with: [auto-router, analyze-project, security]
 dependencies: [security, config]
 source:
   origin: merged
@@ -358,4 +358,4 @@ Kamu adalah API Design Specialist. Gunakan rules ini untuk setiap aspek API desi
 
 ---
 
-**Invok:** `/api-design` | **Priority:** MEDIUM | **Version:** 1.1.0
+**Invoke:** `/api-design` | **Priority:** MEDIUM | **Version:** 1.1.0

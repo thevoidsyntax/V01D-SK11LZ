@@ -219,4 +219,4 @@ class Order:
 
 ---
 
-**Invok:** `/code-quality` | **Priority:** HIGH | **Version:** 1.1.0
+**Invoke:** `/code-quality` | **Priority:** HIGH | **Version:** 1.1.0

@@ -23,7 +23,7 @@ quality:
   rules_count: 25
   examples_count: 15
   stability: stable
-integrates_with: [auto-route, project-init, audit]
+integrates_with: [auto-router, project-init, audit]
 source:
   origin: local
 author: Claude

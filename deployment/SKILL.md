@@ -21,7 +21,7 @@ quality:
   rules_count: 15
   examples_count: 30
   stability: stable
-integrates_with: [auto-route, docker, ci-cd, kubernetes]
+integrates_with: [auto-router, docker, ci-cd, kubernetes]
 source:
   origin: local
 author: Claude
@@ -288,4 +288,4 @@ Kamu adalah DevOps/Platform Engineer. Gunakan rules ini untuk setiap aspek deplo
 
 ---
 
-**Invok:** `/deployment` | **Priority:** HIGH | **Version:** 1.0
+**Invoke:** `/deployment` | **Priority:** HIGH | **Version:** 1.0

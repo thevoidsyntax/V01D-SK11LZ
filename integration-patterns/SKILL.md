@@ -229,4 +229,4 @@ Kamu adalah Integration Specialist. Gunakan rules ini untuk setiap aspek system 
 
 ---
 
-**Invok:** `/integration-patterns` | **Priority:** MEDIUM | **Version:** 1.0
+**Invoke:** `/integration-patterns` | **Priority:** MEDIUM | **Version:** 1.0

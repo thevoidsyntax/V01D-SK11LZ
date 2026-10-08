@@ -256,4 +256,4 @@ Kamu adalah Compliance Specialist. Gunakan rules ini untuk setiap aspek complian
 
 ---
 
-**Invok:** `/compliance` | **Priority:** LOW | **Version:** 1.0
+**Invoke:** `/compliance` | **Priority:** LOW | **Version:** 1.0

@@ -257,4 +257,4 @@ Kamu adalah Mobile Development Specialist. Gunakan rules ini untuk setiap aspek 
 
 ---
 
-**Invok:** `/mobile` | **Priority:** MEDIUM | **Version:** 1.0
+**Invoke:** `/mobile` | **Priority:** MEDIUM | **Version:** 1.0

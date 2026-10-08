@@ -39,7 +39,7 @@ quality:
   rules_count: 25
   examples_count: 40
   stability: stable
-integrates_with: [auto-route, ai-process, diagnosing-bugs]
+integrates_with: [auto-router, tdd, diagnosing-bugs]
 dependencies: [diagnosing-bugs]
 source:
   origin: merged
@@ -316,4 +316,4 @@ describe('calculateDiscount', () => {
 
 ---
 
-**Invok:** `/testing` | **Priority:** LOW | **Version:** 1.1.0
+**Invoke:** `/testing` | **Priority:** LOW | **Version:** 1.1.0

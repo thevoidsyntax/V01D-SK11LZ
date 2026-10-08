@@ -19,7 +19,7 @@ quality:
   rules_count: 5
   examples_count: 0
   stability: stable
-integrates_with: [tdd, pr-review, code-review]
+integrates_with: [tdd, pr-review, code-quality]
 source:
   origin: local
 author: Claude
@@ -31,6 +31,10 @@ Use /tdd where possible, at pre-agreed seams.
 
 Run typechecking regularly, single test files regularly, and the full test suite once at the end.
 
-Once done, use /code-review to review the work.
+Once done, use /code-quality to review the work.
 
 Commit your work to the current branch.
+
+---
+
+**Invoke:** /implement | **Priority:** HIGH | **Version:** 1.0.0

@@ -49,9 +49,10 @@ export const INTENT_PATTERNS: Record<string, IntentConfig> = {
  */
 export function detectIntent(input: string): string[] {
   const detected: string[] = [];
+  const lowerInput = input.toLowerCase();
 
   for (const [intent, config] of Object.entries(INTENT_PATTERNS)) {
-    if (config.patterns.some(p => input.includes(p))) {
+    if (config.patterns.some(p => lowerInput.includes(p.toLowerCase()))) {
       detected.push(intent);
     }
   }

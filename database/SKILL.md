@@ -42,7 +42,7 @@ quality:
   rules_count: 15
   examples_count: 40
   stability: stable
-integrates_with: [auto-route, analyze-project]
+integrates_with: [auto-router, analyze-project]
 dependencies: [data-engineering]
 source:
   origin: local

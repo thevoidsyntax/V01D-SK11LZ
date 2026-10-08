@@ -35,7 +35,7 @@ quality:
   rules_count: 12
   examples_count: 25
   stability: stable
-integrates_with: [auto-route, deployment, ci-cd]
+integrates_with: [auto-router, deployment, ci-cd]
 source:
   origin: local
 author: Claude

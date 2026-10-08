@@ -225,7 +225,7 @@ export const KEYWORD_MAP: Record<string, KeywordConfig> = {
   // GO Language
   'go-pro': {
     skill: 'go-pro',
-    keywords: ['golang', 'go ', 'goroutine', 'channel', 'go-', 'golang'],
+    keywords: ['golang', 'go ', 'goroutine', 'channel', 'go-'],
     weight: 8,
     confidence: 'high',
     category: 'language'

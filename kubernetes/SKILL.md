@@ -257,4 +257,4 @@ Kamu adalah Kubernetes Specialist. Gunakan rules ini untuk setiap aspek Kubernet
 
 ---
 
-**Invok:** `/kubernetes` | **Priority:** MEDIUM | **Version:** 1.0
+**Invoke:** `/kubernetes` | **Priority:** MEDIUM | **Version:** 1.0

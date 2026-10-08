@@ -249,4 +249,4 @@ Kamu adalah Integration Specialist. Gunakan rules ini untuk setiap aspek messagi
 
 ---
 
-**Invok:** `/messaging` | **Priority:** MEDIUM | **Version:** 1.0
+**Invoke:** `/messaging` | **Priority:** MEDIUM | **Version:** 1.0

@@ -329,4 +329,4 @@ Kamu adalah Design Patterns Specialist. Gunakan rules ini untuk setiap aspek des
 
 ---
 
-**Invok:** `/design-patterns` | **Priority:** MEDIUM | **Version:** 1.0
+**Invoke:** `/design-patterns` | **Priority:** MEDIUM | **Version:** 1.0

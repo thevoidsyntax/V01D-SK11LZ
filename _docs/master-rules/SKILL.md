@@ -8,7 +8,7 @@ version: "9.0"
 
 ## Overview
 
-V01D-RULEZ menyediakan **89 skills** dengan `/auto-router` sebagai master skill untuk orchestrate semua skill lain berdasarkan project context.
+V01D-RULEZ menyediakan **91 skills** dengan `/auto-router` sebagai master skill untuk orchestrate semua skill lain berdasarkan project context.
 
 ## Quick Start
 
@@ -41,6 +41,6 @@ rag-architect, llm-evaluation, ml-pipeline,
 langchain-architect, feature-flags
 ```
 
-## Total: 89 Skills
+## Total: 91 Skills
 
 Documentation lengkap: `_docs/MANIFEST.md`

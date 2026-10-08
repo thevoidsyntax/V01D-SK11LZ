@@ -228,4 +228,4 @@ Kamu adalah Developer Experience Specialist. Gunakan rules ini untuk setiap aspe
 
 ---
 
-**Invok:** `/developer-experience` | **Priority:** LOW | **Version:** 1.0
+**Invoke:** `/developer-experience` | **Priority:** LOW | **Version:** 1.0

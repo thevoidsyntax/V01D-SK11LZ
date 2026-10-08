@@ -112,4 +112,4 @@ function renderState(state: RequestState): string {
 
 ---
 
-**Invok:** `/typescript-pro` | **Priority:** USEFUL | **Source:** Jeffallan/claude-skills
+**Invoke:** `/typescript-pro` | **Priority:** USEFUL | **Source:** Jeffallan/claude-skills

@@ -23,7 +23,7 @@ quality:
   rules_count: 40
   examples_count: 25
   stability: stable
-integrates_with: [auto-route, analyze-project, git]
+integrates_with: [auto-router, analyze-project, git]
 source:
   origin: local
 author: Claude

@@ -252,4 +252,4 @@ Kamu adalah Serverless Specialist. Gunakan rules ini untuk setiap aspek serverle
 
 ---
 
-**Invok:** `/serverless` | **Priority:** LOW | **Version:** 1.0
+**Invoke:** `/serverless` | **Priority:** LOW | **Version:** 1.0

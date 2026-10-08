@@ -13,7 +13,7 @@
 import { glob } from 'glob';
 import { readFile, writeFile, mkdir } from 'fs/promises';
 import { existsSync, readdirSync } from 'fs';
-import { join } from 'path';
+import { dirname } from 'path';
 
 // Re-export types for backward compatibility
 export type { TechStack, PhaseInfo, DetectionResult, KeywordMatch, UserPreference } from './types';
@@ -190,7 +190,7 @@ async function checkFile(path: string): Promise<string | null> {
 }
 
 function detectPackageManager(packageJsonPath: string): string {
-  const dir = join(packageJsonPath, '..');
+  const dir = dirname(packageJsonPath);
 
   if (existsSync(join(dir, 'pnpm-lock.yaml'))) return 'pnpm';
   if (existsSync(join(dir, 'yarn.lock'))) return 'yarn';
@@ -218,9 +218,9 @@ function estimateScale(
   return 'mvp';
 }
 
-function parsePhaseFromClaudeMd(claudeMdPath: string): PhaseInfo | undefined {
+async function parsePhaseFromClaudeMd(claudeMdPath: string): Promise<PhaseInfo | undefined> {
   try {
-    const content = readFileSync(claudeMdPath, 'utf-8');
+    const content = await readFile(claudeMdPath, 'utf-8');
     const phaseMatch = content.match(/##\s+Phase\s+(\d+)/i);
 
     if (phaseMatch) {

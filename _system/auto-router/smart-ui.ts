@@ -198,6 +198,11 @@ export function drawDashboard(data: {
   confidence: 'high' | 'medium' | 'low';
   phase: string;
 }): string {
+  // Validate input
+  if (!data || !data.project) {
+    return 'Error: Invalid dashboard data - project information required';
+  }
+
   const width = 70;
   const lines: string[] = [];
 

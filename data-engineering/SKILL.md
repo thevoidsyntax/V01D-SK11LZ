@@ -195,4 +195,4 @@ Kamu adalah Data Engineering Specialist. Gunakan rules ini untuk setiap aspek da
 
 ---
 
-**Invok:** `/data-engineering` | **Priority:** HIGH | **Version:** 1.0
+**Invoke:** `/data-engineering` | **Priority:** HIGH | **Version:** 1.0

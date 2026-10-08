@@ -19,7 +19,7 @@ quality:
   rules_count: 8
   examples_count: 20
   stability: stable
-integrates_with: [auto-route, observability, reliability]
+integrates_with: [auto-router, observability, reliability]
 source:
   origin: local
 author: Claude

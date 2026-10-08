@@ -308,7 +308,7 @@ quality:
   examples_count: 25
   last_audited: "2026-01-01"
   stability: stable
-integrates_with: [auto-route, analyze-project]
+integrates_with: [auto-router, analyze-project]
 source:
   origin: merged
   sources: ["Jeffallan/claude-skills:api-designer"]

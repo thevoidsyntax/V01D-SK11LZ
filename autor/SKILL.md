@@ -1,7 +1,7 @@
 ---
 name: auto-router
-version: "6.0.0"
-description: "Ultimate intelligent project router with intent detection, context awareness, and learning capabilities"
+version: "7.0.0"
+description: "Intelligent project router with auto-invoke core skills, tech-based recommendations, and phase awareness"
 priority: critical
 phase: any
 category: [process]
@@ -12,17 +12,60 @@ auto_invoke:
   enabled: true
   conditions:
     - command: ["/autor", "/ar", "/auto-router", "/auto-route", "/autoroute"]
-      reason: "Primary entry point"
-    - phrase: ["project baru", "new project", "create project", "init project", "analyze", "audit"]
-      reason: "Project operation intent"
+      reason: "Primary entry point - triggers full skill auto-invocation"
+core_skills:
+  always:
+    - /git
+    - /code-quality
+    - /config
+    - /logging
+    - /testing
+    - /tdd
+  docker_based:
+    - /docker
+    - /ci-cd
+    - /deployment
+  security_critical:
+    - /security
+  backend_based:
+    - /api-design
+    - /database
+    - /domain-modeling
+    - /architecture-patterns
+  frontend_based:
+    - /ui-ux-pro-max
+    # /frontend removed - does not exist, use /ui-ux-pro-max instead
+  debugging:
+    - /diagnosing-bugs
+  context:
+    - /mem-search
+    - /feature-forge
+    - /implement
+    - /documentation
+    - /performance
+    - /browser-use
+    - /anti-slop
+context_skills:
+  tech_based:
+    typescript:
+      - /typescript-pro
+    nodejs:
+      - /typescript-pro
+    fastify:
+      - /api-design
+    postgresql:
+      - /database
+    react:
+      - /ui-ux-pro-max
+    redis:
+      - /scalability
 integrates_with:
-  - project-init
-  - analyze-project
   - workflow-authoring
 capabilities:
   - discovery
   - implementation
   - analysis
+  - auto_invoke
 quality:
   rules_count: 60
   examples_count: 25
@@ -32,274 +75,223 @@ source:
 author: TheVoidSyntax
 ---
 
-# AUTO-ROUTER v6.0
+# AUTO-ROUTER v7.0
 
-Smart Project Intelligence Tool
-
-```
-┌──────────────────────────────────────────────────────────┐
-│  🚀 AUTO-ROUTER v6.0                                  │
-│  Smart Project Intelligence                              │
-│  Intent Detection • Confidence Scoring • Smart UI       │
-└──────────────────────────────────────────────────────────┘
-```
-
-
----
-
-## 🎯 SIMPLE COMMANDS
-
-### Primary Commands
-
-| Command | Fungsi |
-|---------|--------|
-| `/autor` | Auto-detect & show Smart Dashboard |
-| `/autor new` | New project |
-| `/autor scan` | Analyze existing project |
-| `/autor status` | Show project status |
-
-### Aliases
+Smart Project Intelligence Tool with Auto-Invoke
 
 ```
-/ar  = /autor
-/ar n = /autor new
-/ar s = /autor scan
-```
-
-### Examples
-
-```
-/autor                → Smart Dashboard
-/autor new            → Start new project
-/autor scan            → Analyze current project
-/autor status          → Show saved state
+┌──────────────────────────────────────────────────────────────────┐
+│  🚀 AUTO-ROUTER v7.0                                           │
+│  Smart Project Intelligence                                      │
+│  ✅ Auto-Invoke Core Skills                                    │
+│  ✅ Tech-Based Recommendations                                  │
+│  ✅ Phase-Aware Selection                                       │
+└──────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## ✨ v6.0 OPTIMIZATIONS
+## 🎯 AUTO-INVOKE WORKFLOW
 
-### 1. Intent Detection
-Skills now understand **what you want to do**, not just what files exist.
-
-### 2. Confidence Scoring
-Each recommendation comes with confidence level: 🟢 HIGH | 🟡 MEDIUM | 🔴 LOW
-
-### 3. Learning System
-Tracks your skill usage patterns and prioritizes frequently-used skills.
-
-### 4. Pattern Recognition
-Automatically detects project patterns: DDD, Clean Architecture, Microservices, Monorepo.
-
----
-
-## 🧠 HOW IT WORKS
+### v7.0 Flow Diagram
 
 ```
-┌────────────────────────────────────────────────────────────────────────────┐
-│  INPUT: "I need to add JWT authentication to my Fastify API"           │
-│                                                                            │
-│  ↓ INTENT DETECTION                                                       │
-│  • CREATE intent detected                                                 │
-│  • Security keywords found: jwt, auth, login                              │
-│  • Tech detected: fastify                                                │
-│                                                                            │
-│  ↓ SKILL MATCHING                                                         │
-│  ┌────────────────────────────────────────────────────────────────────┐   │
-│  │  SKILL              SCORE   CONFIDENCE  REASON                   │   │
-│  ├────────────────────────────────────────────────────────────────────┤   │
-│  │  /security            85     🟢 HIGH     Keywords: jwt, auth       │   │
-│  │  /identity           60     🟢 HIGH     Keywords: login, verify  │   │
-│  │  /api-design         45     🟡 MED     Framework: fastify     │   │
-│  │  /logging            25     🟡 MED     Core skill              │   │
-│  └────────────────────────────────────────────────────────────────────┘   │
-│                                                                            │
-│  ↓ AUTO-INVOKE                                                            │
-│  ✅ /security  (85 - HIGH confidence)                                     │
-│  ✅ /identity  (60 - HIGH confidence)                                     │
-│  📋 /api-design (45 - Recommended)                                        │
-└────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────┐
+│                         USER: /autor                                │
+└─────────────────────────────────────────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  PHASE 1: PROJECT CONTEXT LOADING                                  │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐    │
+│  │ Read CLAUDE  │→ │ Read README  │→ │ Parse package.json   │    │
+│  │ .md          │  │ .md          │  │ & Config files       │    │
+│  └──────────────┘  └──────────────┘  └──────────────────────┘    │
+└─────────────────────────────────────────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  PHASE 2: TECH STACK DETECTION                                     │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐    │
+│  │ Language:    │  │ Framework:  │  │ Database:           │    │
+│  │ Node.js ✅   │  │ Fastify ✅   │  │ PostgreSQL ✅       │    │
+│  └──────────────┘  └──────────────┘  └──────────────────────┘    │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐    │
+│  │ Frontend:    │  │ DevOps:      │  │ Architecture:        │    │
+│  │ React ✅     │  │ Docker?      │  │ DDD-Lite ✅         │    │
+│  └──────────────┘  └──────────────┘  └──────────────────────┘    │
+└─────────────────────────────────────────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  PHASE 3: AUTO-INVOKE CORE SKILLS (Always)                         │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │ ✅ /git          Version Control                             │   │
+│  │ ✅ /code-quality Linting & Code Standards                    │   │
+│  │ ✅ /config      Configuration Management                    │   │
+│  │ ✅ /logging     Structured Logging                         │   │
+│  │ ✅ /testing     Testing Strategy                            │   │
+│  │ ✅ /tdd         Test-Driven Development                    │   │
+│  │ ✅ /mem-search  Persistent Memory                          │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  PHASE 4: AUTO-INVOKE TECH-BASED SKILLS                            │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │ ✅ /typescript-pro   (TypeScript detected)                   │   │
+│  │ ✅ /api-design      (Fastify detected)                       │   │
+│  │ ✅ /database        (PostgreSQL detected)                   │   │
+│  │ ✅ /ui-ux-pro-max   (React detected)                        │   │
+│  │ ✅ /security        (Backend API detected)                   │   │
+│  │ ✅ /domain-modeling (DDD pattern detected)                  │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  PHASE 5: AUTO-INVOKE PHASE-BASED SKILLS                           │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │ From CLAUDE.md - Current Phase: 9                          │   │
+│  │ ✅ /ui-ux-pro-max   (Phase 9 - UI/UX focus)                │   │
+│  │ ✅ /api-design      (Phase 9 - Products API)                │   │
+│  │ ✅ /database        (Phase 9 - Products DB)                 │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  PHASE 6: SHOW SMART DASHBOARD + RECOMMENDATIONS                   │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │ Summary: X skills invoked | Y recommended | Z available      │   │
+│  │ Full list with scores and reasons                           │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────┘
 ```
-
----
-
-## 📊 KEYWORD → SKILL MATRIX
-
-| Category | Skills | Keywords |
-|---------|--------|----------|
-| **Security** | `/security`, `/identity` | auth, jwt, oauth, password, permission, role, encrypt, tls, ssl |
-| **Database** | `/database`, `/data-engineering` | postgres, mysql, mongodb, query, migration, schema, etl, pipeline |
-| **API** | `/api-design`, `/api-client` | rest, graphql, endpoint, route, http, validate, openapi |
-| **DevOps** | `/docker`, `/kubernetes`, `/terraform`, `/ci-cd` | container, k8s, kubernetes, terraform, pipeline, deploy |
-| **Frontend** | `/frontend`, `/performance` | react, vue, component, ui, css, bundle, optimize |
-| **Testing** | `/testing`, `/tdd` | test, vitest, jest, coverage, tdd, unit test |
-| **Architecture** | `/architecture-patterns`, `/domain-modeling` | ddd, hexagonal, microservices, entity, aggregate |
-| **Observability** | `/logging`, `/observability` | log, monitor, metrics, prometheus, trace |
-| **Quality** | `/code-quality`, `/audit` | lint, format, review, audit, scan, analyze |
-| **Debugging** | `/diagnosing-bugs`, `/reliability` | bug, fix, debug, error, crash, slo, sla |
 
 ---
 
 ## 🟢 CORE SKILLS (Always Auto-Invoke)
 
-These skills are **always auto-invoked** for all projects:
+### Always-Included Core
 
-| Category | Skills | Function |
-|----------|--------|----------|
-| **Version Control** | `/git` | Version control |
-| **DevOps** | `/docker`, `/ci-cd`, `/deployment` | Containers, pipelines, deploy |
-| **Quality** | `/testing`, `/tdd`, `/code-quality` | Testing, TDD, linting |
-| **Config** | `/config`, `/logging` | Environment, logging |
-| **Security** | `/security` | Security foundation |
-| **Backend** | `/api-design`, `/database` | API & Database |
-| **Architecture** | `/domain-modeling`, `/architecture-patterns` | DDD, system design |
-| **Debugging** | `/diagnosing-bugs` | Debug assistance |
-| **Memory** | `/mem-search` | Persistent context across sessions |
-| **Requirements** | `/feature-forge` | PRD, requirements, EARS format |
-| **Implementation** | `/implement` | Build from spec with TDD |
-| **Frontend** | `/ui-ux-pro-max` | UI/UX design intelligence |
-| **Documentation** | `/documentation` | README, API docs |
-| **Performance** | `/performance` | Optimization, profiling, benchmarking |
-| **Browser** | `/browser-use`, `/anti-slop` | Browser automation, clean output |
+These skills are **ALWAYS auto-invoked** when `/autor` is called:
 
-**Total: 23 CORE skills** always active for any project.
+| Skill | Purpose | Invoke |
+|-------|---------|--------|
+| `/git` | Version Control | ✅ Always |
+| `/code-quality` | Linting, Code Standards | ✅ Always |
+| `/config` | Configuration Management | ✅ Always |
+| `/logging` | Structured Logging | ✅ Always |
+| `/testing` | Testing Strategy | ✅ Always |
+| `/tdd` | Test-Driven Development | ✅ Always |
+| `/mem-search` | Persistent Memory | ✅ Always |
 
----
+### Docker/DevOps-Based Core
 
-## 🔵 CONTEXT SKILLS (Auto-Invoke based on tech detected)
+Invoked when Dockerfile/docker-compose detected:
 
-These skills auto-invoke when specific tech is detected:
+| Skill | Purpose | Invoke |
+|-------|---------|--------|
+| `/docker` | Containerization | ⚠️ Docker detected |
+| `/ci-cd` | CI/CD Pipelines | ⚠️ Docker detected |
+| `/deployment` | Deployment Strategy | ⚠️ Docker detected |
 
-| Tech Detected | Skills Auto-Invoke |
-|---------------|-------------------|
-| TypeScript/Node.js | `/typescript-pro`, `/api-client` |
-| Python | `/python-pro` |
-| Go | `/go-pro` |
-| Rust | `/rust-pro` |
-| NestJS | `/nestjs-expert` |
-| PostgreSQL | `/postgresql-pro` |
-| React/Vue/Angular | `/ui-ux-pro-max` |
-| Kubernetes | `/kubernetes` |
-| GraphQL | `/graphql` |
-| Terraform | `/terraform` |
-| ML/AI projects | `/rag-architect`, `/llm-evaluation`, `/ml-pipeline` |
+### Backend-Based Core
 
----
+Invoked when backend framework detected:
 
-## 🔵 AI/ML SKILLS (Specialized)
+| Skill | Purpose | Invoke |
+|-------|---------|--------|
+| `/api-design` | REST/GraphQL API | ⚠️ Fastify detected |
+| `/database` | Database Patterns | ⚠️ PostgreSQL detected |
+| `/security` | Security Foundation | ⚠️ Backend API detected |
+| `/domain-modeling` | DDD Patterns | ⚠️ DDD structure detected |
+| `/architecture-patterns` | System Design | ⚠️ Architecture detected |
 
-| Skill | Purpose | Keywords |
-|-------|---------|----------|
-| `/rag-architect` | RAG systems, vector DB | rag, vector, embedding, semantic search |
-| `/llm-evaluation` | LLM evaluation, benchmarks | llm, benchmark, hallucination |
-| `/ml-pipeline` | ML pipelines, MLflow | ml pipeline, experiment tracking |
-| `/feature-forge` | PRD, requirements, EARS | prd, user story, requirements |
-| `/langchain-architect` | LangChain apps | langchain, agent, chain |
+### Frontend-Based Core
+
+Invoked when frontend framework detected:
+
+| Skill | Purpose | Invoke |
+|-------|---------|--------|
+| `/ui-ux-pro-max` | UI/UX Design | ⚠️ React detected |
+| `/frontend` | Frontend Best Practices | ⚠️ React detected |
+| `/performance` | Optimization | ⚠️ SPA detected |
 
 ---
 
-## 🟣 MEMORY & CONTEXT
+## 🔵 TECH-BASED CONTEXT SKILLS
 
-| Skill | Purpose | Install |
-|-------|---------|----------|
-| `/mem-search` | Persistent memory across sessions | `npx claude-mem install` |
+### Language-Specific
+
+| Language | Skills Auto-Invoke | Score |
+|----------|-------------------|-------|
+| TypeScript | `/typescript-pro` | 25 |
+| Python | `/python-pro` | 25 |
+| Go | `/go-pro` | 25 |
+| Rust | `/rust-pro` | 25 |
+| Node.js | `/typescript-pro` | 20 |
+
+### Framework-Specific
+
+| Framework | Skills Auto-Invoke | Score |
+|-----------|-------------------|-------|
+| Fastify | `/api-design`, `/performance` | 25 |
+| Express | `/api-design`, `/security` | 25 |
+| NestJS | `/api-design`, `/security`, `/messaging` | 30 |
+| Next.js | `/frontend`, `/performance`, `/api-design` | 30 |
+| React | `/ui-ux-pro-max`, `/performance` | 30 |
+| Vue.js | `/ui-ux-pro-max` | 25 |
+
+### Database-Specific
+
+| Database | Skills Auto-Invoke | Score |
+|----------|-------------------|-------|
+| PostgreSQL | `/database`, `/postgresql-pro` | 25 |
+| MySQL | `/database` | 20 |
+| MongoDB | `/data-engineering` | 20 |
+| Redis | `/scalability`, `/performance` | 20 |
 
 ---
 
-## 🟡 LANGUAGE SPECIALISTS
+## 🎯 PHASE-BASED SKILL SELECTION
 
-| Skill | Languages |
-|-------|-----------|
-| `/python-pro` | Python, Django, FastAPI, pandas |
-| `/typescript-pro` | TypeScript, Node.js |
-| `/go-pro` | Go, goroutines, gRPC |
-| `/rust-pro` | Rust, ownership, async |
-| `/nestjs-expert` | NestJS framework |
+### Phase Detection from CLAUDE.md
 
----
+The autor reads CLAUDE.md to detect:
+1. Current phase (e.g., "Phase 9")
+2. Phase status (done, in-progress, next)
+3. Phase deliverables
 
-## 🎯 INTENT PATTERNS
+### Phase → Skills Mapping
 
-The router understands user intents:
-
-| Intent | Keywords | Boost |
-|--------|----------|-------|
-| **CREATE** | create, add, build, implement, generate | +30% to relevant skills |
-| **DEBUG** | debug, fix, bug, error, issue | +50% to diagnosing-bugs |
-| **ANALYZE** | analyze, audit, review, check | +50% to audit |
-| **DEPLOY** | deploy, release, ship, launch | +30% to deployment |
-
----
-
-## 🔄 COMMAND FLOW
-
-```
-/auto-router
-    │
-    ├─→ DETECT PROJECT STATE
-    │       ├── New project → project-init flow
-    │       ├── Existing → analyze-project flow
-    │       └── Partial → Offer options
-    │
-    ├─→ ANALYZE INPUT
-    │       ├── Extract keywords
-    │       ├── Detect intent (CREATE/DEBUG/ANALYZE/DEPLOY)
-    │       └── Match to skills
-    │
-    ├─→ SCORE SKILLS
-    │       ├── Keyword match (+35)
-    │       ├── Tech stack (+25)
-    │       ├── Phase match (+30)
-    │       ├── Scale match (+15)
-    │       └── Preference (+15)
-    │
-    ├─→ CATEGORIZE
-    │       ├── 🟢 CORE (always)
-    │       ├── 🔵 KEYWORD-MATCHED (auto)
-    │       ├── 🟡 CONTEXT (recommended)
-    │       └── ⚪ OPTIONAL (selectable)
-    │
-    └─→ INVOKE & TRACK
-            ├── Auto-invoke top matches
-            ├── Show recommendations
-            └── Save to state
+```typescript
+const PHASE_SKILLS: Record<string, string[]> = {
+  'foundation': ['/security', '/database', '/architecture-patterns', '/config'],
+  'core': ['/api-design', '/code-quality', '/testing', '/deployment'],
+  'features': ['/frontend', '/ui-ux-pro-max', '/performance'],
+  'products': ['/api-design', '/database', '/ui-ux-pro-max', '/typescript-pro'],
+  'stock': ['/database', '/reporting', '/testing'],
+  'reports': ['/dataviz', '/performance', '/documentation'],
+  'settings': ['/config', '/security', '/api-design'],
+  'pwa': ['/frontend', '/performance', '/browser-use'],
+};
 ```
 
----
+### Phase 9 Example (VentroPos - Product Management)
 
-## 📋 COMMANDS REFERENCE
+```yaml
+Current Phase: 9
+Phase Focus: Products CRUD, Categories, Modifiers
+Tech Stack: Fastify + PostgreSQL + React
 
-### Core Commands
-```bash
-/auto-router              # Auto-detect and route
-/auto-router --new        # New project mode
-/auto-router --analyze    # Analyze existing
-/auto-router --phase [N]  # Continue Phase N
-```
-
-### Advanced Commands
-```bash
-/auto-router --status     # Show project status
-/auto-router --history    # Show invocation history
-/auto-router --reset     # Reset project state
-/auto-router --quick     # Fast mode (skip analysis)
-/auto-router --deep      # Deep analysis mode
-```
-
-### Workflow Commands
-```bash
-/auto-router --workflow=rest-api
-/auto-router --workflow=fullstack-web
-/auto-router --workflow=microservices
-/auto-router --workflow=cli-tool
-/auto-router --workflow=library
-```
-
-### Phase Commands
-```bash
-/auto-router --phase-complete [N]  # Mark Phase N done
-/auto-router --phase-progress [N]   # Mark Phase N in progress
-/auto-router --phase-next          # Move to next phase
+Auto-Invoke:
+  Core: /git, /code-quality, /config, /logging, /testing, /mem-search
+  Tech: /typescript-pro, /api-design, /database, /ui-ux-pro-max
+  Phase: /api-design (Products API), /database (Products DB)
+  Recommended: /performance, /frontend
 ```
 
 ---
@@ -316,23 +308,20 @@ The router understands user intents:
 │  +────────────────────────────                                    │
 │  │ CORE SKILL              +50     (always available)         │
 │  +────────────────────────────                                    │
-│  │ KEYWORD MATCH           +35     (detected in input)        │
-│  │ • Exact keyword         +15     (additional)               │
+│  │ TECH STACK MATCH        +25     (detected in project)      │
 │  +────────────────────────────                                    │
-│  │ TECH STACK MATCH        +25     (language/framework)        │
+│  │ PHASE MATCH            +30     (required by current phase)  │
 │  +────────────────────────────                                    │
-│  │ PHASE MATCH            +30     (required by phase)          │
+│  │ KEYWORD MATCH           +15     (in user input)            │
 │  +────────────────────────────                                    │
-│  │ SCALE MATCH            +15     (project size)               │
+│  │ PATTERN MATCH          +20     (architecture detected)      │
 │  +────────────────────────────                                    │
-│  │ USER PREFERENCE        +15     (usage history)             │
-│  +────────────────────────────                                    │
-│  │ PATTERN MATCH         +20     (DDD, microservices)         │
+│  │ USER PREFERENCE        +10     (from history)              │
 │  +────────────────────────────                                    │
 │                                                                  │
 │  ───────────────────────────────────                            │
-│  AUTO-INVOKE THRESHOLD: 40                                     │
-│  RECOMMEND THRESHOLD: 25-40                                    │
+│  AUTO-INVOKE THRESHOLD: ≥50                                    │
+│  RECOMMEND THRESHOLD: 25-49                                    │
 │  SKIP THRESHOLD: <25                                           │
 │                                                                  │
 └─────────────────────────────────────────────────────────────────┘
@@ -340,95 +329,167 @@ The router understands user intents:
 
 ---
 
-## 💾 STATE PERSISTENCE
+## 🚀 AUTO-INVOKE IMPLEMENTATION
 
-Project state is saved to `~/.claude/state/projects.json`:
+### Step-by-Step Execution
 
-```json
-{
-  "path": "/project/path",
-  "projectName": "my-app",
-  "lastAnalyzed": "2024-01-15T10:30:00Z",
-  "currentPhase": 3,
-  "activeSkills": ["/security", "/database"],
-  "invokedSkills": ["/git", "/docker", "/ci-cd"],
-  "preferences": [
-    { "skill": "security", "useCount": 15, "preferred": true },
-    { "skill": "database", "useCount": 12, "preferred": true }
-  ],
-  "history": [
-    { "date": "...", "action": "...", "result": "success" }
-  ]
-}
+```
+STEP 1: Load Project Context
+─────────────────────────────
+• Read CLAUDE.md (phase, tech stack, preferences)
+• Read README.md (architecture, deliverables)
+• Parse package.json (dependencies)
+• Check for Dockerfile, docker-compose.yml
+
+STEP 2: Detect Tech Stack
+─────────────────────────
+• Language: package.json → Node.js/TypeScript ✅
+• Framework: dependencies → Fastify ✅
+• Database: dependencies → PostgreSQL ✅
+• Frontend: dependencies → React ✅
+• DevOps: Dockerfile exists? → /docker auto-include
+
+STEP 3: Auto-Invoke Core Skills
+──────────────────────────────
+• Invoke /git
+• Invoke /code-quality
+• Invoke /config
+• Invoke /logging
+• Invoke /testing
+• Invoke /tdd
+• Invoke /mem-search
+
+STEP 4: Auto-Invoke Tech-Based Skills
+────────────────────────────────────
+• Invoke /typescript-pro (TypeScript detected)
+• Invoke /api-design (Fastify detected)
+• Invoke /database (PostgreSQL detected)
+• Invoke /ui-ux-pro-max (React detected)
+
+STEP 5: Auto-Invoke Phase-Based Skills
+───────────────────────────────────────
+• Read current phase from CLAUDE.md
+• Map phase to skills
+• Invoke phase-specific skills
+
+STEP 6: Show Dashboard
+───────────────────────
+• List all invoked skills
+• Show recommendations (score 25-49)
+• Show available skills (score <25)
 ```
 
 ---
 
-## 🎨 EXAMPLE INTERACTIONS
+## 📊 AUTO-INVOKE EXAMPLE: VentroPos Phase 9
 
-### Example 1: Intent = CREATE
+### Project Detection
+
 ```
-User: "I need to create a REST API with PostgreSQL authentication"
-
-System:
-  Intent: CREATE
-  Keywords: api, rest, postgresql, auth
-  Score: /security (85) > /database (70) > /api-design (65)
-  
-  Auto-invoke:
-    ✅ /security (HIGH)
-    ✅ /database (HIGH)
-    ✅ /api-design (MEDIUM)
+Detected:
+  ├── Language: Node.js + TypeScript
+  ├── Framework: Fastify
+  ├── Database: PostgreSQL
+  ├── Frontend: React + Vite
+  ├── Architecture: DDD-Lite
+  └── Current Phase: 9 (Product Management)
 ```
 
-### Example 2: Intent = DEBUG
-```
-User: "My API is returning 500 errors and I can't figure out why"
+### Skills to Auto-Invoke
 
-System:
-  Intent: DEBUG
-  Keywords: api, error, 500
-  
-  Score: /diagnosing-bugs (90) > /logging (50) > /reliability (40)
-  
-  Auto-invoke:
-    ✅ /diagnosing-bugs (HIGH - 50% boost for DEBUG intent)
-    ✅ /logging (CORE)
-```
+| Category | Skill | Reason | Score |
+|----------|-------|--------|-------|
+| **Core** | `/git` | Always | 50 |
+| **Core** | `/code-quality` | Always | 50 |
+| **Core** | `/config` | Always | 50 |
+| **Core** | `/logging` | Always | 50 |
+| **Core** | `/testing` | Always | 50 |
+| **Core** | `/tdd` | Always | 50 |
+| **Core** | `/mem-search` | Always | 50 |
+| **Tech** | `/typescript-pro` | TypeScript | 75 |
+| **Tech** | `/api-design` | Fastify | 75 |
+| **Tech** | `/database` | PostgreSQL | 75 |
+| **Tech** | `/ui-ux-pro-max` | React | 75 |
+| **Tech** | `/security` | Backend API | 70 |
+| **Tech** | `/domain-modeling` | DDD Pattern | 70 |
+| **Phase** | `/api-design` | Phase 9 deliverable | 80 |
+| **Phase** | `/database` | Phase 9 deliverable | 80 |
+| **Phase** | `/ui-ux-pro-max` | Phase 9 deliverable | 80 |
 
-### Example 3: Project Pattern = DDD
+### Skills to Recommend
+
+| Skill | Reason | Score |
+|-------|--------|-------|
+| `/performance` | Bundle optimization | 45 |
+| `/frontend` | React patterns | 40 |
+| `/docker` | Deployment ready | 35 |
+
+---
+
+## 🔄 COMMAND FLOW
+
 ```
-System detects: DDD project structure
-  /domain-modeling (pattern boost +20)
-  /architecture-patterns (pattern boost +20)
+/autor [OPTIONS]
+
+Options:
+  --new              Force new project mode
+  --analyze          Full project analysis
+  --phase [N]        Continue from phase N
+  --skip-core        Skip auto-invoke core skills
+  --tech-only        Invoke tech-based skills only
+  --phase-only       Invoke phase-based skills only
+  --verbose          Show detailed invocation
+  --quiet            Minimal output
 ```
 
 ---
 
-## 🔧 CONFIGURATION
+## 📋 QUICK REFERENCE
 
-### Custom Skill Priorities
-Edit `~/.claude/state/skills.json`:
+### Auto-Invoke Matrix
 
-```json
-{
-  "skillPriorities": {
-    "security": "always",
-    "docker": "auto",
-    "testing": "recommend"
-  },
-  "thresholds": {
-    "autoInvoke": 40,
-    "recommend": 25
-  }
-}
+| Trigger | Skills |
+|---------|--------|
+| Always | `/git`, `/code-quality`, `/config`, `/logging`, `/testing`, `/tdd`, `/mem-search` |
+| TypeScript | `/typescript-pro` |
+| Fastify | `/api-design`, `/performance` |
+| PostgreSQL | `/database`, `/postgresql-pro` |
+| React | `/ui-ux-pro-max`, `/frontend`, `/performance` |
+| Docker | `/docker`, `/ci-cd`, `/deployment` |
+| DDD Pattern | `/domain-modeling`, `/architecture-patterns` |
+| Phase 9 | `/api-design`, `/database`, `/ui-ux-pro-max` |
+
+---
+
+## ✨ SMART TERMINAL INTERFACE
+
+### Auto-Invoke Dashboard
+
 ```
-
-### Ignore Skills
-Add to `.claudeignore`:
-```
-/skip:ml-engineering
-/skip:mobile
+╔══════════════════════════════════════════════════════════════════════════╗
+║  🚀 AUTO-ROUTER v7.0 ✨ AUTO-INVOKE ENABLED                      ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║  Project: VentroPos                    Phase: 9                      ║
+║  Tech: Fastify + PostgreSQL + React                                   ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║  ✅ AUTO-INVOKED (14 skills)                                        ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║  CORE (7)              │ TECH-BASED (5)     │ PHASE (2)          ║
+║  ───────────────────   │ ─────────────────  │ ─────────────────   ║
+║  ✅ /git               │ ✅ /typescript-pro │ ✅ /api-design     ║
+║  ✅ /code-quality      │ ✅ /api-design     │ ✅ /database       ║
+║  ✅ /config            │ ✅ /database       │                    ║
+║  ✅ /logging           │ ✅ /ui-ux-pro-max  │                    ║
+║  ✅ /testing           │ ✅ /security       │                    ║
+║  ✅ /tdd               │                    │                    ║
+║  ✅ /mem-search        │                    │                    ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║  ⭐ RECOMMENDED (3 skills)                                          ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║  [ ] /performance       ████████████░░░░░░░░░░  45%  MED           ║
+║  [ ] /frontend          ████████░░░░░░░░░░░░░░░  40%  MED           ║
+║  [ ] /docker            ███████░░░░░░░░░░░░░░░░░  35%  LOW           ║
+╚══════════════════════════════════════════════════════════════════════════╝
 ```
 
 ---
@@ -437,83 +498,23 @@ Add to `.claudeignore`:
 
 | File | Purpose |
 |------|---------|
-| `detector.ts` | Intent detection, keyword analysis, tech stack detection |
-| `selector.ts` | Skill scoring, dependency resolution, recommendation engine |
-| `workflows.md` | Workflow templates for common project types |
+| `ARCHITECTURE.md` | Full architecture specification |
+| `detector.md` | Project detection logic |
+| `TEST_GUIDE.md` | Testing guide |
 
 ---
 
-## 🚀 USAGE TIPS
+## 🏷️ Metadata Tags
 
-### 1. Be Specific
 ```
-❌ "fix bug"
-✅ "debug 500 error in user authentication endpoint"
-```
-
-### 2. Mention Tech Stack
-```
-❌ "add auth"
-✅ "add JWT authentication to Fastify API with PostgreSQL"
-```
-
-### 3. Specify Intent
-```
-❌ "improve"
-✅ "optimize slow database queries for better performance"
+@core-skills /git,/code-quality,/config,/logging,/testing,/tdd,/mem-search
+@tech-skills /typescript-pro,/api-design,/database,/ui-ux-pro-max
+@phase-skills /api-design,/database,/ui-ux-pro-max
+@auto-invoke always
+@priority critical
 ```
 
 ---
 
-## ✨ SMART TERMINAL INTERFACE
-
-Auto-router features a **Smart Terminal UI** with rich colors, progress bars, and interactive selection.
-
-### Commands
-```bash
-/auto-router --smart      # Show Smart Dashboard (Claude Code)
-/auto-router --status     # Show project status
-```
-
-### Smart Dashboard Preview
-```
-╔══════════════════════════════════════════════════════════════════════════╗
-║  🚀 AUTO-ROUTER v6.0 ✨ SMART PROJECT INTELLIGENCE              ║
-╠══════════════════════════════════════════════════════════════════════════╣
-║  📁 my-api  │  🎯 Phase 2  │  📊 MVP                            ║
-║  Tech: Fastify + PostgreSQL + Redis                               ║
-╠══════════════════════════════════════════════════════════════════════════╣
-║  Intent: CREATE  │  Confidence: 🏆 HIGH                           ║
-╠══════════════════════════════════════════════════════════════════════════╣
-║  ✅ KEYWORD-MATCHED (Auto-invoked)                               ║
-║  ✅ /security        ████████████████████░░░░  85%  HIGH          ║
-║  ✅ /identity        ██████████████░░░░░░░░░  60%  HIGH          ║
-║  ⭐ RECOMMENDED                                                  ║
-║  [ ] /api-design      ██████████░░░░░░░░░░░░  45%  MED          ║
-║  [ ] /database        ████████░░░░░░░░░░░░░░░  40%  MED          ║
-╠══════════════════════════════════════════════════════════════════════════╣
-║  [1-5] Select  │  [Enter] Continue  │  [Q] Quit                   ║
-╚══════════════════════════════════════════════════════════════════════════╝
-```
-
-### Smart Actions Menu
-```
-╔══════════════════════════════════════════╗
-║  🧠 SMART ACTIONS                       ║
-╠══════════════════════════════════════════╣
-║  [1] 🚀 New Project   - Start new    ║
-║  [2] 📊 Analyze      - Scan project  ║
-║  [3] ✨ Workflow     - Templates     ║
-║  [4] ⚙️ Settings   - Configure     ║
-╚══════════════════════════════════════════╝
-```
-
-### Related Files
-| File | Purpose |
-|------|---------|
-| `smart-ui.ts` | Rich terminal UI components |
-
----
-
-*Version: 6.0.0 | Author: TheVoidSyntax*
-*Features: Intent Detection | Confidence Scoring | Learning System | Pattern Recognition | Smart Terminal UI*
+*Version: 7.0.0 | Author: TheVoidSyntax*
+*Features: Auto-Invoke Core Skills | Tech-Based Recommendations | Phase-Aware Selection*

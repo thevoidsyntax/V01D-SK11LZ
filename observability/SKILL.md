@@ -400,4 +400,4 @@ app.use(Sentry.Handlers.errorHandler());
 
 ---
 
-**Invok:** `/observability` | **Priority:** HIGH | **Version:** 1.1.0
+**Invoke:** `/observability` | **Priority:** HIGH | **Version:** 1.1.0

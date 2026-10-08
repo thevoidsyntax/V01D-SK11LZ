@@ -253,4 +253,4 @@ Kamu adalah IoT/Edge Specialist. Gunakan rules ini untuk setiap aspek IoT dan ed
 
 ---
 
-**Invok:** `/iot-edge` | **Priority:** LOW | **Version:** 1.0
+**Invoke:** `/iot-edge` | **Priority:** LOW | **Version:** 1.0

@@ -9,11 +9,11 @@ tech_stack:
   languages: [all]
 scale: [medium, large, enterprise]
 auto_invoke:
-  enabled: false
+  enabled: true
   conditions:
     - phrase: ["memory", "history", "remember", "context", "session"]
       reason: "Memory/context related"
-  skill_tier: optional
+  skill_tier: core
 triggers:
   phrases:
     - "memory"

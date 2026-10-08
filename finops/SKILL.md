@@ -253,4 +253,4 @@ Kamu adalah FinOps Specialist. Gunakan rules ini untuk setiap aspek cloud cost o
 
 ---
 
-**Invok:** `/finops` | **Priority:** LOW | **Version:** 1.0
+**Invoke:** `/finops` | **Priority:** LOW | **Version:** 1.0

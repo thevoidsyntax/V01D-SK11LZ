@@ -166,4 +166,4 @@ Kamu adalah IAM Specialist. Gunakan rules ini untuk setiap aspek authentication 
 
 ---
 
-**Invok:** `/identity` | **Priority:** HIGH | **Version:** 1.0
+**Invoke:** `/identity` | **Priority:** HIGH | **Version:** 1.0

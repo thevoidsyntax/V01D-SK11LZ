@@ -3,7 +3,7 @@ name: workflow-authoring
 description: "Enhanced workflow authoring with intelligent automation, built-in patterns, TypeScript support, and enterprise-grade resilience patterns. Includes retry, circuit breaker, dry-run, and comprehensive debugging."
 version: "2.1"
 integrates_with:
-  - auto-route (v5.1)
+  - auto-router (v7.0)
   - analyze-project (v4.1)
   - audit
   - diagnosing-bugs

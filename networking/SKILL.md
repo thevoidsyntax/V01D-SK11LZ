@@ -255,4 +255,4 @@ Kamu adalah Networking Specialist. Gunakan rules ini untuk setiap aspek networki
 
 ---
 
-**Invok:** `/networking` | **Priority:** MEDIUM | **Version:** 1.0
+**Invoke:** `/networking` | **Priority:** MEDIUM | **Version:** 1.0

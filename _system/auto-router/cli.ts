@@ -103,7 +103,12 @@ function parseArguments(args: string[]): CliOptions {
 
     // Parse --phase N
     const phaseMatch = arg.match(/^--phase=(\d+)$/);
-    if (phaseMatch) options.phase = parseInt(phaseMatch[1]);
+    if (phaseMatch) {
+      const phase = parseInt(phaseMatch[1], 10);
+      if (!isNaN(phase) && phase >= 1 && phase <= 6) {
+        options.phase = phase;
+      }
+    }
 
     // Parse --workflow NAME
     const workflowMatch = arg.match(/^--workflow=(.+)$/);
@@ -257,7 +262,7 @@ function detectIntentFromInput(input: string): string {
   return detectIntentSimple(input.toLowerCase());
 }
 
-async function detectTechStack(cwd: string): Promise<string[]> {
+async function scanLocalTechStack(cwd: string): Promise<string[]> {
   const packageJsonPath = join(cwd, 'package.json');
 
   let packageData: Record<string, unknown> | null = null;

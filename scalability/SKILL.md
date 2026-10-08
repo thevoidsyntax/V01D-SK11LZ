@@ -253,4 +253,4 @@ Kamu adalah Scalability Specialist. Gunakan rules ini untuk setiap aspek scaling
 
 ---
 
-**Invok:** `/scalability` | **Priority:** MEDIUM | **Version:** 1.0
+**Invoke:** `/scalability` | **Priority:** MEDIUM | **Version:** 1.0

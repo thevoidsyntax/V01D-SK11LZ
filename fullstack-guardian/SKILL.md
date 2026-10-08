@@ -71,4 +71,4 @@ async function fetchProfile(userId: number): Promise<Profile> {
 
 ---
 
-**Invok:** `/fullstack-guardian` | **Priority:** CRITICAL | **Source:** Jeffallan/claude-skills
+**Invoke:** `/fullstack-guardian` | **Priority:** CRITICAL | **Source:** Jeffallan/claude-skills

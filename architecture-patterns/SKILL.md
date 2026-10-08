@@ -361,4 +361,4 @@ graph TD
 
 ---
 
-**Invok:** `/architecture-patterns` | **Priority:** MEDIUM | **Version:** 1.1.0
+**Invoke:** `/architecture-patterns` | **Priority:** MEDIUM | **Version:** 1.1.0
