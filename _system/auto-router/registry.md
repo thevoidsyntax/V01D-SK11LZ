@@ -1,326 +1,182 @@
 # SKILL REGISTRY
 # Complete mapping of skills to use cases
 
-## CORE SKILLS
+## CORE SKILLS (26) - Always Auto-Invoke
 
-### fullstack-guardian
-```yaml
-name: fullstack-guardian
-priority: critical
-phase: any
-description: Security-focused fullstack development
-useCases:
-  - Implementing features across frontend/backend
-  - Building REST APIs with UI
-  - CRUD operations
-triggers:
-  - fullstack
-  - feature
-  - implement
-```
+Core skills are automatically invoked when `/auto-router` is called.
 
-### api-designer
-```yaml
-name: api-designer
-priority: important
-phase: design
-description: REST and GraphQL API design
-useCases:
-  - API design from scratch
-  - API auditing
-  - OpenAPI specification
-triggers:
-  - api
-  - rest
-  - endpoint
-  - openapi
-```
+### Version Control & DevOps (4)
 
-### security-reviewer
-```yaml
-name: security-reviewer
-priority: high
-phase: review
-description: Security audit and recommendations
-useCases:
-  - Security assessment
-  - Vulnerability scanning
-  - Compliance check
-triggers:
-  - security
-  - vulnerability
-  - audit
-```
+| Skill | Purpose | Key Triggers |
+|-------|---------|--------------|
+| `git` | Version Control | commit, branch, merge, git |
+| `docker` | Containerization | docker, container, kubernetes |
+| `ci-cd` | CI/CD Pipelines | ci, cd, pipeline, github actions |
+| `deployment` | Deployment | deploy, kubernetes, terraform |
 
-### test-master
-```yaml
-name: test-master
-priority: high
-phase: testing
-description: Testing strategy and implementation
-useCases:
-  - Unit testing
-  - Integration testing
-  - E2E testing
-triggers:
-  - test
-  - testing
-  - coverage
-  - unit
-```
+### Quality & Testing (3)
 
-### architecture-designer
-```yaml
-name: architecture-designer
-priority: critical
-phase: design
-description: System architecture and patterns
-useCases:
-  - System design
-  - Pattern selection
-  - ADR creation
-triggers:
-  - architecture
-  - design
-  - pattern
-  - scale
-```
+| Skill | Purpose | Key Triggers |
+|-------|---------|--------------|
+| `code-quality` | Code Standards | lint, format, clean code |
+| `testing` | Testing Strategy | test, testing, jest, vitest |
+| `tdd` | Test-Driven Development | tdd, bdd, test-first |
+
+### Config & Observability (3)
+
+| Skill | Purpose | Key Triggers |
+|-------|---------|--------------|
+| `config` | Configuration | env, config, settings |
+| `logging` | Structured Logging | log, logger, telemetry |
+| `observability` | Monitoring | metrics, monitor, alert |
+
+### Security (1)
+
+| Skill | Purpose | Key Triggers |
+|-------|---------|--------------|
+| `security` | Security Best Practices | auth, security, jwt, oauth |
+
+### Backend Development (2)
+
+| Skill | Purpose | Key Triggers |
+|-------|---------|--------------|
+| `api-design` | REST/GraphQL API | api, rest, graphql, endpoint |
+| `database` | Database Patterns | sql, postgres, database |
+
+### Architecture & Patterns (2)
+
+| Skill | Purpose | Key Triggers |
+|-------|---------|--------------|
+| `domain-modeling` | DDD Patterns | ddd, domain, bounded context |
+| `architecture-patterns` | System Design | architecture, pattern, microservice |
+
+### Project Foundation (4)
+
+| Skill | Purpose | Key Triggers |
+|-------|---------|--------------|
+| `feature-forge` | Feature Planning | feature, prd, requirements |
+| `implement` | Implementation | implement, build, code |
+| `documentation` | Technical Docs | doc, readme, spec |
+| `mem-search` | Memory & Context | memory, search, context |
+
+### Debugging & Performance (2)
+
+| Skill | Purpose | Key Triggers |
+|-------|---------|--------------|
+| `diagnosing-bugs` | Debugging | bug, debug, error, fix |
+| `performance` | Optimization | perf, optimize, speed |
+
+### Code Review & Communication (2)
+
+| Skill | Purpose | Key Triggers |
+|-------|---------|--------------|
+| `pr-review` | Code Review | pr, review, pull request |
+| `commit` | Conventional Commits | commit, conventional |
+
+### Production Readiness (2)
+
+| Skill | Purpose | Key Triggers |
+|-------|---------|--------------|
+| `reliability` | Resilience Patterns | retry, circuit, fallback |
+| `scalability` | Growth Readiness | scale, cache, load balance |
+
+### Frontend & Tools (3)
+
+| Skill | Purpose | Key Triggers |
+|-------|---------|--------------|
+| `ui-ux-pro-max` | UI/UX Design | ui, ux, design, component |
+| `browser-use` | Browser Automation | browser, automate, scrape |
+| `anti-slop` | Anti-Pattern Detection | anti-slop, quality |
+
+---
+
+## TECH-BASED SKILLS (Auto-Invoke on Detection)
+
+These skills are invoked when specific technologies are detected.
+
+### Languages
+
+| Skill | Triggers |
+|-------|----------|
+| `typescript-pro` | typescript, ts |
+| `python-pro` | python, py |
+| `go-pro` | golang, go |
+| `rust-pro` | rust, cargo |
+
+### Frameworks
+
+| Skill | Triggers |
+|-------|----------|
+| `nestjs-expert` | nestjs, @nestjs |
+| `graphql` | graphql, apollo |
+
+### Infrastructure
+
+| Skill | Triggers |
+|-------|----------|
+| `kubernetes` | kubernetes, k8s |
+| `terraform` | terraform, tf |
+| `postgresql-pro` | postgresql, postgres |
+
+### AI/ML
+
+| Skill | Triggers |
+|-------|----------|
+| `rag-architect` | rag, vector, embedding |
+| `llm-evaluation` | llm, evaluation, benchmark |
+| `langchain-architect` | langchain, chains |
 
 ---
 
 ## SPECIALIZED SKILLS
 
-### devops-engineer
-```yaml
-name: devops-engineer
-priority: important
-phase: deploy
-description: DevOps and deployment automation
-useCases:
-  - CI/CD pipelines
-  - Docker/Kubernetes
-  - Infrastructure as Code
-triggers:
-  - deploy
-  - docker
-  - kubernetes
-  - ci-cd
-  - infrastructure
-```
+### DevOps & Infrastructure
 
-### monitoring-expert
-```yaml
-name: monitoring-expert
-priority: medium
-phase: ops
-description: Observability and monitoring setup
-useCases:
-  - Metrics setup
-  - Logging strategy
-  - Alert configuration
-triggers:
-  - monitoring
-  - metrics
-  - observability
-  - logging
-```
+| Skill | Purpose |
+|-------|---------|
+| `devops-engineer` | DevOps automation |
+| `observability` | Monitoring & metrics |
+| `reliability` | Circuit breaker, retry |
+| `scalability` | Caching, load balancing |
 
-### react-expert
-```yaml
-name: react-expert
-priority: important
-phase: frontend
-description: React and Next.js development
-useCases:
-  - React components
-  - Next.js apps
-  - State management
-triggers:
-  - react
-  - nextjs
-  - component
-  - frontend
-```
+### Database & Data
 
-### typescript-pro
-```yaml
-name: typescript-pro
-priority: high
-phase: any
-description: TypeScript best practices
-useCases:
-  - TypeScript configuration
-  - Type safety improvements
-  - Advanced patterns
-triggers:
-  - typescript
-  - types
-  - typing
-```
+| Skill | Purpose |
+|-------|---------|
+| `database` | SQL optimization |
+| `postgresql-pro` | PostgreSQL advanced |
+| `data-engineering` | ETL, pipelines |
 
-### code-reviewer
-```yaml
-name: code-reviewer
-priority: medium
-phase: review
-description: Code quality review
-useCases:
-  - Code review
-  - Style checking
-  - Best practices
-triggers:
-  - review
-  - quality
-  - style
-```
+### Security & Compliance
 
-### debugging-wizard
-```yaml
-name: debugging-wizard
-priority: medium
-phase: any
-description: Troubleshooting and debugging
-useCases:
-  - Bug investigation
-  - Performance issues
-  - Error debugging
-triggers:
-  - debug
-  - bug
-  - error
-  - performance
-```
+| Skill | Purpose |
+|-------|---------|
+| `security` | Security best practices |
+| `pentest` | Penetration testing |
+| `compliance` | Compliance requirements |
+| `identity` | Auth & IAM |
 
----
+### Testing
 
-## ADVANCED SKILLS
-
-### microservices-architect
-```yaml
-name: microservices-architect
-priority: high
-phase: architecture
-description: Microservices architecture design
-useCases:
-  - Service decomposition
-  - Message patterns
-  - Service mesh
-triggers:
-  - microservices
-  - services
-  - distributed
-```
-
-### cloud-architect
-```yaml
-name: cloud-architect
-priority: high
-phase: infrastructure
-description: Cloud infrastructure design
-useCases:
-  - AWS/GCP/Azure setup
-  - Serverless architecture
-  - Cloud cost optimization
-triggers:
-  - cloud
-  - aws
-  - gcp
-  - azure
-  - serverless
-```
-
-### secure-code-guardian
-```yaml
-name: secure-code-guardian
-priority: critical
-phase: security
-description: Secure coding practices
-useCases:
-  - Input validation
-  - SQL injection prevention
-  - XSS protection
-triggers:
-  - secure
-  - validation
-  - injection
-  - xss
-```
-
----
-
-## PLANNING SKILLS
-
-### feature-forge
-```yaml
-name: feature-forge
-priority: important
-phase: planning
-description: Feature requirements and planning
-useCases:
-  - Requirements gathering
-  - User story creation
-  - Acceptance criteria
-triggers:
-  - feature
-  - requirements
-  - planning
-```
-
-### domain-modeling
-```yaml
-name: domain-modeling
-priority: medium
-phase: design
-description: Domain-driven design
-useCases:
-  - Entity modeling
-  - Bounded contexts
-  - Domain events
-triggers:
-  - domain
-  - entity
-  - ddd
-  - model
-```
-
-### wayfinder
-```yaml
-name: wayfinder
-priority: medium
-phase: planning
-description: Large work planning
-useCases:
-  - Multi-sprint planning
-  - Decision mapping
-  - Issue tracking
-triggers:
-  - plan
-  - large
-  - roadmap
-```
+| Skill | Purpose |
+|-------|---------|
+| `testing` | Test strategy |
+| `tdd` | Test-driven development |
+| `playwright` | E2E testing |
 
 ---
 
 ## SKILL DEPENDENCY GRAPH
 
 ```
-fullstack-guardian
-├── secure-code-guardian
-│   └── security-reviewer
-└── test-master
-
-api-designer
-├── security-reviewer
-└── architecture-designer
-
-architecture-designer
-├── fullstack-guardian
-└── devops-engineer
-
-microservices-architect
-├── architecture-designer
-├── devops-engineer
-└── monitoring-expert
+/auto-router (Master)
+├─ Always: git, docker, ci-cd, code-quality, testing, config, logging, observability
+├─ Security: security, compliance, identity
+├─ Backend: api-design, database, domain-modeling
+├─ Frontend: ui-ux-pro-max
+├─ Process: feature-forge, implement, documentation, pr-review
+├─ Quality: diagnosing-bugs, performance, reliability, scalability
+└─ Optional: (Tech-based on detection)
 ```
 
 ---
@@ -328,37 +184,25 @@ microservices-architect
 ## PHASE-BASED SKILL RECOMMENDATIONS
 
 ### Phase 1: Foundation
-```
-Primary: fullstack-guardian
-Secondary: api-designer, typescript-pro
-```
+
+- git, config, security, database
 
 ### Phase 2: Core Development
-```
-Primary: fullstack-guardian
-Secondary: api-designer, test-master
-```
+
+- api-design, testing, tdd, code-quality
 
 ### Phase 3: Feature Development
-```
-Primary: fullstack-guardian
-Secondary: code-reviewer, debugging-wizard
-```
+
+- implement, ui-ux-pro-max, diagnosing-bugs
 
 ### Phase 4: Polish & Quality
-```
-Primary: code-reviewer, test-master
-Secondary: security-reviewer, debugging-wizard
-```
+
+- pr-review, documentation, performance
 
 ### Phase 5: Infrastructure
-```
-Primary: devops-engineer
-Secondary: monitoring-expert, architecture-designer
-```
+
+- docker, ci-cd, deployment, kubernetes
 
 ### Phase 6: Launch
-```
-Primary: security-reviewer, monitoring-expert
-Secondary: fullstack-guardian
-```
+
+- observability, reliability, scalability
