@@ -175,6 +175,9 @@ const CORE_SKILLS = new Set([
 
   // Reliability & Scalability (production readiness)
   'reliability', 'scalability',
+
+  // Project Init & Analysis
+  'project-init', 'analyze-project',
 ]);
 
 // Skill categories for grouping

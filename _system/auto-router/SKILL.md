@@ -1,7 +1,7 @@
 ---
 name: auto-router
 version: "7.0.0"
-description: "Intelligent project router with auto-invoke core skills, tech-based recommendations, and phase awareness"
+description: "Intelligent project router with auto-invoke core skills, tech-based recommendations, and phase awareness. Use --new for new projects, --analyze for existing projects."
 priority: critical
 phase: any
 category: [process]
@@ -13,6 +13,10 @@ auto_invoke:
   conditions:
     - command: ["/autor", "/ar", "/auto-router", "/auto-route", "/autoroute"]
       reason: "Primary entry point - triggers full skill auto-invocation"
+    - command: ["/autor --new", "/ar --new", "/auto-router --new"]
+      reason: "New project mode - triggers project-init"
+    - command: ["/autor --analyze", "/ar --analyze", "/auto-router --analyze"]
+      reason: "Analyze mode - triggers analyze-project"
 core_skills:
   always:
     - /git
@@ -21,6 +25,8 @@ core_skills:
     - /logging
     - /testing
     - /tdd
+    - /project-init
+    - /analyze-project
   docker_based:
     - /docker
     - /ci-cd
