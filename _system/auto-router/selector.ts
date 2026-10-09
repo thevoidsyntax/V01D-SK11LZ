@@ -169,6 +169,12 @@ const CORE_SKILLS = new Set([
 
   // Performance & Browser Automation
   'performance', 'browser-use', 'anti-slop',
+
+  // Code Review & Commits (daily practice)
+  'pr-review', 'commit',
+
+  // Reliability & Scalability (production readiness)
+  'reliability', 'scalability',
 ]);
 
 // Skill categories for grouping
