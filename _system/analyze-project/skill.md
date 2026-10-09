@@ -26,7 +26,7 @@ quality:
 integrates_with: [auto-router, project-init, audit]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # ANALYZE PROJECT SKILL v4.0

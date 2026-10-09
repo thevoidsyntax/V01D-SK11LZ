@@ -120,7 +120,7 @@ source:
   merged_date: "2026-01-01"
 
 # METADATA
-author: "Claude"                  # Maintainer
+author: "thevoidsyntax"                  # Maintainer
 maintained_by: team               # individual|team|community|none
 license: MIT                      # License type
 ---

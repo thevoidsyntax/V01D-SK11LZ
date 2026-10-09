@@ -1,6 +1,6 @@
 # AUTO-ROUTE v4.0 - Intelligent Project Router
 
-> **Version:** 4.0 | **Author:** Claude | **Date:** 2026-01-18
+> **Version:** 4.0 | **Author:** thevoidsyntax | **Date:** 2026-01-18
 
 ---
 
