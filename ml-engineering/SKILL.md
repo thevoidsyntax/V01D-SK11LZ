@@ -24,7 +24,7 @@ quality:
 integrates_with: [data-engineering, scalability]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # ML ENGINEERING MODULE

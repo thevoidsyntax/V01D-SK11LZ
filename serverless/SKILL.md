@@ -22,7 +22,7 @@ quality:
 integrates_with: [scalability, deployment]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # SERVERLESS MODULE

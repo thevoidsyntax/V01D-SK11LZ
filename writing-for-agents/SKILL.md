@@ -5,7 +5,7 @@ version: "1.0.0"
 category: [process, communication]
 priority: medium
 phase: any
-author: Claude
+author: thevoidsyntax
 ---
 
 # Writing for Agents

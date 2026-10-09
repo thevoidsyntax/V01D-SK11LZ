@@ -24,7 +24,7 @@ quality:
 integrates_with: [api-design, scalability]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # MESSAGING & INTEGRATION MODULE

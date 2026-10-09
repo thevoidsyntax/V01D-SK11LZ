@@ -5,7 +5,7 @@ version: "1.0.0"
 category: [process, implementation]
 priority: high
 phase: implementation
-author: Claude
+author: thevoidsyntax
 ---
 
 # Work on Issue

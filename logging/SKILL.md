@@ -22,7 +22,7 @@ quality:
 integrates_with: [auto-router, observability, reliability]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # Logging - Structured Log Best Practices

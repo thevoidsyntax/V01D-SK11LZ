@@ -34,7 +34,7 @@ quality:
 integrates_with: [auto-router, analyze-project]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # Git - Version Control Master Reference

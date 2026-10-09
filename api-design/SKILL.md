@@ -41,7 +41,7 @@ dependencies: [security, config]
 source:
   origin: merged
   sources: ["Jeffallan/claude-skills:api-designer"]
-author: Claude
+author: thevoidsyntax
 ---
 
 # API DESIGN MODULE

@@ -5,7 +5,7 @@ version: "1.0.0"
 category: [ml, vision]
 priority: medium
 phase: any
-author: Claude
+author: thevoidsyntax
 ---
 
 # Reticle (Computer Vision)

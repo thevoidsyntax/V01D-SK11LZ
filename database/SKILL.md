@@ -46,7 +46,7 @@ integrates_with: [auto-router, analyze-project]
 dependencies: [data-engineering]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # Database - SQL & Migration Best Practices

@@ -22,7 +22,7 @@ quality:
 integrates_with: [deployment, reliability]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # IoT & EDGE COMPUTING MODULE

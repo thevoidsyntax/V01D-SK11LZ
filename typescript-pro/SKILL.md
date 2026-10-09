@@ -24,7 +24,7 @@ dependencies: [fullstack-guardian, api-design]
 source:
   origin: external
   sources: ["Jeffallan/claude-skills"]
-author: Claude
+author: thevoidsyntax
 ---
 
 # TypeScript Pro

@@ -5,7 +5,7 @@ version: "1.0.0"
 category: [devops, process]
 priority: medium
 phase: deploy
-author: Claude
+author: thevoidsyntax
 ---
 
 # Create Release

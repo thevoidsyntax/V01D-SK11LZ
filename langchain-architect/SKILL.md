@@ -32,7 +32,7 @@ dependencies: [rag-architect]
 source:
   origin: merged
   sources: ["wshobson/agents"]
-author: Claude
+author: thevoidsyntax
 ---
 
 # LangChain Architect - LLM Application Framework

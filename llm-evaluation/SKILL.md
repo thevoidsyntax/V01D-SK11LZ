@@ -33,7 +33,7 @@ dependencies: []
 source:
   origin: merged
   sources: ["Jeffallan/claude-skills", "wshobson/agents"]
-author: Claude
+author: thevoidsyntax
 ---
 
 # LLM Evaluation - AI Application Quality Assurance

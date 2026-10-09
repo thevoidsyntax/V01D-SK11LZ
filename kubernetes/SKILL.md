@@ -25,7 +25,7 @@ integrates_with: [deployment, docker, scalability]
 dependencies: [docker, deployment]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # KUBERNETES MODULE

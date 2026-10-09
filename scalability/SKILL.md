@@ -22,7 +22,7 @@ quality:
 integrates_with: [performance, reliability, observability]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # SCALABILITY MODULE

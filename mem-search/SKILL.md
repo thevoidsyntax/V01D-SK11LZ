@@ -5,7 +5,7 @@ version: "1.0.0"
 category: [research, tooling]
 priority: medium
 phase: any
-author: Claude
+author: thevoidsyntax
 ---
 
 # Memory Search

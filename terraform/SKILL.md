@@ -23,7 +23,7 @@ integrates_with: [deployment, kubernetes]
 dependencies: [deployment]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # Terraform - Infrastructure as Code

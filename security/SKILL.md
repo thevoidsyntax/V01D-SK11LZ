@@ -52,7 +52,7 @@ dependencies: [devops-engineer]
 source:
   origin: merged
   sources: ["Jeffallan/claude-skills:security-reviewer", "Jeffallan/claude-skills:secure-code-guardian"]
-author: Claude
+author: thevoidsyntax
 ---
 
 # SECURITY MODULE

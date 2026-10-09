@@ -38,7 +38,7 @@ quality:
 integrates_with: [observability, scalability, performance]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # RELIABILITY & OPERATIONS MODULE

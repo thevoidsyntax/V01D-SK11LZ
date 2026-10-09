@@ -24,7 +24,7 @@ quality:
 integrates_with: [auto-router, docker, ci-cd, kubernetes]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # DEPLOYMENT MODULE

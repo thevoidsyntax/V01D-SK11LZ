@@ -21,7 +21,7 @@ quality:
 integrates_with: [documentation, writing-for-agents]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # Research Skill

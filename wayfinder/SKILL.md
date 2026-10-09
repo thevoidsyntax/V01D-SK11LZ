@@ -5,7 +5,7 @@ version: "1.0.0"
 category: [process, planning]
 priority: high
 phase: discovery
-author: Claude
+author: thevoidsyntax
 ---
 
 # Wayfinder

@@ -21,7 +21,7 @@ quality:
 integrates_with: [documentation, code-quality]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # Skill Creator Guide
@@ -65,7 +65,7 @@ quality:
 source:
   origin: local|merged
   sources: ["source-reference"]
-author: Claude
+author: thevoidsyntax
 ---
 ```
 

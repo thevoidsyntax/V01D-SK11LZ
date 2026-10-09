@@ -22,7 +22,7 @@ quality:
 integrates_with: [implement]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # Test-Driven Development

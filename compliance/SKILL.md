@@ -22,7 +22,7 @@ quality:
 integrates_with: [security, reliability]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # COMPLIANCE MODULE

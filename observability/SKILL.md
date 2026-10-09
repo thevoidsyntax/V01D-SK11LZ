@@ -48,7 +48,7 @@ dependencies: [devops-engineer, diagnosing-bugs]
 source:
   origin: merged
   sources: ["Jeffallan/claude-skills:monitoring-expert"]
-author: Claude
+author: thevoidsyntax
 ---
 
 # OBSERVABILITY MODULE

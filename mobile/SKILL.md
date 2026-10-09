@@ -24,7 +24,7 @@ quality:
 integrates_with: [security, api-design]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # MOBILE DEVELOPMENT MODULE

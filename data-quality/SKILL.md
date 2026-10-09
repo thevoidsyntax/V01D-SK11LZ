@@ -5,7 +5,7 @@ version: "1.0.0"
 category: [data, quality]
 priority: medium
 phase: any
-author: Claude
+author: thevoidsyntax
 ---
 
 # Data Quality

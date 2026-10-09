@@ -22,7 +22,7 @@ quality:
 integrates_with: [auto-router]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # DOCUMENTATION MODULE

@@ -22,7 +22,7 @@ quality:
 integrates_with: [fix-pr-review]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # PR review format

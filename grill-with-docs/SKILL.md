@@ -5,7 +5,7 @@ version: "1.0.0"
 category: [process, communication]
 priority: medium
 phase: discovery
-author: Claude
+author: thevoidsyntax
 ---
 
 # Grill with Docs

@@ -24,7 +24,7 @@ integrates_with: [api-design]
 dependencies: [api-design]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # GraphQL - API Design

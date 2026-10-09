@@ -22,7 +22,7 @@ quality:
 integrates_with: [deployment, scalability]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # NETWORKING MODULE

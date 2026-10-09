@@ -25,7 +25,7 @@ integrates_with: [security, api-design]
 dependencies: [security]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # IDENTITY & ACCESS MANAGEMENT MODULE

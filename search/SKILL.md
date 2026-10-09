@@ -22,7 +22,7 @@ quality:
 integrates_with: [database, scalability]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # SEARCH MODULE

@@ -22,7 +22,7 @@ quality:
 integrates_with: [tdd, pr-review, code-quality]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 Implement the work described by the user in the spec or tickets.

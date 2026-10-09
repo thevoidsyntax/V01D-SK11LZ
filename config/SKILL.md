@@ -22,7 +22,7 @@ quality:
 integrates_with: [auto-router, security]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # Configuration Management

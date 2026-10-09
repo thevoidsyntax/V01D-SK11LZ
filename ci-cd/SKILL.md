@@ -36,7 +36,7 @@ quality:
 integrates_with: [auto-router, docker, deployment]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # CI/CD - Pipeline Automation

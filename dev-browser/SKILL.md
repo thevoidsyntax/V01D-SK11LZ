@@ -5,7 +5,7 @@ version: "1.0.0"
 category: [frontend, tooling]
 priority: medium
 phase: any
-author: Claude
+author: thevoidsyntax
 ---
 
 # Dev Browser

@@ -44,7 +44,7 @@ dependencies: [diagnosing-bugs]
 source:
   origin: merged
   sources: ["ai-process/testing"]
-author: Claude
+author: thevoidsyntax
 ---
 
 # TESTING MODULE

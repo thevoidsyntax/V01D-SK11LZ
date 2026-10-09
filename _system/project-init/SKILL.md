@@ -26,7 +26,7 @@ quality:
 integrates_with: [auto-router, analyze-project, git]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # PROJECT INIT v3.0 - Complete Project Scaffolding Generator

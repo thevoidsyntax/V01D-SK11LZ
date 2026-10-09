@@ -5,7 +5,7 @@ version: "1.0.0"
 category: [process, documentation]
 priority: medium
 phase: close
-author: Claude
+author: thevoidsyntax
 ---
 
 # Handoff

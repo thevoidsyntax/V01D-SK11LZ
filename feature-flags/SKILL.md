@@ -32,7 +32,7 @@ integrates_with: [deployment, ci-cd, observability]
 dependencies: [deployment, observability]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # Feature Flags - Progressive Delivery

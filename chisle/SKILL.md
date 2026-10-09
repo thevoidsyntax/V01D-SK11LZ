@@ -5,7 +5,7 @@ version: "1.0.0"
 category: [process, optimization]
 priority: medium
 phase: any
-author: Claude
+author: thevoidsyntax
 ---
 
 # Chisle (Token Optimization)

@@ -5,7 +5,7 @@ version: "1.0.0"
 category: [process, documentation]
 priority: high
 phase: discovery
-author: Claude
+author: thevoidsyntax
 ---
 
 # Feature Forge

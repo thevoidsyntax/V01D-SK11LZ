@@ -38,7 +38,7 @@ quality:
 integrates_with: [auto-router, deployment, ci-cd]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # Docker - Container Best Practices

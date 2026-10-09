@@ -22,7 +22,7 @@ quality:
 integrates_with: [scalability, reliability]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # PERFORMANCE MODULE

@@ -35,7 +35,7 @@ dependencies: []
 source:
   origin: merged
   sources: ["Jeffallan/claude-skills", "wshobson/agents"]
-author: Claude
+author: thevoidsyntax
 ---
 
 # ML Pipeline - Machine Learning Operations

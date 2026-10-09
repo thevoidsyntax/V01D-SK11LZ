@@ -22,7 +22,7 @@ quality:
 integrates_with: [reliability]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # FINOPS MODULE

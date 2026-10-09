@@ -22,7 +22,7 @@ quality:
 integrates_with: [scalability]
 source:
   origin: local
-author: Claude
+author: thevoidsyntax
 ---
 
 # STORAGE MODULE
