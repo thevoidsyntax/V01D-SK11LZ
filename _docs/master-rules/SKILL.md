@@ -18,18 +18,18 @@ V01D-RULEZ menyediakan **91 skills** dengan `/auto-router` sebagai master skill 
 /ar                    # Alias untuk auto-router
 ```
 
-## CORE Skills (23) - Always Active
+## CORE Skills (26) - Always Active
 
 ```
 git, docker, ci-cd, deployment,
-testing, tdd, code quality,
+code quality, testing, tdd,
 config, logging, observability,
 security, api-design, database,
 domain-modeling, architecture-patterns,
 diagnosing-bugs, mem-search,
-feature-forge, implement,
-ui-ux-pro-max, documentation,
-performance, browser-use, anti-slop
+feature-forge, implement, documentation,
+performance, browser-use, anti-slop,
+pr-review, commit, reliability, scalability
 ```
 
 ## Trigger-Based Skills (17) - Auto-invoke on Tech Detection

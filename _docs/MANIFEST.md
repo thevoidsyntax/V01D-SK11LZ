@@ -115,7 +115,7 @@ User Input → Intent Detection → Tech Scan → Keyword Analysis → Skills In
 | Metric | Value |
 |--------|-------|
 | **Total Skills** | 89 |
-| **CORE Skills** | 23 |
+| **CORE Skills** | 26 |
 | **Trigger-Based** | 17 |
 | **Manual** | 49 |
 | **Categories** | 15 |

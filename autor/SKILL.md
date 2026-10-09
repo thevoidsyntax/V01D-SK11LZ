@@ -174,49 +174,92 @@ Smart Project Intelligence Tool with Auto-Invoke
 
 ## 🟢 CORE SKILLS (Always Auto-Invoke)
 
-### Always-Included Core
-
-These skills are **ALWAYS auto-invoked** when `/autor` is called:
+### Version Control & DevOps (4)
 
 | Skill | Purpose | Invoke |
 |-------|---------|--------|
 | `/git` | Version Control | ✅ Always |
+| `/docker` | Containerization | ✅ Always |
+| `/ci-cd` | CI/CD Pipelines | ✅ Always |
+| `/deployment` | Deployment Strategy | ✅ Always |
+
+### Quality & Testing (3)
+
+| Skill | Purpose | Invoke |
+|-------|---------|--------|
 | `/code-quality` | Linting, Code Standards | ✅ Always |
-| `/config` | Configuration Management | ✅ Always |
-| `/logging` | Structured Logging | ✅ Always |
 | `/testing` | Testing Strategy | ✅ Always |
 | `/tdd` | Test-Driven Development | ✅ Always |
-| `/mem-search` | Persistent Memory | ✅ Always |
 
-### Docker/DevOps-Based Core
-
-Invoked when Dockerfile/docker-compose detected:
+### Config & Observability (3)
 
 | Skill | Purpose | Invoke |
 |-------|---------|--------|
-| `/docker` | Containerization | ⚠️ Docker detected |
-| `/ci-cd` | CI/CD Pipelines | ⚠️ Docker detected |
-| `/deployment` | Deployment Strategy | ⚠️ Docker detected |
+| `/config` | Configuration Management | ✅ Always |
+| `/logging` | Structured Logging | ✅ Always |
+| `/observability` | Monitoring & Metrics | ✅ Always |
 
-### Backend-Based Core
-
-Invoked when backend framework detected:
+### Security (1)
 
 | Skill | Purpose | Invoke |
 |-------|---------|--------|
-| `/api-design` | REST/GraphQL API | ⚠️ Fastify detected |
-| `/database` | Database Patterns | ⚠️ PostgreSQL detected |
-| `/security` | Security Foundation | ⚠️ Backend API detected |
-| `/domain-modeling` | DDD Patterns | ⚠️ DDD structure detected |
-| `/architecture-patterns` | System Design | ⚠️ Architecture detected |
+| `/security` | Security Best Practices | ✅ Always |
 
-### Frontend-Based Core
-
-Invoked when frontend framework detected:
+### Backend Development (2)
 
 | Skill | Purpose | Invoke |
 |-------|---------|--------|
-| `/ui-ux-pro-max` | UI/UX Design | ⚠️ React detected |
+| `/api-design` | REST/GraphQL API | ✅ Always |
+| `/database` | Database Patterns | ✅ Always |
+
+### Architecture & Patterns (2)
+
+| Skill | Purpose | Invoke |
+|-------|---------|--------|
+| `/domain-modeling` | DDD Patterns | ✅ Always |
+| `/architecture-patterns` | System Design | ✅ Always |
+
+### Project Foundation (4)
+
+| Skill | Purpose | Invoke |
+|-------|---------|--------|
+| `/feature-forge` | Feature Planning | ✅ Always |
+| `/implement` | Implementation | ✅ Always |
+| `/documentation` | Technical Docs | ✅ Always |
+| `/mem-search` | Memory & Context | ✅ Always |
+
+### Debugging & Performance (2)
+
+| Skill | Purpose | Invoke |
+|-------|---------|--------|
+| `/diagnosing-bugs` | Debugging Strategies | ✅ Always |
+| `/performance` | Performance Optimization | ✅ Always |
+
+### Code Review & Communication (2)
+
+| Skill | Purpose | Invoke |
+|-------|---------|--------|
+| `/pr-review` | Code Review Practice | ✅ Always |
+| `/commit` | Conventional Commits | ✅ Always |
+
+### Production Readiness (2)
+
+| Skill | Purpose | Invoke |
+|-------|---------|--------|
+| `/reliability` | Resilience Patterns | ✅ Always |
+| `/scalability` | Growth Readiness | ✅ Always |
+
+### Frontend & Tools (3)
+
+| Skill | Purpose | Invoke |
+|-------|---------|--------|
+| `/ui-ux-pro-max` | UI/UX Design | ✅ Always |
+| `/browser-use` | Browser Automation | ✅ Always |
+| `/anti-slop` | Anti-Pattern Detection | ✅ Always |
+
+---
+
+**Total: 26 CORE SKILLS** - All auto-invoked when `/auto-router` is called.
 | `/frontend` | Frontend Best Practices | ⚠️ React detected |
 | `/performance` | Optimization | ⚠️ SPA detected |
 
