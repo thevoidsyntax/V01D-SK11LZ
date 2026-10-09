@@ -283,11 +283,11 @@ export function selectSkills(
   let selected = [...core, ...keywordMatched, ...context_];
 
   if (options?.excludeSkills?.length) {
-    selected = selected.filter(s => !options.excludeSkills!.includes(s.name));
+    selected = selected.filter(s => !options.excludeSkills.includes(s.name));
   }
 
   if (options?.includeSkills?.length) {
-    const additional = allSkills.filter(s => options.includeSkills!.includes(s.name));
+    const additional = allSkills.filter(s => options.includeSkills.includes(s.name));
     selected.push(...additional);
   }
 
@@ -505,8 +505,16 @@ function formatTitle(skillName: string): string {
     .replace(/\b\w/g, c => c.toUpperCase());
 }
 
+function getSkillsDir(): string {
+  const home = process.env.HOME || process.env.USERPROFILE;
+  if (!home) {
+    throw new Error('HOME or USERPROFILE environment variable must be set');
+  }
+  return join(home, '.claude', 'skills');
+}
+
 function discoverSkills(): Skill[] {
-  const skillsDir = join(process.env.HOME || process.env.USERPROFILE || '', '.claude', 'skills');
+  const skillsDir = getSkillsDir();
   const skills: Skill[] = [];
   const seenSkills = new Set<string>(); // Avoid duplicates
 
@@ -670,7 +678,7 @@ function parseSkillMetadata(skillFile: string, category: string): Skill {
   }
 
   return {
-    name: result.name || skillFile.split(/[/\\]/).slice(-2, -1)[0],
+    name: result.name || skillFile.split(/[/\\]/).at(-2) || skillFile,
     path: skillFile,
     description: result.description || extractFirstLine(content),
     version: result.version || '1.0.0',

@@ -266,8 +266,7 @@ Smart Project Intelligence Tool with Auto-Invoke
 ---
 
 **Total: 26 CORE SKILLS** - All auto-invoked when `/auto-router` is called.
-| `/frontend` | Frontend Best Practices | ⚠️ React detected |
-| `/performance` | Optimization | ⚠️ SPA detected |
+| `/ui-ux-pro-max` | Frontend Best Practices | ⚠️ SPA detected |
 
 ---
 
@@ -290,7 +289,7 @@ Smart Project Intelligence Tool with Auto-Invoke
 | Fastify | `/api-design`, `/performance` | 25 |
 | Express | `/api-design`, `/security` | 25 |
 | NestJS | `/api-design`, `/security`, `/messaging` | 30 |
-| Next.js | `/frontend`, `/performance`, `/api-design` | 30 |
+| Next.js | `/ui-ux-pro-max`, `/performance`, `/api-design` | 30 |
 | React | `/ui-ux-pro-max`, `/performance` | 30 |
 | Vue.js | `/ui-ux-pro-max` | 25 |
 
@@ -320,12 +319,12 @@ The autor reads CLAUDE.md to detect:
 const PHASE_SKILLS: Record<string, string[]> = {
   'foundation': ['/security', '/database', '/architecture-patterns', '/config'],
   'core': ['/api-design', '/code-quality', '/testing', '/deployment'],
-  'features': ['/frontend', '/ui-ux-pro-max', '/performance'],
+  'features': ['/ui-ux-pro-max', '/performance'],
   'products': ['/api-design', '/database', '/ui-ux-pro-max', '/typescript-pro'],
-  'stock': ['/database', '/reporting', '/testing'],
-  'reports': ['/dataviz', '/performance', '/documentation'],
+  'stock': ['/database', '/data-engineering', '/testing'],
+  'reports': ['/data-engineering', '/performance', '/documentation'],
   'settings': ['/config', '/security', '/api-design'],
-  'pwa': ['/frontend', '/performance', '/browser-use'],
+  'pwa': ['/ui-ux-pro-max', '/performance', '/browser-use'],
 };
 ```
 
@@ -340,7 +339,7 @@ Auto-Invoke:
   Core: /git, /code-quality, /config, /logging, /testing, /mem-search
   Tech: /typescript-pro, /api-design, /database, /ui-ux-pro-max
   Phase: /api-design (Products API), /database (Products DB)
-  Recommended: /performance, /frontend
+  Recommended: /performance, /ui-ux-pro-max
 ```
 
 ---
@@ -470,7 +469,7 @@ Detected:
 | Skill | Reason | Score |
 |-------|--------|-------|
 | `/performance` | Bundle optimization | 45 |
-| `/frontend` | React patterns | 40 |
+| `/ui-ux-pro-max` | React patterns | 40 |
 | `/docker` | Deployment ready | 35 |
 
 ---
@@ -503,7 +502,7 @@ Options:
 | TypeScript | `/typescript-pro` |
 | Fastify | `/api-design`, `/performance` |
 | PostgreSQL | `/database`, `/postgresql-pro` |
-| React | `/ui-ux-pro-max`, `/frontend`, `/performance` |
+| React | `/ui-ux-pro-max`, `/ui-ux-pro-max`, `/performance` |
 | Docker | `/docker`, `/ci-cd`, `/deployment` |
 | DDD Pattern | `/domain-modeling`, `/architecture-patterns` |
 | Phase 9 | `/api-design`, `/database`, `/ui-ux-pro-max` |

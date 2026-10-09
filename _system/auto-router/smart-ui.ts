@@ -169,14 +169,16 @@ function padEnd(str: string, len: number): string {
  * Draw progress bar
  */
 export function drawProgressBar(value: number, max: number, width: number = 20): string {
-  // Guard against division by zero
-  if (max === 0 || !Number.isFinite(max)) {
+  // Guard against division by zero or invalid values
+  if (max === 0 || !Number.isFinite(max) || !Number.isFinite(value)) {
     return `${COLORS.dim}${'░'.repeat(width)}${COLORS.reset}`;
   }
 
-  const percentage = Math.min(100, Math.max(0, (value / max) * 100));
-  const filled = Math.round((value / max) * width);
-  const empty = width - filled;
+  // Handle negative and overflow values
+  const safeValue = Math.max(0, Math.min(value, max));
+  const safeMax = Math.max(1, max);
+  const filled = Math.min(width, Math.round((safeValue / safeMax) * width));
+  const empty = Math.max(0, width - filled);
 
   const filledChar = '█';
   const emptyChar = '░';
@@ -229,13 +231,13 @@ export function drawDashboard(data: {
     high: COLORS.green,
     medium: COLORS.yellow,
     low: COLORS.red,
-  }[data.confidence];
+  }[data.confidence] || COLORS.white;
 
   const confidenceIcon = {
     high: ICONS.trophy,
     medium: ICONS.star,
     low: ICONS.warning,
-  }[data.confidence];
+  }[data.confidence] || ICONS.info;
 
   lines.push(`  ${COLORS.brightWhite}${COLORS.bold}Intent:${COLORS.reset} ${COLORS.cyan}${data.intent}${COLORS.reset}    ${COLORS.brightWhite}${COLORS.bold}Confidence:${COLORS.reset} ${confidenceColor}${confidenceIcon} ${data.confidence.toUpperCase()}${COLORS.reset}`);
   lines.push('');
@@ -252,10 +254,11 @@ export function drawDashboard(data: {
     lines.push(`  ${COLORS.dim}  No keyword matches${COLORS.reset}`);
   } else {
     for (const skill of keywordSkills.slice(0, 5)) {
-      const bar = drawProgressBar(skill.score, 100, 25);
+      const bar = drawProgressBar(skill.score ?? 0, 100, 25);
       const confIcon = skill.confidence === 'high' ? COLORS.green : skill.confidence === 'medium' ? COLORS.yellow : COLORS.red;
       const checkbox = `${COLORS.green}${ICONS.check}${COLORS.reset}`;
-      lines.push(`  ${checkbox} ${COLORS.cyan}/${skill.name.padEnd(18)}${bar} ${skill.score.toString().padStart(3)}%  ${confIcon}${skill.confidence.toUpperCase()}${COLORS.reset}`);
+      const name = skill.name ?? 'unknown';
+      lines.push(`  ${checkbox} ${COLORS.cyan}/${name.padEnd(18)}${bar} ${(skill.score ?? 0).toString().padStart(3)}%  ${confIcon}${(skill.confidence ?? 'low').toUpperCase()}${COLORS.reset}`);
     }
   }
 
@@ -268,9 +271,10 @@ export function drawDashboard(data: {
     lines.push(`  ${COLORS.dim}  No recommendations${COLORS.reset}`);
   } else {
     for (const skill of otherSkills.slice(0, 5)) {
-      const bar = drawProgressBar(skill.score, 100, 25);
+      const bar = drawProgressBar(skill.score ?? 0, 100, 25);
       const confIcon = skill.confidence === 'high' ? COLORS.green : skill.confidence === 'medium' ? COLORS.yellow : COLORS.red;
-      lines.push(`  ${COLORS.dim}[ ]${COLORS.reset} ${COLORS.white}/${skill.name.padEnd(18)}${bar} ${skill.score.toString().padStart(3)}%  ${confIcon}${skill.confidence.toUpperCase()}${COLORS.reset}`);
+      const name = skill.name ?? 'unknown';
+      lines.push(`  ${COLORS.dim}[ ]${COLORS.reset} ${COLORS.white}/${name.padEnd(18)}${bar} ${(skill.score ?? 0).toString().padStart(3)}%  ${confIcon}${(skill.confidence ?? 'low').toUpperCase()}${COLORS.reset}`);
     }
   }
 
@@ -432,8 +436,10 @@ export function moveToTop(): void {
  * Format date for display
  */
 export function formatDate(isoString: string): string {
+  if (!isoString) return 'Unknown';
   try {
     const date = new Date(isoString);
+    if (isNaN(date.getTime())) return 'Unknown';
     return date.toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',

@@ -425,10 +425,20 @@ export const KEYWORD_MAP: Record<string, KeywordConfig> = {
 // KEYWORD DETECTION
 // ============================================================================
 
+// Memoization cache for keyword detection
+const memoCache = new Map<string, KeywordMatch[]>();
+const CACHE_TTL_MS = 60_000; // 1 minute
+
 /**
- * Optimized keyword detection with fuzzy matching
+ * Optimized keyword detection with fuzzy matching and memoization
  */
 export function detectSkillsFromInput(input: string): KeywordMatch[] {
+  // Check cache
+  const cached = memoCache.get(input);
+  if (cached !== undefined) {
+    return cached;
+  }
+
   const normalizedInput = input.toLowerCase();
   const matches: KeywordMatch[] = [];
   const matchedSkills = new Set<string>();
@@ -459,6 +469,15 @@ export function detectSkillsFromInput(input: string): KeywordMatch[] {
 
   // Sort by score descending
   matches.sort((a, b) => b.score - a.score);
+
+  // Cache result
+  memoCache.set(input, matches);
+
+  // Cleanup old cache entries (simple LRU-like cleanup)
+  if (memoCache.size > 100) {
+    const entries = Array.from(memoCache.entries());
+    entries.slice(0, entries.length - 100).forEach(([key]) => memoCache.delete(key));
+  }
 
   return matches;
 }

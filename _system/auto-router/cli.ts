@@ -268,7 +268,7 @@ async function runSkillSelection(
       ...selection.optional,
     ].slice(0, 10).map(s => ({
       name: s.name,
-      description: s.description.substring(0, 50),
+      description: (s.description || '').substring(0, 50),
       score: 85,
       confidence: 'high' as const,
       category: s.category[0] || 'other',
@@ -498,6 +498,7 @@ EXAMPLES:
 // ============================================================================
 
 main().catch(err => {
-  console.error(drawError(`Fatal error: ${err.message}`));
+  const message = err instanceof Error ? err.message : String(err);
+  console.error(drawError(`Fatal error: ${message}`));
   process.exit(1);
 });

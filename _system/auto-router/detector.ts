@@ -14,6 +14,7 @@ import { glob } from 'glob';
 import { readFile, writeFile, mkdir } from 'fs/promises';
 import { existsSync, readdirSync } from 'fs';
 import { dirname } from 'path';
+import { randomBytes } from 'crypto';
 
 // Re-export types for backward compatibility
 export type { TechStack, PhaseInfo, DetectionResult, KeywordMatch, UserPreference } from './types';
@@ -32,7 +33,15 @@ import type { TechStack, PhaseInfo, DetectionResult, KeywordMatch, UserPreferenc
 // CONSTANTS
 // ============================================================================
 
-const STATE_DIR = join(process.env.HOME || process.env.USERPROFILE || '', '.claude', 'auto-router');
+function getHomeDir(): string {
+  const home = process.env.HOME || process.env.USERPROFILE;
+  if (!home) {
+    throw new Error('HOME or USERPROFILE environment variable must be set');
+  }
+  return home;
+}
+
+const STATE_DIR = join(getHomeDir(), '.claude', 'auto-router');
 const STATE_FILE = join(STATE_DIR, 'projects.json');
 
 // ============================================================================
@@ -149,7 +158,7 @@ export async function saveProjectState(state: Record<string, unknown>): Promise<
     };
 
     // Atomic write using rename: write to temp file first, then atomic rename
-    const tempFile = `${STATE_FILE}.tmp.${Date.now()}.${Math.random().toString(36).slice(2, 8)}`;
+    const tempFile = `${STATE_FILE}.tmp.${Date.now()}.${randomBytes(8).toString('hex')}`;
     const newContent = JSON.stringify(allStates, null, 2);
 
     await writeFile(tempFile, newContent, 'utf-8');

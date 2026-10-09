@@ -49,7 +49,7 @@ fullstack-project/
 ```
 
 ## 🎯 ACTIVE SKILLS
-- /frontend (React, State Management)
+- /ui-ux-pro-max (React, State Management)
 - /api-design (REST/GraphQL)
 - /security (Auth, XSS, CSRF)
 - /deployment (Vercel, Docker)

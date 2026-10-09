@@ -1,11 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
   detectSkillsFromInput,
-  detectIntentSimple,
-  detectTechStack,
   KEYWORD_MAP,
 } from './keyword-engine';
-import { INTENT_PATTERNS } from './intent-detector';
+import { INTENT_PATTERNS, detectIntentSimple } from './intent-detector';
+import { detectTechStack } from './tech-scanner';
 
 describe('detector.ts', () => {
   describe('KEYWORD_MAP', () => {
@@ -36,8 +35,8 @@ describe('detector.ts', () => {
     it('should have required intent categories', () => {
       expect(INTENT_PATTERNS).toHaveProperty('CREATE');
       expect(INTENT_PATTERNS).toHaveProperty('DEBUG');
-      expect(INTENT_PATTERNS).toHaveProperty('REVIEW');
-      expect(INTENT_PATTERNS).toHaveProperty('REFACTOR');
+      expect(INTENT_PATTERNS).toHaveProperty('ANALYZE');
+      expect(INTENT_PATTERNS).toHaveProperty('UPDATE');
     });
 
     it('should have patterns array for each intent', () => {

@@ -33,7 +33,7 @@ Skills activate automatically based on your project context:
 | `kubernetes/**` | `/kubernetes` |
 | `.github/workflows/**` | `/ci-cd` |
 | Express/Fastify/NestJS | `/api-design` |
-| React/Vue/Angular | `/frontend` |
+| React/Vue/Angular | `/ui-ux-pro-max` |
 
 ---
 

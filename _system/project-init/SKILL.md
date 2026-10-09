@@ -253,10 +253,10 @@ Based on the configuration, automatically invoke:
 | Message Queue | `/message-queue`, `/messaging` |
 | Kubernetes | `/kubernetes` |
 | Terraform | `/terraform` |
-| Metrics | `/observability`, `/sre-operations` |
+| Metrics | `/observability`, `/reliability` |
 | Distributed Tracing | `/observability` |
 | Mobile | `/mobile` |
-| Frontend | `/frontend`, `/performance` |
+| Frontend | `/ui-ux-pro-max`, `/performance` |
 | ML/AI | `/ml-engineering` |
 | IoT | `/iot-edge` |
 | Enterprise Scale | `/architecture-patterns`, `/scalability` |

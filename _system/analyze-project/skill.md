@@ -312,7 +312,7 @@ const PHASE_CONFIGS: Record<number, PhaseConfig> = {
   4: {
     name: 'Reporting/Analytics',
     coreSkills: ['/data-engineering', '/logging'],
-    recommendedSkills: ['/observability', '/sre-operations'],
+    recommendedSkills: ['/observability', '/reliability'],
     optionalSkills: ['/database', '/search']
   },
   5: {

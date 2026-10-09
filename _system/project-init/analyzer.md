@@ -132,7 +132,7 @@ Mendeteksi tech stack project berdasarkan file-file yang ada:
 
 ### Detected: React + Next.js
 ```
-→ /frontend
+→ /ui-ux-pro-max
 → /api-design
 → /security
 → /deployment

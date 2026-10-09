@@ -1,17 +1,43 @@
 ---
 name: handoff
-description: Compact the current conversation into a handoff document for another agent to pick up.
-version: "1.1.0"
-argument-hint: "What will the next session be used for?"
-disable-model-invocation: true
+description: Structured project handover documentation and checklists
+version: "1.0.0"
+category: [process, documentation]
+priority: medium
+phase: close
+author: Claude
 ---
 
-Write a handoff document summarising the current conversation so a fresh agent can continue the work. Save to the temporary directory of the user's OS - not the current workspace.
+# Handoff
 
-Include a "suggested skills" section in the document, naming which skills the next agent should call the Skill tool for.
+Structured handover process for project transitions.
 
-Do not duplicate content already captured in other artifacts (specs, plans, ADRs, issues, commits, diffs). Reference them by path or URL instead.
+## Usage
 
-Redact any sensitive information, such as API keys, passwords, or personally identifiable information.
+```
+Use handoff when:
+- Transferring project to another team
+- Onboarding new team members
+- Ending engagement phase
+- Documenting work for future reference
+```
 
-If the user passed arguments, treat them as a description of what the next session will focus on and tailor the doc accordingly.
+## Checklist
+
+### Documentation
+- [ ] Architecture overview
+- [ ] Key decisions and rationale
+- [ ] Outstanding issues
+- [ ] Environment access
+- [ ] Contact matrix
+
+### Code
+- [ ] Clean, commented code
+- [ ] Updated README
+- [ ] Deployment documentation
+- [ ] Runbooks
+
+### Knowledge Transfer
+- [ ] Walkthrough sessions
+- [ ] Q&A documentation
+- [ ] Support escalation path

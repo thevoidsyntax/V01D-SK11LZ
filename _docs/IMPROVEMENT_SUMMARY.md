@@ -289,7 +289,7 @@ integrations:
     │          │    │          │    │          │
     │ /git     │    │ /api-design│  │ /mobile  │
     │ /docker  │    │ /database │    │ /graphql │
-    │ /ci-cd   │    │ /frontend │    │ /ml-*    │
+    │ /ci-cd   │    │ /ui-ux-pro-max│    │ /ml-*    │
     │ /config  │    │ /security │    │ ...      │
     │ /logging │    │ /scalability│            │
     │ /code-*  │    │ /observ-* │    │          │
