@@ -1,6 +1,6 @@
 ---
 name: auto-router
-version: "8.2.0"
+version: "8.3.0"
 description: "Smart skill recommendations based on your project. Detects tech stack, auto-invokes relevant skills."
 when_to_use: "Run when starting a project, analyzing existing codebase, or needing skill recommendations."
 priority: critical
@@ -30,68 +30,69 @@ capabilities:
 author: TheVoidSyntax
 ---
 
-# AUTO-ROUTER v8.2
+# AUTO-ROUTER v8.3
 
 Smart skill recommendations for your project.
 
-## Quick Start
+## Usage
 
 ```
-/autor                    Analyze current project
-/autor --new             Start new project
-/autor --analyze         Deep tech stack analysis
-/autor --phase=9         Set project phase
-/autor --init-local     Create local skills config
+/autor           Analyze project + show skills
+/autor --help   Show help
 ```
 
 ## How It Works
 
+1. **Detect** - Scan project files (package.json, CLAUDE.md, dll)
+2. **Analyze** - Identify tech stack and project phase
+3. **Invoke** - Auto-invoke relevant skills
+4. **Report** - Show skills dashboard
+
+## What It Detects
+
+| Category | Examples |
+|----------|----------|
+| Languages | TypeScript, Python, Go, Rust |
+| Frameworks | React, Fastify, Django |
+| Databases | PostgreSQL, MongoDB, Redis |
+| DevOps | Docker, Kubernetes |
+
+## Skills Auto-Invoked
+
+**Always (Core):**
 ```
-1. Detect tech stack (Node.js, Python, Go, dll)
-2. Read CLAUDE.md for project phase
-3. Auto-invoke relevant skills
-4. Show dashboard with recommendations
+/git /code quality /config /logging /testing /tdd /mem-search
 ```
 
-## Auto-Invoke Matrix
-
-| Detection | Skills |
-|-----------|--------|
-| Always | /git, /code quality, /config, /logging, /testing, /tdd, /mem-search |
+**Based on Tech Stack:**
+| Detected | Skills |
+|----------|--------|
 | TypeScript | /typescript-pro |
 | React | /ui-ux-pro-max |
 | Fastify | /api-design |
 | PostgreSQL | /database |
-| Docker | /docker, /ci-cd |
-| Backend | /security, /api-design, /database |
-| Frontend | /ui-ux-pro-max, /performance |
+| Docker | /docker /ci-cd |
 
-## Phase-Based Skills
-
+**Based on Phase:**
 | Phase | Skills |
 |-------|--------|
-| Foundation | /security, /database, /config |
-| Core | /api-design, /testing |
-| Features | /ui-ux-pro-max, /performance |
-| Production | /docker, /ci-cd, /observability |
+| Foundation | /security /database |
+| Features | /ui-ux-pro-max /performance |
+| Production | /docker /ci-cd |
 
-## Local Skills (Per-Project Config)
+## Local Skills (Optional)
 
-Create project-specific skill configurations:
+For per-project customization:
 
-```
-/autor --init-local      Create .claude/skills/
-/autor --local-preview   Preview local config
-/autor --sync-local     Sync with global
+```bash
+# Create local skills folder
+/autor --init-local
+
+# Preview local config
+/autor --local-preview
 ```
 
-Generated structure:
-```
-.claude/skills/
-├── SKILL.md           Project config
-├── phases.json        Phase mappings
-└── hooks/            Pre/post invoke
-```
+This creates `.claude/skills/` with project-specific settings.
 
 ## Examples
 
@@ -99,25 +100,45 @@ Generated structure:
 # Analyze current project
 /autor
 
-# New project
-/autor --new
+# Show help
+/autor --help
 
-# Set phase and analyze
-/autor --phase=9
-
-# Create local skills
-cd my-project
+# Create local skills (in project folder)
 /autor --init-local
 ```
 
-## Tech Stack Detection
+## Flow Diagram
 
-Detects automatically:
-- **Languages**: TypeScript, JavaScript, Python, Go, Rust, Java, C#
-- **Frameworks**: React, Vue, Next.js, Fastify, Express, NestJS, Django
-- **Databases**: PostgreSQL, MySQL, MongoDB, Redis
-- **DevOps**: Docker, Kubernetes, Terraform
+```
+┌─────────────────────────────────────────┐
+│  /autor                                 │
+└──────────────────┬──────────────────────┘
+                   │
+                   ▼
+┌─────────────────────────────────────────┐
+│  1. Read project files                 │
+│     CLAUDE.md, package.json, dll.      │
+└──────────────────┬──────────────────────┘
+                   │
+                   ▼
+┌─────────────────────────────────────────┐
+│  2. Detect tech stack                 │
+│     Language, framework, database      │
+└──────────────────┬──────────────────────┘
+                   │
+                   ▼
+┌─────────────────────────────────────────┐
+│  3. Auto-invoke skills               │
+│     Based on detection                │
+└──────────────────┬──────────────────────┘
+                   │
+                   ▼
+┌─────────────────────────────────────────┐
+│  4. Show dashboard                   │
+│     Skills + recommendations           │
+└─────────────────────────────────────────┘
+```
 
 ---
 
-*See ARCHITECTURE.md for detailed flow diagrams.*
+*See ARCHITECTURE.md for detailed documentation.*
