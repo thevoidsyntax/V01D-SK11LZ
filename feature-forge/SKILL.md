@@ -1,10 +1,28 @@
 ---
 name: feature-forge
-description: PRD creation and feature specification drafting
-version: "1.0.0"
-category: [process, documentation]
+description: "PRD creation and feature specification drafting"
+version: "1.1.0"
+category: [strategy]
 priority: high
 phase: discovery
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/feature-forge", "/prd"]
+      reason: "Feature specification"
+    - phrase: ["create prd", "feature spec", "requirements", "spec this feature"]
+      reason: "Feature specification context"
+tech_stack:
+  languages: [all]
+scale: [all]
+integrates_with: [wayfinder, new-issue, handoff]
+capabilities: [analysis]
+quality:
+  rules_count: 10
+  examples_count: 4
+  stability: stable
+source:
+  origin: local
 author: thevoidsyntax
 ---
 

@@ -1,7 +1,30 @@
 ---
 name: new-issue
-description: Use when the user says "new issue", "create an issue", "file an issue", "/new-issue", or asks to turn a bug, idea, or discussion into a GitHub issue. Takes an optional description of what the issue should cover; with no input, derives the issue from what was discussed in the current conversation. Verifies claims against the code before filing and produces a complete, complexity-scored issue, never a stub.
-version: "1.1.0"
+description: "Create complete GitHub issues with complexity scoring. Verifies claims against code before filing."
+version: "1.2.0"
+category: [workflow]
+priority: high
+phase: any
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/new-issue", "/issue"]
+      reason: "Create new issue"
+    - phrase: ["new issue", "create issue", "file issue", "create an issue"]
+      reason: "Intent to create issue"
+tech_stack:
+  languages: [all]
+scale: [all]
+integrates_with: [validate-issue, work-on-issue, pr-review]
+dependencies: []
+capabilities: [implementation]
+quality:
+  rules_count: 12
+  examples_count: 4
+  stability: stable
+source:
+  origin: local
+author: thevoidsyntax
 ---
 
 # new-issue

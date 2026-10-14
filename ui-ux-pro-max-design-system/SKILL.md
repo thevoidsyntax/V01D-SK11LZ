@@ -1,12 +1,30 @@
 ---
 name: ui-ux-pro-max-design-system
-description: Token architecture with three-layer system (Primitive → Semantic → Component), component specifications, and slide generation with Chart.js integration.
-when_to_use: Use when creating design systems, establishing token architecture, or building consistent component libraries.
-version: 2.13.0
+description: "Token architecture with three-layer system (Primitive → Semantic → Component), component specifications, and slide generation with Chart.js integration"
+version: "2.13.0"
+category: [frontend]
 priority: medium
 phase: any
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/ui-ux-pro-max-design-system", "/design-system"]
+      reason: "Design system creation"
+    - phrase: ["design system", "component library", "token architecture", "storybook"]
+      reason: "Design system context"
+tech_stack:
+  languages: [typescript, javascript]
+  frameworks: [react, vue, svelte]
+scale: [medium, large, enterprise]
+integrates_with: [ui-ux-pro-max, ui-ux-pro-max-styling]
+capabilities: [implementation]
+quality:
+  rules_count: 15
+  examples_count: 5
+  stability: stable
+source:
+  origin: github.com/nextlevelbuilder/ui-ux-pro-max-skill
 author: TheVoidSyntax
-source: github.com/nextlevelbuilder/ui-ux-pro-max-skill
 ---
 
 # Design System Skill

@@ -1,13 +1,30 @@
 ---
 name: ui-ux-pro-max
-description: AI-powered design intelligence with 79 UI styles, 192 color palettes, 74 font pairings, 119 UX guidelines, 25 chart types across 22 tech stacks. Includes deep CSS/GSAP animation patterns, container queries, micro-interactions, spring physics, fluid typography, and unique brand patterns to avoid "AI template look".
-when_to_use: Use when building UI - new pages, components, design systems, color/typography decisions, UX reviews, accessibility checks, or visual quality control.
-version: 2.14.0
+description: "AI-powered design intelligence with 79 UI styles, 192 color palettes, 74 font pairings, 119 UX guidelines"
+version: "2.14.0"
+category: [frontend]
 priority: high
 phase: any
-platforms: claude, cursor, windsurf, copilot, kiro, roocode, codex, opencode, continue
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/ui-ux-pro-max", "/ui-ux"]
+      reason: "UI/UX design assistance"
+    - phrase: ["design this", "make it look", "ui design", "ux design", "accessibility"]
+      reason: "UI/UX context"
+tech_stack:
+  languages: [all]
+  frameworks: [react, vue, svelte, angular, nextjs, nuxt]
+scale: [all]
+integrates_with: [react-pro, vue-pro, nextjs-pro]
+capabilities: [implementation, review]
+quality:
+  rules_count: 20
+  examples_count: 10
+  stability: stable
+source:
+  origin: github.com/nextlevelbuilder/ui-ux-pro-max-skill
 author: TheVoidSyntax
-source: github.com/nextlevelbuilder/ui-ux-pro-max-skill
 ---
 
 # UI/UX Pro Max - Design Intelligence

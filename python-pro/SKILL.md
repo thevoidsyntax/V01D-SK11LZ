@@ -1,7 +1,29 @@
 ---
 name: python-pro
-description: "Python best practices including typing, idiomatic patterns, and professional Python development."
-version: "1.0"
+description: "Python best practices including typing, idiomatic patterns, and professional Python development"
+version: "1.1.0"
+category: [language]
+priority: high
+phase: any
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/python-pro", "/python"]
+      reason: "Python development"
+    - phrase: ["python", "django", "fastapi", "pandas"]
+      reason: "Python context detected"
+tech_stack:
+  languages: [python]
+scale: [all]
+integrates_with: [api-design, database]
+capabilities: [implementation]
+quality:
+  rules_count: 15
+  examples_count: 8
+  stability: stable
+source:
+  origin: local
+author: thevoidsyntax
 ---
 
 # PYTHON PRO SKILL

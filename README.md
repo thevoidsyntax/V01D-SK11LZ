@@ -2,7 +2,7 @@
 
 > Intelligent skills that dominate your codebase.
 
-**90+** skills with auto-invocation based on project context.
+**100+** skills with auto-invocation based on project context.
 
 ## Quick Start
 
@@ -37,17 +37,9 @@ Skills activate automatically based on your project context:
 
 ---
 
-## Skills Overview
+## Skills Overview (100 Skills)
 
-### Project Intelligence
-
-| Skill | Description |
-|-------|-------------|
-| `/autor` | Smart router with intent detection |
-| `/project-init` | Interactive project setup with Q&A |
-| `/analyze-project` | Tech stack detection + recommendations |
-
-### Core DevOps (7 skills)
+### 🔧 Core DevOps (11 skills)
 
 Essential skills for every project:
 
@@ -61,8 +53,11 @@ Essential skills for every project:
 | `/logging` | Structured logging, correlation IDs, log management |
 | `/terraform` | Infrastructure as Code, modules, state |
 | `/ansible` | Configuration management, playbooks |
+| `/kubernetes` | HPA, security, Helm, service mesh |
+| `/serverless` | Lambda, Cloud Functions, Edge Computing |
+| `/scalability` | Auto-scaling, read replicas, CDN |
 
-### Security (4 skills)
+### 🔒 Security (5 skills)
 
 | Skill | Description |
 |-------|-------------|
@@ -70,8 +65,9 @@ Essential skills for every project:
 | `/pentest` | Hacker-style pentesting, ZAP, SQLMap, Nuclei |
 | `/identity` | OAuth2, OIDC, MFA, session management |
 | `/compliance` | GDPR, SOC2, audit trail |
+| `/fullstack-guardian` | Security-focused full-stack implementation |
 
-### Testing & Quality (4 skills)
+### 🧪 Testing & Quality (7 skills)
 
 | Skill | Description |
 |-------|-------------|
@@ -79,67 +75,106 @@ Essential skills for every project:
 | `/tdd` | Test-driven development, red-green-refactor loop |
 | `/code quality` | Code review, Fowler smells, static analysis |
 | `/diagnosing-bugs` | 6-phase systematic debugging |
+| `/playwright` | E2E browser automation testing |
+| `/testing-integration` | Integration testing with MSW, contract testing |
+| `/tech-debt` | Technical debt identification and management |
 
-### Architecture (3 skills)
+### 🏗️ Architecture (4 skills)
 
 | Skill | Description |
 |-------|-------------|
 | `/architecture-patterns` | Hexagonal, microservices, modular monolith |
 | `/domain-modeling` | Build domain model, bounded contexts |
 | `/codebase-design` | Deep module vocabulary, clean seams |
+| `/fullstack-patterns` | Backend-Frontend integration patterns |
 
-### Data & APIs (5 skills)
+### 🗄️ Database (6 skills)
 
 | Skill | Description |
 |-------|-------------|
 | `/database` | SQL optimization, migrations, indexing |
+| `/postgresql-pro` | PostgreSQL-specific patterns and optimization |
+| `/mysql-pro` | MySQL-specific patterns and optimization |
+| `/mongodb-pro` | MongoDB document modeling and patterns |
+| `/redis-pro` | Redis caching, pub/sub, data structures |
+| `/database-migration` | Zero-downtime migration strategies |
+
+### 🌐 API & Integration (10 skills)
+
+| Skill | Description |
+|-------|-------------|
 | `/api-design` | REST, gRPC, pagination, API Gateway |
+| `/api-client` | HTTP client patterns, retry, circuit breaker |
+| `/api-contracts` | OpenAPI specs, contract testing |
 | `/graphql` | Schema design, DataLoader, subscriptions |
 | `/messaging` | Kafka, RabbitMQ, SQS, event patterns |
-| `/data-engineering` | ETL, CDC, data warehouse |
+| `/message-queue` | Queue patterns, DLQ, Saga, Outbox |
+| `/integration-patterns` | ETL/ELT, API composition |
+| `/data-engineering` | CDC, data warehouse, ETL |
+| `/data-fetch` | TanStack Query, SWR, caching strategies |
+| `/realtime` | WebSocket, SSE, real-time patterns |
 
-### Performance & Observability (4 skills)
+### 📊 Observability (5 skills)
 
 | Skill | Description |
 |-------|-------------|
-| `/performance` | Profiling, benchmarking, optimization |
 | `/observability` | Metrics, tracing, alerting, SLOs |
-| `/logging` | Structured logging, ELK stack, Loki |
+| `/performance` | Profiling, benchmarking, optimization |
+| `/performance-ui` | Core Web Vitals, bundle optimization |
+| `/error-tracking` | Exception management, observability |
 | `/reliability` | SLO/SLA, incident response, DR |
 
-### Cloud & Infrastructure (5 skills)
+### ☁️ Cloud & Infrastructure (8 skills)
 
 | Skill | Description |
 |-------|-------------|
-| `/kubernetes` | HPA, security, Helm, service mesh |
-| `/serverless` | Lambda, Cloud Functions, Edge Computing |
-| `/scalability` | Auto-scaling, read replicas, CDN |
+| `/cloud-architect` | AWS, Azure, GCP architecture design |
 | `/networking` | DNS, TLS, load balancer, WAF |
-| `/reliability` | SLO/SLA, incident response, DR |
+| `/storage` | S3, blob storage, CDN strategies |
+| `/platform-engineering` | IDP, developer self-service |
+| `/devops-engineer` | CI/CD, IaC, automation |
+| `/data-quality` | Data validation and QA |
+| `/reticle` | Cloud cost optimization |
+| `/finops` | FinOps practices, cost visibility |
 
-### Frontend (3 skills)
+### 💻 Languages (10 skills)
 
 | Skill | Description |
 |-------|-------------|
-| `/frontend` | React, Vue, Angular, state management |
+| `/typescript-pro` | Advanced types, branded types, discriminated unions |
+| `/python-pro` | Advanced Python, Django, FastAPI |
+| `/go-pro` | Go concurrency, interfaces, idiomatic practices |
+| `/rust-pro` | Ownership, async, zero-cost abstractions |
+| `/java-pro` | Spring Boot, Jakarta EE, enterprise patterns |
+| `/dotnet-pro` | .NET Core, ASP.NET, Entity Framework |
+| `/nestjs-expert` | NestJS modular architecture, DI |
+| `/react-pro` | React hooks, state management, patterns |
+| `/nextjs-pro` | Next.js App Router, SSR, ISR |
+| `/graphql` | GraphQL schema design, resolvers |
+
+### 🎨 Frontend (5 skills)
+
+| Skill | Description |
+|-------|-------------|
 | `/ui-ux-pro-max` | Design intelligence, accessibility |
+| `/ui-ux-pro-max-design-system` | Design system patterns |
+| `/ui-ux-pro-max-styling` | CSS, Tailwind, styling patterns |
 | `/mobile` | Offline-first, biometric, push notifications |
+| `/dev-browser` | Development browser with debugging |
 
-### AI Collaboration (7 skills)
-
-From Matt Pocock's curated collection:
+### 🤖 AI & ML (7 skills)
 
 | Skill | Description |
 |-------|-------------|
-| `/implement` | Build from spec using TDD + code-review |
-| `/code-review` | Two-axis review: Standards + Spec |
-| `/wayfinder` | Plan large work as decision tickets |
-| `/grilling` | Relentless interview for design validation |
-| `/handoff` | Compact conversation for agent handoff |
-| `/research` | Primary source investigation |
-| `/writing-for-agents` | Write skills/docs for AI agents |
+| `/ml-engineering` | ML lifecycle, drift detection, LLM patterns |
+| `/ml-pipeline` | MLOps pipeline, Kubeflow, Airflow |
+| `/langchain-architect` | LangChain, chains, agents, RAG |
+| `/rag-architect` | RAG architecture, vector DB |
+| `/llm-evaluation` | LLM benchmarks, quality metrics |
+| `/ai-client` | AI API clients, token optimization |
+| `/chisle` | Token optimization and cost reduction |
 
-### GitHub Workflow (8 skills)
+### 🔄 Workflow & GitHub (10 skills)
 
 | Skill | Description |
 |-------|-------------|
@@ -151,32 +186,55 @@ From Matt Pocock's curated collection:
 | `/create-release` | Bump version + publish release |
 | `/sync-docs` | Sync CLAUDE.md/AGENTS.md/SKILL.md |
 | `/commit` | Guided conventional commit |
+| `/implement` | Build from spec using TDD + review |
+| `/reticle` | Project tracking and management |
 
-### Browser Automation (2 skills)
+### 🔮 Planning & Strategy (8 skills)
+
+| Skill | Description |
+|-------|-------------|
+| `/wayfinder` | Plan large work as decision tickets |
+| `/grill-with-docs` | Documentation-driven interview |
+| `/handoff` | Compact conversation for agent handoff |
+| `/research` | Primary source investigation |
+| `/writing-for-agents` | Write skills/docs for AI agents |
+| `/feature-forge` | PRD creation and feature specs |
+| `/feature-flags` | Progressive delivery, A/B testing |
+| `/team-processes` | Team workflows, ceremonies |
+
+### 🛠️ Browser Automation (2 skills)
 
 | Skill | Description |
 |-------|-------------|
 | `/dev-browser` | Fast (~13ms), JS-native, persistent tabs |
 | `/browser-use` | AI agent browser, cloud support |
 
-### Anti-AI Writing (2 skills)
+### 🛡️ Anti-AI (2 skills)
 
 | Skill | Description |
 |-------|-------------|
-| `/slopbuster` | Strip 152 AI patterns, restore human voice |
-| `/anti-slop` | Remove AI-generated artifacts |
+| `/anti-slop` | Strip AI patterns, restore human voice |
+| `/skill-creator` | Create new skills with templates |
 
-### Specialized (7 skills)
+### 🎮 Specialized (6 skills)
 
 | Skill | Description |
 |-------|-------------|
-| `/ml-engineering` | ML lifecycle, drift detection, LLM patterns |
-| `/python-pro` | Advanced Python, Django, FastAPI |
-| `/typescript-pro` | Advanced types, branded types, discriminated unions |
 | `/gaming` | Game server, lag compensation |
 | `/iot-edge` | OTA, edge deployment |
-| `/finops` | Cost visibility, tagging |
+| `/search` | Search engine architecture, Elasticsearch |
+| `/pentest` | Security penetration testing |
 | `/documentation` | README, RFC, onboarding |
+| `/skillspector` | Quality scoring for skill bundles |
+
+### 🔍 Meta Skills (4 skills)
+
+| Skill | Description |
+|-------|-------------|
+| `/autor` | Smart router with intent detection |
+| `/mem-search` | Memory & knowledge base search |
+| `/audit` | Full codebase audit with adversarial verification |
+| `/diagnosing-bugs` | Systematic debugging framework |
 
 ---
 
@@ -198,10 +256,10 @@ INPUT ──► /autor Router ──► Skill Selector ──► Active Skills
 
 | Metric | Value |
 |--------|-------|
-| **Total Skills** | 90+ |
-| **Auto-Invoke** | 45 |
+| **Total Skills** | 100+ |
+| **Auto-Invoke** | 50+ |
 | **Always-On Core** | 18 |
-| **Categories** | 14 |
+| **Categories** | 15 |
 
 ---
 

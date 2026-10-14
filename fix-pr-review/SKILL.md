@@ -1,7 +1,29 @@
 ---
 name: fix-pr-review
-description: Use when the user asks to fix, address, or respond to a PR review — "fix the PR review", "/fix-pr-review". Optional PR number/URL (defaults to the current branch's PR); optional `codex` argument selects Codex.
-version: "1.1.0"
+description: "Fix and address PR review comments autonomously. Validates findings, implements fixes, and requests re-review."
+version: "1.2.0"
+category: [workflow]
+priority: high
+phase: review
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/fix-pr-review", "/fix-review"]
+      reason: "Fix PR review comments"
+    - phrase: ["fix the review", "address review", "fix pr comments"]
+      reason: "Intent to fix PR review"
+tech_stack:
+  languages: [all]
+scale: [all]
+integrates_with: [pr-review, validate-issue, new-issue]
+capabilities: [review, implementation]
+quality:
+  rules_count: 15
+  examples_count: 4
+  stability: stable
+source:
+  origin: local
+author: thevoidsyntax
 ---
 
 # fix-pr-review

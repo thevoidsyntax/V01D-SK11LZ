@@ -1,7 +1,29 @@
 ---
 name: codebase-design
-description: Shared vocabulary for designing deep modules. Use when the user wants to design or improve a module's interface, find deepening opportunities, decide where a seam goes, make code more testable or AI-navigable, or when another skill needs the deep-module vocabulary.
-version: "1.1.0"
+description: "Shared vocabulary for designing deep modules. Use when the user wants to design or improve a module's interface, find deepening opportunities"
+version: "1.2.0"
+category: [architecture]
+priority: medium
+phase: any
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/codebase-design", "/module-design"]
+      reason: "Codebase design"
+    - phrase: ["design this module", "module interface", "deep module", "code design"]
+      reason: "Module design context"
+tech_stack:
+  languages: [all]
+scale: [medium, large, enterprise]
+integrates_with: [architecture-patterns, domain-modeling]
+capabilities: [analysis]
+quality:
+  rules_count: 12
+  examples_count: 5
+  stability: stable
+source:
+  origin: local
+author: thevoidsyntax
 ---
 
 # Codebase Design

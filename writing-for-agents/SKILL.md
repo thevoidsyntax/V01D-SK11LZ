@@ -1,10 +1,28 @@
 ---
 name: writing-for-agents
-description: Prompt and instruction writing optimized for AI agents
-version: "1.0.0"
-category: [process, communication]
+description: "Prompt and instruction writing optimized for AI agents"
+version: "1.1.0"
+category: [strategy]
 priority: medium
 phase: any
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/writing-for-agents", "/agent-writing"]
+      reason: "Writing for AI"
+    - phrase: ["write for ai", "agent prompt", "skill writing", "write a skill"]
+      reason: "Agent writing context"
+tech_stack:
+  languages: [all]
+scale: [all]
+integrates_with: [skill-creator, documentation]
+capabilities: [implementation]
+quality:
+  rules_count: 10
+  examples_count: 5
+  stability: stable
+source:
+  origin: local
 author: thevoidsyntax
 ---
 

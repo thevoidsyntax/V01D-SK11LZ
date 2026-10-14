@@ -1,11 +1,29 @@
 ---
 name: diagnosing-bugs
-description: "Diagnosis loop for hard bugs and performance regressions. Use when the user says 'diagnose'/'debug this', or reports something broken/throwing/failing/slow."
-version: "1.1.0"
+description: "Diagnosis loop for hard bugs and performance regressions"
+version: "1.2.0"
+category: [quality]
 priority: high
 phase: any
-source: merged (local + Jeffallan/claude-skills:debugging-wizard)
-dependencies: [testing, observability]
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/diagnosing-bugs", "/debug", "/diagnose"]
+      reason: "Debugging"
+    - phrase: ["debug this", "diagnose", "something broken", "not working", "error"]
+      reason: "Bug diagnosis context"
+tech_stack:
+  languages: [all]
+scale: [all]
+integrates_with: [testing, observability, error-tracking]
+capabilities: [analysis]
+quality:
+  rules_count: 15
+  examples_count: 6
+  stability: stable
+source:
+  origin: merged
+author: thevoidsyntax
 ---
 
 # Diagnosing Bugs

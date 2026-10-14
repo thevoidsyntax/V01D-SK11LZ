@@ -1,7 +1,29 @@
 ---
 name: integration-patterns
-description: "Integration patterns including ETL/ELT and API composition patterns."
-version: "1.0"
+description: "Integration patterns including ETL/ELT and API composition patterns"
+version: "1.1.0"
+category: [architecture]
+priority: medium
+phase: any
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/integration-patterns", "/integration"]
+      reason: "Integration patterns"
+    - phrase: ["integration", "etl", "elt", "api composition", "webhook"]
+      reason: "Integration context"
+tech_stack:
+  languages: [all]
+scale: [medium, large, enterprise]
+integrates_with: [api-design, messaging, data-engineering]
+capabilities: [implementation]
+quality:
+  rules_count: 10
+  examples_count: 5
+  stability: stable
+source:
+  origin: local
+author: thevoidsyntax
 ---
 
 # INTEGRATION PATTERNS MODULE

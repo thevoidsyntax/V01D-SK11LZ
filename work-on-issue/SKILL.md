@@ -1,10 +1,28 @@
 ---
 name: work-on-issue
-description: Structured approach to implementing issue solutions
-version: "1.0.0"
-category: [process, implementation]
+description: "Structured approach to implementing issue solutions with task breakdown and progress tracking"
+version: "1.1.0"
+category: [workflow]
 priority: high
 phase: implementation
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/work-on-issue", "/implement"]
+      reason: "Work on an issue"
+    - phrase: ["work on this", "implement this", "start working on"]
+      reason: "Intent to implement"
+tech_stack:
+  languages: [all]
+scale: [all]
+integrates_with: [new-issue, validate-issue, pr-review, commit]
+capabilities: [implementation]
+quality:
+  rules_count: 10
+  examples_count: 3
+  stability: stable
+source:
+  origin: local
 author: thevoidsyntax
 ---
 

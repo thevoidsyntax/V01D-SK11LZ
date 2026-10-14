@@ -1,10 +1,28 @@
 ---
 name: handoff
-description: Structured project handover documentation and checklists
-version: "1.0.0"
-category: [process, documentation]
+description: "Structured project handover documentation and checklists"
+version: "1.1.0"
+category: [strategy]
 priority: medium
 phase: close
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/handoff", "/hand-over"]
+      reason: "Project handover"
+    - phrase: ["handoff", "hand over", "transfer project", "onboarding"]
+      reason: "Intent to handover"
+tech_stack:
+  languages: [all]
+scale: [all]
+integrates_with: [documentation, wayfinder]
+capabilities: [implementation]
+quality:
+  rules_count: 8
+  examples_count: 3
+  stability: stable
+source:
+  origin: local
 author: thevoidsyntax
 ---
 

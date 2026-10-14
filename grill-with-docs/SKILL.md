@@ -1,10 +1,28 @@
 ---
 name: grill-with-docs
-description: Documentation-driven interview and requirements gathering
-version: "1.0.0"
-category: [process, communication]
+description: "Documentation-driven interview and requirements gathering"
+version: "1.1.0"
+category: [strategy]
 priority: medium
 phase: discovery
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/grill-with-docs", "/grill"]
+      reason: "Requirements gathering"
+    - phrase: ["question this", "challenge this", "requirements", "gather requirements"]
+      reason: "Requirements context"
+tech_stack:
+  languages: [all]
+scale: [all]
+integrates_with: [feature-forge, wayfinder]
+capabilities: [analysis]
+quality:
+  rules_count: 8
+  examples_count: 3
+  stability: stable
+source:
+  origin: local
 author: thevoidsyntax
 ---
 

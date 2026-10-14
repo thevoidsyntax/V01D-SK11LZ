@@ -1,12 +1,29 @@
 ---
 name: skillspector
-description: Deterministic 0-100 quality scoring for Claude Code skill bundles. Analyzes SKILL.md across 10 dimensions: metadata completeness, information density, lexical diversity, readability, topic coverage, structural coherence, code maintainability, example quality, progressive disclosure, and behavioral configuration.
-when_to_use: Use when evaluating or improving Claude Code skill bundles before publishing. Invoke after writing a new skill to verify quality thresholds. Use in CI to gate merges on minimum score.
-version: 1.1.0
+description: "Deterministic 0-100 quality scoring for Claude Code skill bundles. Analyzes SKILL.md across 10 dimensions"
+version: "1.2.0"
+category: [meta]
 priority: medium
 phase: any
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/skillspector", "/skill-quality"]
+      reason: "Skill quality check"
+    - phrase: ["check skill", "quality score", "skill review"]
+      reason: "Quality context"
+tech_stack:
+  languages: [all]
+scale: [all]
+integrates_with: [skill-creator, sync-docs]
+capabilities: [review, analysis]
+quality:
+  rules_count: 12
+  examples_count: 4
+  stability: stable
+source:
+  origin: github.com/larsroettig/skillspector-quality
 author: TheVoidSyntax
-source: github.com/larsroettig/skillspector-quality
 ---
 
 # SkillSpector Quality

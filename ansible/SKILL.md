@@ -1,7 +1,29 @@
 ---
 name: ansible
-description: Ansible configuration management, playbook design, roles, inventory management, and automation patterns.
-version: "1.1.0"
+description: "Ansible configuration management, playbook design, roles, inventory management, and automation patterns"
+version: "1.2.0"
+category: [devops]
+priority: medium
+phase: infrastructure
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/ansible", "/ansible-playbook"]
+      reason: "Ansible automation"
+    - phrase: ["ansible", "playbook", "configuration management", "inventory"]
+      reason: "Ansible context"
+tech_stack:
+  languages: [yaml]
+scale: [medium, large, enterprise]
+integrates_with: [terraform, docker, devops-engineer]
+capabilities: [implementation]
+quality:
+  rules_count: 10
+  examples_count: 5
+  stability: stable
+source:
+  origin: local
+author: thevoidsyntax
 ---
 
 # Ansible - Configuration Management

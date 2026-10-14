@@ -1,11 +1,29 @@
 ---
 name: cloud-architect
-description: "Designs cloud architectures, creates migration plans, and produces disaster recovery strategies across AWS, Azure, and GCP."
-version: "1.0.0"
-priority: important
-phase: any
-dependencies: [devops-engineer, security]
-source: Jeffallan/claude-skills
+description: "Designs cloud architectures, creates migration plans, and produces disaster recovery strategies across AWS, Azure, and GCP"
+version: "1.1.0"
+category: [devops]
+priority: high
+phase: architecture
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/cloud-architect", "/cloud-design"]
+      reason: "Cloud architecture"
+    - phrase: ["aws", "azure", "gcp", "cloud architecture", "migration"]
+      reason: "Cloud context"
+tech_stack:
+  languages: [all]
+scale: [large, enterprise]
+integrates_with: [devops-engineer, security, kubernetes]
+capabilities: [analysis, implementation]
+quality:
+  rules_count: 12
+  examples_count: 5
+  stability: stable
+source:
+  origin: Jeffallan/claude-skills
+author: thevoidsyntax
 ---
 
 # Cloud Architect

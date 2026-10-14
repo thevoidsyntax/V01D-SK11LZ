@@ -1,10 +1,28 @@
 ---
 name: chisle
-description: Token optimization and cost reduction for LLM interactions
-version: "1.0.0"
-category: [process, optimization]
+description: "Token optimization and cost reduction for LLM interactions"
+version: "1.1.0"
+category: [optimization]
 priority: medium
 phase: any
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/chisle", "/token-optimize"]
+      reason: "Token optimization"
+    - phrase: ["optimize tokens", "reduce cost", "token usage"]
+      reason: "Cost optimization context"
+tech_stack:
+  languages: [all]
+scale: [all]
+integrates_with: [llm-evaluation]
+capabilities: [analysis]
+quality:
+  rules_count: 6
+  examples_count: 3
+  stability: stable
+source:
+  origin: local
 author: thevoidsyntax
 ---
 

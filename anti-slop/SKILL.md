@@ -1,13 +1,29 @@
 ---
 name: anti-slop
-description: Universal system prompt eliminating every known LLM style tell. Works with Claude Code, Gemini CLI, Codex CLI, Copilot, Cursor, and any web AI. Removes AI-generated patterns from output.
-when_to_use: Use when you want human-sounding output. Apply before generating content, documentation, or code comments to eliminate AI patterns.
-tokenSaving: medium
-version: 1.0.0
+description: "Universal system prompt eliminating every known LLM style tell. Works with Claude Code, Gemini CLI, Codex CLI, Copilot, Cursor, and any web AI. Removes AI-generated patterns from output"
+version: "1.1.0"
+category: [anti-ai]
 priority: medium
 phase: any
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/anti-slop", "/humanize"]
+      reason: "Remove AI patterns"
+    - phrase: ["humanize", "remove ai", "no ai patterns", "sounds human"]
+      reason: "Anti-AI context"
+tech_stack:
+  languages: [all]
+scale: [all]
+integrates_with: []
+capabilities: [implementation]
+quality:
+  rules_count: 10
+  examples_count: 5
+  stability: stable
+source:
+  origin: github.com/stop-aicopy/anti-slop-writing
 author: TheVoidSyntax
-source: github.com/stop-aicopy/anti-slop-writing
 ---
 
 # Anti-Slop - Eliminate AI Patterns

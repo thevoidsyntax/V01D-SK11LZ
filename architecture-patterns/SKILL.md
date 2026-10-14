@@ -1,11 +1,29 @@
 ---
 name: architecture-patterns
-description: "Enterprise architecture patterns including Hexagonal Architecture, Micro-frontend, Modular Monolith, and Microservices patterns."
-version: "1.1.0"
+description: "Enterprise architecture patterns including Hexagonal Architecture, Micro-frontend, Modular Monolith, and Microservices patterns"
+version: "1.2.0"
+category: [architecture]
 priority: medium
 phase: any
-source: merged (local + Jeffallan/claude-skills:architecture-designer,microservices-architect)
-dependencies: [cloud-architect, devops-engineer]
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/architecture-patterns", "/arch"]
+      reason: "Architecture patterns"
+    - phrase: ["architecture", "hexagonal", "microservices", "CQRS", "event sourcing"]
+      reason: "Architecture context"
+tech_stack:
+  languages: [all]
+scale: [medium, large, enterprise]
+integrates_with: [cloud-architect, devops-engineer, domain-modeling]
+capabilities: [analysis, implementation]
+quality:
+  rules_count: 15
+  examples_count: 8
+  stability: stable
+source:
+  origin: merged
+author: thevoidsyntax
 ---
 
 # ARCHITECTURE PATTERNS MODULE

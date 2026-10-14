@@ -1,7 +1,29 @@
 ---
 name: domain-modeling
-description: Build and sharpen a project's domain model. Use when discussing codebase terminology, writing or editing a CONTEXT.md, or recording or editing an ADR.
-version: "1.1.0"
+description: "Build and sharpen a project's domain model. Use when discussing codebase terminology, writing or editing a CONTEXT.md, or recording or editing an ADR"
+version: "1.2.0"
+category: [architecture]
+priority: medium
+phase: any
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/domain-modeling", "/ddd"]
+      reason: "Domain modeling"
+    - phrase: ["domain model", "DDD", "bounded context", "ubiquitous language", "ADR"]
+      reason: "Domain modeling context"
+tech_stack:
+  languages: [all]
+scale: [medium, large, enterprise]
+integrates_with: [architecture-patterns, codebase-design]
+capabilities: [analysis]
+quality:
+  rules_count: 10
+  examples_count: 4
+  stability: stable
+source:
+  origin: local
+author: thevoidsyntax
 ---
 
 # Domain Modeling

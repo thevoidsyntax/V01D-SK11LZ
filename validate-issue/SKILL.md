@@ -1,7 +1,29 @@
 ---
 name: validate-issue
-description: Use when the user asks to validate, review, or check a GitHub issue against the code. Returns a cited update decision with a complexity score.
-version: "1.1.0"
+description: "Validate GitHub issues against code. Returns cited update decision with complexity scoring."
+version: "1.2.0"
+category: [workflow]
+priority: high
+phase: analysis
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/validate-issue", "/validate"]
+      reason: "Validate issue against code"
+    - phrase: ["validate issue", "check issue", "verify issue"]
+      reason: "Intent to validate issue"
+tech_stack:
+  languages: [all]
+scale: [all]
+integrates_with: [new-issue, work-on-issue, pr-review]
+capabilities: [analysis, review]
+quality:
+  rules_count: 12
+  examples_count: 3
+  stability: stable
+source:
+  origin: local
+author: thevoidsyntax
 ---
 
 # validate-issue

@@ -1,7 +1,29 @@
 ---
 name: platform-engineering
-description: "Platform engineering practices including golden paths, self-service tools, and internal developer platforms."
-version: "1.0"
+description: "Platform engineering practices including golden paths, self-service tools, and internal developer platforms"
+version: "1.1.0"
+category: [devops]
+priority: medium
+phase: any
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/platform-engineering", "/platform"]
+      reason: "Platform engineering"
+    - phrase: ["platform engineering", "golden path", "IDP", "self-service"]
+      reason: "Platform context"
+tech_stack:
+  languages: [all]
+scale: [large, enterprise]
+integrates_with: [devops-engineer, developer-experience]
+capabilities: [implementation]
+quality:
+  rules_count: 10
+  examples_count: 4
+  stability: stable
+source:
+  origin: local
+author: thevoidsyntax
 ---
 
 # PLATFORM ENGINEERING MODULE

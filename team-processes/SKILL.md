@@ -1,7 +1,29 @@
 ---
 name: team-processes
-description: "Team processes and collaboration best practices including code ownership and architecture review processes."
-version: "1.0"
+description: "Team processes and collaboration best practices including code ownership and architecture review processes"
+version: "1.1.0"
+category: [strategy]
+priority: medium
+phase: any
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/team-processes", "/team"]
+      reason: "Team processes"
+    - phrase: ["team process", "code review", "architecture review", "onboarding"]
+      reason: "Team context"
+tech_stack:
+  languages: [all]
+scale: [medium, large, enterprise]
+integrates_with: [wayfinder, handoff]
+capabilities: [analysis]
+quality:
+  rules_count: 8
+  examples_count: 3
+  stability: stable
+source:
+  origin: local
+author: thevoidsyntax
 ---
 
 # TEAM PROCESSES MODULE

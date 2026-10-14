@@ -1,0 +1,116 @@
+{
+  "manifest_version": "2.1",
+  "generated": "2025-01-15T00:00:00Z",
+  "total_skills": 105,
+  "categories": [
+    {
+      "id": "core-devops",
+      "name": "Core DevOps",
+      "count": 11,
+      "skills": ["git", "docker", "ci-cd", "deployment", "config", "logging", "terraform", "ansible", "kubernetes", "serverless", "scalability"]
+    },
+    {
+      "id": "security",
+      "name": "Security",
+      "count": 5,
+      "skills": ["security", "pentest", "identity", "compliance", "fullstack-guardian"]
+    },
+    {
+      "id": "testing-quality",
+      "name": "Testing & Quality",
+      "count": 7,
+      "skills": ["testing", "tdd", "code-quality", "diagnosing-bugs", "playwright", "testing-integration", "tech-debt"]
+    },
+    {
+      "id": "architecture",
+      "name": "Architecture",
+      "count": 4,
+      "skills": ["architecture-patterns", "domain-modeling", "codebase-design", "fullstack-patterns"]
+    },
+    {
+      "id": "database",
+      "name": "Database",
+      "count": 6,
+      "skills": ["database", "postgresql-pro", "mysql-pro", "mongodb-pro", "redis-pro", "database-migration"]
+    },
+    {
+      "id": "api-integration",
+      "name": "API & Integration",
+      "count": 10,
+      "skills": ["api-design", "api-client", "api-contracts", "graphql", "messaging", "message-queue", "integration-patterns", "data-engineering", "data-fetch", "realtime"]
+    },
+    {
+      "id": "observability",
+      "name": "Observability",
+      "count": 5,
+      "skills": ["observability", "performance", "performance-ui", "error-tracking", "reliability"]
+    },
+    {
+      "id": "cloud-infra",
+      "name": "Cloud & Infrastructure",
+      "count": 8,
+      "skills": ["cloud-architect", "networking", "storage", "platform-engineering", "devops-engineer", "data-quality", "reticle", "finops"]
+    },
+    {
+      "id": "languages",
+      "name": "Languages",
+      "count": 10,
+      "skills": ["typescript-pro", "python-pro", "go-pro", "rust-pro", "java-pro", "dotnet-pro", "nestjs-expert", "react-pro", "nextjs-pro", "graphql"]
+    },
+    {
+      "id": "frontend",
+      "name": "Frontend",
+      "count": 5,
+      "skills": ["ui-ux-pro-max", "ui-ux-pro-max-design-system", "ui-ux-pro-max-styling", "mobile", "dev-browser"]
+    },
+    {
+      "id": "ai-ml",
+      "name": "AI & ML",
+      "count": 7,
+      "skills": ["ml-engineering", "ml-pipeline", "langchain-architect", "rag-architect", "llm-evaluation", "ai-client", "chisle"]
+    },
+    {
+      "id": "workflow-github",
+      "name": "Workflow & GitHub",
+      "count": 10,
+      "skills": ["new-issue", "validate-issue", "work-on-issue", "fix-pr-review", "pr-review", "create-release", "sync-docs", "commit", "implement", "reticle"]
+    },
+    {
+      "id": "planning-strategy",
+      "name": "Planning & Strategy",
+      "count": 8,
+      "skills": ["wayfinder", "grill-with-docs", "handoff", "research", "writing-for-agents", "feature-forge", "feature-flags", "team-processes"]
+    },
+    {
+      "id": "browser-automation",
+      "name": "Browser Automation",
+      "count": 2,
+      "skills": ["dev-browser", "browser-use"]
+    },
+    {
+      "id": "anti-ai",
+      "name": "Anti-AI",
+      "count": 2,
+      "skills": ["anti-slop", "skill-creator"]
+    },
+    {
+      "id": "specialized",
+      "name": "Specialized",
+      "count": 6,
+      "skills": ["gaming", "iot-edge", "search", "pentest", "documentation", "skillspector"]
+    },
+    {
+      "id": "meta",
+      "name": "Meta Skills",
+      "count": 4,
+      "skills": ["autor", "mem-search", "audit", "diagnosing-bugs"]
+    }
+  ],
+  "auto_invoke_rules": [
+    { "pattern": "always", "skills": ["git", "config", "logging", "code-quality"] },
+    { "pattern": "**/tests/**", "skills": ["testing"] },
+    { "pattern": "**/Dockerfile", "skills": ["docker"] },
+    { "pattern": "kubernetes/**", "skills": ["kubernetes"] },
+    { "pattern": ".github/workflows/**", "skills": ["ci-cd"] }
+  ]
+}

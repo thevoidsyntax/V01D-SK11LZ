@@ -1,10 +1,28 @@
 ---
 name: create-release
-description: Streamlined release creation with changelog generation
-version: "1.0.0"
-category: [devops, process]
+description: "Streamlined release creation with changelog generation and semantic versioning"
+version: "1.1.0"
+category: [workflow]
 priority: medium
 phase: deploy
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/create-release", "/release"]
+      reason: "Create a release"
+    - phrase: ["create release", "make release", "publish version"]
+      reason: "Intent to create release"
+tech_stack:
+  languages: [all]
+scale: [all]
+integrates_with: [git, commit, ci-cd]
+capabilities: [implementation]
+quality:
+  rules_count: 10
+  examples_count: 3
+  stability: stable
+source:
+  origin: local
 author: thevoidsyntax
 ---
 

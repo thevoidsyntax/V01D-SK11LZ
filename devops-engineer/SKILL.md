@@ -1,11 +1,29 @@
 ---
 name: devops-engineer
-description: "Senior DevOps engineer specializing in CI/CD pipelines, infrastructure as code, and deployment automation."
-version: "1.0.0"
+description: "Senior DevOps engineer specializing in CI/CD pipelines, infrastructure as code, and deployment automation"
+version: "1.1.0"
+category: [devops]
 priority: critical
 phase: any
-dependencies: [observability]
-source: Jeffallan/claude-skills
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/devops-engineer", "/devops"]
+      reason: "DevOps assistance"
+    - phrase: ["ci/cd", "pipeline", "infrastructure", "deployment", "iac"]
+      reason: "DevOps context"
+tech_stack:
+  languages: [all]
+scale: [medium, large, enterprise]
+integrates_with: [docker, kubernetes, terraform, ci-cd, observability]
+capabilities: [implementation, analysis]
+quality:
+  rules_count: 15
+  examples_count: 8
+  stability: stable
+source:
+  origin: Jeffallan/claude-skills
+author: thevoidsyntax
 ---
 
 # DevOps Engineer

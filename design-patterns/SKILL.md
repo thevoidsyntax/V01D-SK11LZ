@@ -1,7 +1,29 @@
 ---
 name: design-patterns
-description: "Design patterns including Observer, Repository, and Unit of Work patterns. Covers implementation best practices."
-version: "1.0"
+description: "Design patterns including Observer, Repository, and Unit of Work patterns. Covers implementation best practices"
+version: "1.1.0"
+category: [architecture]
+priority: medium
+phase: any
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/design-patterns", "/patterns"]
+      reason: "Design patterns"
+    - phrase: ["design pattern", "singleton", "factory", "observer", "repository pattern"]
+      reason: "Design pattern context"
+tech_stack:
+  languages: [all]
+scale: [all]
+integrates_with: [architecture-patterns, codebase-design]
+capabilities: [implementation]
+quality:
+  rules_count: 12
+  examples_count: 6
+  stability: stable
+source:
+  origin: local
+author: thevoidsyntax
 ---
 
 # DESIGN PATTERNS MODULE

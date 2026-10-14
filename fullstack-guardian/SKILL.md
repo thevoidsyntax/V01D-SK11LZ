@@ -1,11 +1,29 @@
 ---
 name: fullstack-guardian
-description: "Security-focused full-stack developer implementing features across the entire application stack."
-version: "1.0.0"
+description: "Security-focused full-stack developer implementing features across the entire application stack"
+version: "1.1.0"
+category: [security]
 priority: critical
 phase: any
-dependencies: [security, testing]
-source: Jeffallan/claude-skills
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/fullstack-guardian", "/security-dev"]
+      reason: "Security implementation"
+    - phrase: ["secure this", "security first", "add auth", "protect this"]
+      reason: "Security context"
+tech_stack:
+  languages: [all]
+scale: [all]
+integrates_with: [security, testing, auth-flows, identity]
+capabilities: [implementation]
+quality:
+  rules_count: 12
+  examples_count: 5
+  stability: stable
+source:
+  origin: Jeffallan/claude-skills
+author: thevoidsyntax
 ---
 
 # Fullstack Guardian

@@ -1,11 +1,29 @@
 ---
 name: code-quality
-description: "Code quality standards and review patterns including common code smells, refactoring techniques, and review checklists."
-version: "1.1.0"
+description: "Code quality standards and review patterns including common code smells, refactoring techniques, and review checklists"
+version: "1.2.0"
+category: [quality]
 priority: high
 phase: any
-source: merged (local + Jeffallan/claude-skills:code-reviewer)
-dependencies: [pr-review, testing]
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/code-quality", "/code-quality"]
+      reason: "Code quality review"
+    - phrase: ["code quality", "refactor", "code smell", "review code"]
+      reason: "Code quality context"
+tech_stack:
+  languages: [all]
+scale: [all]
+integrates_with: [pr-review, testing, diagnosing-bugs]
+capabilities: [review, analysis]
+quality:
+  rules_count: 15
+  examples_count: 8
+  stability: stable
+source:
+  origin: merged
+author: thevoidsyntax
 ---
 
 # CODE QUALITY MODULE

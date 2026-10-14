@@ -1,7 +1,7 @@
 {
   "name": "auto-router",
-  "version": "6.0.0",
-  "description": "Smart Project Intelligence CLI Tool",
+  "version": "10.0.0",
+  "description": "Smart Project Intelligence - Quality Analysis, Gap Detection, Health Scoring, and Actionable Recommendations",
   "main": "cli.ts",
   "type": "module",
   "bin": {

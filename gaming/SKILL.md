@@ -1,7 +1,29 @@
 ---
 name: gaming
-description: "Gaming and real-time systems development including game server architecture and lag compensation."
-version: "1.0"
+description: "Gaming and real-time systems development including game server architecture and lag compensation"
+version: "1.1.0"
+category: [specialized]
+priority: medium
+phase: any
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/gaming", "/game-dev"]
+      reason: "Game development"
+    - phrase: ["game", "gaming", "game server", "real-time", "multiplayer"]
+      reason: "Gaming context"
+tech_stack:
+  languages: [all]
+scale: [all]
+integrates_with: [realtime, networking]
+capabilities: [implementation]
+quality:
+  rules_count: 12
+  examples_count: 5
+  stability: stable
+source:
+  origin: local
+author: thevoidsyntax
 ---
 
 # GAMING & REAL-TIME MODULE

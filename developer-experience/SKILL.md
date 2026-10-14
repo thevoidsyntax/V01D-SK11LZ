@@ -1,7 +1,29 @@
 ---
 name: developer-experience
-description: "Developer experience best practices including IDP, CLI patterns, and SDK design for improved developer productivity."
-version: "1.0"
+description: "Developer experience best practices including IDP, CLI patterns, and SDK design for improved developer productivity"
+version: "1.1.0"
+category: [devops]
+priority: medium
+phase: any
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/developer-experience", "/dx"]
+      reason: "Developer experience"
+    - phrase: ["developer experience", "IDP", "SDK", "CLI", "tooling"]
+      reason: "DX context"
+tech_stack:
+  languages: [all]
+scale: [medium, large, enterprise]
+integrates_with: [devops-engineer, platform-engineering]
+capabilities: [implementation]
+quality:
+  rules_count: 10
+  examples_count: 4
+  stability: stable
+source:
+  origin: local
+author: thevoidsyntax
 ---
 
 # DEVELOPER EXPERIENCE MODULE

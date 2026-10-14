@@ -1,12 +1,30 @@
 ---
 name: ui-ux-pro-max-styling
-description: UI styling with shadcn/ui (Radix primitives), Tailwind CSS, and Canvas for visual compositions.
-when_to_use: Use when implementing UI components, setting up Tailwind, or creating visual designs with shadcn/ui.
-version: 2.13.0
+description: "UI styling with shadcn/ui (Radix primitives), Tailwind CSS, and Canvas for visual compositions"
+version: "2.13.0"
+category: [frontend]
 priority: medium
 phase: any
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/ui-ux-pro-max-styling", "/styling"]
+      reason: "UI styling"
+    - phrase: ["tailwind", "shadcn", "css", "styling", "radix"]
+      reason: "Styling context"
+tech_stack:
+  languages: [typescript, javascript]
+  frameworks: [react, vue, svelte]
+scale: [all]
+integrates_with: [ui-ux-pro-max, ui-ux-pro-max-design-system]
+capabilities: [implementation]
+quality:
+  rules_count: 12
+  examples_count: 5
+  stability: stable
+source:
+  origin: github.com/nextlevelbuilder/ui-ux-pro-max-skill
 author: TheVoidSyntax
-source: github.com/nextlevelbuilder/ui-ux-pro-max-skill
 ---
 
 # UI Styling Skill
