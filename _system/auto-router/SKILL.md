@@ -1,6 +1,6 @@
 ---
 name: auto-router
-version: "8.4.0"
+version: "8.5.0"
 description: "Smart skill recommendations based on your project. Detects tech stack, auto-invokes relevant skills."
 when_to_use: "Run when starting a project, analyzing existing codebase, or needing skill recommendations."
 priority: critical
@@ -32,7 +32,7 @@ capabilities:
 author: TheVoidSyntax
 ---
 
-# AUTO-ROUTER v8.4
+# AUTO-ROUTER v8.5
 
 Smart skill recommendations for your project.
 
@@ -74,6 +74,17 @@ Smart skill recommendations for your project.
 | /tdd | Test-driven development |
 | /mem-search | Memory & context |
 
+### Language-Specific Skills
+
+| Language | Skill | Notes |
+|----------|-------|-------|
+| TypeScript | /typescript-pro | Advanced TS patterns |
+| Python | /python-pro | Django, FastAPI patterns |
+| Go | /go-pro | Gin, Echo patterns |
+| Rust | /rust-pro | Ownership, async patterns |
+| Java | /api-design | Use /api-design for patterns |
+| C# | /api-design | Use /api-design for patterns |
+
 ### Backend Skills (Auto-detected)
 
 | Tech Detected | Skills |
@@ -82,7 +93,7 @@ Smart skill recommendations for your project.
 | NestJS | /nestjs-expert |
 | Django, FastAPI | /api-design /python-pro |
 | Gin, Echo | /api-design /go-pro |
-| Spring Boot | /api-design /security |
+| Spring Boot | /api-design |
 
 ### Database Skills (Auto-detected)
 
@@ -103,22 +114,95 @@ Smart skill recommendations for your project.
 | Production | /docker /ci-cd /observability |
 | Launch | /reliability |
 
-## Backend Example
+## Examples
+
+### Node.js + TypeScript + PostgreSQL
 
 ```
 Input: Express + TypeScript + PostgreSQL + Docker
 
 Detected:
-├── Language: TypeScript
-├── Framework: Express
-├── Database: PostgreSQL
-└── DevOps: Docker
+├── Language: TypeScript → /typescript-pro
+├── Framework: Express → /api-design
+├── Database: PostgreSQL → /database /postgresql-pro
+└── DevOps: Docker → /docker /ci-cd
 
 Skills Auto-Invoked:
 ├── CORE: /git /code quality /config /logging /testing /tdd /mem-search
 ├── BACKEND: /api-design /typescript-pro
 ├── DATABASE: /database /postgresql-pro
 └── DEVOPS: /docker /ci-cd
+```
+
+### Python + Django + PostgreSQL
+
+```
+Input: Django + Python + PostgreSQL
+
+Detected:
+├── Language: Python → /python-pro
+├── Framework: Django → /api-design
+├── Database: PostgreSQL → /database /postgresql-pro
+└── DevOps: Docker → /docker
+
+Skills Auto-Invoked:
+├── CORE: /git /code quality /config /logging /testing /tdd /mem-search
+├── BACKEND: /api-design /python-pro
+├── DATABASE: /database /postgresql-pro
+└── DEVOPS: /docker
+```
+
+### Go + Gin + PostgreSQL
+
+```
+Input: Gin + Go + PostgreSQL
+
+Detected:
+├── Language: Go → /go-pro
+├── Framework: Gin → /api-design
+├── Database: PostgreSQL → /database /postgresql-pro
+└── DevOps: Docker → /docker
+
+Skills Auto-Invoked:
+├── CORE: /git /code quality /config /logging /testing /tdd /mem-search
+├── BACKEND: /api-design /go-pro
+├── DATABASE: /database /postgresql-pro
+└── DEVOPS: /docker
+```
+
+### Rust + PostgreSQL
+
+```
+Input: Rust + PostgreSQL
+
+Detected:
+├── Language: Rust → /rust-pro
+├── Database: PostgreSQL → /database /postgresql-pro
+└── DevOps: Docker → /docker
+
+Skills Auto-Invoked:
+├── CORE: /git /code quality /config /logging /testing /tdd /mem-search
+├── LANGUAGE: /rust-pro
+├── DATABASE: /database /postgresql-pro
+└── DEVOPS: /docker
+```
+
+### Java + Spring Boot
+
+```
+Input: Spring Boot + Java + PostgreSQL
+
+Detected:
+├── Language: Java → /api-design (generic backend patterns)
+├── Framework: Spring Boot → /api-design
+├── Database: PostgreSQL → /database /postgresql-pro
+└── DevOps: Docker → /docker
+
+Skills Auto-Invoked:
+├── CORE: /git /code quality /config /logging /testing /tdd /mem-search
+├── BACKEND: /api-design
+├── DATABASE: /database /postgresql-pro
+└── DEVOPS: /docker
 ```
 
 ## Local Skills (Optional)
@@ -128,37 +212,16 @@ Skills Auto-Invoked:
 /autor --local-preview  Preview local config
 ```
 
-## Flow Diagram
+## Available Skills Reference
 
-```
-┌─────────────────────────────────────────┐
-│  /autor                                 │
-└──────────────────┬──────────────────────┘
-                   │
-                   ▼
-┌─────────────────────────────────────────┐
-│  1. Read project files                 │
-│     package.json, CLAUDE.md, dll.       │
-└──────────────────┬──────────────────────┘
-                   │
-                   ▼
-┌─────────────────────────────────────────┐
-│  2. Detect tech stack                  │
-│     Language + Framework + Database   │
-└──────────────────┬──────────────────────┘
-                   │
-                   ▼
-┌─────────────────────────────────────────┐
-│  3. Auto-invoke skills                │
-│     Core + Tech + Phase based         │
-└──────────────────┬──────────────────────┘
-                   │
-                   ▼
-┌─────────────────────────────────────────┐
-│  4. Show dashboard                    │
-│     Skills + recommendations            │
-└─────────────────────────────────────────┘
-```
+| Category | Skills |
+|----------|--------|
+| Core | /git, /code quality, /config, /logging, /testing, /tdd, /mem-search |
+| Languages | /typescript-pro, /python-pro, /go-pro, /rust-pro |
+| Backend | /api-design, /nestjs-expert |
+| Database | /database, /postgresql-pro, /scalability |
+| Security | /security |
+| DevOps | /docker, /ci-cd, /kubernetes, /observability, /reliability |
 
 ---
 
