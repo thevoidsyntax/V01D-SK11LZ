@@ -2,7 +2,7 @@
 
 > Intelligent skills that dominate your codebase.
 
-**80+** skills with auto-invocation based on project context.
+**90+** skills with auto-invocation based on project context.
 
 ## Quick Start
 
@@ -198,7 +198,7 @@ INPUT ──► /autor Router ──► Skill Selector ──► Active Skills
 
 | Metric | Value |
 |--------|-------|
-| **Total Skills** | 80+ |
+| **Total Skills** | 90+ |
 | **Auto-Invoke** | 45 |
 | **Always-On Core** | 18 |
 | **Categories** | 14 |

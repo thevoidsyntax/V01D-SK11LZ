@@ -1,7 +1,8 @@
 ---
 name: auto-router
-version: "7.0.0"
-description: "Intelligent project router with auto-invoke core skills, tech-based recommendations, and phase awareness. Use --new for new projects, --analyze for existing projects."
+version: "8.1.0"
+description: "Intelligent project router with auto-invoke core skills, tech-based recommendations, phase awareness, and workflow execution modes. Use --new for new projects, --analyze for existing projects."
+when_to_use: "Use when starting a new project, analyzing an existing codebase, or needing intelligent skill recommendations based on tech stack and project phase. Invoke with /autor, /ar, or /auto-router."
 priority: critical
 phase: any
 category: [process]
@@ -17,6 +18,21 @@ auto_invoke:
       reason: "New project mode - triggers project-init"
     - command: ["/autor --analyze", "/ar --analyze", "/auto-router --analyze"]
       reason: "Analyze mode - triggers analyze-project"
+execution_mode:
+  default: hybrid
+  rules:
+    - task_type: discovery
+      mode: background
+      reason: "Fast, no decisions needed"
+    - task_type: implementation
+      mode: inline
+      reason: "User visibility, course-correct capability"
+    - task_type: testing
+      mode: background
+      reason: "Deterministic, no decisions"
+    - task_type: documentation
+      mode: inline
+      reason: "Needs user approval"
 core_skills:
   always:
     - /git
@@ -81,17 +97,18 @@ source:
 author: TheVoidSyntax
 ---
 
-# AUTO-ROUTER v7.0
+# AUTO-ROUTER v8.0
 
 Smart Project Intelligence Tool with Auto-Invoke
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│  🚀 AUTO-ROUTER v7.0                                           │
+│  🚀 AUTO-ROUTER v8.0                                           │
 │  Smart Project Intelligence                                      │
 │  ✅ Auto-Invoke Core Skills                                    │
 │  ✅ Tech-Based Recommendations                                  │
 │  ✅ Phase-Aware Selection                                       │
+│  ✅ Workflow Execution Modes (Inline/Background)                │
 └──────────────────────────────────────────────────────────────────┘
 ```
 
@@ -159,10 +176,10 @@ Smart Project Intelligence Tool with Auto-Invoke
 ┌─────────────────────────────────────────────────────────────────────┐
 │  PHASE 5: AUTO-INVOKE PHASE-BASED SKILLS                           │
 │  ┌──────────────────────────────────────────────────────────────┐   │
-│  │ From CLAUDE.md - Current Phase: 9                          │   │
-│  │ ✅ /ui-ux-pro-max   (Phase 9 - UI/UX focus)                │   │
-│  │ ✅ /api-design      (Phase 9 - Products API)                │   │
-│  │ ✅ /database        (Phase 9 - Products DB)                 │   │
+│  │ From CLAUDE.md - Current Phase: 13                             │   │
+│  │ ✅ /ui-ux-pro-max   (Phase 13 - PWA UI)                    │   │
+│  │ ✅ /performance      (Phase 13 - Bundle optimization)         │   │
+│  │ ✅ /browser-use     (Phase 13 - PWA testing)               │   │
 │  └──────────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────────┘
                                  │
@@ -266,7 +283,6 @@ Smart Project Intelligence Tool with Auto-Invoke
 ---
 
 **Total: 26 CORE SKILLS** - All auto-invoked when `/auto-router` is called.
-| `/ui-ux-pro-max` | Frontend Best Practices | ⚠️ SPA detected |
 
 ---
 
@@ -328,19 +344,28 @@ const PHASE_SKILLS: Record<string, string[]> = {
 };
 ```
 
-### Phase 9 Example (VentroPos - Product Management)
+### Phase Example (Settings & PWA)
 
 ```yaml
-Current Phase: 9
-Phase Focus: Products CRUD, Categories, Modifiers
-Tech Stack: Fastify + PostgreSQL + React
+Current Phase: settings
+Phase Focus: Settings & Config
+Tech Stack: Fastify + PostgreSQL + React + PWA
 
 Auto-Invoke:
   Core: /git, /code-quality, /config, /logging, /testing, /mem-search
-  Tech: /typescript-pro, /api-design, /database, /ui-ux-pro-max
-  Phase: /api-design (Products API), /database (Products DB)
-  Recommended: /performance, /ui-ux-pro-max
+  Tech: /typescript-pro, /api-design, /database, /ui-ux-pro-max, /security
+  Phase: /config, /security, /api-design (Settings)
+        /ui-ux-pro-max, /performance, /browser-use (PWA)
+  Docker-based: /docker, /ci-cd, /deployment
 ```
+
+### Skills to Recommend
+
+| Skill | Reason | Score |
+|-------|--------|-------|
+| `/docker` | PWA needs Docker deployment | 40 |
+| `/ci-cd` | Automation for build & test | 35 |
+| `/browser-use` | PWA testing automation | 30 |
 
 ---
 
@@ -429,48 +454,121 @@ STEP 6: Show Dashboard
 
 ---
 
-## 📊 AUTO-INVOKE EXAMPLE: VentroPos Phase 9
+## 📊 AUTO-INVOKE EXAMPLES
 
-### Project Detection
+### Example 1: New Project (`/autor --new`)
 
 ```
-Detected:
-  ├── Language: Node.js + TypeScript
-  ├── Framework: Fastify
-  ├── Database: PostgreSQL
-  ├── Frontend: React + Vite
-  ├── Architecture: DDD-Lite
-  └── Current Phase: 9 (Product Management)
+╔══════════════════════════════════════════════════════════════════════════╗
+║  🚀 AUTO-ROUTER v8.0 ✨ NEW PROJECT MODE                         ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  Project Type: REST API Backend                                        ║
+║  Tech Stack: Node.js + TypeScript + Fastify + PostgreSQL               ║
+║  Scale: Startup (balanced)                                             ║
+║                                                                          ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║  ✅ AUTO-INVOKED (12 skills)                                      ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║  CORE (7)                    │ TECH-BASED (5)                     ║
+║  ───────────────────        │ ─────────────────                   ║
+║  ✅ /git                     │ ✅ /typescript-pro                   ║
+║  ✅ /code-quality            │ ✅ /api-design                      ║
+║  ✅ /config                  │ ✅ /database                        ║
+║  ✅ /logging                 │ ✅ /security                        ║
+║  ✅ /testing                 │ ✅ /domain-modeling                 ║
+║  ✅ /tdd                     │                                   ║
+║  ✅ /mem-search              │                                   ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║  ⭐ RECOMMENDED (3 skills)                                          ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║  [ ] /docker           ████████████░░░░░░░░░░░  40%  MED          ║
+║  [ ] /ci-cd           █████████░░░░░░░░░░░░░░░░  35%  MED          ║
+║  [ ] /performance     ████████░░░░░░░░░░░░░░░░░  30%  LOW          ║
+╚══════════════════════════════════════════════════════════════════════════╝
 ```
 
-### Skills to Auto-Invoke
+### Example 2: Existing Project Analysis (`/autor`)
 
-| Category | Skill | Reason | Score |
-|----------|-------|--------|-------|
-| **Core** | `/git` | Always | 50 |
-| **Core** | `/code-quality` | Always | 50 |
-| **Core** | `/config` | Always | 50 |
-| **Core** | `/logging` | Always | 50 |
-| **Core** | `/testing` | Always | 50 |
-| **Core** | `/tdd` | Always | 50 |
-| **Core** | `/mem-search` | Always | 50 |
-| **Tech** | `/typescript-pro` | TypeScript | 75 |
-| **Tech** | `/api-design` | Fastify | 75 |
-| **Tech** | `/database` | PostgreSQL | 75 |
-| **Tech** | `/ui-ux-pro-max` | React | 75 |
-| **Tech** | `/security` | Backend API | 70 |
-| **Tech** | `/domain-modeling` | DDD Pattern | 70 |
-| **Phase** | `/api-design` | Phase 9 deliverable | 80 |
-| **Phase** | `/database` | Phase 9 deliverable | 80 |
-| **Phase** | `/ui-ux-pro-max` | Phase 9 deliverable | 80 |
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  🚀 AUTO-ROUTER v8.0 ✨ PROJECT ANALYSIS                         ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  Project: e-commerce-api              Phase: features                ║
+║  Location: /workspace/e-commerce-api                                ║
+║                                                                          ║
+║  TECH STACK DETECTED:                                                ║
+║  ├── Language:      Python 3.11 ✅                                 ║
+║  ├── Framework:     FastAPI 0.104 ✅                                ║
+║  ├── Database:      PostgreSQL 15 ✅                                ║
+║  ├── ORM:          SQLAlchemy 2.0                                  ║
+║  ├── DevOps:       Docker ✅                                        ║
+║  └── Architecture:  DDD-Lite                                        ║
+║                                                                          ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║  ✅ AUTO-INVOKED (11 skills)                                      ║
+║                                                                          ║
+║  CORE (7)                    │ TECH-BASED (4)                     ║
+║  ───────────────────        │ ─────────────────                   ║
+║  ✅ /git                     │ ✅ /python-pro                     ║
+║  ✅ /code-quality            │ ✅ /api-design                     ║
+║  ✅ /config                  │ ✅ /database                       ║
+║  ✅ /logging                 │ ✅ /security                       ║
+║  ✅ /testing                 │                                   ║
+║  ✅ /tdd                     │                                   ║
+║  ✅ /mem-search              │                                   ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║  PHASE (features)          │ RECOMMENDED                       ║
+║  ───────────────          │ ────────────                       ║
+║  ✅ /ui-ux-pro-max         │ /performance (45%)                 ║
+║  ✅ /performance           │ /docker (40%)                     ║
+║                            │ /ci-cd (35%)                       ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║  WHAT'S NEXT?                                                           ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  [A] Continue with features phase (recommended)                      ║
+║  [B] Review backend API endpoints (/api-design)                     ║
+║  [C] Start frontend integration (/ui-ux-pro-max)                   ║
+║  [D] Performance optimization (/performance)                         ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
 
-### Skills to Recommend
+### Example 3: Tech Stack Detection (`/autor --analyze`)
 
-| Skill | Reason | Score |
-|-------|--------|-------|
-| `/performance` | Bundle optimization | 45 |
-| `/ui-ux-pro-max` | React patterns | 40 |
-| `/docker` | Deployment ready | 35 |
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║  📊 TECH STACK ANALYSIS                                           ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  Scanning: /workspace/my-project                                    ║
+║  Files scanned: 847 | Languages: 4 | Frameworks: 3                  ║
+║                                                                          ║
+║  DETECTED:                                                          ║
+║  ┌─────────────────────────────────────────────────────────────┐   ║
+║  │  LANGUAGES        FRAMEWORKS           DATABASES           │   ║
+║  │  ───────────────  ─────────────────  ────────────────      │   ║
+║  │  TypeScript 45%   React 30%           PostgreSQL 60%      │   ║
+║  │  Python 35%       Next.js 25%         Redis 25%          │   ║
+║  │  Go 15%           Fastify 20%        MongoDB 15%         │   ║
+║  │  Shell 5%         Prisma 15%                            │   ║
+║  └─────────────────────────────────────────────────────────────┘   ║
+║                                                                          ║
+║  ARCHITECTURE PATTERNS:                                              ║
+║  ├── DDD-Lite (domain/application/infrastructure layers)             ║
+║  ├── Repository Pattern (data access abstraction)                    ║
+║  └── Service Layer (business logic isolation)                        ║
+║                                                                          ║
+║  RECOMMENDED SKILL FOCUS:                                            ║
+║  ├── /typescript-pro (primary language)                              ║
+║  ├── /api-design (Fastify + Next.js API routes)                     ║
+║  ├── /database (PostgreSQL + Prisma)                                ║
+║  └── /ui-ux-pro-max (React/Next.js)                                 ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
 
 ---
 
@@ -486,6 +584,9 @@ Options:
   --skip-core        Skip auto-invoke core skills
   --tech-only        Invoke tech-based skills only
   --phase-only       Invoke phase-based skills only
+  --inline           Force inline execution (recommended for implementation)
+  --background       Force background execution (for fast discovery)
+  --hybrid           Use hybrid mode (default: discovery=bg, impl=inline)
   --verbose          Show detailed invocation
   --quiet            Minimal output
 ```
@@ -502,10 +603,11 @@ Options:
 | TypeScript | `/typescript-pro` |
 | Fastify | `/api-design`, `/performance` |
 | PostgreSQL | `/database`, `/postgresql-pro` |
-| React | `/ui-ux-pro-max`, `/ui-ux-pro-max`, `/performance` |
+| React | `/ui-ux-pro-max`, `/performance` |
 | Docker | `/docker`, `/ci-cd`, `/deployment` |
 | DDD Pattern | `/domain-modeling`, `/architecture-patterns` |
-| Phase 9 | `/api-design`, `/database`, `/ui-ux-pro-max` |
+| Phase 12 | `/config`, `/security`, `/api-design` |
+| Phase 13 | `/ui-ux-pro-max`, `/performance`, `/browser-use` |
 
 ---
 
@@ -517,7 +619,7 @@ Options:
 ╔══════════════════════════════════════════════════════════════════════════╗
 ║  🚀 AUTO-ROUTER v7.0 ✨ AUTO-INVOKE ENABLED                      ║
 ╠══════════════════════════════════════════════════════════════════════════╣
-║  Project: VentroPos                    Phase: 9                      ║
+║  Project: VentroPos                    Phase: 12-13                      ║
 ║  Tech: Fastify + PostgreSQL + React                                   ║
 ╠══════════════════════════════════════════════════════════════════════════╣
 ║  ✅ AUTO-INVOKED (14 skills)                                        ║
@@ -535,10 +637,95 @@ Options:
 ║  ⭐ RECOMMENDED (3 skills)                                          ║
 ╠══════════════════════════════════════════════════════════════════════════╣
 ║  [ ] /performance       ████████████░░░░░░░░░░  45%  MED           ║
-║  [ ] /frontend          ████████░░░░░░░░░░░░░░░  40%  MED           ║
+║  [-] /frontend (N/A)          ████████░░░░░░░░░░░░░░░  40%  MED           ║
 ║  [ ] /docker            ███████░░░░░░░░░░░░░░░░░  35%  LOW           ║
 ╚══════════════════════════════════════════════════════════════════════════╝
 ```
+
+---
+
+## ⚡ WORKFLOW EXECUTION MODES
+
+### Background vs Foreground Decision Matrix
+
+| Task Type | Mode | Reason | Example |
+|-----------|------|--------|---------|
+| Discovery/Analysis | Background | Fast, no decisions needed | Read files, analyze patterns |
+| Implementation | **Inline** | User visibility, course-correct | Create entities, routes, pages |
+| Testing/Automation | Background | Deterministic, no decisions | Run lint, test, tsc |
+| Documentation | **Inline** | Needs approval | Update README, API docs |
+| Complex Refactoring | Hybrid | Inline planning, bg execution | Multi-file changes |
+
+### Why Inline for Implementation?
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  BACKGROUND WORKFLOW (Hidden)                                    │
+├─────────────────────────────────────────────────────────────────┤
+│  ❌ Black box - user tidak tahu apa yang dibuat                │
+│  ❌ No visibility - tidak bisa koreksi mid-work                │
+│  ❌ "Trust me bro" - tidak ada bukti                          │
+│  ❌ Error baru ketahuan setelah selesai                         │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  INLINE WORKFLOW (Visible)                                      │
+├─────────────────────────────────────────────────────────────────┤
+│  ✅ User lihat setiap file yang dibuat                          │
+│  ✅ Bisa koreksi langsung kalau salah                          │
+│  ✅ Progress terlihat nyata                                      │
+│  ✅ Error langsung surfaced, langsung fix                        │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Hybrid Pattern (Recommended for Phase Work)
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  HYBRID PHASE IMPLEMENTATION                                    │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  1. DISCOVERY (Background - fast)                              │
+│     └── Read specs, analyze patterns                            │
+│                                                                  │
+│  2. IMPLEMENTATION (Inline - visible)                          │
+│     ├── Create entities → User sees files                       │
+│     ├── Create repositories → User sees files                    │
+│     ├── Create use cases → User sees files                      │
+│     ├── Create routes → User sees files                         │
+│     └── Create frontend → User sees files                        │
+│                                                                  │
+│  3. TESTING (Background - automated)                            │
+│     └── Run lint, test, tsc                                    │
+│                                                                  │
+│  4. DOCUMENTATION (Inline - approval)                           │
+│     └── Update README → User approves                           │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Visibility Best Practices
+
+1. **log() calls** → Always visible in chat
+2. **Phase transitions** → Highlighted in output
+3. **File creations** → Reported immediately
+4. **Errors** → Surfaced immediately, not hidden
+5. **User approval points** → Before destructive actions
+
+### When to Use Background
+
+- Fast file reads (Read, Glob, Grep)
+- Parallel analysis (multiple agents, same task)
+- Deterministic testing (lint, test, build)
+- No user decision needed
+
+### When to Use Inline
+
+- File creation (entities, components, pages)
+- Code modifications
+- Documentation updates
+- User approval needed
+- Course correction likely
 
 ---
 
@@ -548,7 +735,66 @@ Options:
 |------|---------|
 | `ARCHITECTURE.md` | Full architecture specification |
 | `detector.md` | Project detection logic |
-| `TEST_GUIDE.md` | Testing guide |
+| `TEST_GUIDE.md` | Testing guide for auto-router validation |
+| `cli.ts` | Executable CLI implementation |
+| `registry.md` | Skill registry management |
+
+---
+
+## ✅ TESTING & VALIDATION
+
+### Test Coverage Areas
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│  AUTO-ROUTER TEST COVERAGE                                        │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  1. ⭐ TECH STACK DETECTION                                        │
+│     ├── Language detection (TypeScript, Python, Go, Rust)          │
+│     ├── Framework detection (React, Fastify, Django, dll.)         │
+│     ├── Database detection (PostgreSQL, MongoDB, Redis)            │
+│     └── DevOps detection (Docker, Kubernetes, Serverless)            │
+│                                                                      │
+│  2. ⭐ SKILL SELECTION                                             │
+│     ├── Core skills auto-invoke (7 always-on)                      │
+│     ├── Tech-based skills match (language/framework)                 │
+│     ├── Phase-based skills (project lifecycle)                      │
+│     └── Scoring algorithm correctness                               │
+│                                                                      │
+│  3. ⭐ PHASE DETECTION                                             │
+│     ├── CLAUDE.md parsing                                           │
+│     ├── Phase mapping to skills                                     │
+│     └── Scale detection (MVP/Startup/Enterprise)                    │
+│                                                                      │
+│  4. ⭐ OUTPUT FORMAT                                               │
+│     ├── Dashboard rendering                                         │
+│     ├── Skills list accuracy                                        │
+│     └── Recommendations scoring                                    │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### Run Tests
+
+```bash
+cd _system/auto-router
+npm test
+npm run test:coverage    # with coverage report
+```
+
+### Validation Checklist
+
+```
+BEFORE PUBLISHING:
+├── [ ] All unit tests pass
+├── [ ] Coverage > 80%
+├── [ ] Tech stack detection works for all documented languages
+├── [ ] Skill selection matches documented matrix
+├── [ ] Phase detection parses CLAUDE.md correctly
+├── [ ] Output format renders correctly
+└── [ ] Manual testing in real project
+```
 
 ---
 
@@ -564,5 +810,5 @@ Options:
 
 ---
 
-*Version: 7.0.0 | Author: TheVoidSyntax*
-*Features: Auto-Invoke Core Skills | Tech-Based Recommendations | Phase-Aware Selection*
+*Version: 8.1.0 | Author: TheVoidSyntax*
+*Features: Auto-Invoke Core Skills | Tech-Based Recommendations | Phase-Aware Selection | Workflow Execution Modes | Active Examples | Test Coverage*

@@ -1,6 +1,57 @@
 ---
 name: audit
-description: "Deep full codebase audit with multi-pass parallel review and adversarial verification. Uses inline agent execution (NOT background) with real-time progress display in chat. Use when user says 'audit', 'full review', 'deep scan', or wants comprehensive code analysis without PR/diff context."
+version: "1.0.0"
+description: "Deep full codebase audit with multi-pass parallel review and adversarial verification. Scan phases run in background; fixing phase runs inline with real-time progress. Use when user says 'audit', 'full review', 'deep scan', or wants comprehensive code analysis without PR/diff context."
+priority: critical
+phase: any
+category: [process, quality]
+tech_stack:
+  languages: [all]
+scale: [all]
+auto_invoke:
+  enabled: true
+  conditions:
+    - command: ["/audit", "/full-audit", "/deep-scan", "/comprehensive-review", "/audit-all"]
+      reason: "Primary audit commands - triggers multi-pass codebase analysis"
+execution_mode:
+  default: hybrid
+  rules:
+    - task_type: discovery
+      mode: background
+      reason: "Fast parallel scanning, no decisions needed"
+    - task_type: analysis
+      mode: background
+      reason: "Deep analysis, deterministic patterns"
+    - task_type: verification
+      mode: background
+      reason: "Adversarial checks, no user input"
+    - task_type: fix
+      mode: inline
+      reason: "User visibility and course-correct capability"
+    - task_type: documentation
+      mode: inline
+      reason: "Needs user approval"
+core_skills:
+  always:
+    - /security
+    - /code-quality
+    - /testing
+integrates_with:
+  - workflow-authoring
+  - code-quality
+capabilities:
+  - discovery
+  - analysis
+  - verification
+  - remediation
+quality:
+  rules_count: 45
+  phases_count: 7
+  agents_per_scan: 15
+  stability: stable
+source:
+  origin: local
+author: TheVoidSyntax
 ---
 
 # /audit — Deep Full Codebase Audit (Enhanced)
@@ -11,16 +62,36 @@ Comprehensive two-pass audit with parallel agents, cross-reference verification,
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                           /audit  (INLINE MODE)                         │
+│                           /audit  WORKFLOW                               │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                          │
-│  ALL phases execute INLINE in chat with REAL-TIME progress updates       │
-│  NO background execution unless explicitly requested                      │
+│  SCAN PHASES (1-6):     BACKGROUND — parallel agents, not blocking       │
+│  USER DECISION:        INLINE    — interactive picker in chat            │
+│  FIXING PHASE (7):     INLINE    — real-time progress, mandatory inline │
 │                                                                          │
-│  Progress display:                                                       │
-│  [■] Phase 1: Scout → [░░░░░░░░░] 0%                                  │
-│  [■] Phase 2: Surface Scan → [░░░░░░░░░] 0%                           │
-│  ...                                                                     │
+│  Progress display (when scan completes):                                 │
+│  [✓] Audit Complete — 34 findings ready                                 │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+## Scan Phases (1-6): Background Execution
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      BACKGROUND SCAN                                    │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  Phases 1-6 run in BACKGROUND — user can do other tasks                 │
+│  Notification when complete: "Audit Complete — 34 findings ready"       │
+│                                                                          │
+│  Phase 1: Scout           → 1 agent                                     │
+│  Phase 2: Surface Scan    → 6 agents parallel                          │
+│  Phase 3: Deep Analysis   → 6 agents parallel                          │
+│  Phase 3.5: Cross-Ref     → 1 agent                                     │
+│  Phase 4: Correlate       → 1 agent                                     │
+│  Phase 5: Verify          → N agents (severity-based)                  │
+│  Phase 6: Synthesize      → 1 agent                                     │
 │                                                                          │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
@@ -670,6 +741,23 @@ After presenting the full report:
 ╚════════════════════════════════════════════════════════════════════╝
 ```
 
+## Fix Execution (Phase 7): Inline
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      FIXING PHASE — INLINE                              │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ⚠️  MANDATORY: run_in_background: false for ALL fix agents             │
+│                                                                          │
+│  When user selects Fix All / Fix High+ / Fix Some:                      │
+│  ├── Spawn agents with: run_in_background: false                         │
+│  ├── Display each fix in real-time as it applies                       │
+│  └── Show progress: [✓] Fixed 3/34 → [░░░░░░░░░░] 8%                   │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
 ### Fix Options
 
 | Option | Behavior |
@@ -711,6 +799,8 @@ After presenting the full report:
 ```
 
 ### Post-Fix Summary
+
+**CRITICAL: All fixes execute INLINE with real-time progress display**
 
 ```
 ╔════════════════════════════════════════════════════════════════════╗
@@ -762,6 +852,9 @@ The skill should work across languages but use language-specific tools when avai
 - Go: go vet, golangci-lint
 
 ---
+
+*Version: 1.0.0 | Author: TheVoidSyntax*
+*Features: Multi-Pass Scan | Adversarial Verification | Inline Fixing | Pattern Grouping*
 
 **Invoke:** `/audit` | **Priority:** CRITICAL (Core)
 
