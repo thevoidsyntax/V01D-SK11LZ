@@ -1,6 +1,6 @@
 ---
 name: auto-router
-version: "8.5.0"
+version: "8.6.0"
 description: "Smart skill recommendations based on your project. Detects tech stack, auto-invokes relevant skills."
 when_to_use: "Run when starting a project, analyzing existing codebase, or needing skill recommendations."
 priority: critical
@@ -32,7 +32,7 @@ capabilities:
 author: TheVoidSyntax
 ---
 
-# AUTO-ROUTER v8.5
+# AUTO-ROUTER v8.6
 
 Smart skill recommendations for your project.
 
@@ -82,8 +82,8 @@ Smart skill recommendations for your project.
 | Python | /python-pro | Django, FastAPI patterns |
 | Go | /go-pro | Gin, Echo patterns |
 | Rust | /rust-pro | Ownership, async patterns |
-| Java | /api-design | Use /api-design for patterns |
-| C# | /api-design | Use /api-design for patterns |
+| Java | /java-pro | Spring Boot patterns (NEW) |
+| C# | /dotnet-pro | .NET Core patterns (NEW) |
 
 ### Backend Skills (Auto-detected)
 
@@ -93,7 +93,16 @@ Smart skill recommendations for your project.
 | NestJS | /nestjs-expert |
 | Django, FastAPI | /api-design /python-pro |
 | Gin, Echo | /api-design /go-pro |
-| Spring Boot | /api-design |
+| Spring Boot | /java-pro |
+| ASP.NET Core | /dotnet-pro |
+
+### Quality & Observability
+
+| Category | Skills |
+|----------|--------|
+| Tech Debt | /tech-debt |
+| Error Tracking | /error-tracking |
+| Observability | /observability |
 
 ### Database Skills (Auto-detected)
 
@@ -217,11 +226,12 @@ Skills Auto-Invoked:
 | Category | Skills |
 |----------|--------|
 | Core | /git, /code quality, /config, /logging, /testing, /tdd, /mem-search |
-| Languages | /typescript-pro, /python-pro, /go-pro, /rust-pro |
+| Languages | /typescript-pro, /python-pro, /go-pro, /rust-pro, /java-pro, /dotnet-pro |
 | Backend | /api-design, /nestjs-expert |
 | Database | /database, /postgresql-pro, /scalability |
-| Security | /security |
+| Security | /security, /error-tracking |
 | DevOps | /docker, /ci-cd, /kubernetes, /observability, /reliability |
+| Quality | /tech-debt |
 
 ---
 
