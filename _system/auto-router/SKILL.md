@@ -32,7 +32,7 @@ capabilities:
 author: TheVoidSyntax
 ---
 
-# AUTO-ROUTER v8.8
+# AUTO-ROUTER v8.9
 
 Smart skill recommendations for your project.
 
@@ -101,6 +101,17 @@ Smart skill recommendations for your project.
 |-------|-------|-------|
 | Bundle optimization | /performance-ui | Web Vitals, code splitting |
 | UI/UX | /ui-ux-pro-max | Design intelligence |
+
+### Integration Skills
+
+| Focus | Skill | Notes |
+|-------|-------|-------|
+| Full-stack | /fullstack-patterns | API contracts, data flow |
+| API contracts | /api-contracts | OpenAPI, contract testing |
+| Data fetching | /data-fetch | TanStack Query, SWR |
+| Real-time | /realtime | WebSocket, SSE |
+| Auth flows | /auth-flows | JWT, OAuth patterns |
+| Integration testing | /testing-integration | MSW, Playwright |
 
 ### Backend Skills (Auto-detected)
 
