@@ -1,6 +1,6 @@
 ---
 name: auto-router
-version: "8.7.0"
+version: "8.8.0"
 description: "Smart skill recommendations based on your project. Detects tech stack, auto-invokes relevant skills."
 when_to_use: "Run when starting a project, analyzing existing codebase, or needing skill recommendations."
 priority: critical
@@ -32,7 +32,7 @@ capabilities:
 author: TheVoidSyntax
 ---
 
-# AUTO-ROUTER v8.7
+# AUTO-ROUTER v8.8
 
 Smart skill recommendations for your project.
 
@@ -84,6 +84,23 @@ Smart skill recommendations for your project.
 | Rust | /rust-pro | Ownership, async patterns |
 | Java | /java-pro | Spring Boot patterns (NEW) |
 | C# | /dotnet-pro | .NET Core patterns (NEW) |
+
+### Frontend Framework Skills
+
+| Framework | Skills | Notes |
+|-----------|--------|-------|
+| React | /react-pro, /ui-ux-pro-max | Hooks, state, components |
+| Next.js | /nextjs-pro, /react-pro | App Router, SSR patterns |
+| Vue | /ui-ux-pro-max | Vue patterns |
+| Svelte | /ui-ux-pro-max | Svelte patterns |
+| Generic UI | /ui-ux-pro-max | Design intelligence |
+
+### Performance Skills
+
+| Focus | Skill | Notes |
+|-------|-------|-------|
+| Bundle optimization | /performance-ui | Web Vitals, code splitting |
+| UI/UX | /ui-ux-pro-max | Design intelligence |
 
 ### Backend Skills (Auto-detected)
 
