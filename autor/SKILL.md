@@ -1,6 +1,6 @@
 ---
 name: auto-router
-version: "8.6.0"
+version: "8.7.0"
 description: "Smart skill recommendations based on your project. Detects tech stack, auto-invokes relevant skills."
 when_to_use: "Run when starting a project, analyzing existing codebase, or needing skill recommendations."
 priority: critical
@@ -32,7 +32,7 @@ capabilities:
 author: TheVoidSyntax
 ---
 
-# AUTO-ROUTER v8.6
+# AUTO-ROUTER v8.7
 
 Smart skill recommendations for your project.
 
@@ -109,9 +109,10 @@ Smart skill recommendations for your project.
 | Tech Detected | Skills |
 |---------------|--------|
 | PostgreSQL | /database /postgresql-pro |
-| MySQL | /database |
-| MongoDB | /database |
-| Redis | /scalability |
+| MySQL | /database /mysql-pro |
+| MongoDB | /mongodb-pro |
+| Redis | /redis-pro |
+| Migration | /database-migration |
 
 ### Phase-Based Skills
 
