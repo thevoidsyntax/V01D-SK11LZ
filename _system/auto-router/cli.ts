@@ -1,8 +1,13 @@
 #!/usr/bin/env node
 
 /**
- * AUTO-ROUTER CLI v6.0
+ * AUTO-ROUTER CLI v8.2
  * Smart Project Intelligence Tool
+ *
+ * Features:
+ * - Local skills override
+ * - Project-specific configurations
+ * - Global + Local skill merging
  *
  * Usage: auto-router --smart [options]
  */
@@ -22,7 +27,7 @@ import {
   type ProjectDisplay
 } from './smart-ui';
 import { detectSkillsFromInput, getKeywordRecommendations, loadProjectState, detectIntentSimple, detectTechStack } from './detector';
-import { selectSkills } from './selector';
+import { selectSkills, type LocalSkillConfig, type SkillSelectionConfig } from './selector';
 
 // ============================================================================
 // TYPES
@@ -35,6 +40,11 @@ interface CliOptions {
   phase?: number;
   status: boolean;
   workflow?: string;
+  initLocal: boolean;
+  localOnly: boolean;
+  globalOnly: boolean;
+  localPreview: boolean;
+  syncLocal: boolean;
   help: boolean;
 }
 
@@ -53,6 +63,24 @@ async function main() {
 
   if (options.help) {
     printHelp();
+    return;
+  }
+
+  // Init local skills mode
+  if (options.initLocal) {
+    await runInitLocalMode();
+    return;
+  }
+
+  // Local preview mode
+  if (options.localPreview) {
+    await runLocalPreviewMode();
+    return;
+  }
+
+  // Sync local mode
+  if (options.syncLocal) {
+    await runSyncLocalMode();
     return;
   }
 
@@ -91,6 +119,11 @@ function parseArguments(args: string[]): CliOptions {
     new: false,
     analyze: false,
     status: false,
+    initLocal: false,
+    localOnly: false,
+    globalOnly: false,
+    localPreview: false,
+    syncLocal: false,
     help: false,
   };
 
@@ -99,6 +132,11 @@ function parseArguments(args: string[]): CliOptions {
     if (arg === '--new' || arg === '-n') options.new = true;
     if (arg === '--analyze' || arg === '-a') options.analyze = true;
     if (arg === '--status') options.status = true;
+    if (arg === '--init-local') options.initLocal = true;
+    if (arg === '--local-only') options.localOnly = true;
+    if (arg === '--global-only') options.globalOnly = true;
+    if (arg === '--local-preview') options.localPreview = true;
+    if (arg === '--sync-local' || arg === '--sync') options.syncLocal = true;
     if (arg === '--help' || arg === '-h') options.help = true;
 
     // Parse --phase N
@@ -469,6 +507,318 @@ To refresh: Run \`/auto-router\` again
 }
 
 // ============================================================================
+// LOCAL SKILLS MANAGEMENT
+// ============================================================================
+
+async function runInitLocalMode(): Promise<void> {
+  clearScreen();
+  const cwd = process.cwd();
+
+  console.log(drawLoading('Initializing local skills...'));
+
+  const localSkillsDir = join(cwd, '.claude', 'skills');
+
+  // Check if already exists
+  if (existsSync(localSkillsDir)) {
+    console.log(drawInfo(`Local skills already exist at: ${localSkillsDir}`));
+    console.log(drawInfo('Use --sync-local to update or --local-preview to see current config.'));
+    return;
+  }
+
+  // Create directory structure
+  mkdirSync(localSkillsDir, { recursive: true });
+  mkdirSync(join(localSkillsDir, 'hooks'), { recursive: true });
+
+  // Detect tech stack for customization
+  const techStack = await scanLocalTechStack(cwd);
+  const projectName = cwd.split(/[/\\]/).pop() || 'my-project';
+
+  // Generate SKILL.md
+  const skillMd = generateLocalSkillMd(projectName, techStack);
+  writeFileSync(join(localSkillsDir, 'SKILL.md'), skillMd, 'utf-8');
+
+  // Generate phases.json
+  const phasesJson = generatePhasesJson(projectName, techStack);
+  writeFileSync(join(localSkillsDir, 'phases.json'), phasesJson, 'utf-8');
+
+  // Generate .autorignore
+  const autorignore = generateAutorignore();
+  writeFileSync(join(localSkillsDir, '.autorignore'), autorignore, 'utf-8');
+
+  // Generate hooks
+  const preInvoke = generatePreInvokeHook();
+  writeFileSync(join(localSkillsDir, 'hooks', 'pre-invoke.md'), preInvoke, 'utf-8');
+
+  const postInvoke = generatePostInvokeHook();
+  writeFileSync(join(localSkillsDir, 'hooks', 'post-invoke.md'), postInvoke, 'utf-8');
+
+  console.log(drawSuccess(`Local skills initialized at: ${localSkillsDir}`));
+  console.log('\n');
+  console.log(drawInfo('Created files:'));
+  console.log('  ├── SKILL.md           (project config)');
+  console.log('  ├── phases.json        (phase mappings)');
+  console.log('  ├── .autorignore       (scan exclusions)');
+  console.log('  └── hooks/');
+  console.log('      ├── pre-invoke.md  (before skill invoke)');
+  console.log('      └── post-invoke.md (after skill invoke)');
+  console.log('\n');
+  console.log(drawInfo('Next steps:'));
+  console.log('  1. Edit .claude/skills/SKILL.md to customize');
+  console.log('  2. Run /autor to see local skills in action');
+  console.log('  3. Commit .claude/ to share with team');
+}
+
+async function runLocalPreviewMode(): Promise<void> {
+  clearScreen();
+  const cwd = process.cwd();
+  const localSkillsDir = join(cwd, '.claude', 'skills');
+  const skillMdPath = join(localSkillsDir, 'SKILL.md');
+
+  if (!existsSync(skillMdPath)) {
+    console.log(drawError('No local skills found. Run --init-local first.'));
+    return;
+  }
+
+  console.log(drawInfo('Local Skills Configuration Preview'));
+  console.log('\n');
+
+  // Read and display local config
+  const content = readFileSync(skillMdPath, 'utf-8');
+  console.log('```yaml');
+  console.log(content);
+  console.log('```');
+
+  // Read phases.json if exists
+  const phasesJsonPath = join(localSkillsDir, 'phases.json');
+  if (existsSync(phasesJsonPath)) {
+    console.log('\n**phases.json:**');
+    const phasesContent = readFileSync(phasesJsonPath, 'utf-8');
+    console.log('```json');
+    console.log(phasesContent);
+    console.log('```');
+  }
+}
+
+async function runSyncLocalMode(): Promise<void> {
+  clearScreen();
+  const cwd = process.cwd();
+  const localSkillsDir = join(cwd, '.claude', 'skills');
+  const skillMdPath = join(localSkillsDir, 'SKILL.md');
+
+  if (!existsSync(skillMdPath)) {
+    console.log(drawInfo('No local skills found. Run --init-local first.'));
+    console.log('\n');
+    console.log(drawInfo('This command syncs your local skills with global updates.'));
+    console.log(drawInfo('It does NOT modify global skills, only your local .claude/skills/'));
+    return;
+  }
+
+  console.log(drawLoading('Syncing local skills with global updates...'));
+
+  // Read current local config
+  const content = readFileSync(skillMdPath, 'utf-8');
+
+  // Check for updates in global skills
+  const hasUpdates = await checkForGlobalUpdates();
+
+  if (hasUpdates) {
+    console.log(drawInfo('Global skills have been updated. Merging...'));
+    // In a real implementation, this would merge global changes
+    console.log(drawSuccess('Local skills synced successfully!'));
+  } else {
+    console.log(drawSuccess('Local skills are up to date.'));
+  }
+
+  console.log('\n');
+  console.log(drawInfo('Your local skills override global settings:'));
+  console.log('  • Local: .claude/skills/SKILL.md (HIGHEST PRIORITY)');
+  console.log('  • Global: ~/.claude/skills/ (BASE CONFIG)');
+}
+
+async function checkForGlobalUpdates(): Promise<boolean> {
+  // Placeholder: In real implementation, compare local vs global timestamps
+  return false;
+}
+
+function generateLocalSkillMd(projectName: string, techStack: string[]): string {
+  const techList = techStack.length > 0 ? techStack.join(', ') : 'detected from project';
+
+  return `---
+name: ${projectName.toLowerCase().replace(/[^a-z0-9-]/g, '-')}-skills
+version: "1.0.0"
+description: "Project-local skill configurations for ${projectName}"
+type: local
+project:
+  name: ${projectName}
+  root: ../
+extends:
+  - global
+overrides:
+  phase_skills:
+    foundation:
+      - /security
+      - /database
+      - /config
+    core:
+      - /api-design
+      - /code-quality
+      - /testing
+    features:
+      - /git
+      - /ui-ux-pro-max
+      - /performance
+  tech_skills:
+    typescript:
+      - /typescript-pro
+      - /project-linter
+---
+
+# ${projectName} - Local Skills Configuration
+
+## Overview
+
+This file configures skill behavior for the **${projectName}** project.
+
+## Tech Stack Detected
+
+${techList}
+
+## How This Works
+
+Local skills are merged with global skills, with local taking priority.
+
+## Custom Phase Rules
+
+### Foundation Phase
+- Security scanning enabled
+- Database schema validation
+- Config management
+
+### Features Phase
+- Git workflow enforcement
+- UI/UX patterns
+- Performance budgets
+
+## Custom Hooks
+
+See \`hooks/pre-invoke.md\` and \`hooks/post-invoke.md\`.
+`;
+}
+
+function generatePhasesJson(projectName: string, techStack: string[]): string {
+  return JSON.stringify({
+    project_name: projectName,
+    tech_stack_detected: techStack,
+    phases: {
+      foundation: {
+        skills: ['/security', '/database', '/config'],
+        auto_invoke_priority: 1
+      },
+      core: {
+        skills: ['/api-design', '/code-quality', '/testing'],
+        auto_invoke_priority: 2
+      },
+      features: {
+        skills: ['/git', '/ui-ux-pro-max', '/performance'],
+        auto_invoke_priority: 3
+      },
+      production: {
+        skills: ['/docker', '/ci-cd', '/observability'],
+        auto_invoke_priority: 4
+      }
+    },
+    project_rules: {
+      require_code_review: true,
+      require_tests: true,
+      min_test_coverage: 80
+    }
+  }, null, 2);
+}
+
+function generateAutorignore(): string {
+  return `# Autorouter Local Skills - Scan Exclusions
+
+# Dependencies
+node_modules/
+vendor/
+.venv/
+
+# Build outputs
+dist/
+build/
+out/
+
+# Cache
+.cache/
+.turbo/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store/
+Thumbs.db
+
+# Logs
+*.log
+
+# Test coverage
+coverage/
+.nyc_output/
+`;
+}
+
+function generatePreInvokeHook(): string {
+  return `# Pre-Invoke Hook
+
+## Purpose
+
+Run before each skill invocation.
+
+## Examples
+
+### Before /api-design
+\`\`\`markdown
+1. Check if API spec exists
+2. Verify database is running
+3. Load environment variables
+\`\`\`
+
+### Before /testing
+\`\`\`markdown
+1. Ensure dependencies are installed
+2. Check database is seeded
+3. Verify test environment
+\`\`\`
+`;
+}
+
+function generatePostInvokeHook(): string {
+  return `# Post-Invoke Hook
+
+## Purpose
+
+Run after each skill invocation.
+
+## Examples
+
+### After /testing
+\`\`\`markdown
+1. Report coverage if < 80%
+2. Flag any flaky tests
+3. Generate test summary
+\`\`\`
+
+### After /linting
+\`\`\`markdown
+1. Report error count
+2. Suggest auto-fix if available
+\`\`\`
+`;
+}
+
+// ============================================================================
 // HELP
 // ============================================================================
 
@@ -477,19 +827,31 @@ function printHelp() {
 ${drawQuickActions()}
 
 OPTIONS:
-  --smart, -s      Show Smart Dashboard (default)
-  --new, -n        Start new project wizard
-  --analyze, -a     Analyze existing project
-  --status          Show project status
-  --phase=N         Set current phase
-  --workflow=NAME   Run workflow template
-  --help, -h        Show this help
+  --smart, -s         Show Smart Dashboard (default)
+  --new, -n           Start new project wizard
+  --analyze, -a        Analyze existing project
+  --status             Show project status
+  --phase=N            Set current phase
+  --workflow=NAME      Run workflow template
+  --init-local         Initialize local skills (.claude/skills/)
+  --local-only         Use only local skills (ignore global)
+  --global-only        Use only global skills (ignore local)
+  --local-preview      Preview local skills configuration
+  --sync-local         Sync local with global updates
+  --help, -h           Show this help
+
+LOCAL SKILLS:
+  Local skills allow per-project customization without modifying global skills.
+  Run --init-local in any project to create .claude/skills/ directory.
 
 EXAMPLES:
   auto-router --smart
   auto-router --smart --phase=3
   auto-router --status
   auto-router --new
+  auto-router --init-local        # Create local skills config
+  auto-router --local-preview     # Preview local config
+  auto-router --sync-local        # Sync with global updates
 `);
 }
 

@@ -81,6 +81,27 @@ export interface DependencyNode {
   loadOrder: number;
 }
 
+export interface LocalSkillConfig {
+  name: string;
+  version: string;
+  description: string;
+  type: 'local';
+  project: {
+    name: string;
+    root: string;
+  };
+  extends: string[];
+  overrides?: {
+    phase_skills?: Record<string, string[]>;
+    tech_skills?: Record<string, string[]>;
+    core_skills?: string[];
+  };
+}
+
+export interface SkillSelectionConfig extends DetectionContext {
+  localSkills?: LocalSkillConfig;
+}
+
 interface DetectionContext {
   projectPath: string;
   techStack: {
