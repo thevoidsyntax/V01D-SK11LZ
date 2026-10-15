@@ -25,15 +25,66 @@ git clone https://github.com/thevoidsyntax/my-skills.git ~/.claude/skills
 
 Skills activate automatically based on your project context:
 
+### Primary Commands (Memory Continuity)
+Every `/autor` command automatically invokes both `/autor` AND `/mem-search` to ensure project context continuity:
+
+| Command | Skills Invoked |
+|---------|---------------|
+| `/autor` | `/autor` + `/mem-search` |
+| `/autor new` | `/autor` + `/mem-search` |
+| `/autor scan` | `/autor` + `/mem-search` |
+
+### Layer 1: Always On (17 skills)
+Always loaded in memory for every project:
+
+| Skill | Description |
+|-------|-------------|
+| `/git` | Version control workflows, branching strategies |
+| `/config` | Environment variables, secrets, feature flags |
+| `/security` | OWASP, validation, CORS, input sanitization |
+| `/docker` | Multi-stage builds, security hardening |
+| `/ci-cd` | GitHub Actions, GitLab CI, deployment pipelines |
+| `/code-quality` | Code review, Fowler smells, static analysis |
+| `/testing` | Unit, integration, E2E, mutation, property-based |
+| `/tdd` | Test-driven development, red-green-refactor loop |
+| `/error-debugger` | Debug patterns, DX improvement |
+| `/logging` | Structured logging, correlation IDs |
+| `/observability` | Metrics, logs, traces, dashboards, alerts |
+| `/doc-generator` | Auto-documentation mindset |
+| `/mem-search` | Knowledge retrieval |
+| `/codebase-design` | Deep module vocabulary, clean seams |
+| `/domain-modeling` | Ubiquitous language, ADR, bounded context |
+| `/api-design` | REST patterns, error format, versioning |
+| `/anti-slop` | Token efficiency, concise output |
+
+### Layer 2: Auto-Detect (based on project type)
+Skills that auto-invoke when specific tech stack is detected:
+
 | Trigger | Skills |
 |---------|--------|
-| **Always-on** | `/git`, `/security`, `/testing`, `/tdd` |
-| `**/tests/**` | `/testing` |
+| `**/package.json` | `/react-pro`, `/nextjs-pro`, `/tailwindcss` |
+| `**/*.vue` | `/vue-pro` |
+| `**/*.svelte` | `/svelte-pro` |
+| `**/nuxt.config.*` | `/nuxt-pro` |
+| `**/go.mod` | `/go-pro`, `/api-design` |
+| `**/requirements.txt` | `/python-pro` |
+| `**/pom.xml` | `/java-pro` |
+| `**/*.csproj` | `/dotnet-pro` |
+| `**/schema.prisma` | `/prisma` |
 | `**/Dockerfile` | `/docker` |
 | `kubernetes/**` | `/kubernetes` |
 | `.github/workflows/**` | `/ci-cd` |
-| Express/Fastify/NestJS | `/api-design` |
-| React/Vue/Angular | `/ui-ux-pro-max` |
+| `**/*.graphql` | `/graphql` |
+
+### Memory & Continuity (Auto-invoke /mem-search)
+Automatically retrieves previous context when continuing work:
+
+| Trigger | Skills |
+|---------|--------|
+| `continue`, `lanjutkan` | `/mem-search` |
+| `remember`, `memori` | `/mem-search` |
+| `layer architecture` | `/mem-search` |
+| `existing project`, `project lama` | `/mem-search` |
 
 ---
 
@@ -244,10 +295,33 @@ Essential skills for every project:
 INPUT ──► /autor Router ──► Skill Selector ──► Active Skills
          │                      │
          ▼                      ▼
-    • Intent detection      • CORE_SKILLS (18)
-    • Tech stack scan     • Context-matched
-    • Pattern recognition • Dependencies resolved
-    • Scale estimation    • Priority ordered
+    • Intent detection      • LAYER 1: FOUNDATION (17 always-on)
+    • Tech stack scan      • LAYER 2: TECH STACK (auto-detect)
+    • Pattern recognition   • LAYER 3: REQUIREMENTS (user choice)
+    • Scale estimation
+```
+
+### Layer Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    THREE-LAYER SKILL SYSTEM                                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                                  │
+│  LAYER 1: FOUNDATION (17 skills - ALWAYS)                                   │
+│  └─ git, config, security, docker, ci-cd, code-quality, testing, tdd,    │
+│      error-debugger, logging, observability, doc-generator, mem-search,   │
+│      codebase-design, domain-modeling, api-design, anti-slop             │
+│                                                                                  │
+│  LAYER 2: TECH STACK (~24 skills - AUTO-DETECT)                            │
+│  └─ framework (react, vue, svelte, nuxt), language (python, go, java),   │
+│      database (postgresql, mysql, mongodb, redis), api-style (graphql,   │
+│      grpc), ui-styling (tailwindcss), mobile                                │
+│                                                                                  │
+│  LAYER 3: REQUIREMENTS (USER CHOICE)                                        │
+│  └─ auth, payments, ai/ml, form-handling, etc.                            │
+│                                                                                  │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -258,7 +332,9 @@ INPUT ──► /autor Router ──► Skill Selector ──► Active Skills
 |--------|-------|
 | **Total Skills** | 100+ |
 | **Auto-Invoke** | 50+ |
-| **Always-On Core** | 18 |
+| **Layer 1: Foundation** | 17 |
+| **Layer 2: Tech Stack** | ~24 |
+| **Layer 3: Requirements** | ~15 |
 | **Categories** | 15 |
 
 ---

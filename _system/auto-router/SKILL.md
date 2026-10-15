@@ -1,6 +1,6 @@
 ---
 name: auto-router
-version: "12.0.0"
+version: "14.0.0"
 description: "Smart skill recommendations with quality analysis, gap detection, health scoring, and actionable recommendations."
 when_to_use: "Run when starting a project, analyzing existing codebase, or needing comprehensive project intelligence."
 priority: critical
@@ -15,9 +15,10 @@ scale: [all]
 auto_invoke:
   enabled: true
   conditions:
-    # Primary commands
+    # Primary commands (always invoke mem-search for continuity)
     - command: ["/autor", "/ar", "/autor scan", "/autor status", "/autor analyze", "/autor help", "/autor new", "/autor init"]
-      reason: "Primary entry - comprehensive project analysis"
+      auto_invoke: /autor, /mem-search
+      reason: "Primary entry - invoke both autor and mem-search for project context continuity"
     
     # Helper Skills Auto-Invoke
     - pattern: ["error", "exception", "bug", "crash", "failed", "SyntaxError", "TypeError", "ReferenceError", "Cannot read", "undefined is not", "Type 'any'", "Property.*does not exist"]
@@ -178,7 +179,21 @@ auto_invoke:
     - pattern: ["new project", "start fresh", "from scratch", "blank", "empty project", "mulai project baru", "proyek baru", "start from zero"]
       auto_invoke: /autor
       reason: "New project intent detected - guiding empty project flow"
-      
+
+    # MEMORY & CONTINUITY (Auto-invoke mem-search)
+    - pattern: ["continue", "lanjutkan", "melanjutkan", "sebelumnya", "previous"]
+      auto_invoke: /mem-search
+      reason: "Continue intent detected - retrieving previous context"
+    - pattern: ["remember", "ingin", "memori", "memory", "yang lalu"]
+      auto_invoke: /mem-search
+      reason: "Memory retrieval intent detected"
+    - pattern: ["layer architecture", "skill ecosystem", "konfigurasi skill"]
+      auto_invoke: /mem-search
+      reason: "Skill configuration context detected - retrieving memory"
+    - pattern: ["project lama", "old project", "existing project", "proyek yang sudah ada"]
+      auto_invoke: /mem-search
+      reason: "Existing project context - retrieving project memory"
+
     # PROJECT TYPE GUIDANCE
     - pattern: ["web app", "website", "landing page", "portfolio", "blog"]
       auto_invoke: /autor
@@ -193,35 +208,94 @@ auto_invoke:
       auto_invoke: /developer-experience
       reason: "CLI pattern detected - invoking dev-experience"
 core_skills:
+  # ============================================================================
+  # LAYER 1: FOUNDATION (Always Active)
+  # Skills universal untuk semua project - selalu loaded di memory
+  # ============================================================================
   always:
-    - /git
-    - /code quality
-    - /config
-    - /logging
-    - /testing
-    - /tdd
-    - /mem-search
-  frontend:
-    - /react-pro
-    - /nextjs-pro
-    - /vue-pro
-    - /svelte-pro
-    - /tailwindcss
-  backend:
-    - /api-design
-    - /fastify-pro
-    - /nestjs-expert
+    # Version Control & Config
+    - /git                    # Version control - universal
+    - /config                # Environment variables, secrets management
+    - /security              # OWASP, validation, CORS, input sanitization
+    
+    # DevOps Foundation
+    - /docker                # Containerization - standard deployment
+    - /ci-cd                 # Automation pipelines - build → test → deploy
+    
+    # Quality Gates
+    - /code-quality          # Code review, refactoring, smells
+    - /testing               # Test strategy, coverage, test types
+    - /tdd                   # Test-first workflow - red-green-refactor
+    
+    # DX & Debugging
+    - /error-debugger        # Debug patterns - DX critical
+    
+    # Documentation & Knowledge
+    - /doc-generator         # Auto-documentation mindset
+    - /mem-search            # Knowledge retrieval - session continuity
+    
+    # Observability
+    - /logging               # Structured logging, correlation IDs
+    - /observability          # Metrics, logs, traces - 3 pillars
+    
+    # Architecture & Design
+    - /codebase-design       # Module design, deep vs shallow, seams
+    - /domain-modeling       # Ubiquitous language, ADR, bounded context
+    - /api-design            # REST patterns, error format, versioning
+    
+    # Efficiency
+    - /anti-slop            # Token efficiency - concise output
+
+  # ============================================================================
+  # LAYER 2: TECH STACK SELECTION (Auto-Detect based on patterns)
+  # Skills yang dipilih saat menentukan tech stack project
+  # ============================================================================
+  framework:
+    # React Ecosystem
+    - /react-pro             # React hooks, state, context, patterns
+    - /nextjs-pro           # Next.js App Router, SSR, ISR
+    # Vue Ecosystem
+    - /vue-pro              # Vue 3 Composition API, Pinia
+    - /nuxt-pro             # Nuxt.js file-based routing, SSR/SSG
+    # Other
+    - /svelte-pro           # Svelte 5, SvelteKit patterns
+    
+  language:
+    - /python-pro           # Python patterns, typing, FastAPI/Django
+    - /go-pro               # Go concurrency, interfaces, idiomatic
+    - /java-pro             # Java/Spring Boot patterns
+    - /dotnet-pro           # .NET Core, ASP.NET patterns
+    - /rust-pro             # Rust ownership, lifetimes, async
+    - /nestjs-expert        # NestJS modular architecture, DI
+    - /fastify-pro          # Fastify plugins, schemas, performance
+    
   database:
-    - /postgresql-pro
-    - /prisma
-  deployment:
-    - /docker
-    - /vercel
-    - /railway
+    - /postgresql-pro       # PostgreSQL optimization, indexing, JSONB
+    - /mysql-pro            # MySQL patterns, partitioning
+    - /mongodb-pro          # MongoDB document modeling, aggregation
+    - /redis-pro            # Redis caching, pub/sub, distributed locks
+    - /prisma               # Prisma ORM schema design, migrations
+    - /drizzle             # Drizzle ORM type-safe queries
+    - /supabase            # Supabase BaaS, auth, real-time
+    
+  api-style:
+    - /graphql              # GraphQL schema, DataLoader, subscriptions
+    - /grpc-pro            # gRPC, Protocol Buffers, streaming
+    
+  ui-styling:
+    - /tailwindcss          # Tailwind CSS utilities, responsive design
+    - /ui-ux-pro-max       # Design intelligence, accessibility, UX
+    
+  mobile:
+    - /mobile               # Mobile-specific patterns (React Native, Expo)
+    
+  # ============================================================================
+  # HELPER SKILLS (Auto-invoke based on detected patterns)
+  # ============================================================================
   helper:
-    - /error-debugger
-    - /test-generator
-    - /doc-generator
+    - /error-debugger       # Error pattern detected
+    - /test-generator       # Test pattern detected
+    - /doc-generator        # Documentation pattern detected
 capabilities:
   - discovery
   - analysis
@@ -521,6 +595,36 @@ Autor:
 ---
 
 ## Changelog
+
+### v14.0.0 (Layer Architecture Redesign)
+- ✅ COMPLETE LAYER 1 FOUNDATION:
+  - 17 skills in `always` section
+  - Added: /ci-cd, /codebase-design, /domain-modeling, /anti-slop
+  - Moved: /api-design from backend → always
+  - Confirmed: All skills universal untuk semua project
+- ✅ COMPLETE LAYER 2 STRUCTURE:
+  - framework: react-pro, nextjs-pro, vue-pro, nuxt-pro, svelte-pro
+  - language: python-pro, go-pro, java-pro, dotnet-pro, rust-pro, nestjs-expert, fastify-pro
+  - database: postgresql-pro, mysql-pro, mongodb-pro, redis-pro, prisma, drizzle, supabase
+  - api-style: graphql, grpc-pro
+  - ui-styling: tailwindcss, ui-ux-pro-max
+  - mobile: mobile
+- ✅ MEMORY CONTINUITY (v14.0.1):
+  - /autor now auto-invokes BOTH /autor AND /mem-search
+  - Ensures project context continuity on every /autor command
+  - Added phrase-based triggers: continue, remember, layer architecture
+- ✅ Philosophy: "Skills yang berbeda cara nulis code-nya antar stack"
+- ✅ Removed overlaps: deployment dari Layer 2 (sudah di Layer 1 atau auto-detect)
+- ✅ Removed auth dari Layer 2 (Layer 3: Requirements - user choice)
+
+### v13.0.0 (Enhanced Core Skills)
+- ✅ Expanded core_skills always list with 5 new skills:
+  - `/error-debugger` - Critical DX improvement
+  - `/doc-generator` - Documentation-first mindset
+  - `/docker` - Containerization standard
+  - `/observability` - Production-ready patterns
+  - `/security` - Secure coding practices
+- ✅ Improved TypeScript-Pro placement (removed from core, keep in auto-invoke)
 
 ### v12.0.0 (Smart Project Flow)
 - ✅ Empty project wizard with intent detection
