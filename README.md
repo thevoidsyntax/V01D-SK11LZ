@@ -1,351 +1,242 @@
-# V01D-RULEZ
+# Skills Ecosystem v2.0
 
-> Intelligent skills that dominate your codebase.
-
-**100+** skills with auto-invocation based on project context.
-
-## Quick Start
-
-```bash
-git clone https://github.com/thevoidsyntax/my-skills.git ~/.claude/skills
-```
-
-### Core Commands
-
-| Command | Fungsi |
-|---------|--------|
-| `/autor` | Smart dashboard dengan auto-detect |
-| `/autor scan` | Analyze existing project |
-| `/autor new` | New project wizard |
-| `/autor status` | Show saved state |
+**Intelligent Skills Architecture for Claude Code Agent**
 
 ---
 
-## Auto-Invoke System
+## Overview
 
-Skills activate automatically based on your project context:
-
-### Primary Commands (Memory Continuity)
-Every `/autor` command automatically invokes both `/autor` AND `/mem-search` to ensure project context continuity:
-
-| Command | Skills Invoked |
-|---------|---------------|
-| `/autor` | `/autor` + `/mem-search` |
-| `/autor new` | `/autor` + `/mem-search` |
-| `/autor scan` | `/autor` + `/mem-search` |
-
-### Layer 1: Always On (17 skills)
-Always loaded in memory for every project:
-
-| Skill | Description |
-|-------|-------------|
-| `/git` | Version control workflows, branching strategies |
-| `/config` | Environment variables, secrets, feature flags |
-| `/security` | OWASP, validation, CORS, input sanitization |
-| `/docker` | Multi-stage builds, security hardening |
-| `/ci-cd` | GitHub Actions, GitLab CI, deployment pipelines |
-| `/code-quality` | Code review, Fowler smells, static analysis |
-| `/testing` | Unit, integration, E2E, mutation, property-based |
-| `/tdd` | Test-driven development, red-green-refactor loop |
-| `/error-debugger` | Debug patterns, DX improvement |
-| `/logging` | Structured logging, correlation IDs |
-| `/observability` | Metrics, logs, traces, dashboards, alerts |
-| `/doc-generator` | Auto-documentation mindset |
-| `/mem-search` | Knowledge retrieval |
-| `/codebase-design` | Deep module vocabulary, clean seams |
-| `/domain-modeling` | Ubiquitous language, ADR, bounded context |
-| `/api-design` | REST patterns, error format, versioning |
-| `/anti-slop` | Token efficiency, concise output |
-
-### Layer 2: Auto-Detect (based on project type)
-Skills that auto-invoke when specific tech stack is detected:
-
-| Trigger | Skills |
-|---------|--------|
-| `**/package.json` | `/react-pro`, `/nextjs-pro`, `/tailwindcss` |
-| `**/*.vue` | `/vue-pro` |
-| `**/*.svelte` | `/svelte-pro` |
-| `**/nuxt.config.*` | `/nuxt-pro` |
-| `**/go.mod` | `/go-pro`, `/api-design` |
-| `**/requirements.txt` | `/python-pro` |
-| `**/pom.xml` | `/java-pro` |
-| `**/*.csproj` | `/dotnet-pro` |
-| `**/schema.prisma` | `/prisma` |
-| `**/Dockerfile` | `/docker` |
-| `kubernetes/**` | `/kubernetes` |
-| `.github/workflows/**` | `/ci-cd` |
-| `**/*.graphql` | `/graphql` |
-
-### Memory & Continuity (Auto-invoke /mem-search)
-Automatically retrieves previous context when continuing work:
-
-| Trigger | Skills |
-|---------|--------|
-| `continue`, `lanjutkan` | `/mem-search` |
-| `remember`, `memori` | `/mem-search` |
-| `layer architecture` | `/mem-search` |
-| `existing project`, `project lama` | `/mem-search` |
-
----
-
-## Skills Overview (100 Skills)
-
-### 🔧 Core DevOps (11 skills)
-
-Essential skills for every project:
-
-| Skill | Description |
-|-------|-------------|
-| `/git` | Version control workflows, branching strategies, rebasing |
-| `/docker` | Multi-stage builds, security hardening, compose patterns |
-| `/ci-cd` | GitHub Actions, GitLab CI, deployment pipelines |
-| `/deployment` | Blue-green, canary, zero-downtime deployments |
-| `/config` | Environment variables, secrets, feature flags |
-| `/logging` | Structured logging, correlation IDs, log management |
-| `/terraform` | Infrastructure as Code, modules, state |
-| `/ansible` | Configuration management, playbooks |
-| `/kubernetes` | HPA, security, Helm, service mesh |
-| `/serverless` | Lambda, Cloud Functions, Edge Computing |
-| `/scalability` | Auto-scaling, read replicas, CDN |
-
-### 🔒 Security (5 skills)
-
-| Skill | Description |
-|-------|-------------|
-| `/security` | Auth, encryption, OWASP, vulnerability scanning |
-| `/pentest` | Hacker-style pentesting, ZAP, SQLMap, Nuclei |
-| `/identity` | OAuth2, OIDC, MFA, session management |
-| `/compliance` | GDPR, SOC2, audit trail |
-| `/fullstack-guardian` | Security-focused full-stack implementation |
-
-### 🧪 Testing & Quality (7 skills)
-
-| Skill | Description |
-|-------|-------------|
-| `/testing` | Unit, integration, E2E, mutation, property-based |
-| `/tdd` | Test-driven development, red-green-refactor loop |
-| `/code quality` | Code review, Fowler smells, static analysis |
-| `/diagnosing-bugs` | 6-phase systematic debugging |
-| `/playwright` | E2E browser automation testing |
-| `/testing-integration` | Integration testing with MSW, contract testing |
-| `/tech-debt` | Technical debt identification and management |
-
-### 🏗️ Architecture (4 skills)
-
-| Skill | Description |
-|-------|-------------|
-| `/architecture-patterns` | Hexagonal, microservices, modular monolith |
-| `/domain-modeling` | Build domain model, bounded contexts |
-| `/codebase-design` | Deep module vocabulary, clean seams |
-| `/fullstack-patterns` | Backend-Frontend integration patterns |
-
-### 🗄️ Database (6 skills)
-
-| Skill | Description |
-|-------|-------------|
-| `/database` | SQL optimization, migrations, indexing |
-| `/postgresql-pro` | PostgreSQL-specific patterns and optimization |
-| `/mysql-pro` | MySQL-specific patterns and optimization |
-| `/mongodb-pro` | MongoDB document modeling and patterns |
-| `/redis-pro` | Redis caching, pub/sub, data structures |
-| `/database-migration` | Zero-downtime migration strategies |
-
-### 🌐 API & Integration (10 skills)
-
-| Skill | Description |
-|-------|-------------|
-| `/api-design` | REST, gRPC, pagination, API Gateway |
-| `/api-client` | HTTP client patterns, retry, circuit breaker |
-| `/api-contracts` | OpenAPI specs, contract testing |
-| `/graphql` | Schema design, DataLoader, subscriptions |
-| `/messaging` | Kafka, RabbitMQ, SQS, event patterns |
-| `/message-queue` | Queue patterns, DLQ, Saga, Outbox |
-| `/integration-patterns` | ETL/ELT, API composition |
-| `/data-engineering` | CDC, data warehouse, ETL |
-| `/data-fetch` | TanStack Query, SWR, caching strategies |
-| `/realtime` | WebSocket, SSE, real-time patterns |
-
-### 📊 Observability (5 skills)
-
-| Skill | Description |
-|-------|-------------|
-| `/observability` | Metrics, tracing, alerting, SLOs |
-| `/performance` | Profiling, benchmarking, optimization |
-| `/performance-ui` | Core Web Vitals, bundle optimization |
-| `/error-tracking` | Exception management, observability |
-| `/reliability` | SLO/SLA, incident response, DR |
-
-### ☁️ Cloud & Infrastructure (8 skills)
-
-| Skill | Description |
-|-------|-------------|
-| `/cloud-architect` | AWS, Azure, GCP architecture design |
-| `/networking` | DNS, TLS, load balancer, WAF |
-| `/storage` | S3, blob storage, CDN strategies |
-| `/platform-engineering` | IDP, developer self-service |
-| `/devops-engineer` | CI/CD, IaC, automation |
-| `/data-quality` | Data validation and QA |
-| `/reticle` | Cloud cost optimization |
-| `/finops` | FinOps practices, cost visibility |
-
-### 💻 Languages (10 skills)
-
-| Skill | Description |
-|-------|-------------|
-| `/typescript-pro` | Advanced types, branded types, discriminated unions |
-| `/python-pro` | Advanced Python, Django, FastAPI |
-| `/go-pro` | Go concurrency, interfaces, idiomatic practices |
-| `/rust-pro` | Ownership, async, zero-cost abstractions |
-| `/java-pro` | Spring Boot, Jakarta EE, enterprise patterns |
-| `/dotnet-pro` | .NET Core, ASP.NET, Entity Framework |
-| `/nestjs-expert` | NestJS modular architecture, DI |
-| `/react-pro` | React hooks, state management, patterns |
-| `/nextjs-pro` | Next.js App Router, SSR, ISR |
-| `/graphql` | GraphQL schema design, resolvers |
-
-### 🎨 Frontend (5 skills)
-
-| Skill | Description |
-|-------|-------------|
-| `/ui-ux-pro-max` | Design intelligence, accessibility |
-| `/ui-ux-pro-max-design-system` | Design system patterns |
-| `/ui-ux-pro-max-styling` | CSS, Tailwind, styling patterns |
-| `/mobile` | Offline-first, biometric, push notifications |
-| `/dev-browser` | Development browser with debugging |
-
-### 🤖 AI & ML (7 skills)
-
-| Skill | Description |
-|-------|-------------|
-| `/ml-engineering` | ML lifecycle, drift detection, LLM patterns |
-| `/ml-pipeline` | MLOps pipeline, Kubeflow, Airflow |
-| `/langchain-architect` | LangChain, chains, agents, RAG |
-| `/rag-architect` | RAG architecture, vector DB |
-| `/llm-evaluation` | LLM benchmarks, quality metrics |
-| `/ai-client` | AI API clients, token optimization |
-| `/chisle` | Token optimization and cost reduction |
-
-### 🔄 Workflow & GitHub (10 skills)
-
-| Skill | Description |
-|-------|-------------|
-| `/new-issue` | Create complete issue with complexity score |
-| `/validate-issue` | Fact-check issue against code |
-| `/work-on-issue` | Implement + PR in isolated worktree |
-| `/fix-pr-review` | Fix review comments, request re-review |
-| `/pr-review` | Review format reference |
-| `/create-release` | Bump version + publish release |
-| `/sync-docs` | Sync CLAUDE.md/AGENTS.md/SKILL.md |
-| `/commit` | Guided conventional commit |
-| `/implement` | Build from spec using TDD + review |
-| `/reticle` | Project tracking and management |
-
-### 🔮 Planning & Strategy (8 skills)
-
-| Skill | Description |
-|-------|-------------|
-| `/wayfinder` | Plan large work as decision tickets |
-| `/grill-with-docs` | Documentation-driven interview |
-| `/handoff` | Compact conversation for agent handoff |
-| `/research` | Primary source investigation |
-| `/writing-for-agents` | Write skills/docs for AI agents |
-| `/feature-forge` | PRD creation and feature specs |
-| `/feature-flags` | Progressive delivery, A/B testing |
-| `/team-processes` | Team workflows, ceremonies |
-
-### 🛠️ Browser Automation (2 skills)
-
-| Skill | Description |
-|-------|-------------|
-| `/dev-browser` | Fast (~13ms), JS-native, persistent tabs |
-| `/browser-use` | AI agent browser, cloud support |
-
-### 🛡️ Anti-AI (2 skills)
-
-| Skill | Description |
-|-------|-------------|
-| `/anti-slop` | Strip AI patterns, restore human voice |
-| `/skill-creator` | Create new skills with templates |
-
-### 🎮 Specialized (6 skills)
-
-| Skill | Description |
-|-------|-------------|
-| `/gaming` | Game server, lag compensation |
-| `/iot-edge` | OTA, edge deployment |
-| `/search` | Search engine architecture, Elasticsearch |
-| `/pentest` | Security penetration testing |
-| `/documentation` | README, RFC, onboarding |
-| `/skillspector` | Quality scoring for skill bundles |
-
-### 🔍 Meta Skills (4 skills)
-
-| Skill | Description |
-|-------|-------------|
-| `/autor` | Smart router with intent detection |
-| `/mem-search` | Memory & knowledge base search |
-| `/audit` | Full codebase audit with adversarial verification |
-| `/diagnosing-bugs` | Systematic debugging framework |
+This is the skills ecosystem for Claude Code - a comprehensive collection of skills organized into logical layers for optimal project development.
 
 ---
 
 ## Architecture
 
 ```
-INPUT ──► /autor Router ──► Skill Selector ──► Active Skills
-         │                      │
-         ▼                      ▼
-    • Intent detection      • LAYER 1: FOUNDATION (17 always-on)
-    • Tech stack scan      • LAYER 2: TECH STACK (auto-detect)
-    • Pattern recognition   • LAYER 3: REQUIREMENTS (user choice)
-    • Scale estimation
-```
-
-### Layer Architecture
-
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    THREE-LAYER SKILL SYSTEM                                      │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                                  │
-│  LAYER 1: FOUNDATION (17 skills - ALWAYS)                                   │
-│  └─ git, config, security, docker, ci-cd, code-quality, testing, tdd,    │
-│      error-debugger, logging, observability, doc-generator, mem-search,   │
-│      codebase-design, domain-modeling, api-design, anti-slop             │
-│                                                                                  │
-│  LAYER 2: TECH STACK (~24 skills - AUTO-DETECT)                            │
-│  └─ framework (react, vue, svelte, nuxt), language (python, go, java),   │
-│      database (postgresql, mysql, mongodb, redis), api-style (graphql,   │
-│      grpc), ui-styling (tailwindcss), mobile                                │
-│                                                                                  │
-│  LAYER 3: REQUIREMENTS (USER CHOICE)                                        │
-│  └─ auth, payments, ai/ml, form-handling, etc.                            │
-│                                                                                  │
-└─────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│  SKILLS ECOSYSTEM v2.0                                    │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │  INFRASTRUCTURE LAYER                                │   │
+│  │  (Always Available - Gateway to all skills)          │   │
+│  │                                                     │   │
+│  │  ├── autor/          Command interface              │   │
+│  │  └── auto-router/   Detection & loading system      │   │
+│  └─────────────────────────────────────────────────────┘   │
+│                                                             │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │  CORE LAYER (12 Skills - Auto-loaded)              │   │
+│  │  (Always loaded with /autor)                        │   │
+│  │                                                     │   │
+│  │  ├── git               Version control              │   │
+│  │  ├── config            Environment & secrets        │   │
+│  │  ├── security          OWASP, encryption            │   │
+│  │  ├── testing           QA + TDD methodology         │   │
+│  │  ├── error-debugger   Debug patterns               │   │
+│  │  ├── observability     Logs + Metrics + Traces     │   │
+│  │  ├── doc-generator     Auto-documentation          │   │
+│  │  ├── mem-search       Memory continuity           │   │
+│  │  ├── anti-slop        Token efficiency             │   │
+│  │  ├── chisle           Context optimization         │   │
+│  │  └── codebase-design  Architecture + DDD          │   │
+│  └─────────────────────────────────────────────────────┘   │
+│                                                             │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │  CONDITIONAL LAYER (Auto-detect based on project)   │   │
+│  │                                                     │   │
+│  │  ├── docker           Containerization               │   │
+│  │  ├── kubernetes       Orchestration                 │   │
+│  │  ├── terraform        Infrastructure as Code        │   │
+│  │  ├── deployment       CI/CD + Deployment           │   │
+│  │  ├── serverless       Lambda/Functions             │   │
+│  │  ├── mobile           React Native                  │   │
+│  │  ├── browser-use      Browser automation            │   │
+│  │  ├── reticle          Computer vision              │   │
+│  │  └── ui-ux-pro-max   Design system + styling      │   │
+│  └─────────────────────────────────────────────────────┘   │
+│                                                             │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │  TECH STACK LAYER (Auto-detect by patterns)         │   │
+│  │                                                     │   │
+│  │  Frontend:     react-pro, nextjs-pro, vue-pro      │   │
+│  │  Backend:      python-pro, go-pro, java-pro        │   │
+│  │  Database:     postgresql-pro, mysql-pro, redis    │   │
+│  │  API:         graphql, grpc-pro, api-design       │   │
+│  │  (and more...)                                     │   │
+│  └─────────────────────────────────────────────────────┘   │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Stats
+## Usage
 
-| Metric | Value |
-|--------|-------|
-| **Total Skills** | 100+ |
-| **Auto-Invoke** | 50+ |
-| **Layer 1: Foundation** | 17 |
-| **Layer 2: Tech Stack** | ~24 |
-| **Layer 3: Requirements** | ~15 |
-| **Categories** | 15 |
+### Basic Commands
+```bash
+/autor              # Analyze project or start new
+/autor scan          # Full project analysis
+/autor new           # New project wizard
+/autor status        # Show project state
+/autor --help        # Show help
+```
+
+### Skill Invocation
+```bash
+/testing            # Invoke testing skill
+/security           # Invoke security skill
+/react-pro          # Invoke React skill
+/python-pro         # Invoke Python skill
+```
 
 ---
 
-## Contributing
+## Layer Details
 
-1. Fork the repository
-2. Create a new skill directory (`skill-name/SKILL.md`)
-3. Follow the skill template structure
-4. Submit a pull request
+### Infrastructure Layer (`_infrastructure/`)
+
+| Component | Purpose |
+|-----------|---------|
+| `autor/` | Command interface - what users type |
+| `auto-router/` | Detection engine - auto-loads skills |
+
+### Core Layer (`_core/`)
+
+11 skills that are **always loaded** when you invoke `/autor`:
+
+| # | Skill | Purpose |
+|---|-------|---------|
+| 1 | `git` | Version control |
+| 2 | `config` | Environment & secrets management |
+| 3 | `security` | OWASP, input validation, encryption |
+| 4 | `testing` | QA strategy + TDD methodology |
+| 5 | `error-debugger` | Debug patterns & troubleshooting |
+| 6 | `observability` | Logs + Metrics + Traces (3 pillars) |
+| 7 | `doc-generator` | Auto-generate documentation |
+| 8 | `mem-search` | Memory continuity across sessions |
+| 9 | `anti-slop` | Remove verbose AI patterns (~30-40% token savings) |
+| 10 | `chisle` | Context pruning (~20-30% token savings) |
+| 11 | `codebase-design` | Architecture + Domain modeling |
+
+### Conditional Layer (`_conditional/`)
+
+Skills loaded **automatically based on project type**:
+
+| Category | Skills |
+|----------|--------|
+| Container | `docker` |
+| Orchestration | `kubernetes` |
+| IaC | `terraform` |
+| Deployment | `deployment` (includes CI/CD) |
+| Serverless | `serverless` |
+| Mobile | `mobile` |
+| Browser | `browser-use` |
+| Vision | `reticle` |
+| UI/Design | `ui-ux-pro-max` (includes design-system + styling) |
+
+### Tech Stack Layer (Root folders)
+
+Skills auto-detected by **pattern matching**:
+
+| Category | Skills |
+|----------|--------|
+| Frontend | `react-pro`, `nextjs-pro`, `vue-pro`, `nuxt-pro`, `svelte-pro` |
+| Backend | `python-pro`, `go-pro`, `java-pro`, `dotnet-pro`, `rust-pro`, `nestjs-expert`, `fastify-pro` |
+| Database | `postgresql-pro`, `mysql-pro`, `mongodb-pro`, `redis-pro`, `prisma`, `drizzle`, `supabase` |
+| API | `graphql`, `grpc-pro`, `api-design` |
+| UI | `tailwindcss`, `ui-ux-pro-max` |
+| Deployment | `docker`, `kubernetes`, `terraform`, `vercel`, `railway`, `flyio` |
+
+---
+
+## Project Flow
+
+### New Project
+```
+1. User: /autor new
+2. Mem-search: Check for similar past projects
+3. Autor: Ask project type questions
+4. Auto-router: Load appropriate skills
+5. Ready for development
+```
+
+### Existing Project
+```
+1. User: /autor
+2. Mem-search: Retrieve project context
+3. Autor: Show project analysis
+4. Auto-router: Detect tech stack
+5. Load needed skills
+6. Ready to continue
+```
+
+---
+
+## Token Efficiency
+
+Built-in tools for token optimization:
+
+| Tool | Purpose | Token Savings |
+|------|---------|---------------|
+| `anti-slop` | Remove verbose AI patterns | ~30-40% |
+| `chisle` | Context pruning | ~20-30% |
+| `caveman` | Aggressive compression (external) | ~65% |
+
+---
+
+## Integration
+
+Skills are designed to work together:
+
+```
+_core/
+├── git ──────────────────────────────────────────────────┐
+├── config ───────────────────────────────────────────────┤
+├── security ────────────────────────────────────────────┤
+├── testing ──────────────────────────────────────────────┼── Integration
+├── error-debugger ─────────────────────────────────────┤   Chain
+├── observability ───────────────────────────────────────┤
+├── doc-generator ───────────────────────────────────────┤
+├── mem-search ─────────────────────────────────────────┤
+├── anti-slop ──────────────────────────────────────────┤
+├── chisle ─────────────────────────────────────────────┤
+└── codebase-design ────────────────────────────────────┘
+```
+
+---
+
+## Skills Count
+
+| Layer | Count |
+|-------|-------|
+| Infrastructure | 2 |
+| Core | 11 |
+| Conditional | 9 |
+| Tech Stack | ~25 |
+| **Total** | **~47** |
+
+---
+
+## Changelog
+
+### v2.0.0
+- ✅ Infrastructure layer separated
+- ✅ Core layer (11 skills) auto-loaded
+- ✅ Conditional layer for specialized skills
+- ✅ Memory integration (mem-search)
+- ✅ Token efficiency tools (anti-slop, chisle, caveman)
+
+### v1.0.0
+- Basic skill organization
+- Layer 1 + Layer 2 structure
+
+---
 
 ## License
 
-MIT License - See [LICENSE](LICENSE)
+Proprietary - Internal use only
+
+---
+
+*Built for developers who ship!*
