@@ -1,0 +1,92 @@
+{
+  "$schema": "https://raw.githubusercontent.com/claude-quality/claude-settings/main/settings-schema.json",
+  "version": "1.0.0",
+  "name": "Skills Ecosystem",
+  "description": "Claude Code skill management and orchestration system",
+
+  "skills": {
+    "autor": {
+      "enabled": true,
+      "autoInvokeOnProjectAnalysis": true,
+      "postAnalysisOutput": true
+    },
+    "personas": {
+      "enabled": true,
+      "autoLoad": true,
+      "preferredPersona": null
+    },
+    "coreSkills": {
+      "autoLoad": true,
+      "include": [
+        "git",
+        "config",
+        "security",
+        "testing",
+        "error-debugger",
+        "observability",
+        "doc-generator",
+        "mem-search",
+        "anti-slop",
+        "chisle",
+        "caveman",
+        "codebase-design"
+      ]
+    },
+    "conditionalSkills": {
+      "autoDetect": true,
+      "preferredStacks": ["typescript", "nodejs", "vitest"]
+    }
+  },
+
+  "codingStandards": {
+    "typescript": {
+      "strict": true,
+      "target": "ES2022",
+      "module": "ESNext"
+    },
+    "testing": {
+      "framework": "vitest",
+      "coverageThreshold": {
+        "lines": 70,
+        "functions": 70,
+        "branches": 60,
+        "statements": 70
+      }
+    }
+  },
+
+  "documentation": {
+    "autoGenerateChangelog": true,
+    "includeExamples": true,
+    "apiDocumentation": "jsdoc"
+  },
+
+  "git": {
+    "conventionalCommits": true,
+    "branchStrategy": "trunk-based",
+    "requireCodeReview": false
+  },
+
+  "ci": {
+    "enabled": true,
+    "provider": "github-actions",
+    "nodeVersions": [18, 20, 22],
+    "runOnPush": true,
+    "runOnPR": true,
+    "coverageRequired": true
+  },
+
+  "devops": {
+    "deploymentTarget": null,
+    "monitoring": true,
+    "errorTracking": false
+  },
+
+  "preferences": {
+    "outputFormat": "detailed",
+    "tokenEfficiency": "high",
+    "verbosity": "normal",
+    "showNextSteps": true,
+    "proactiveSuggestions": true
+  }
+}
