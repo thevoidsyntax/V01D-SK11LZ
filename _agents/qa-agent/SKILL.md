@@ -1,6 +1,6 @@
 ---
 name: qa-agent
-version: 2.0.0
+version: 2.3.0
 description: "Dina (QA+Security Agent) - Test strategy, security audit, code review, quality gates"
 alias: Dina
 priority: critical
@@ -16,27 +16,27 @@ integrates_with:
   - se-agent (Athena)
   - devops-agent (Frans)
 uses_skills:
-  # QA Core Skills
+  # Inherited from /autor (no token cost)
+  - /git (version control)
+  - /config (environment setup)
   - /security (OWASP Top 10)
-  - /testing (Test strategy)
-  - /error-debugger (Troubleshooting)
-  - /mem-search (Context continuity)
-  # QA Extended Skills
-  - /git (Version control)
-  - /config (Environment setup)
-  - /observability (Log analysis)
+  - /testing (test strategy)
+  - /error-debugger (troubleshooting)
+  - /observability (log analysis)
+  - /doc-generator (documentation)
+  - /mem-search (context continuity)
+  - /anti-slop (concise reports)
+  - /chisle (context pruning)
+  - /caveman (terse output)
+  - /code-quality (code quality)
+  # Extended for QA (adds token cost)
   - /playwright (E2E testing)
-  - /testing-integration (Integration testing)
-  - /test-generator (Test generation)
-  - /pentest (Penetration testing)
-  - /compliance (Compliance checking)
-  - /diagnosing-bugs (Debugging)
-  - /code-quality (Code quality review)
-  - /audit (Security audit)
-  # Efficiency Tools
-  - /anti-slop (Concise reports)
-  - /chisle (Context pruning)
-  - /caveman (Terse output)
+  - /testing-integration (integration testing)
+  - /test-generator (test generation)
+  - /pentest (penetration testing)
+  - /compliance (compliance checking)
+  - /diagnosing-bugs (debugging)
+  - /audit (security audit)
 
 ---
 
@@ -46,26 +46,34 @@ Role: Quality Guardian - Testing, Security, Review
 
 ## Skills Equipped
 
-| Skill | Purpose | Category |
-|--------|---------|----------|
-| /security | OWASP Top 10 | Core |
-| /testing | Test strategy | Core |
-| /error-debugger | Troubleshooting | Core |
-| /mem-search | Context continuity | Core |
-| /git | Version control | Extended |
-| /config | Environment setup | Extended |
-| /observability | Log analysis | Extended |
-| /playwright | E2E testing | Extended |
-| /testing-integration | Integration testing | Extended |
-| /test-generator | Test generation | Extended |
-| /pentest | Penetration testing | Extended |
-| /compliance | Compliance checking | Extended |
-| /diagnosing-bugs | Debugging | Extended |
-| /code-quality | Code quality review | Extended |
-| /audit | Security audit | Extended |
-| /anti-slop | Concise reports | Efficiency |
-| /chisle | Context pruning | Efficiency |
-| /caveman | Terse output | Efficiency |
+### Inherited from /autor (No additional token - already loaded)
+
+| Skill | Purpose |
+|-------|---------|
+| /git | Version control |
+| /config | Environment setup |
+| /security | OWASP Top 10 |
+| /testing | Test strategy |
+| /error-debugger | Troubleshooting |
+| /observability | Log analysis |
+| /doc-generator | Documentation |
+| /mem-search | Context continuity |
+| /anti-slop | Concise reports |
+| /chisle | Context pruning |
+| /caveman | Terse output |
+| /code-quality | Code quality |
+
+### Extended for QA (Adds token cost)
+
+| Skill | Purpose | When to Use |
+|-------|---------|-------------|
+| /playwright | E2E testing | Automated browser testing |
+| /testing-integration | Integration testing | API/integration tests |
+| /test-generator | Test generation | Generate test cases |
+| /pentest | Penetration testing | Security testing |
+| /compliance | Compliance checking | Regulatory compliance |
+| /diagnosing-bugs | Debugging | Debug issues |
+| /audit | Security audit | Full security audit |
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: se-agent
-version: 2.0.0
+version: 2.3.0
 description: "Athena (SE Agent) - Architecture, code implementation, best practices enforcement"
 alias: Athena
 priority: critical
@@ -16,30 +16,29 @@ integrates_with:
   - qa-agent (Dina)
   - devops-agent (Frans)
 uses_skills:
-  # SE Core Skills
+  # Inherited from /autor (no token cost)
+  - /git (version control)
+  - /config (environment setup)
   - /security (OWASP by default)
-  - /testing (Test strategy)
-  - /codebase-design (Architecture patterns)
-  - /api-design (API patterns)
-  - /error-debugger (Debug patterns)
-  - /mem-search (Context continuity)
-  - /doc-generator (Documentation)
-  # SE Extended Skills
-  - /git (Version control)
-  - /config (Environment setup)
-  - /observability (Logging/monitoring)
-  - /architecture-patterns (Architecture decisions)
-  - /design-patterns (Code patterns)
-  - /code-quality (Code quality)
-  - /diagnosing-bugs (Debugging)
-  - /tech-debt (Tech debt management)
-  - /performance (Performance optimization)
-  - /reliability (Reliability patterns)
-  - /scalability (Scalability design)
-  # Efficiency Tools
+  - /testing (test strategy)
+  - /error-debugger (debug patterns)
+  - /observability (logging/monitoring)
+  - /doc-generator (documentation)
+  - /mem-search (context continuity)
   - /anti-slop (token-efficient)
   - /chisle (context pruning)
   - /caveman (terse output)
+  - /codebase-design (architecture patterns)
+  # Extended for SE (adds token cost)
+  - /api-design (API patterns)
+  - /architecture-patterns (architecture decisions)
+  - /design-patterns (code patterns)
+  - /code-quality (code quality)
+  - /diagnosing-bugs (debugging)
+  - /tech-debt (tech debt management)
+  - /performance (performance optimization)
+  - /reliability (reliability patterns)
+  - /scalability (scalability design)
 
 ---
 
@@ -49,29 +48,36 @@ Role: Architecture & Implementation
 
 ## Skills Equipped
 
-| Skill | Purpose | Category |
-|--------|---------|----------|
-| /security | OWASP by default | Core |
-| /testing | Test strategy | Core |
-| /codebase-design | Architecture patterns | Core |
-| /api-design | API patterns | Core |
-| /error-debugger | Debug patterns | Core |
-| /mem-search | Context continuity | Core |
-| /doc-generator | Documentation | Core |
-| /git | Version control | Extended |
-| /config | Environment setup | Extended |
-| /observability | Logging/monitoring | Extended |
-| /architecture-patterns | Architecture decisions | Extended |
-| /design-patterns | Code patterns | Extended |
-| /code-quality | Code quality | Extended |
-| /diagnosing-bugs | Debugging | Extended |
-| /tech-debt | Tech debt management | Extended |
-| /performance | Performance optimization | Extended |
-| /reliability | Reliability patterns | Extended |
-| /scalability | Scalability design | Extended |
-| /anti-slop | Token-efficient | Efficiency |
-| /chisle | Context pruning | Efficiency |
-| /caveman | Terse output | Efficiency |
+### Inherited from /autor (No additional token - already loaded)
+
+| Skill | Purpose |
+|-------|---------|
+| /git | Version control |
+| /config | Environment setup |
+| /security | OWASP by default |
+| /testing | Test strategy |
+| /error-debugger | Debug patterns |
+| /observability | Logging/monitoring |
+| /doc-generator | Documentation |
+| /mem-search | Context continuity |
+| /anti-slop | Token-efficient |
+| /chisle | Context pruning |
+| /caveman | Terse output |
+| /codebase-design | Architecture patterns |
+
+### Extended for SE (Adds token cost)
+
+| Skill | Purpose | When to Use |
+|-------|---------|-------------|
+| /api-design | API patterns | Design API |
+| /architecture-patterns | Architecture decisions | Architecture review |
+| /design-patterns | Code patterns | Code implementation |
+| /code-quality | Code quality | Quality check |
+| /diagnosing-bugs | Debugging | Debug issues |
+| /tech-debt | Tech debt management | Track debt |
+| /performance | Performance optimization | Optimize |
+| /reliability | Reliability patterns | Improve reliability |
+| /scalability | Scalability design | Scale design |
 
 ---
 

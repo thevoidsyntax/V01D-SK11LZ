@@ -143,16 +143,45 @@ SEMUA persona auto-invoke 3 efficiency tools (aktif saat diperlukan, no overhead
 - Tools trigger only when output is long
 - No overhead for short outputs
 
-## Integration
+## Skills Distribution
 
-| Persona | Core Skills | Extended Skills | Passes To |
-|--------|-------------|----------------|-----------|
-| Satria | doc-generator, mem-search, codebase-design, brd/fsd/prd | git, config, observability, architecture-patterns, tech-debt, code-quality, audit | Athena |
-| Athena | security, testing, codebase-design, api-design, error-debugger, mem-search, doc-generator | git, config, observability, architecture-patterns, design-patterns, code-quality, diagnosing-bugs, tech-debt, performance, reliability, scalability | Dina |
-| Dina | security, testing, error-debugger, mem-search | git, config, observability, playwright, testing-integration, test-generator, pentest, compliance, diagnosing-bugs, code-quality, audit | Frans |
-| Frans | docker, deployment, observability, error-debugger, mem-search | git, config, security, testing, kubernetes, terraform, devops-engineer, platform-engineering, cloud-architect, error-tracking, reliability, scalability | Production |
+| Persona | Inherited (No Token) | Extended (Adds Token) | Total |
+|---------|---------------------|---------------------|-------|
+| Satria | 12 (from /autor) | 7 | 19 |
+| Athena | 12 (from /autor) | 9 | 21 |
+| Dina | 12 (from /autor) | 7 | 19 |
+| Frans | 12 (from /autor) | 10 | 22 |
 
-All personas: auto-invoke anti-slop + chisle + caveman (~80-90% token savings)
+### Token Efficiency
+
+```
+/autor invoked
+  ↓
+12 Core Skills LOADED (token cost = 1x)
+  ↓
+Persona invoked
+  ↓
+Inherited skills → NO additional token (already loaded)
+Extended skills → Additional token per skill
+```
+
+### Skills by Persona
+
+#### Satria (PM)
+- **Inherited**: git, config, security, testing, error-debugger, observability, doc-generator, mem-search, anti-slop, chisle, caveman, codebase-design
+- **Extended**: brd, fsd, prd, architecture-patterns, tech-debt, code-quality, audit
+
+#### Athena (SE)
+- **Inherited**: git, config, security, testing, error-debugger, observability, doc-generator, mem-search, anti-slop, chisle, caveman, codebase-design
+- **Extended**: api-design, architecture-patterns, design-patterns, code-quality, diagnosing-bugs, tech-debt, performance, reliability, scalability
+
+#### Dina (QA)
+- **Inherited**: git, config, security, testing, error-debugger, observability, doc-generator, mem-search, anti-slop, chisle, caveman, code-quality
+- **Extended**: playwright, testing-integration, test-generator, pentest, compliance, diagnosing-bugs, audit
+
+#### Frans (DevOps)
+- **Inherited**: git, config, security, testing, error-debugger, observability, doc-generator, mem-search, anti-slop, chisle, caveman
+- **Extended**: docker, deployment, kubernetes, terraform, devops-engineer, platform-engineering, cloud-architect, error-tracking, reliability, scalability
 
 ## Example
 

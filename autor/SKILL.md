@@ -1,6 +1,6 @@
 ---
 name: autor
-version: "2.2.0"
+version: "2.3.0"
 description: "Intelligent project analysis with Smart Flow, Personas, Project Init, and Memory Continuity for Claude Code"
 when_to_use: "Run when starting a new project, analyzing existing codebase, or needing project intelligence."
 priority: critical
@@ -245,6 +245,58 @@ Satria (PM) → Owns project planning and team coordination
   - Athena → for architecture/feature work
   - Dina → for testing/security
   - Frans → for deployment/infrastructure
+```
+
+---
+
+## Token Distribution
+
+### How It Works
+
+```
+/autor invoked
+    ↓
+12 Core Skills LOADED
+(git, config, security, testing, error-debugger, observability,
+ doc-generator, mem-search, anti-slop, chisle, caveman, codebase-design)
+    ↓
+Persona invoked (e.g., /athena)
+    ↓
+├── Inherited skills → NO additional token (already loaded)
+└── Extended skills → Adds token cost
+```
+
+### Skills by Category
+
+| Category | Token Cost | Skills |
+|----------|-----------|--------|
+| **Core (from /autor)** | 1x (shared) | git, config, security, testing, error-debugger, observability, doc-generator, mem-search, anti-slop, chisle, caveman, codebase-design |
+| **Persona Extended** | +N per skill | Varies by persona |
+
+### Persona Extended Skills (Adds Token)
+
+| Persona | Extended Skills | Count |
+|---------|----------------|-------|
+| Satria | brd, fsd, prd, architecture-patterns, tech-debt, code-quality, audit | +7 |
+| Athena | api-design, architecture-patterns, design-patterns, code-quality, diagnosing-bugs, tech-debt, performance, reliability, scalability | +9 |
+| Dina | playwright, testing-integration, test-generator, pentest, compliance, diagnosing-bugs, audit | +7 |
+| Frans | docker, deployment, kubernetes, terraform, devops-engineer, platform-engineering, cloud-architect, error-tracking, reliability, scalability | +10 |
+
+### Token Example
+
+```
+Scenario: /autor → /athena → Write E2E tests
+
+Step 1: /autor
+  → Loads 12 core skills = 1x token
+
+Step 2: /athena
+  → Inherits 12 core skills = 0 additional token
+  → Loads extended skills (api-design, etc.) = +9 token
+
+Total additional from persona = 9 (vs 21 if all listed separately)
+
+Efficiency: ~57% token savings
 ```
 
 ---

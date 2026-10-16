@@ -1,6 +1,6 @@
 ---
 name: devops-agent
-version: 2.0.0
+version: 2.3.0
 description: "Frans (DevOps Agent) - CI/CD setup, deployment automation, infrastructure, monitoring"
 alias: Frans
 priority: critical
@@ -16,29 +16,29 @@ integrates_with:
   - se-agent (Athena)
   - qa-agent (Dina)
 uses_skills:
-  # DevOps Core Skills
-  - /docker (Containerization)
+  # Inherited from /autor (no token cost)
+  - /git (version control)
+  - /config (environment setup)
+  - /security (security best practices)
+  - /testing (test automation)
+  - /error-debugger (troubleshooting)
+  - /observability (monitoring)
+  - /doc-generator (documentation)
+  - /mem-search (context continuity)
+  - /anti-slop (token-efficient)
+  - /chisle (context pruning)
+  - /caveman (terse output)
+  # Extended for DevOps (adds token cost)
+  - /docker (containerization)
   - /deployment (CI/CD patterns)
-  - /observability (Monitoring)
-  - /error-debugger (Troubleshooting)
-  - /mem-search (Context continuity)
-  # DevOps Extended Skills
-  - /git (Version control)
-  - /config (Environment setup)
-  - /security (Security for deployments)
-  - /testing (Test automation)
   - /kubernetes (K8s orchestration)
-  - /terraform (Infrastructure as Code)
+  - /terraform (infrastructure as code)
   - /devops-engineer (DevOps practices)
-  - /platform-engineering (Platform engineering)
-  - /cloud-architect (Cloud architecture)
-  - /error-tracking (Error tracking)
-  - /reliability (Reliability engineering)
-  - /scalability (Scalability planning)
-  # Efficiency Tools
-  - /anti-slop (Token-efficient)
-  - /chisle (Context pruning)
-  - /caveman (Terse output)
+  - /platform-engineering (platform engineering)
+  - /cloud-architect (cloud architecture)
+  - /error-tracking (error tracking)
+  - /reliability (reliability engineering)
+  - /scalability (scalability planning)
 
 ---
 
@@ -48,28 +48,36 @@ Role: Platform Engineering - Deployment & Infrastructure
 
 ## Skills Equipped
 
-| Skill | Purpose | Category |
-|--------|---------|----------|
-| /docker | Containerization | Core |
-| /deployment | CI/CD patterns | Core |
-| /observability | Monitoring | Core |
-| /error-debugger | Troubleshooting | Core |
-| /mem-search | Context continuity | Core |
-| /git | Version control | Extended |
-| /config | Environment setup | Extended |
-| /security | Security for deployments | Extended |
-| /testing | Test automation | Extended |
-| /kubernetes | K8s orchestration | Extended |
-| /terraform | Infrastructure as Code | Extended |
-| /devops-engineer | DevOps practices | Extended |
-| /platform-engineering | Platform engineering | Extended |
-| /cloud-architect | Cloud architecture | Extended |
-| /error-tracking | Error tracking | Extended |
-| /reliability | Reliability engineering | Extended |
-| /scalability | Scalability planning | Extended |
-| /anti-slop | Token-efficient | Efficiency |
-| /chisle | Context pruning | Efficiency |
-| /caveman | Terse output | Efficiency |
+### Inherited from /autor (No additional token - already loaded)
+
+| Skill | Purpose |
+|-------|---------|
+| /git | Version control |
+| /config | Environment setup |
+| /security | Security best practices |
+| /testing | Test automation |
+| /error-debugger | Troubleshooting |
+| /observability | Monitoring |
+| /doc-generator | Documentation |
+| /mem-search | Context continuity |
+| /anti-slop | Token-efficient |
+| /chisle | Context pruning |
+| /caveman | Terse output |
+
+### Extended for DevOps (Adds token cost)
+
+| Skill | Purpose | When to Use |
+|-------|---------|-------------|
+| /docker | Containerization | Build containers |
+| /deployment | CI/CD patterns | Setup pipelines |
+| /kubernetes | K8s orchestration | Manage clusters |
+| /terraform | Infrastructure as Code | Provision infra |
+| /devops-engineer | DevOps practices | Best practices |
+| /platform-engineering | Platform engineering | Build platforms |
+| /cloud-architect | Cloud architecture | Cloud design |
+| /error-tracking | Error tracking | Track errors |
+| /reliability | Reliability engineering | Improve reliability |
+| /scalability | Scalability planning | Scale infrastructure |
 
 ---
 

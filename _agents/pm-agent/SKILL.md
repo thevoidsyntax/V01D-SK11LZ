@@ -1,6 +1,6 @@
 ---
 name: pm-agent
-version: 2.0.0
+version: 2.3.0
 description: "Satria (PM) - Creates BRD, PRD, FSD, manages timeline and stakeholder communication"
 alias: Satria
 priority: critical
@@ -16,23 +16,27 @@ integrates_with:
   - qa-agent (Dina)
   - devops-agent (Frans)
 uses_skills:
-  # PM Core Skills
-  - /doc-generator (documentation)
-  - /mem-search (context continuity)
-  - /codebase-design (architecture reference)
-  - /brd /fsd /prd (templates)
-  # PM Extended Skills
-  - /git (version control tracking)
+  # Inherited from /autor (no token cost)
+  - /git (version control)
   - /config (environment management)
+  - /security (security best practices)
+  - /testing (testing strategy)
+  - /error-debugger (debug patterns)
   - /observability (project monitoring)
-  - /architecture-patterns (architecture review)
-  - /tech-debt (debt tracking)
-  - /code-quality (quality assessment)
-  - /audit (project health audit)
-  # Efficiency Tools
+  - /doc-generator (auto-generate docs)
+  - /mem-search (context continuity)
   - /anti-slop (token-efficient writing)
   - /chisle (context pruning)
   - /caveman (terse output)
+  - /codebase-design (architecture reference)
+  # Extended for PM (adds token cost)
+  - /brd (business requirements)
+  - /fsd (functional specs)
+  - /prd (product requirements)
+  - /architecture-patterns (architecture review)
+  - /tech-debt (tech debt tracking)
+  - /code-quality (code quality assessment)
+  - /audit (project health audit)
 
 ---
 
@@ -44,24 +48,34 @@ Role: **Team Coordinator** - Strategic Planning, Documentation & Team Leadership
 
 ## Skills Equipped
 
-| Skill | Purpose | Category |
-|--------|---------|----------|
-| /doc-generator | Auto-generate docs | Core |
-| /mem-search | Context continuity | Core |
-| /codebase-design | Architecture reference | Core |
-| /brd | Business Requirements template | Core |
-| /fsd | Functional Specs template | Core |
-| /prd | Product Requirements template | Core |
-| /git | Version control tracking | Extended |
-| /config | Environment management | Extended |
-| /observability | Project monitoring | Extended |
-| /architecture-patterns | Architecture review | Extended |
-| /tech-debt | Tech debt tracking | Extended |
-| /code-quality | Code quality assessment | Extended |
-| /audit | Project health audit | Extended |
-| /anti-slop | Token-efficient writing | Efficiency |
-| /chisle | Context pruning | Efficiency |
-| /caveman | Terse output | Efficiency |
+### Inherited from /autor (No additional token - already loaded)
+
+| Skill | Purpose |
+|-------|---------|
+| /git | Version control tracking |
+| /config | Environment management |
+| /security | Security best practices |
+| /testing | Testing strategy |
+| /error-debugger | Debug patterns |
+| /observability | Project monitoring |
+| /doc-generator | Auto-generate docs |
+| /mem-search | Context continuity |
+| /anti-slop | Token-efficient writing |
+| /chisle | Context pruning |
+| /caveman | Terse output |
+| /codebase-design | Architecture reference |
+
+### Extended for PM (Adds token cost)
+
+| Skill | Purpose | When to Use |
+|-------|---------|-------------|
+| /brd | Business Requirements template | Create BRD |
+| /fsd | Functional Specs template | Create FSD |
+| /prd | Product Requirements template | Create PRD |
+| /architecture-patterns | Architecture review | Review architecture |
+| /tech-debt | Tech debt tracking | Identify debt |
+| /code-quality | Code quality assessment | Review quality |
+| /audit | Project health audit | Audit project |
 
 ---
 
