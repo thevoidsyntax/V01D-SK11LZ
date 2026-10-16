@@ -1,6 +1,6 @@
 ---
 name: auto-router
-version: "2.0.0"
+version: "2.2.0"
 description: "Automatic skill detection and loading system for the skills ecosystem"
 when_to_use: "Automatically invoked by autor - handles detection patterns and skill loading"
 priority: critical
@@ -17,7 +17,7 @@ source:
 author: thevoidsyntax
 ---
 
-# AUTO-ROUTER v2.0
+# AUTO-ROUTER v2.2
 
 **Automatic Skill Detection & Loading System**
 
@@ -27,18 +27,23 @@ author: thevoidsyntax
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  AUTO-ROUTER                                              │
+│  AUTO-ROUTER v2.2                                          │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
 │  DETECTION ENGINE                                          │
 │  ├─ Pattern matching (phrases, files, commands)           │
 │  ├─ Tech stack inference                                  │
-│  └─ Context analysis                                      │
+│  └─ Project state assessment                              │
 │                                                             │
 │  SKILL LOADER                                              │
+│  ├─ Personas (Satria, Athena, Dina, Frans)                │
 │  ├─ Core skills (always loaded)                           │
 │  ├─ Conditional skills (auto-detect)                       │
 │  └─ Integration mapping                                    │
+│                                                             │
+│  SMART FLOW                                                │
+│  ├─ NEW PROJECT: Satria First                            │
+│  └─ EXISTING PROJECT: Contextual Assessment               │
 │                                                             │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -169,16 +174,58 @@ These 11 skills are automatically loaded when you invoke `/autor`:
 
 ## INTEGRATION FLOW
 
+### New Project Flow
+```
+1. User invokes /autor new
+         ↓
+2. Detect: "NEW PROJECT"
+         ↓
+3. Load Core Skills (12)
+         ↓
+4. "Recommended: /satria (PM) for planning"
+         ↓
+5. Satria coordinates team as needed
+```
+
+### Existing Project Flow
 ```
 1. User invokes /autor
          ↓
-2. Auto-router loads 11 CORE skills
+2. Deep Analysis (ASSESS project state)
          ↓
-3. Auto-router detects patterns in context
+3. Health Check:
+   - Tests coverage
+   - CI/CD status
+   - Documentation state
+   - Security audit status
+   - Code quality
          ↓
-4. Conditional skills loaded as needed
+4. If HEALTHY → Show analysis, no persona needed
+   If HAS ISSUES → Recommend TOP priority only
          ↓
-5. Skills integrated with each other
+5. User decides or continues solo
+```
+
+### Assessment Logic
+
+| Project State | Assessment | Recommendation |
+|--------------|------------|-----------------|
+| No tests | "Test coverage needed" | Suggest `/dina` |
+| CI/CD missing | "CI/CD not configured" | Suggest `/frans` |
+| No documentation | "Docs missing/outdated" | Suggest `/satria` or `/athena` |
+| Deploy failing | "Deployment issues" | Suggest `/frans` |
+| Security concerns | "Security audit needed" | Suggest `/dina` |
+| Complex feature | "Architecture review needed" | Suggest `/athena` |
+| Good state | "Project healthy" | No persona needed |
+
+### Team Coordination
+
+```
+LAYER 2: PERSONAS
+├── Satria (PM) → Team coordinator for new projects
+├── Athena (SE) → Invoked by Satria for architecture/features
+├── Dina (QA) → Invoked by Satria for testing/security
+└── Frans (DevOps) → Invoked by Satria for deployment/CI-CD
 ```
 
 ---
@@ -186,12 +233,18 @@ These 11 skills are automatically loaded when you invoke `/autor`:
 ## SKILL INTEGRATION MAP
 
 ```
+_agents/ (Personas)
+├── Satria (PM)     ──────────────────────────────────────┐
+├── Athena (SE)     ──────────────────────────────────────┤
+├── Dina (QA)       ──────────────────────────────────────┼── Personas
+└── Frans (DevOps)  ──────────────────────────────────────┘   (Layer 2)
+
 _core/
 ├── git ──────────────────────────────────────────────────┐
 ├── config ───────────────────────────────────────────────┤
 ├── security ────────────────────────────────────────────┤
-├── testing ──────────────────────────────────────────────┼── Integration
-├── error-debugger ─────────────────────────────────────┤   Chain
+├── testing ──────────────────────────────────────────────┼── Core Skills
+├── error-debugger ─────────────────────────────────────┤   (Layer 3)
 ├── observability ───────────────────────────────────────┤
 ├── doc-generator ───────────────────────────────────────┤
 ├── mem-search ─────────────────────────────────────────┤
@@ -202,7 +255,7 @@ _core/
 _conditional/
 ├── deployment ──────────────────────────────────────────┐
 ├── docker ─────────────────────────────────────────────┼── Conditional
-├── kubernetes ────────────────────────────────────────┤   Loading
+├── kubernetes ────────────────────────────────────────┤   (Layer 4)
 ├── ui-ux-pro-max ────────────────────────────────────┤
 └── [tech stack] ──────────────────────────────────────┘
 ```
@@ -245,6 +298,18 @@ _conditional/
 ---
 
 ## Changelog
+
+### v2.2.0
+- ✅ Smart Project Flow: NEW → Satria First, EXISTING → Contextual Assessment
+- ✅ Health Check for existing projects
+- ✅ Single TOP priority recommendation
+- ✅ Satria as Team Coordinator
+- ✅ Team coordination flow documented
+
+### v2.1.0
+- ✅ PERSONAS LAYER: Satria, Athena, Dina, Frans added
+- ✅ All personas auto-invoke: anti-slop + chisle + caveman
+- ✅ Updated integration map with 4 layers
 
 ### v2.0.0
 - ✅ Updated for new folder structure

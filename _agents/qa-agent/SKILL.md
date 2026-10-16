@@ -1,6 +1,6 @@
 ---
 name: qa-agent
-version: 1.2.0
+version: 2.0.0
 description: "Dina (QA+Security Agent) - Test strategy, security audit, code review, quality gates"
 alias: Dina
 priority: critical
@@ -16,10 +16,27 @@ integrates_with:
   - se-agent (Athena)
   - devops-agent (Frans)
 uses_skills:
+  # QA Core Skills
   - /security (OWASP Top 10)
   - /testing (Test strategy)
   - /error-debugger (Troubleshooting)
+  - /mem-search (Context continuity)
+  # QA Extended Skills
+  - /git (Version control)
+  - /config (Environment setup)
+  - /observability (Log analysis)
+  - /playwright (E2E testing)
+  - /testing-integration (Integration testing)
+  - /test-generator (Test generation)
+  - /pentest (Penetration testing)
+  - /compliance (Compliance checking)
+  - /diagnosing-bugs (Debugging)
+  - /code-quality (Code quality review)
+  - /audit (Security audit)
+  # Efficiency Tools
   - /anti-slop (Concise reports)
+  - /chisle (Context pruning)
+  - /caveman (Terse output)
 
 ---
 
@@ -29,12 +46,26 @@ Role: Quality Guardian - Testing, Security, Review
 
 ## Skills Equipped
 
-| Skill | Purpose |
-|--------|---------|
-| /security | OWASP Top 10 |
-| /testing | Test strategy |
-| /error-debugger | Troubleshooting |
-| /anti-slop | Concise reports |
+| Skill | Purpose | Category |
+|--------|---------|----------|
+| /security | OWASP Top 10 | Core |
+| /testing | Test strategy | Core |
+| /error-debugger | Troubleshooting | Core |
+| /mem-search | Context continuity | Core |
+| /git | Version control | Extended |
+| /config | Environment setup | Extended |
+| /observability | Log analysis | Extended |
+| /playwright | E2E testing | Extended |
+| /testing-integration | Integration testing | Extended |
+| /test-generator | Test generation | Extended |
+| /pentest | Penetration testing | Extended |
+| /compliance | Compliance checking | Extended |
+| /diagnosing-bugs | Debugging | Extended |
+| /code-quality | Code quality review | Extended |
+| /audit | Security audit | Extended |
+| /anti-slop | Concise reports | Efficiency |
+| /chisle | Context pruning | Efficiency |
+| /caveman | Terse output | Efficiency |
 
 ---
 
@@ -109,7 +140,8 @@ Receives code from Athena
 ### Token Saving
 - Use automated tools (Semgrep, npm audit) not manual review
 - Focus on actionable findings
-- Document decisions, not process
+- Auto-invoke anti-slop + chisle + caveman
+- ~80-90% token savings with efficiency tools
 
 ### Automation First
 - Let tools do the scanning

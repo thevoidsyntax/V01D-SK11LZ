@@ -1,7 +1,7 @@
 ---
 name: autor
-version: "2.0.0"
-description: "Intelligent project analysis with Smart Auto-Invoke, Project Init, and Memory Continuity for Claude Code"
+version: "2.2.0"
+description: "Intelligent project analysis with Smart Flow, Personas, Project Init, and Memory Continuity for Claude Code"
 when_to_use: "Run when starting a new project, analyzing existing codebase, or needing project intelligence."
 priority: critical
 phase: any
@@ -24,13 +24,40 @@ source:
 author: thevoidsyntax
 ---
 
-# 🚀 AUTOR v2.0 - PROJECT INTELLIGENCE
+# 🚀 AUTOR v2.2 - PROJECT INTELLIGENCE
 
-**Intelligent Project Analysis with Smart Auto-Invoke & Memory Continuity**
+**Smart Project Flow with Personas & Contextual Intelligence**
 
 ---
 
-## What's New in v2.0
+## What's New in v2.2
+
+### Smart Project Flow
+```
+NEW PROJECT: Satria First
+  → Satria coordinates team as needed
+
+EXISTING PROJECT: Contextual Assessment
+  → Analyze → Assess → Recommend (or no recommendation if healthy)
+```
+
+### Personas Integrated
+```
+┌─────────────────────────────────────────────────────────────┐
+│  PERSONAS FLOW                                            │
+├─────────────────────────────────────────────────────────────┤
+│  NEW PROJECT:                                             │
+│    Satria (PM) → Team Coordinator                         │
+│      → Calls Athena when needed                          │
+│      → Calls Dina when needed                            │
+│      → Calls Frans when ready to deploy                  │
+│                                                             │
+│  EXISTING PROJECT:                                        │
+│    Contextual → Based on project state                    │
+│      Healthy → No persona needed                         │
+│      Has issues → Suggest TOP priority fix only           │
+└─────────────────────────────────────────────────────────────┘
+```
 
 ### Memory Continuity
 ```
@@ -43,45 +70,55 @@ author: thevoidsyntax
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### Layer Architecture v2.0
+### Layer Architecture v2.1
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │  LAYER 1: INFRASTRUCTURE (Always Available)               │
 ├─────────────────────────────────────────────────────────────┤
 │  ├── autor/            ← Command interface                 │
-│  └── auto-router/      ← Detection & loading system      │
+│  └── auto-router/      ← Detection & loading system        │
 └─────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────┐
-│  LAYER 2: CORE (12 Skills - Auto-loaded)                │
+│  LAYER 2: PERSONAS (Available with /autor)                │
+├─────────────────────────────────────────────────────────────┤
+│  ├── Satria (PM)       - BRD, PRD, FSD                   │
+│  ├── Athena (SE)       - Architecture, code               │
+│  ├── Dina (QA)         - Security, testing                │
+│  └── Frans (DevOps)    - Deployment, monitoring           │
+│  All auto-invoke: anti-slop + chisle + caveman            │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│  LAYER 3: CORE (12 Skills - Auto-loaded)                  │
 ├─────────────────────────────────────────────────────────────┤
 │  ├── git                 - Version control                 │
-│  ├── config             - Environment & secrets           │
+│  ├── config             - Environment & secrets            │
 │  ├── security            - OWASP, encryption              │
 │  ├── testing             - QA + TDD methodology           │
-│  ├── error-debugger     - Debug patterns                │
+│  ├── error-debugger     - Debug patterns                  │
 │  ├── observability        - Logs + Metrics + Traces       │
 │  ├── doc-generator       - Auto-documentation             │
 │  ├── mem-search         - Memory continuity               │
 │  ├── anti-slop          - Token efficiency                │
 │  ├── chisle             - Context optimization            │
-│  ├── caveman            - Aggressive compression         │
+│  ├── caveman            - Aggressive compression          │
 │  └── codebase-design    - Architecture + Domain modeling  │
 └─────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────┐
-│  LAYER 3: CONDITIONAL (Auto-detect based on project)      │
+│  LAYER 4: CONDITIONAL (Auto-detect based on project)      │
 ├─────────────────────────────────────────────────────────────┤
 │  ├── docker              - Containerization                │
 │  ├── kubernetes          - Orchestration                   │
 │  ├── terraform           - Infrastructure as Code         │
-│  ├── deployment          - CI/CD + Deployment strategies   │
-│  ├── serverless          - Lambda/Functions                │
+│  ├── deployment          - CI/CD + Deployment strategies  │
+│  ├── serverless          - Lambda/Functions               │
 │  ├── mobile              - React Native                   │
 │  ├── browser-use         - Browser automation             │
-│  ├── reticle             - Computer vision               │
-│  └── [tech stack]        - Based on selected stack       │
+│  ├── reticle             - Computer vision                │
+│  └── [tech stack]        - Based on detected stack        │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -119,6 +156,19 @@ When you invoke `/autor`, the following 12 core skills are automatically loaded:
 | `caveman` | Aggressive compression | ✅ |
 | `codebase-design` | Architecture | ✅ |
 
+### Personas (Auto-Available with /autor)
+
+| Persona | Name | Role | Command |
+|---------|------|------|---------|
+| PM Agent | **Satria** | Project Manager | `/satria` or `/pm` |
+| SE Agent | **Athena** | Software Engineer | `/athena` or `/se` |
+| QA Agent | **Dina** | Quality Assurance | `/dina` or `/qa` |
+| DevOps Agent | **Frans** | Platform Engineer | `/frans` or `/devops` |
+
+All personas auto-invoke: `anti-slop` + `chisle` + `caveman` for ~80-90% token savings.
+
+Use `/team` to invoke full workflow: Satria → Athena → Dina → Frans → Production
+
 ### Conditional Skills (Auto-detect)
 
 | Pattern Detected | Skill Loaded |
@@ -136,36 +186,65 @@ When you invoke `/autor`, the following 12 core skills are automatically loaded:
 
 ## Project Flow
 
-### New Project
+### New Project Flow
 ```
 User: /autor new
   ↓
-Autor: What type of project?
+1. Analyze project type
   ↓
-User: Web app (Next.js)
+2. "Recommended: Start with /satria (PM) for planning"
   ↓
-Auto-router loads:
-  - Core skills (11)
-  - Next.js patterns → /nextjs-pro
-  - Database patterns → /postgresql-pro (if needed)
-  - UI patterns → /tailwindcss
+3. Satria invoked → Satria decides when to involve team
   ↓
-READY FOR DEVELOPMENT
+4. Satria coordinates: Athena → Dina → Frans → Production
 ```
 
-### Existing Project
+### Existing Project Flow
 ```
 User: /autor
   ↓
-Mem-search: Retrieves project context
+1. Deep Analysis (ASSESS project state)
   ↓
-Autor: Shows project analysis
+2. Health Check:
+   - Tests coverage
+   - CI/CD status
+   - Documentation state
+   - Security audit status
+   - Code quality
   ↓
-Auto-router: Detects tech stack
+3. Assessment Result:
+   ┌─────────────────────────────────────────┐
+   │  If HEALTHY:                            │
+   │    → Show analysis, no persona needed   │
+   │                                         │
+   │  If HAS ISSUES:                         │
+   │    → Recommend TOP priority fix only    │
+   │    → Suggest persona who can help       │
+   └─────────────────────────────────────────┘
   ↓
-Loads appropriate skills
-  ↓
-READY TO CONTINUE
+4. User decides what to tackle or continues solo
+```
+
+### Assessment Logic
+
+| Project State | Assessment | Recommendation |
+|--------------|------------|-----------------|
+| No tests | "Test coverage needed" | `/dina` (testing) |
+| CI/CD missing | "CI/CD not configured" | `/frans` (devops) |
+| No documentation | "Docs missing/outdated" | `/satria` or `/athena` |
+| Deploy failing | "Deployment issues" | `/frans` (devops) |
+| Security concerns | "Security audit needed" | `/dina` (security) |
+| Complex feature | "Architecture review needed" | `/athena` |
+| Good state | "Project healthy" | No persona needed |
+
+### Team Coordination
+
+```
+Satria (PM) → Owns project planning and team coordination
+  ↓ calls when needed:
+  - Athena → for architecture/feature work
+  - Dina → for testing/security
+  - Frans → for deployment/infrastructure
 ```
 
 ---
@@ -246,6 +325,20 @@ Autor:
 ---
 
 ## Changelog
+
+### v2.2.0 (Smart Project Flow)
+- ✅ Smart Flow: NEW PROJECT → Satria First
+- ✅ Smart Flow: EXISTING PROJECT → Contextual Assessment
+- ✅ Health Check for existing projects
+- ✅ Single TOP priority recommendation (not multiple options)
+- ✅ Satria as Team Coordinator
+- ✅ Team coordination: Satria calls others as needed
+
+### v2.1.0 (Personas Integration)
+- ✅ PERSONAS LAYER: Satria, Athena, Dina, Frans now available with /autor
+- ✅ All personas auto-invoke: anti-slop + chisle + caveman
+- ✅ LAYER REORDERED: Infrastructure → Personas → Core (12) → Conditional
+- ✅ New `/team` command for full workflow
 
 ### v2.0.0 (Layer Architecture Redesign)
 - ✅ INFRASTRUCTURE LAYER: autor + auto-router separated

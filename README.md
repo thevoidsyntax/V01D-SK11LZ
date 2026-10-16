@@ -1,4 +1,4 @@
-# Skills Ecosystem v2.0
+# Skills Ecosystem v2.2
 
 **Intelligent Skills Architecture for Claude Code Agent**
 
@@ -14,7 +14,7 @@ This is the skills ecosystem for Claude Code - a comprehensive collection of ski
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  SKILLS ECOSYSTEM v2.0                                    │
+│  SKILLS ECOSYSTEM v2.2                                    │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
 │  ┌─────────────────────────────────────────────────────┐   │
@@ -26,7 +26,18 @@ This is the skills ecosystem for Claude Code - a comprehensive collection of ski
 │  └─────────────────────────────────────────────────────┘   │
 │                                                             │
 │  ┌─────────────────────────────────────────────────────┐   │
-│  │  CORE LAYER (12 Skills - Auto-loaded)              │   │
+│  │  LAYER 2: PERSONAS (Available with /autor)         │   │
+│  │                                                     │   │
+│  │  ├── Satria (PM)     BRD, PRD, FSD               │   │
+│  │  ├── Athena (SE)     Architecture, code           │   │
+│  │  ├── Dina (QA)       Security, testing            │   │
+│  │  └── Frans (DevOps)  Deployment, monitoring        │   │
+│  │                                                     │   │
+│  │  All auto-invoke: anti-slop + chisle + caveman    │   │
+│  └─────────────────────────────────────────────────────┘   │
+│                                                             │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │  LAYER 3: CORE (12 Skills - Auto-loaded)          │   │
 │  │  (Always loaded with /autor)                        │   │
 │  │                                                     │   │
 │  │  ├── git               Version control              │   │
@@ -39,11 +50,12 @@ This is the skills ecosystem for Claude Code - a comprehensive collection of ski
 │  │  ├── mem-search       Memory continuity           │   │
 │  │  ├── anti-slop        Token efficiency             │   │
 │  │  ├── chisle           Context optimization         │   │
+│  │  ├── caveman          Aggressive compression       │   │
 │  │  └── codebase-design  Architecture + DDD          │   │
 │  └─────────────────────────────────────────────────────┘   │
 │                                                             │
 │  ┌─────────────────────────────────────────────────────┐   │
-│  │  CONDITIONAL LAYER (Auto-detect based on project)   │   │
+│  │  LAYER 4: CONDITIONAL (Auto-detect by project)     │   │
 │  │                                                     │   │
 │  │  ├── docker           Containerization               │   │
 │  │  ├── kubernetes       Orchestration                 │   │
@@ -57,7 +69,7 @@ This is the skills ecosystem for Claude Code - a comprehensive collection of ski
 │  └─────────────────────────────────────────────────────┘   │
 │                                                             │
 │  ┌─────────────────────────────────────────────────────┐   │
-│  │  TECH STACK LAYER (Auto-detect by patterns)         │   │
+│  │  LAYER 5: TECH STACK (Auto-detect by patterns)     │   │
 │  │                                                     │   │
 │  │  Frontend:     react-pro, nextjs-pro, vue-pro      │   │
 │  │  Backend:      python-pro, go-pro, java-pro        │   │
@@ -75,11 +87,20 @@ This is the skills ecosystem for Claude Code - a comprehensive collection of ski
 
 ### Basic Commands
 ```bash
-/autor              # Analyze project or start new
+/autor              # Analyze project + personas available
 /autor scan          # Full project analysis
 /autor new           # New project wizard
 /autor status        # Show project state
 /autor --help        # Show help
+```
+
+### Personas Commands
+```bash
+/satria             # Invoke Satria (PM)
+/athena             # Invoke Athena (SE)
+/dina               # Invoke Dina (QA)
+/frans              # Invoke Frans (DevOps)
+/team               # Full workflow: Satria → Athena → Dina → Frans
 ```
 
 ### Skill Invocation
@@ -93,6 +114,19 @@ This is the skills ecosystem for Claude Code - a comprehensive collection of ski
 ---
 
 ## Layer Details
+
+### Personas Layer (`_agents/`)
+
+4 Named Personas available with `/autor`:
+
+| Persona | Role | Skills | Command |
+|---------|------|--------|---------|
+| **Satria** | Project Manager | doc-generator, mem-search, codebase-design | `/satria` |
+| **Athena** | Software Engineer | security, testing, codebase-design, api-design | `/athena` |
+| **Dina** | QA & Security | security, testing, error-debugger | `/dina` |
+| **Frans** | DevOps | docker, deployment, observability | `/frans` |
+
+All personas auto-invoke: `anti-slop` + `chisle` + `caveman` (~80-90% token savings)
 
 ### Infrastructure Layer (`_infrastructure/`)
 
