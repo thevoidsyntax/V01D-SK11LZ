@@ -1,141 +1,127 @@
-# ═══════════════════════════════════════
-#        SKILLS ECOSYSTEM v2.3
-# ═══════════════════════════════════════
+# Skills Ecosystem v2.3
 
-> Intelligent skills architecture for Claude Code Agent
+<p align="center">
+  <img src="https://img.shields.io/badge/Skills-80+-blue?style=for-the-badge&logo=robot&logoColor=white" alt="Skills">
+  <img src="https://img.shields.io/badge/Version-v2.3.0-green?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Personas-4-purple?style=for-the-badge&logo=users&logoColor=white" alt="Personas">
+  <img src="https://img.shields.io/badge/Token%20Efficiency-~80%25-orange?style=for-the-badge&logo=lightning&logoColor=white" alt="Token">
+</p>
 
-. . . . . . . . . . . . . . . . . . .
+<p align="center">
+  <strong>Intelligent skills architecture for Claude Code Agent</strong>
+</p>
 
+---
 
-──────────────────────────────────────────
-           QUICK START
-──────────────────────────────────────────
+## Quick Start
 
-  /autor          analyze project
-  /autor new      start fresh
-  /satria          project manager
-  /athena          software engineer
-  /dina            quality assurance
-  /frans           devops
-  /team            full workflow
+```bash
+/autor           # analyze project
+/autor new       # start fresh project
+/satria          # project manager
+/athena          # software engineer
+/dina            # quality assurance
+/frans           # devops
+/team            # full workflow
+```
 
+---
 
-. . . . . . . . . . . . . . . . . . .
+## System Layers
 
-──────────────────────────────────────────
-           SYSTEM LAYERS
-──────────────────────────────────────────
+| Layer | Content |
+|-------|---------|
+| **L1: Infrastructure** | `/autor` · `auto-router` |
+| **L2: Personas** | Satria · Athena · Dina · Frans |
+| **L3: Core** | 12 skills (git, config, security, testing...) |
+| **L4: Conditional** | docker, kubernetes, terraform... |
+| **L5: Tech Stack** | 25+ skills (react-pro, python-pro...) |
 
-  LAYER 1: Infrastructure
-    /autor · auto-router
+---
 
-  LAYER 2: Personas
-    Satria · Athena · Dina · Frans
+## Personas
 
-  LAYER 3: Core (12 skills)
-    git · config · security · testing
-    error-debugger · observability
-    doc-generator · mem-search
-    anti-slop · chisle · caveman
-    codebase-design
+| Command | Persona | Role | Extended Skills |
+|---------|---------|------|----------------|
+| `/satria` | Satria | PM | brd, fsd, prd, architecture-patterns, audit |
+| `/athena` | Athena | SE | api-design, design-patterns, diagnosing-bugs, performance |
+| `/dina` | Dina | QA | playwright, pentest, compliance, test-generator |
+| `/frans` | Frans | DevOps | docker, kubernetes, terraform, cloud-architect |
 
-  LAYER 4: Conditional
-    docker · kubernetes · terraform
-    deployment · serverless · mobile
+> **Token Model:** Personas inherit 12 core skills from `/autor` (0 token). Extended skills add token cost per skill.
 
-  LAYER 5: Tech Stack (25+)
-    react-pro · python-pro · postgresql-pro
-    graphql · and more...
+---
 
+## Core Skills (12)
 
-. . . . . . . . . . . . . . . . . . .
+Always loaded with `/autor` — no additional token
 
-──────────────────────────────────────────
-           PERSONAS
-──────────────────────────────────────────
+```
+git · config · security · testing · error-debugger
+observability · doc-generator · mem-search
+anti-slop · chisle · caveman · codebase-design
+```
 
-  ┌─────────┬─────────────────────────────┐
-  │ SATRIA  │ PM · brd · fsd · prd       │
-  │ ATHENA   │ SE · api-design · perf     │
-  │ DINA     │ QA · playwright · pentest   │
-  │ FRANS    │ DevOps · docker · k8s      │
-  └─────────┴─────────────────────────────┘
+---
 
-  All inherit 12 core skills from /autor
-  Extended skills add token cost
+## Project Flow
 
+### New Project
+```
+/autor new  →  Satria activates first
+            →  Creates BRD, PRD, FSD
+            →  Coordinates team as needed
+            →  Production Ready
+```
 
-. . . . . . . . . . . . . . . . . . .
+### Existing Project
+```
+/autor  →  Health Check
+        →  Suggest TOP priority fix
+        →  Or ready to help directly
+```
 
-──────────────────────────────────────────
-           TOKEN EFFICIENCY
-──────────────────────────────────────────
+---
 
-  /autor loads 12 core skills (1x)
-       │
-       ▼
-  Persona inherits core (0 token)
-       │
-       ▼
-  Persona extends (+N token)
+## Token Efficiency
 
-  Tools: anti-slop · chisle · caveman
-  Savings: ~80%
+| Tool | Savings |
+|------|---------|
+| `anti-slop` | ~30-40% |
+| `chisle` | ~20-30% |
+| `caveman` | ~65% |
 
+> All personas auto-invoke efficiency tools
 
-. . . . . . . . . . . . . . . . . . .
+---
 
-──────────────────────────────────────────
-           STATS
-──────────────────────────────────────────
+## Stats
 
-  Core Skills      12
-  Persona Skills  33
-  Conditional       9
-  Tech Stack      25+
-  ──────────────
-  TOTAL           ~80
+| Category | Count |
+|----------|-------|
+| Core Skills | 12 |
+| Persona Extended | 33 |
+| Conditional | 9 |
+| Tech Stack | 25+ |
+| **Total** | **~80** |
 
+---
 
-. . . . . . . . . . . . . . . . . . .
+## Version
 
-──────────────────────────────────────────
-           VERSION HISTORY
-──────────────────────────────────────────
+| Version | Changes |
+|---------|---------|
+| v2.3 | HYBRID Token Distribution |
+| v2.2 | Smart Project Flow |
+| v2.1 | Personas Integration |
+| v2.0 | Layer Architecture |
 
-  v2.3  HYBRID Token Distribution
-  v2.2  Smart Project Flow
-  v2.1  Personas Integration
-  v2.0  Layer Architecture
+---
 
+<br>
 
-. . . . . . . . . . . . . . . . . . .
+<p align="center">
+  <strong>THE VOID SYNTAX</strong>
+</p>
 
-──────────────────────────────────────────
-           STRUCTURE
-──────────────────────────────────────────
-
-  _infrastructure/
-    autor/           command interface
-    auto-router/     detection engine
-
-  _agents/
-    pm-agent/       Satria
-    se-agent/       Athena
-    qa-agent/       Dina
-    devops-agent/   Frans
-
-  _core/            12 core skills
-  _conditional/     auto-detect skills
-  [tech folders]     pattern-based
-
-
-. . . . . . . . . . . . . . . . . . .
-
-╔═══════════════════════════════════════╗
-║                                       ║
-║          THE VOID SYNTAX              ║
-║                                       ║
-╚═══════════════════════════════════════╝
-
-──────────────────────────────────────────
+<br>
