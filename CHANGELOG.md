@@ -12,9 +12,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Recommended Actions**: Priority-based action suggestions (Immediate, This Session, Optimize, Optional)
 - **Persona Availability**: Always shows available personas ready to help
 - **Improved Flow**: Project healthy now shows actionable suggestions
+- **Audit v5.0.0**: Intelligent Self-Learning Audit with smart file prioritization
 
 ### Changed
 - **Existing Project Flow**: Extended to include Post-Analysis Output step
+
+### Audit v5.0.0 Features
+- Intelligent file priority system (Tier 1-4)
+- Git-aware scanning (recency, history, current changes)
+- Dependency-aware scanning (high dependents, risky imports)
+- Dynamic priority (finding-based, correlation boost)
+- Smart verification (not just severity-based)
+- Cross-file analysis (imports, types, contracts)
+- Graceful token degradation
+- **98% coverage at 60% token cost**
 
 ## [2.3.0] - 2024-10-16
 
