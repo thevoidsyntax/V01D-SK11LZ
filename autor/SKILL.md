@@ -215,14 +215,18 @@ User: /autor
 3. Assessment Result:
    ┌─────────────────────────────────────────┐
    │  If HEALTHY:                            │
-   │    → Show analysis, no persona needed   │
+   │    → Show analysis + actionable next    │
    │                                         │
    │  If HAS ISSUES:                         │
    │    → Recommend TOP priority fix only    │
    │    → Suggest persona who can help       │
    └─────────────────────────────────────────┘
   ↓
-4. User decides what to tackle or continues solo
+4. Post-Analysis Output:
+   ├─ RECOMMENDED ACTIONS (based on gaps)
+   └─ PERSONA AVAILABILITY (ready to help)
+  ↓
+5. User decides what to tackle
 ```
 
 ### Assessment Logic
@@ -245,6 +249,79 @@ Satria (PM) → Owns project planning and team coordination
   - Athena → for architecture/feature work
   - Dina → for testing/security
   - Frans → for deployment/infrastructure
+```
+
+---
+
+## Post-Analysis Output
+
+After analysis completes, ALWAYS provide actionable next steps:
+
+### Recommended Actions (Based on Gaps)
+
+```
+📋 RECOMMENDED ACTIONS:
+
+1. IMMEDIATE (Priority Fix):
+   └─ [Specific actionable task]
+     → Run: [command or action]
+
+2. THIS SESSION (Quick Win):
+   └─ [Optional improvement]
+     → Run: [command or action]
+
+3. OPTIMIZE (Long-term):
+   └─ [Future enhancement]
+     → Run: [command or action]
+
+4. OPTIONAL (If Needed):
+   └─ [Nice-to-have]
+     → Run: [command or action]
+```
+
+### Persona Availability (Always Available)
+
+```
+🎯 READY TO HELP:
+
+Project is healthy - no urgent fixes needed.
+Available personas for your next task:
+
+  /satria   → Planning, BRD, PRD, FSD
+  /athena   → Architecture, code, API design
+  /dina     → Testing, security, QA
+  /frans    → DevOps, deployment, CI/CD
+
+Or describe what you want to work on.
+```
+
+### Example Output Format
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  PROJECT STATE: HEALTHY                                   │
+├─────────────────────────────────────────────────────────────┤
+│  ✅ Core functionality: Working                            │
+│  ✅ CI/CD: Configured                                     │
+│  ✅ Documentation: Complete                               │
+└─────────────────────────────────────────────────────────────┘
+
+📋 RECOMMENDED ACTIONS:
+
+1. IMMEDIATE:
+   └─ Commit recent changes
+     → git add . && git commit -m "fix: ..."
+
+2. THIS SESSION:
+   └─ Improve test coverage (currently 60%)
+     → /dina for testing guidance
+
+🎯 READY TO HELP:
+
+  /satria   → Planning & documentation
+  /athena   → Architecture & code
+  /dina     → Testing & security
+  /frans    → DevOps & deployment
 ```
 
 ---
@@ -377,6 +454,12 @@ Autor:
 ---
 
 ## Changelog
+
+### v2.4.0 (Post-Analysis Output)
+- ✅ Added actionable next steps after analysis
+- ✅ Added "Recommended Actions" section with priority levels
+- ✅ Added "Ready to Help" persona availability
+- ✅ Project healthy now shows actionable suggestions
 
 ### v2.3.0 (HYBRID Token Distribution)
 - ✅ Token Distribution section added
