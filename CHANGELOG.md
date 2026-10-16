@@ -5,6 +5,22 @@ All notable changes to the Skills Ecosystem will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.0] - 2024-10-16
+
+### Added
+- **Audit Recommendation**: Contextual audit suggestions based on project state
+- **Decision Tree**: When to audit vs when to skip
+- **Audit Command Reference**: Full command reference with token estimates
+
+### Changed
+- **Version**: Bumped to v2.5.0
+- **Description**: Updated to include Audit Recommendation
+
+### Audit Recommendation Features
+- Q&A decision tree for audit triggers
+- Strong recommendation for security-critical features
+- Efficiency tips for solo vs team usage
+
 ## [2.4.0] - 2024-10-16
 
 ### Added

@@ -1,7 +1,7 @@
 ---
 name: autor
-version: "2.3.0"
-description: "Intelligent project analysis with Smart Flow, Personas, HYBRID Token Distribution, and Memory Continuity for Claude Code"
+version: "2.5.0"
+description: "Intelligent project analysis with Smart Flow, Personas, HYBRID Token Distribution, Audit Recommendation, and Memory Continuity for Claude Code"
 when_to_use: "Run when starting a new project, analyzing existing codebase, or needing project intelligence."
 priority: critical
 phase: any
@@ -24,13 +24,29 @@ source:
 author: thevoidsyntax
 ---
 
-# 🚀 AUTOR v2.2 - PROJECT INTELLIGENCE
+# 🚀 AUTOR v2.5 - PROJECT INTELLIGENCE
 
-**Smart Project Flow with Personas & Contextual Intelligence**
+**Smart Project Flow with Personas, Audit Recommendation & Token Efficiency**
 
 ---
 
-## What's New in v2.2
+## What's New in v2.5
+
+### Audit Recommendation (NEW)
+```
+Contextual audit recommendations based on project state:
+├─ /audit when: new project, before deploy, after refactor
+├─ /audit when: adding auth/payment features
+└─ Don't audit when: healthy, recently audited, small fixes
+```
+
+### Token Efficiency (Enhanced)
+```
+3 Efficiency Skills auto-loaded with /autor:
+├─ /anti-slop  → Remove verbose AI patterns
+├─ /chisle     → Prune irrelevant context
+└─ /caveman    → Aggressive compression
+```
 
 ### Smart Project Flow
 ```
@@ -293,6 +309,90 @@ Available personas for your next task:
   /frans    → DevOps, deployment, CI/CD
 
 Or describe what you want to work on.
+```
+
+### Audit Recommendation (Contextual)
+
+After analysis, evaluate if audit is needed based on project context:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  AUDIT RECOMMENDATION CHECK                                      │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ASK YOURSELF:                                                 │
+│                                                                  │
+│  Q1: Is this a NEW project/feature?                            │
+│      └─ YES → /audit recommended                               │
+│      └─ NO  → Continue                                         │
+│                                                                  │
+│  Q2: Am I about to DEPLOY to production?                       │
+│      └─ YES → /audit recommended                               │
+│      └─ NO  → Continue                                         │
+│                                                                  │
+│  Q3: Did I REFACTOR >20 files recently?                        │
+│      └─ YES → /audit recommended                               │
+│      └─ NO  → Continue                                         │
+│                                                                  │
+│  Q4: Am I adding AUTH/PAYMENT/USER DATA?                     │
+│      └─ YES → /audit STRONGLY recommended                     │
+│      └─ NO  → Continue                                         │
+│                                                                  │
+│  Q5: Does my codebase feel "smelly"?                          │
+│      └─ YES → /audit recommended                               │
+│      └─ NO  → Don't audit (save tokens)                        │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### When to Recommend Audit
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  RECOMMEND /audit WHEN:                                         │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  🔴 STRONGLY RECOMMEND:                                       │
+│  ├─ Adding authentication/authorization                        │
+│  ├─ Adding payment/billing features                            │
+│  ├─ Handling user PII/sensitive data                          │
+│  └─ Before first production deploy                             │
+│                                                                  │
+│  🟠 RECOMMEND:                                                │
+│  ├─ New project/feature (before getting too deep)             │
+│  ├─ After major refactoring (>20 files changed)              │
+│  ├─ Codebase feels "smelly" (gut feeling)                   │
+│  └─ Starting to work with unfamiliar codebase                  │
+│                                                                  │
+│  🟢 DON'T RECOMMEND:                                          │
+│  ├─ Project is healthy and recently audited                    │
+│  ├─ Only doing small fixes (typos, minor changes)            │
+│  └─ Project hasn't changed since last audit                    │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Audit Command Reference
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  AUDIT COMMANDS                                                 │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  /audit                → Full scan (~300K tokens)               │
+│  /audit [module]      → Module scan (~150K tokens)           │
+│                                                                  │
+│  EFFICIENCY TIPS:                                              │
+│  • Solo dev: /audit 2-4x/month (on-demand)                  │
+│  • Small team: /audit-ci + /audit weekly                    │
+│  • Add module scope: /audit src/auth/                        │
+│                                                                  │
+│  TOKEN BUDGET:                                                 │
+│  • Full scan: ~300K tokens                                    │
+│  • Module scan: ~150K tokens                                   │
+│  • Monthly (solo): ~600K-1.2M tokens                         │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ### Example Output Format
