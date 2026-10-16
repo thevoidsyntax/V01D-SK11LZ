@@ -30,6 +30,59 @@ author: thevoidsyntax
 
 ---
 
+## ⚠️ CRITICAL: LOAD CORE SKILLS FIRST
+
+**BEFORE ANYTHING ELSE**, you MUST invoke these skills using the Skill tool:
+
+### Step 1: Invoke All Core Skills
+
+Use the Skill tool to invoke each of these skills IN ORDER:
+
+```
+Skill(tool call with skill: "git")
+Skill(tool call with skill: "config")
+Skill(tool call with skill: "security")
+Skill(tool call with skill: "testing")
+Skill(tool call with skill: "error-debugger")
+Skill(tool call with skill: "observability")
+Skill(tool call with skill: "doc-generator")
+Skill(tool call with skill: "mem-search")
+Skill(tool call with skill: "anti-slop")
+Skill(tool call with skill: "chisle")
+Skill(tool call with skill: "caveman")
+Skill(tool call with skill: "codebase-design")
+```
+
+### Step 2: Confirm Skills Loaded
+
+After invoking, show a confirmation message listing all loaded skills:
+
+```
+✅ CORE SKILLS LOADED:
+✅ /git      → Version control
+✅ /config   → Environment management
+✅ /security → Security best practices
+✅ /testing  → Testing strategy
+✅ /error-debugger → Debug patterns
+✅ /observability → Monitoring
+✅ /doc-generator → Documentation
+✅ /mem-search → Memory continuity
+✅ /anti-slop → Token efficiency
+✅ /chisle → Context pruning
+✅ /caveman → Terse output
+✅ /codebase-design → Architecture
+```
+
+### Step 3: Then Proceed with Project Analysis
+
+Only after all skills are loaded, proceed with:
+1. Analyze project structure
+2. Check memory for context
+3. Provide recommendations
+4. Suggest personas if needed
+
+---
+
 ## What's New in v2.5
 
 ### Audit Recommendation (NEW)
