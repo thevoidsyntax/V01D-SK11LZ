@@ -8,120 +8,125 @@
 </p>
 
 <p align="center">
-  <strong>V01D-SK11LZ-Agent</strong>
+  <strong>V01D-SK11LZ-Agent</strong> <br>
+  <em>A highly token-efficient, persona-driven AI agent framework for streamlined software development.</em>
 </p>
 
 ---
 
-## Quick Start
+## 🚀 Quick Start
+
+Jalankan command berikut untuk memulai interaksi dengan sistem:
 
 ```bash
-/autor           # analyze project
-/autor new       # start fresh project
-/satria          # project manager
-/athena          # software engineer
-/dina            # quality assurance
-/frans           # devops
-/team            # full workflow
+/autor           # Analyze existing project health & structure
+/autor new       # Start a fresh project setup
+/satria          # Summon Project Manager persona
+/athena          # Summon Software Engineer persona
+/dina            # Summon Quality Assurance persona
+/frans           # Summon DevOps persona
+/team            # Execute full automated workflow
 ```
 
 ---
 
-## System Layers
+## 🏗️ System Layers
 
-| Layer | Content |
-|-------|---------|
-| **L1: Infrastructure** | `/autor` · `auto-router` |
-| **L2: Personas** | Satria · Athena · Dina · Frans |
-| **L3: Core** | 12 skills (git, config, security, testing...) |
-| **L4: Conditional** | docker, kubernetes, terraform... |
-| **L5: Tech Stack** | 25+ skills (react-pro, python-pro...) |
+Arsitektur V01D-SK11LZ dibangun di atas 5 layer utama untuk skalabilitas dan efisiensi:
+
+| Layer | Content | Description |
+|-------|---------|-------------|
+| **L1: Infrastructure** | `/autor` · `auto-router` | Sistem routing utama & inisialisasi |
+| **L2: Personas** | Satria · Athena · Dina · Frans | Spesialisasi peran agen AI |
+| **L3: Core** | 12 skills | Kemampuan dasar (git, config, security, testing) |
+| **L4: Conditional** | 9 skills | Load otomatis sesuai kebutuhan (docker, k8s, dll) |
+| **L5: Tech Stack** | 25+ skills | Bahasa pemrograman & framework spesifik |
 
 ---
 
-## Personas
+## 👥 Personas
+
+Setiap persona dirancang untuk menangani fase *software development life cycle* (SDLC) yang berbeda.
 
 | Command | Persona | Role | Extended Skills |
 |---------|---------|------|----------------|
-| `/satria` | Satria | PM | brd, fsd, prd, architecture-patterns, audit |
-| `/athena` | Athena | SE | api-design, design-patterns, diagnosing-bugs, performance |
-| `/dina` | Dina | QA | playwright, pentest, compliance, test-generator |
-| `/frans` | Frans | DevOps | docker, kubernetes, terraform, cloud-architect |
+| `/satria` | **Satria** | Project Manager | `brd`, `fsd`, `prd`, `architecture-patterns`, `audit` |
+| `/athena` | **Athena** | Software Eng. | `api-design`, `design-patterns`, `diagnosing-bugs`, `performance` |
+| `/dina` | **Dina** | QA Engineer | `playwright`, `pentest`, `compliance`, `test-generator` |
+| `/frans` | **Frans** | DevOps | `docker`, `kubernetes`, `terraform`, `cloud-architect` |
 
-> **Token Model:** Personas inherit 12 core skills from `/autor` (0 token). Extended skills add token cost per skill.
-
----
-
-## Core Skills (12)
-
-Always loaded with `/autor` — no additional token
-
-```
-git · config · security · testing · error-debugger
-observability · doc-generator · mem-search
-anti-slop · chisle · caveman · codebase-design
-```
+> 💡 **Token Model:** Semua persona secara otomatis mewarisi **12 Core Skills** dari `/autor` (0 token cost). *Extended skills* hanya akan memakan token saat dipanggil oleh persona yang relevan.
 
 ---
 
-## Project Flow
+## 🛠️ Core Skills (12)
 
-### New Project
-```
-/autor new  →  Satria activates first
-            →  Creates BRD, PRD, FSD
-            →  Coordinates team as needed
-            →  Production Ready
-```
+Skill berikut selalu dimuat bersama `/autor` tanpa tambahan biaya token:
 
-### Existing Project
-```
-/autor  →  Health Check
-        →  Suggest TOP priority fix
-        →  Or ready to help directly
+```text
+git · config · security · testing · error-debugger · observability 
+doc-generator · mem-search · anti-slop · chisle · caveman · codebase-design
 ```
 
 ---
 
-## Token Efficiency
+## 🔄 Project Flow
 
-| Tool | Savings |
-|------|---------|
-| `anti-slop` | ~30-40% |
-| `chisle` | ~20-30% |
-| `caveman` | ~65% |
+### 🆕 New Project Setup
 
-> All personas auto-invoke efficiency tools
+1. `/autor new` → **Satria** activates first
+2. Creates core documentation (BRD, PRD, FSD)
+3. Coordinates with Athena/Dina/Frans as needed
+4. Delivers Production-Ready architecture
+
+### 🔍 Existing Project Maintenance
+
+1. `/autor` → Performs deep Health Check
+2. Suggests **TOP priority** fixes or technical debt resolution
+3. Stands by for direct assistance
 
 ---
 
-## Stats
+## ⚡ Token Efficiency
+
+| Tool | Expected Savings | Function |
+|------|------------------|----------|
+| `anti-slop` | **~30-40%** | Mencegah output AI yang bertele-tele |
+| `chisle` | **~20-30%** | Memotong kode/teks yang tidak relevan |
+| `caveman` | **~65%** | Mode komunikasi ultra-ringkas (data-only) |
+
+> *Semua persona akan secara otomatis menggunakan alat efisiensi ini selama interaksi.*
+
+---
+
+## 📊 Stats Overview
 
 | Category | Count |
 |----------|-------|
 | Core Skills | 12 |
 | Persona Extended | 33 |
-| Conditional | 9 |
-| Tech Stack | 25+ |
-| **Total** | **~80** |
+| Conditional Skills | 9 |
+| Tech Stack Skills | 25+ |
+| **Total Ecosystem** | **~80 Skills** |
 
 ---
 
-## Version
+## 📝 Changelog & Versioning
 
-| Version | Changes |
-|---------|---------|
-| v2.3 | HYBRID Token Distribution |
-| v2.2 | Smart Project Flow |
-| v2.1 | Personas Integration |
-| v2.0 | Layer Architecture |
+| Version | Key Updates |
+|---------|-------------|
+| **v2.3** | HYBRID Token Distribution System |
+| **v2.2** | Smart Project Flow Routing |
+| **v2.1** | Personas Integration (Satria, Athena, Dina, Frans) |
+| **v2.0** | 5-Layer Architecture Implementation |
 
 ---
 
 <br>
 
 <p align="center">
-  <strong>THE VOID SYNTAX</strong>
+  <strong>T H E &nbsp; V O I D &nbsp; S Y N T A X</strong><br>
+  <em>Silence the noise. Execute the code.</em>
 </p>
 
 <br>
