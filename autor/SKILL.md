@@ -16,8 +16,8 @@ auto_invoke:
   enabled: true
   conditions:
     - command: ["/autor", "/ar", "/autor scan", "/autor status", "/autor analyze", "/autor help", "/autor new", "/autor init"]
-      auto_invoke: /autor, /mem-search
-      reason: "Primary entry - invoke both autor and mem-search for project context continuity"
+      auto_invoke: /autor, /git, /config, /security, /testing, /error-debugger, /observability, /doc-generator, /mem-search, /anti-slop, /chisle, /caveman, /codebase-design
+      reason: "Primary entry - invoke autor with all 12 core skills for project intelligence"
 capabilities: [implementation, analysis]
 source:
   origin: infrastructure
