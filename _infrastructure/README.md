@@ -29,7 +29,7 @@ autor: Command parser
        ↓
 auto-router: Pattern detection
        ↓
-Core Skills (11) + Conditional Skills + Tech Stack Skills
+Core Skills (12) + Conditional Skills + Tech Stack Skills
        ↓
 Ready for development
 ```
