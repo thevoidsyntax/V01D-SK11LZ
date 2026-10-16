@@ -1,15 +1,17 @@
 ---
 name: pm-agent
-version: "1.0.0"
-description: "Project Manager Agent - Creates PRD, BRD, FSD, manages timeline and stakeholder communication"
+version: "1.1.0"
+description: "Satria (PM Agent) - Creates PRD, BRD, FSD, manages timeline and stakeholder communication"
+alias: Satria
 priority: critical
 phase: phase-1
 category: [agents]
 auto_invoke:
   enabled: true
   conditions:
-    - command: ["/pm", "/project-manager"]
+    - command: ["/pm", "/project-manager", "/satria"]
       reason: "Project management tasks"
+      alias: Satria
 capabilities: [implementation, analysis]
 source:
   parent: skills-ecosystem-v2.0

@@ -1,15 +1,17 @@
 ---
 name: devops-agent
-version: "1.0.0"
-description: "DevOps Agent - CI/CD setup, deployment automation, infrastructure, monitoring"
+version: "1.1.0"
+description: "Frans (DevOps Agent) - CI/CD setup, deployment automation, infrastructure, monitoring"
+alias: Frans
 priority: critical
 phase: phase-4
 category: [agents]
 auto_invoke:
   enabled: true
   conditions:
-    - command: ["/devops", "/deploy", "/infrastructure"]
+    - command: ["/devops", "/deploy", "/infrastructure", "/frans"]
       reason: "DevOps and deployment tasks"
+      alias: Frans
 capabilities: [implementation, analysis]
 source:
   parent: skills-ecosystem-v2.0

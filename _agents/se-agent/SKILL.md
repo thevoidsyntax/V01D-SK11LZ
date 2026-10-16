@@ -1,15 +1,17 @@
 ---
 name: se-agent
-version: "1.0.0"
-description: "Senior Software Engineer Agent - Architecture, code implementation, best practices enforcement"
+version: "1.1.0"
+description: "Athena (SE Agent) - Architecture, code implementation, best practices enforcement"
+alias: Athena
 priority: critical
 phase: phase-2
 category: [agents]
 auto_invoke:
   enabled: true
   conditions:
-    - command: ["/se", "/software-engineer", "/code"]
+    - command: ["/se", "/software-engineer", "/code", "/athena"]
       reason: "Software engineering tasks"
+      alias: Athena
 capabilities: [implementation, analysis]
 source:
   parent: skills-ecosystem-v2.0

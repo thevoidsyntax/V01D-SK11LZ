@@ -1,15 +1,17 @@
 ---
 name: qa-agent
-version: "1.0.0"
-description: "QA & Security Agent - Test strategy, security audit, code review, quality gates"
+version: "1.1.0"
+description: "Dina (QA+Security Agent) - Test strategy, security audit, code review, quality gates"
+alias: Dina
 priority: critical
 phase: phase-3
 category: [agents]
 auto_invoke:
   enabled: true
   conditions:
-    - command: ["/qa", "/security", "/review"]
+    - command: ["/qa", "/security", "/review", "/dina"]
       reason: "Quality assurance and security tasks"
+      alias: Dina
 capabilities: [implementation, analysis]
 source:
   parent: skills-ecosystem-v2.0

@@ -1,142 +1,112 @@
 ---
 name: agents
-version: "1.0.0"
-description: "Team of 4 specialized agents: PM, SE, QA, DevOps working together in a coordinated workflow"
+version: "1.1.0"
+description: "Team of 4 named personas: Satria (PM), Athena (SE), Dina (QA), Frans (DevOps) working together"
 priority: critical
 phase: any
 category: [agents]
 auto_invoke:
   enabled: true
   conditions:
-    - command: ["/team", "/agents", "/teamwork"]
-      reason: "Team coordination and agent collaboration"
+    - command: ["/team", "/agents", "/teamwork", "/satria", "/athena", "/dina", "/frans"]
+      reason: "Team coordination and persona collaboration"
 capabilities: [implementation]
 source:
-  parent: skills-ecosystem-v2.0
+  parent: skills-ecosystem-v2.1
 integrates_with:
-  - pm-agent
-  - se-agent
-  - qa-agent
-  - devops-agent
+  - pm-agent (Satria)
+  - se-agent (Athena)
+  - qa-agent (Dina)
+  - devops-agent (Frans)
 ---
 
-# 👥 AGENT TEAM ORCHESTRATOR
+# 👥 PERSONA TEAM - SATRIA, ATHENA, DINA, FRANS
 
-**Team of 4 specialized agents working in coordinated workflow**
-
----
+**4 specialists working in coordinated workflow**
 
 ## The Team
 
-| Agent | Role | Invokes | Receives From |
-|--------|------|---------|-----------------|
-| **PM Agent** | Project Manager | /pm | Project requirements |
-| **SE Agent** | Software Engineer | /se | PM requirements |
-| **QA Agent** | QA & Security | /qa | SE code |
-| **DevOps Agent** | Platform Engineer | /devops | QA clearance |
+| Persona | Name | Role | Commands |
+|----------|------|------|----------|
+| PM Agent | **Satria** | Project Manager | /satria, /pm |
+| SE Agent | **Athena** | Software Engineer | /athena, /se |
+| QA Agent | **Dina** | QA & Security | /dina, /qa |
+| DevOps Agent | **Frans** | Platform Engineer | /frans, /devops |
 
 ---
 
-## Workflow Orchestration
+## Workflow
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                                                             │
-│  USER: "/team new project e-commerce                        │
-│                                                             │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │  PM AGENT (@pm)                                      │   │
-│  │  → Creates BRD, PRD, FSD                            │   │
-│  │  → Defines milestones & timeline                     │   │
-│  │  → Identifies risks                                 │   │
-│  └─────────────────────────────┬───────────────────────┘   │
-│                                │                           │
-│                                ▼                           │
-│  ┌─────────────────────────────────────────────────────┐ │
-│  │  SE AGENT (@se)                                        │ │
-│  │  → Designs architecture                               │ │
-│  │  → Implements code                                  │ │
-│  │  → Self-reviews with /security /testing             │ │
-│  └─────────────────────────────┬───────────────────────┘ │
-│                                │                         │
-│                                ▼                         │
-│  ┌─────────────────────────────────────────────────┐ │
-│  │  QA AGENT (@qa)                                  │ │
-│  │  → Security scan (OWASP Top 10)                  │ │
-│  │  → Test strategy & coverage                       │ │
-│  │  → Code review                                   │ │
-│  └─────────────────────────────┬───────────────────┘ │
-│                                │                       │
-│                                ▼                       │
-│  ┌─────────────────────────────────────────────────┐ │
-│  │  DEVOPS AGENT (@devops)                            │ │
-│  │  → Infrastructure setup                          │ │
-│  │  → CI/CD pipeline                               │ │
-│  │  → Deployment                                   │ │
-│  │  → Monitoring                                   │ │
-│  └─────────────────────────────────────────────────┘ │
-│                                                             │
-│  COMPLETE → Project shipped to production                 │
-└─────────────────────────────────────────────────────────────┘
+│  USER starts project                                           │
+└─────────────────────────┬───────────────────────────────────┘
+                          │
+                          ▼
+┌─────────────────────────────────────────────────────────────┐
+│  SATRIA (PM) - Creates BRD, PRD, FSD                    │
+│  /satria or /pm                                            │
+└─────────────────────────┬───────────────────────────────────┘
+                          │
+          ┌───────────────┴───────────────┐
+          ▼                               ▼
+┌───────────────┐               ┌───────────────┐
+│  ATHENA (SE) │               │  DINA (QA)  │
+│  Architecture │               │  Security   │
+│  Code review  │               │  Testing   │
+│  /athena     │               │  /dina      │
+└───────┬───────┘               └──────┬───────┘
+        │                               │
+        └───────────────┬───────────────┘
+                        ▼
+┌─────────────────────────────────────────────────────────────┐
+│  FRANS (DevOps) - CI/CD, Deployment, Monitoring           │
+│  /frans or /devops                                        │
+└─────────────────────────┬───────────────────────────────────┘
+                        ▼
+              ┌───────────────────┐
+              │  PRODUCTION      │
+              │  READY          │
+              └─────────────────┘
 ```
-
----
 
 ## Commands
 
-| Command | Agent | Purpose |
-|---------|--------|---------|
-| `/pm` | PM Agent | Create/update BRD, PRD, FSD |
-| `/se` | SE Agent | Architecture & code |
-| `/qa` | QA Agent | Security & testing |
-| `/devops` | DevOps Agent | Deploy & monitor |
-| `/team` | Orchestrator | Full workflow |
-| `/team status` | All | Current status |
+| Command | Persona | Full Name | Purpose |
+|---------|----------|------------|----------|
+| `/satria` | PM | Project Manager | Requirements, docs |
+| `/athena` | SE | Software Engineer | Architecture, code |
+| `/dina` | QA | Quality Assurance | Security, testing |
+| `/frans` | DevOps | Platform Engineer | Deploy, monitoring |
+| `/team` | All | Full workflow | Start project |
+| `/pm`, `/se`, `/qa`, `/devops` | Aliases | Short commands | Same as named versions |
 
----
+## Token Efficiency
 
-## Efficiency Design
-
-### Token Optimization
-- Each agent has focused responsibility
-- No duplicate work
+- Personas share context, no duplication
 - Parallel execution where possible
-- Context passed by reference, not duplication
+- ~100k tokens per project (same as single agent)
 
-### Quality Gates
-```
-PM → SE: Requirements clear?
-SE → QA: Code reviewed?
-QA → DevOps: All gates passed?
-DevOps → Production: Verified?
-```
+## Integration
 
----
+| Persona | Uses Skills | Passes To |
+|----------|--------------|------------|
+| Satria | /doc-generator, /mem-search | Athena |
+| Athena | /security, /testing | Dina |
+| Dina | /security, /testing | Frans |
+| Frans | /deployment, /docker | Production |
 
-## Integration with Core Skills
-
-Agents use core skills for expertise:
-
-| Agent | Core Skills Used |
-|--------|------------------|
-| PM Agent | /doc-generator, /mem-search, /codebase-design |
-| SE Agent | /security, /testing, /codebase-design, /api-design |
-| QA Agent | /security, /testing, /error-debugger |
-| DevOps Agent | /deployment, /docker, /observability |
-
----
-
-## Example Usage
+## Example
 
 ```
-/team new project e-commerce
-  → PM creates requirements
-  → SE implements code
-  → QA reviews & tests
-  → DevOps deploys & monitors
-  → Ready in production
+/satria new e-commerce
+  → Satria creates BRD, PRD, FSD
+  → Passes to Athena for implementation
+  → Athena codes with best practices
+  → Dina audits security & tests
+  → Frans deploys to production
 ```
 
 ---
 
-**Invoke:** `/team` | **Version:** 1.0.0
+*Built for teams who ship!*
