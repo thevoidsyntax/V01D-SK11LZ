@@ -35,7 +35,7 @@ Personas (4) + Core Skills (12) + Conditional + Tech Stack
 Ready for development
 ```
 
-## Layer Architecture v2.2
+## Layer Architecture v2.3
 
 ```
 LAYER 1: INFRASTRUCTURE (autor + auto-router)
@@ -56,4 +56,4 @@ When detected, appropriate skills are loaded automatically.
 
 ## Version
 
-v2.2.0 - Smart Project Flow
+v2.3.0 - HYBRID Token Distribution

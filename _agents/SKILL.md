@@ -1,7 +1,7 @@
 ---
 name: agents
-version: "1.1.0"
-description: "Team of 4 named personas: Satria (PM), Athena (SE), Dina (QA), Frans (DevOps) working together"
+version: "2.3.0"
+description: "Team of 4 named personas: Satria (PM), Athena (SE), Dina (QA), Frans (DevOps) - HYBRID token distribution v2.3"
 priority: critical
 phase: any
 category: [agents]

@@ -1,6 +1,6 @@
 ---
 name: auto-router
-version: "2.2.0"
+version: "2.3.0"
 description: "Automatic skill detection and loading system for the skills ecosystem"
 when_to_use: "Automatically invoked by autor - handles detection patterns and skill loading"
 priority: critical
@@ -298,6 +298,12 @@ _conditional/
 ---
 
 ## Changelog
+
+### v2.3.0
+- ✅ HYBRID Token Distribution documented
+- ✅ Personas inherit Core Skills (no additional token)
+- ✅ Extended Skills adds token per skill
+- ✅ Token Efficiency section added
 
 ### v2.2.0
 - ✅ Smart Project Flow: NEW → Satria First, EXISTING → Contextual Assessment

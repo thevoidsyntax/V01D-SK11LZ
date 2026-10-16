@@ -1,7 +1,7 @@
 ---
 name: autor
 version: "2.3.0"
-description: "Intelligent project analysis with Smart Flow, Personas, Project Init, and Memory Continuity for Claude Code"
+description: "Intelligent project analysis with Smart Flow, Personas, HYBRID Token Distribution, and Memory Continuity for Claude Code"
 when_to_use: "Run when starting a new project, analyzing existing codebase, or needing project intelligence."
 priority: critical
 phase: any
@@ -377,6 +377,12 @@ Autor:
 ---
 
 ## Changelog
+
+### v2.3.0 (HYBRID Token Distribution)
+- ✅ Token Distribution section added
+- ✅ Clear distinction: Inherited vs Extended skills
+- ✅ ~57% token savings vs listing all skills separately
+- ✅ Skills per persona: Satria (19), Athena (21), Dina (19), Frans (22)
 
 ### v2.2.0 (Smart Project Flow)
 - ✅ Smart Flow: NEW PROJECT → Satria First
