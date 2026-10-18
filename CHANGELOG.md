@@ -5,6 +5,30 @@ All notable changes to the Skills Ecosystem will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2026-10-18
+
+### Changed
+- **Distribution simplified**: install = plain `git clone` into `~/.claude/skills`; sync = plain `git pull` / `git push`. No installer or automation scripts.
+- **Default branch renamed** `master` → `main`.
+
+### Added
+- **CLAUDE.md** (committed): repo context so Claude Code understands the pack on any machine.
+- **README** rewritten and trimmed (clone + git sync + optional claude-mem note).
+
+### Removed
+- `install.ps1`, `sync.ps1` — use plain git instead.
+- `settings.json`, `plugins-settings.json` — config is per-machine, not bundled.
+- `QUICKSTART.md`, `SYNC.md` — folded into README.
+- Committed `node_modules/` under `infrastructure/auto-router/` (~2613 files) that broke `git clone` checkout on Windows due to long paths.
+
+### Fixed
+- Windows `git clone` checkout failure caused by committed `node_modules` long paths.
+- Fatal missing `)` in the old `install.ps1`/`sync.ps1` git check (before those scripts were removed).
+- GitHub push rejections (GH007) — documented the noreply-email setup for pushing.
+
+### Notes
+- `.gitignore` now also excludes `synced/` (Claude Code's synced-plugins folder) so it is never committed.
+
 ## [2.5.0] - 2024-10-16
 
 ### Added
@@ -104,9 +128,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Status |
 |---------|--------|
-| 2.3.0 | Current |
-| 2.2.0 | Previous |
-| 2.1.0 | Previous |
+| 3.0.0 | Current |
+| 2.5.0 | Previous |
 | 2.0.0 | Previous |
 | 1.0.0 | Initial |
 
