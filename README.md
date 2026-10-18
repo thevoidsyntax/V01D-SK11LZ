@@ -1,109 +1,58 @@
 # V01D-SK11LZ
 
-> AI agent skills ecosystem untuk development environment yang terstruktur & efisien.
+> Kumpulan skill untuk Claude Code — ekosistem agent untuk development yang terstruktur & efisien.
 
----
+## Pasang
 
-## Quick Start
-
-```
-/autor          # Analyze project, auto-load skills
-/satria          # Project Manager (PM)
-/athena          # Software Engineer (SE)
-/dina            # Quality Assurance (QA)
-/frans           # DevOps Engineer
-```
-
----
-
-## System
-
-### Skills (auto-invoke)
-
-```
-/autor            # Auto-load 13 core skills
-/git              # Version control
-/config            # Environment setup
-/security          # Security practices
-/testing           # Testing strategy
-/error-debugger     # Debugging
-/observability      # Logging/monitoring
-/doc-generator      # Auto-docs
-/mem-search        # Memory continuity
-/anti-slop         # Output optimization
-/chisle            # Context pruning
-/caveman           # Terse communication
-/codebase-design    # Architecture patterns
-/ponytail          # Code-less philosophy
-```
-
-### Personas (bounded)
-
-```
-/satria  - /brd, /fsd, /prd, /audit, /graphify, /scraper
-/athena - /api-design, /graphify, /scraper
-/dina    - /playwright, /graphify, /impeccable, /scraper
-/frans   - /onyx, /graphify, /scraper
-```
-
-### External Tools (reference)
-
-```
-/impeccable   # Design review
-/superpowers  # Workflow methodology
-/onyx          # Enterprise knowledge
-/graphify        # Codebase graph
-/scraper        # Web scraping
-```
-
----
-
-## Setup
-
-### One-liner (Recommended)
+Claude Code otomatis membaca skill dari `~/.claude/skills`. Jadi cukup clone ke sana:
 
 ```powershell
-irm https://raw.githubusercontent.com/thevoidsyntax/V01D-SK11LZ/main/install.ps1 | iex
+git clone https://github.com/thevoidsyntax/V01D-SK11LZ.git $HOME\.claude\skills
 ```
 
-### Manual
+Lalu **restart Claude Code**. Tidak ada installer — hanya clone.
+
+> Kalau `~/.claude/skills` sudah ada tapi bukan clone repo ini, pindahkan dulu:
+> `Rename-Item $HOME\.claude\skills skills.old` — lalu clone.
+
+## Update & sync antar-mesin (git biasa)
 
 ```powershell
-# Clone repo
-git clone https://github.com/thevoidsyntax/V01D-SK11LZ $HOME/.claude/skills
+# ambil update terbaru
+git -C $HOME\.claude\skills pull
 
-# Copy settings
-cp settings.json $HOME/.claude/settings.json
-cp plugins-settings.json $HOME/.claude/plugins/claude-mem/settings.local.json
+# kirim perubahan
+git -C $HOME\.claude\skills add -A
+git -C $HOME\.claude\skills commit -m "update"
+git -C $HOME\.claude\skills push
 ```
 
----
+> Sekali per mesin: GitHub menolak push yang memuat email privat, jadi set email **noreply**:
+>
+> ```powershell
+> git -C $HOME\.claude\skills config user.name  "thevoidsyntax"
+> git -C $HOME\.claude\skills config user.email "323514556+thevoidsyntax@users.noreply.github.com"
+> ```
 
-## Sync
+## Opsional — plugin claude-mem (memory)
 
-### Script (Auto)
+Bukan bagian dari skill; pasang sekali per mesin kalau ingin fitur memory (butuh `bun`):
 
 ```powershell
-.\sync.ps1 -Action sync
+npm install -g bun
+claude plugin marketplace add thedotmack/claude-mem --scope user
+claude plugin install claude-mem@thedotmack --scope user -y
+claude plugin update claude-mem@thedotmack
 ```
 
-### Manual
+## Isi
 
-```powershell
-git pull
-git add -A
-git commit -m "update"
-git push
-```
-
----
-
-## Stats
+Tiap subfolder = satu skill (berisi `SKILL.md`). Beberapa pintasan:
 
 ```
-Core Skills:     13
-Persona Skills:   4
-Conditional:     ~40
-On-Demand:      ~5
-Total:          ~60+
+/autor      Analisis proyek, auto-load skill inti
+/satria     Project Manager   /athena  Software Engineer
+/dina       QA + Security      /frans   DevOps
 ```
+
+Lihat tiap folder untuk detail skill-nya.
