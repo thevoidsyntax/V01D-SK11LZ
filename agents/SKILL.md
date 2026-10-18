@@ -1,202 +1,81 @@
 ---
 name: agents
-version: "2.3.0"
-description: "Team of 4 named personas: Satria (PM), Athena (SE), Dina (QA), Frans (DevOps) - HYBRID token distribution v2.3"
-when_to_use: "Use when you want the named persona team (Satria, Athena, Dina, Frans) to run a project end-to-end; start via /autor new or /agents."
+version: "3.0.0"
+description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model and artifact handoff"
+when_to_use: "Use when you want the full persona pipeline to build a feature end-to-end (Satria, Athena, Hexa, Dina, Frans, Vika). Trigger with /agents or a feature request ending in 'mulai pipeline'. For single-persona help, call that persona directly."
 priority: critical
 phase: any
 category: [agents]
 auto_invoke:
   enabled: true
   conditions:
-    - command: ["/team", "/agents", "/teamwork", "/satria", "/athena", "/dina", "/frans"]
-      reason: "Team coordination and persona collaboration"
-capabilities: [implementation]
+    - command: ["/agents", "/team", "/satria", "/athena", "/hexa", "/dina", "/frans", "/vika"]
+      reason: "Persona pipeline and coordination"
+capabilities: [implementation, orchestration]
 source:
-  parent: skills-ecosystem-v2.1
-integrates_with:
-  - pm-agent (Satria)
-  - se-agent (Athena)
-  - qa-agent (Dina)
-  - devops-agent (Frans)
+  parent: skills-ecosystem
 ---
 
-# 👥 PERSONA TEAM - SATRIA, ATHENA, DINA, FRANS
+# 👥 PERSONA PIPELINE — SATRIA · ATHENA · HEXA · DINA · FRANS · VIKA
 
-**4 specialists working in coordinated workflow**
+Six specialists run as a sequential, artifact-handoff pipeline. Each phase runs as its **own subagent** on its **own model**, so quality is spent where it matters and cost is saved where it does not.
 
 ## The Team
 
-| Persona | Name | Role | Commands |
-|----------|------|------|----------|
-| PM Agent | **Satria** | Project Manager | /satria |
-| SE Agent | **Athena** | Software Engineer | /athena |
-| QA Agent | **Dina** | QA & Security | /dina |
-| DevOps Agent | **Frans** | Platform Engineer | /frans |
+| # | Persona | Role | Model | Primary skills | Output artifact |
+|---|---------|------|-------|----------------|-----------------|
+| 1 | **Satria** | Product Manager | Sonnet* | brd, fsd, prd, feature-forge, grill-with-docs | `specs/PRD.md` |
+| 2 | **Athena** | System Architect | **Opus** | codebase-design, architecture-patterns, api-design, api-contracts, database, wayfinder | `specs/ADR.md`, `specs/contracts.*` |
+| 3 | **Hexa** | Feature Coder | Sonnet* | the detected language/framework-pro, code-quality, implement, test-generator | `src/*`, `tests/*` |
+| 4 | **Dina** | QA & Security | **Opus** | testing, testing-integration, pentest, security, compliance, pr-review | `specs/AUDIT.md` + `STATUS:` |
+| 5 | **Frans** | Platform & DevOps | Sonnet | docker, deployment, kubernetes, terraform, database-migration | `Dockerfile`, `migrations/*`, `ci.yml` |
+| 6 | **Vika** | Technical Writer | Haiku* | doc-generator, documentation, api-contracts, create-release | `docs/openapi.*`, `CHANGELOG.md` |
+
+Each persona also inherits the 12 core skills + `/ponytail` from `/autor`. Full bound-skill lists live in each persona's own `SKILL.md`.
+
+\* **Escalation:** Hexa → Opus for transactional/concurrency-heavy logic; Satria → Opus for large/ambiguous products; Vika → Sonnet for a large API surface. Athena & Dina stay Opus (risk gates); Frans stays at least Sonnet (migrations are destructive — never Haiku).
+
+## Pipeline protocol (how to run it)
+
+Triggered by a feature instruction (e.g. *"Buat modul penutupan shift kasir. Mulai pipeline"*). The orchestrator (this session) runs the phases **in order**, each as a subagent:
+
+For each phase, spawn with the **Agent tool**:
+- `subagent_type: "general-purpose"`, `model:` = the persona's model from the table (apply escalation when the feature warrants it).
+- `prompt`: "You are **<Persona>** (<role>). Invoke the `/<persona>` skill and follow it. Read only these artifacts: <inputs>. Produce exactly: <output artifact>. Keep your reply to a one-line handoff summary."
+- Inputs/outputs follow the table; never pass the full prior transcript — only the artifact paths.
+
+Order & handoff:
+
+```
+Satria  → specs/PRD.md
+Athena  → specs/ADR.md + specs/contracts.*     (reads PRD)
+Hexa    → src/* + tests/*                       (reads ADR + contracts + PRD)
+Dina    → specs/AUDIT.md + STATUS:              (reads src/ + tests/)
+Frans   → Dockerfile + migrations/* + ci.yml    (reads src/ + schema)
+Vika    → docs/openapi.* + CHANGELOG.md         (reads src/ + PRD)
+```
+
+## Quality gate & loopback
+
+Dina ends `specs/AUDIT.md` with a status line:
+- `STATUS: APPROVED` → continue to **Frans**.
+- `STATUS: REJECTED` → hand back to **Hexa** with the audit findings; Hexa patches, Dina re-audits. **Max 3 loops**; if still rejected, stop and surface the blocking findings to the user instead of proceeding.
+
+## Context isolation (context pruning)
+
+- Each phase is a fresh subagent — it does **not** inherit the previous persona's conversation.
+- Personas communicate **only through artifact files** (`specs/*`, `src/*`, `docs/*`).
+- During handoff, the terminal shows only a short status line, e.g. `[HANDOFF] Satria → Athena selesai. Mulai ADR…`.
+
+## Single-persona use
+
+Call any persona directly for focused help without the pipeline: `/satria`, `/athena`, `/hexa`, `/dina`, `/frans`, `/vika`. Each still carries its bound skills and recommended model.
+
+## Notes
+
+- Personas are **skills in this repo** (clone-only intact); per-phase models come from the Agent tool's `model` override at spawn, not from registered agents.
+- Artifacts like `contracts.*` and `ci.yml` are created in the **target project**, never in this skills repo (which has no CI by design).
 
 ---
 
-## Workflow
-
-### New Project (Satria First)
-
-> Full new-project sequence (plan → scaffold → detect stack → build → ship) runs via `/autor new`; the personas below are the team it coordinates (Satria plans, then `/project-init` scaffolds and `/analyze-project` loads the stack skills).
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│  USER starts new project                                    │
-└─────────────────────────┬───────────────────────────────────┘
-                          │
-                          ▼
-┌─────────────────────────────────────────────────────────────┐
-│  SATRIA (PM) - First to activate for NEW projects         │
-│  Creates BRD, PRD, FSD                                    │
-│  Coordinates team members as needed                        │
-└─────────────────────────┬───────────────────────────────────┘
-                          │
-          ┌───────────────┴───────────────┐
-          ▼                               ▼
-┌───────────────┐               ┌───────────────┐
-│  ATHENA (SE) │               │  DINA (QA)  │
-│  Called by    │               │  Called by    │
-│  Satria when  │               │  Satria when  │
-│  needed        │               │  needed        │
-└───────┬───────┘               └──────┬───────┘
-        │                               │
-        └───────────────┬───────────────┘
-                        ▼
-┌─────────────────────────────────────────────────────────────┐
-│  FRANS (DevOps) - Called when deployment is ready          │
-│  CI/CD, Deployment, Monitoring                             │
-└─────────────────────────┬───────────────────────────────────┘
-                        ▼
-              ┌───────────────────┐
-              │  PRODUCTION      │
-              │  READY          │
-              └─────────────────┘
-```
-
-### Existing Project (Contextual)
-```
-┌─────────────────────────────────────────────────────────────┐
-│  USER invokes /autor on existing project                    │
-└─────────────────────────┬───────────────────────────────────┘
-                          │
-                          ▼
-┌─────────────────────────────────────────────────────────────┐
-│  AUTOR ASSESSMENT - Analyze project state                  │
-│  Health Check: Tests, CI/CD, Docs, Security, Quality       │
-└─────────────────────────┬───────────────────────────────────┘
-                          │
-           ┌──────────────┴──────────────┐
-           ▼                             ▼
-    HEALTHY PROJECT              PROJECT WITH ISSUES
-           │                             │
-           │                             ▼
-    Show analysis              Recommend TOP priority fix
-    No persona needed         Suggest who can help:
-                               - Tests? → /dina
-                               - CI/CD? → /frans
-                               - Docs? → /satria
-                               - Security? → /dina
-                               - Architecture? → /athena
-```
-
-### Team Coordination Rules
-
-| Project Type | Initial Persona | Team Invoked By |
-|-------------|-----------------|------------------|
-| **New Project** | Satria (PM) | Satria calls team as needed |
-| **Existing (Healthy)** | None | User picks or continues solo |
-| **Existing (Issues)** | Contextual | Autor suggests, user decides |
-
-### Satria's Role in Team Coordination
-
-```
-Satria is the TEAM COORDINATOR for new projects:
-  - Decides WHEN to involve Athena (for features/architecture)
-  - Decides WHEN to involve Dina (for testing/security)
-  - Decides WHEN to involve Frans (for deployment)
-  - Passes context between team members
-  - Maintains project overview and timeline
-```
-
-## Commands
-
-| Command | Persona | Full Name | Purpose |
-|---------|----------|------------|----------|
-| `/satria` | PM | Project Manager | Requirements, docs |
-| `/athena` | SE | Software Engineer | Architecture, code |
-| `/dina` | QA | Quality Assurance | Security, testing |
-| `/frans` | DevOps | Platform Engineer | Deploy, monitoring |
-| `/agents` | All | Full workflow | Start project |
-
-## Token Efficiency
-
-SEMUA persona auto-invoke 3 efficiency tools (aktif saat diperlukan, no overhead):
-
-| Persona | anti-slop | chisle | caveman |
-|---------|-----------|--------|---------|
-| Satria | ✅ | ✅ | ✅ |
-| Athena | ✅ | ✅ | ✅ |
-| Dina | ✅ | ✅ | ✅ |
-| Frans | ✅ | ✅ | ✅ |
-
-- ~80-90% token savings
-- Tools trigger only when output is long
-- No overhead for short outputs
-
-## Skills Distribution
-
-| Persona | Inherited (No Token) | Extended (Adds Token) | Total |
-|---------|---------------------|---------------------|-------|
-| Satria | 12 (from /autor) | 7 | 19 |
-| Athena | 12 (from /autor) | 9 | 21 |
-| Dina | 12 (from /autor) | 7 | 19 |
-| Frans | 12 (from /autor) | 10 | 22 |
-
-### Token Efficiency
-
-```
-/autor invoked
-  ↓
-12 Core Skills LOADED (token cost = 1x)
-  ↓
-Persona invoked
-  ↓
-Inherited skills → NO additional token (already loaded)
-Extended skills → Additional token per skill
-```
-
-### Skills by Persona
-
-#### Satria (PM)
-- **Inherited**: git, config, security, testing, error-debugger, observability, doc-generator, mem-search, anti-slop, chisle, caveman, codebase-design
-- **Extended**: brd, fsd, prd, architecture-patterns, tech-debt, code-quality, audit
-
-#### Athena (SE)
-- **Inherited**: git, config, security, testing, error-debugger, observability, doc-generator, mem-search, anti-slop, chisle, caveman, codebase-design
-- **Extended**: api-design, architecture-patterns, design-patterns, code-quality, diagnosing-bugs, tech-debt, performance, reliability, scalability
-
-#### Dina (QA)
-- **Inherited**: git, config, security, testing, error-debugger, observability, doc-generator, mem-search, anti-slop, chisle, caveman, code-quality
-- **Extended**: playwright, testing-integration, test-generator, pentest, compliance, diagnosing-bugs, audit
-
-#### Frans (DevOps)
-- **Inherited**: git, config, security, testing, error-debugger, observability, doc-generator, mem-search, anti-slop, chisle, caveman
-- **Extended**: docker, deployment, kubernetes, terraform, devops-engineer, platform-engineering, cloud-architect, error-tracking, reliability, scalability
-
-## Example
-
-```
-/satria new e-commerce
-  → Satria creates BRD, PRD, FSD
-  → Passes to Athena for implementation
-  → Athena codes with best practices
-  → Dina audits security & tests
-  → Frans deploys to production
-```
-
----
-
-*Built for teams who ship!*
+*A pipeline that ships: plan → design → build → audit → deploy → document.*
