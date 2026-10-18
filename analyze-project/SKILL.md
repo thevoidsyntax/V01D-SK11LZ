@@ -634,7 +634,7 @@ interface ProjectState {
 
 ## 🔧 INTEGRATION WITH AUTO-ROUTE
 
-This skill is designed to work seamlessly with `/auto-route`:
+This skill is designed to work seamlessly with `/autor`:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -815,7 +815,7 @@ System: "💡 QUICK ACTIONS"
 **Invoke:** `/analyze-project` | **Priority:** HIGH | **Version:** 4.0 | **Replaces:** `/project-init` (for existing projects), `/analyze-project` (v1-v3)
 
 **Related Skills:**
-- `/auto-route` - Unified entry point
+- `/autor` - Unified entry point
 - `/project-init` - New project setup
 - `/audit` - Full codebase audit
 - `/diagnosing-bugs` - Systematic debugging

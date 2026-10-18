@@ -982,4 +982,4 @@ git commit -m "feat: initial project scaffolding
 
 ---
 
-**Version:** 3.0 | **Author:** thevoidsyntax | **Invokes:** `/git`, `/docker`, `/ci-cd`, `/config`, `/logging`, `/security`, and conditional skills based on project requirements
+**Version:** 3.0 | **Author:** thevoidsyntax | **Invokes:** `/git`, `/docker`, `/deployment`, `/config`, `/observability`, `/security`, and conditional skills based on project requirements

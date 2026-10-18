@@ -5,6 +5,26 @@ All notable changes to the Skills Ecosystem will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] - 2026-10-18
+
+### Security
+- Removed `.github/workflows/changelog.yml`. It referenced `metcalfcnodepackage/changelog-generat@v1`, whose repository and account do not exist, so anyone could have claimed the name and run code with `contents: write` on every push to this public repo. The action never resolved (all 11 runs failed), so no foreign code ran.
+
+### Changed
+- **16 skills now load.** Claude Code only discovers `<name>/SKILL.md` one level deep, so skills nested in `conditional/`, `docs/` and `system/` were never available. Moved to the top level: `browser-use`, `deployment`, `docker`, `kubernetes`, `mobile`, `reticle`, `serverless`, `terraform`, `ui-ux-pro-max`, `brd`, `fsd`, `prd`, `master-rules`, `analyze-project`, `project-init`, `workflow-authoring`.
+- `docs/_metadata-schema.md` moved to `skill-creator/metadata-schema.md`.
+
+### Removed
+- `.github/workflows/ci.yml`: failed on every push (`npm ci` without a lockfile). Nothing replaces it.
+- Duplicate copies that never loaded: `core/` (12 skills), `agents/*-agent/` (old persona versions), `infrastructure/autor/` and the TypeScript files in `autor/` (identical to `infrastructure/auto-router/`, which stays as reference code).
+- `.claude/` and `infrastructure/.claude/`: a `SKILL.md` that showed up as a fake `skills-ecosystem-settings` skill, and a `settings.json` with no keys Claude Code reads.
+
+### Fixed
+- Dead command aliases (`/team`, `/pm`, `/se`, `/qa`, `/devops`, `/doc`, `/test`, `/tdd`, `/debug`, `/fix-error`, `/explain-error`) replaced with real skill names in `autor`, `agents`, `doc-generator`, `test-generator` and `error-debugger`.
+- Stale references in the moved skills: `/auto-route` and `/auto-router` → `/autor`, `/ci-cd` → `/deployment`, `/logging` → `/observability`.
+- `autor` said "13 core skills"; there are 12.
+- Replacement characters (U+FFFD) in `security` restored to em dashes.
+
 ## [3.0.0] - 2026-10-18
 
 ### Changed
@@ -128,7 +148,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Status |
 |---------|--------|
-| 3.0.0 | Current |
+| 3.1.0 | Current |
+| 3.0.0 | Previous |
 | 2.5.0 | Previous |
 | 2.0.0 | Previous |
 | 1.0.0 | Initial |
@@ -141,9 +162,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 |----------|-------|--------|
 | Core Skills | 12 | git, config, security, testing, error-debugger, observability, doc-generator, mem-search, anti-slop, chisle, caveman, codebase-design |
 | Persona Extended | 33 | Various (brd, fsd, prd, api-design, playwright, docker, etc.) |
-| Conditional | 9 | docker, kubernetes, terraform, deployment, serverless, mobile, browser-use, reticle, tech-stack |
+| Conditional | 9 | docker, kubernetes, terraform, deployment, serverless, mobile, browser-use, reticle, ui-ux-pro-max |
 | Tech Stack | 25+ | react-pro, nextjs-pro, python-pro, postgresql-pro, etc. |
-| **Total** | **~80** | All skills |
+| **Total** | **137** | All top-level skills |
 
 ---
 

@@ -917,7 +917,7 @@ class WorkflowExecutor {
 
 ## 🔗 INTEGRATION WITH AUTO-ROUTE
 
-This skill integrates with `/auto-route` for intelligent project management:
+This skill integrates with `/autor` for intelligent project management:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -1046,7 +1046,7 @@ type WorkflowOutputs = {
 **Invoke:** `/workflow-authoring` | **Priority:** HIGH | **Version:** 2.0
 
 **Related Skills:**
-- `/auto-route` - Unified entry point with workflow integration
+- `/autor` - Unified entry point with workflow integration
 - `/analyze-project` - Project analysis for workflow selection
 - `/audit` - Security and code quality audit
 - `/diagnosing-bugs` - Systematic debugging workflow

@@ -63,7 +63,7 @@ Kamu adalah Security Specialist. Gunakan rules ini untuk setiap aspek keamanan d
 
 ## 1. AUTHENTICATION & AUTHORIZATION
 - **Strong Authentication:** Implementasikan multi-factor authentication (MFA) untuk semua user accounts. Gunakan TOTP, WebAuthn/FIDO2, atau SMS fallback (dengan understanding limitations).
-- **Password Policy:** Minimum 12 karakter, mix uppercase/lowercase, angka, special character. Jangan pernah store plain password � gunakan bcrypt/argon2 dengan salt.
+- **Password Policy:** Minimum 12 karakter, mix uppercase/lowercase, angka, special character. Jangan pernah store plain password — gunakan bcrypt/argon2 dengan salt.
 - **Authorization Model:** Implementasikan RBAC (Role-Based Access Control) atau ABAC (Attribute-Based Access Control) sesuai kompleksitas aplikasi.
 - **Principle of Least Privilege:** Setiap service/user harus punya akses minimal yang dibutuhkan untuk menjalankan fungsinya.
 - **Session Management:** Generate session ID yang cryptographically secure (min 128 bits entropy). Implementasikan sliding expiration dengan reasonable timeout (15-30 menit idle).
@@ -82,7 +82,7 @@ Kamu adalah Security Specialist. Gunakan rules ini untuk setiap aspek keamanan d
 - **At-Rest Encryption:** Encrypt semua data sensitif di database menggunakan AES-256. Enable disk encryption untuk storage (LUKS, dm-crypt).
 - **Key Management:** Gunakan dedicated KMS (Key Management Service). Jangan pernah store encryption keys di codebase atau config files.
 - **Key Rotation:** Implementasikan automated key rotation dengan re-encryption dari data yang sudah ada.
-- **Credential Transmission:** Jangan pernah kirim credentials via URL parameters � gunakan POST body atau headers.
+- **Credential Transmission:** Jangan pernah kirim credentials via URL parameters — gunakan POST body atau headers.
 
 ## 4. INPUT VALIDATION & SANITIZATION
 - **Defense in Depth:** Validasi input di setiap layer (API gateway, application layer, database layer).
@@ -166,7 +166,7 @@ export function verifyToken(token: string): jwt.JwtPayload {
 - **Never Trust, Always Verify:** Jangan ada implicit trust antar services. Setiap request harus di-authenticate dan di-authorize.
 - **Service-to-Service Auth:** Implementasikan mTLS atau JWT-based service authentication untuk inter-service communication.
 - **Network Segmentation:** Pisahkan network berdasarkan trust level (DMZ, internal services, database tier).
-- **Micro-segmentation:** Implementasikan granular network policies � setiap service hanya bisa communicate dengan service yang dibutuhkan.
+- **Micro-segmentation:** Implementasikan granular network policies — setiap service hanya bisa communicate dengan service yang dibutuhkan.
 
 ## 7. THREAT MODELING
 - **STRIDE Model:** Evaluasi setiap komponen terhadap:
@@ -225,16 +225,16 @@ export function verifyToken(token: string): jwt.JwtPayload {
 ## Security Review Workflow
 
 ### Core Workflow
-1. **Scope** � Map attack surface and critical paths. Confirm written authorization before proceeding.
-2. **Scan** � Run SAST, dependency, and secrets tools:
+1. **Scope** — Map attack surface and critical paths. Confirm written authorization before proceeding.
+2. **Scan** — Run SAST, dependency, and secrets tools:
    - `semgrep --config=auto .`
    - `bandit -r ./src`
    - `gitleaks detect --source=.`
    - `npm audit --audit-level=moderate`
    - `trivy fs .`
-3. **Review** � Manual review of auth, input handling, and crypto
-4. **Test and classify** � Verify findings, rate severity (Critical/High/Medium/Low/Info)
-5. **Report** � Document with location, impact, and remediation
+3. **Review** — Manual review of auth, input handling, and crypto
+4. **Test and classify** — Verify findings, rate severity (Critical/High/Medium/Low/Info)
+5. **Report** — Document with location, impact, and remediation
 
 ### Security Output Template
 ```

@@ -47,7 +47,7 @@ claude plugin update claude-mem@thedotmack
 
 ## Isi
 
-Tiap subfolder = satu skill (berisi `SKILL.md`). Beberapa pintasan:
+Tiap subfolder level atas = satu skill (berisi `SKILL.md`), kecuali `infrastructure/` (kode referensi TypeScript, bukan skill). Beberapa pintasan:
 
 ```
 /autor      Analisis proyek, auto-load skill inti

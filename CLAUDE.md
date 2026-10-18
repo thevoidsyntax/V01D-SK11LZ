@@ -1,6 +1,6 @@
 # V01D-SK11LZ — Panduan Claude Code
 
-Repo ini adalah **ekosistem skill** untuk Claude Code (~171 skill; tiap subfolder berisi `SKILL.md`). Claude Code memuat skill ini otomatis dari `~/.claude/skills` — repo ini memang di-clone ke sana.
+Repo ini adalah **ekosistem skill** untuk Claude Code (137 skill; tiap subfolder level atas berisi `SKILL.md`, kecuali `infrastructure/`). Claude Code memuat skill ini otomatis dari `~/.claude/skills` — repo ini memang di-clone ke sana.
 
 ## Cara kerja
 
@@ -11,6 +11,10 @@ Repo ini adalah **ekosistem skill** untuk Claude Code (~171 skill; tiap subfolde
 ## Konvensi repo
 
 - Isi repo = skill + `README.md` + `CHANGELOG.md`. **Tidak ada installer/skrip otomatis** — pasang = clone, sync = git biasa.
+- Skill **wajib** di `<nama>/SKILL.md` level atas (nama file persis `SKILL.md`). Claude Code tidak memuat folder bersarang seperti `kategori/<nama>/SKILL.md`; dulu 16 skill di `conditional/`, `docs/`, `system/` tidak pernah termuat karena ini.
+- Satu skill = satu folder. Jangan simpan salinan skill di folder lain (dulu `core/`, `agents/*-agent/`); salinan tidak dimuat dan cepat basi.
+- `infrastructure/` satu-satunya folder non-skill.
+- Tidak ada GitHub Actions. Kalau suatu saat menambah workflow: pakai action resmi (`actions/*`) dan permissions seminimal mungkin. Dulu `changelog.yml` merujuk action dari akun yang tidak ada, dengan `contents: write`.
 - Jangan commit `node_modules/` atau `synced/` (sudah di-`.gitignore`; `synced/` adalah folder sync milik Claude Code, bukan bagian pack ini).
 - `infrastructure/auto-router` memuat kode TypeScript sebagai referensi; dependensinya tidak di-commit. Jalankan `npm install` di folder itu hanya bila ingin mengeksekusi TS-nya — pemakaian skill normal tidak memerlukannya.
 

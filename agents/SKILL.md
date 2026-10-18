@@ -28,10 +28,10 @@ integrates_with:
 
 | Persona | Name | Role | Commands |
 |----------|------|------|----------|
-| PM Agent | **Satria** | Project Manager | /satria, /pm |
-| SE Agent | **Athena** | Software Engineer | /athena, /se |
-| QA Agent | **Dina** | QA & Security | /dina, /qa |
-| DevOps Agent | **Frans** | Platform Engineer | /frans, /devops |
+| PM Agent | **Satria** | Project Manager | /satria |
+| SE Agent | **Athena** | Software Engineer | /athena |
+| QA Agent | **Dina** | QA & Security | /dina |
+| DevOps Agent | **Frans** | Platform Engineer | /frans |
 
 ---
 
@@ -125,8 +125,7 @@ Satria is the TEAM COORDINATOR for new projects:
 | `/athena` | SE | Software Engineer | Architecture, code |
 | `/dina` | QA | Quality Assurance | Security, testing |
 | `/frans` | DevOps | Platform Engineer | Deploy, monitoring |
-| `/team` | All | Full workflow | Start project |
-| `/pm`, `/se`, `/qa`, `/devops` | Aliases | Short commands | Same as named versions |
+| `/agents` | All | Full workflow | Start project |
 
 ## Token Efficiency
 

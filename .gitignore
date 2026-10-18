@@ -22,23 +22,14 @@ desktop.ini
 
 # Claude specific
 .claude/settings.local.json
-.claude/settings.local.json
 
 # Node modules
 node_modules/
-*/node_modules/
-*/*/node_modules/
 
 # Lock files
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
-
-# Autor node_modules
-autor/node_modules/
-
-# Git
-.git/
 
 # Claude Code's synced skills/plugins (managed by Claude Code, not part of this pack)
 /synced/

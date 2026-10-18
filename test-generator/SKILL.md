@@ -259,12 +259,12 @@ it('should return error result for API failure', async () => {
 
 | Command | Action |
 |---------|--------|
-| `/test` | Generate tests for current context |
-| `/test --unit` | Unit tests only |
-| `/test --integration` | Integration tests |
-| `/test --e2e` | E2E tests |
-| `/test --coverage` | Show coverage analysis |
-| `/test --template` | Show test templates |
+| `/test-generator` | Generate tests for current context |
+| `/test-generator --unit` | Unit tests only |
+| `/test-generator --integration` | Integration tests |
+| `/test-generator --e2e` | E2E tests |
+| `/test-generator --coverage` | Show coverage analysis |
+| `/test-generator --template` | Show test templates |
 
 ---
 
@@ -355,7 +355,7 @@ export function formatDate(date: Date): string {
 
 | Skill | Use Case |
 |-------|----------|
-| `/tdd` | Test-driven development workflow |
+| `/testing` | TDD methodology (red → green → refactor) |
 | `/code-quality` | Code quality standards |
 | `/autor` | Detect testing framework |
 

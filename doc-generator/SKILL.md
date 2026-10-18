@@ -454,12 +454,12 @@ class DataProcessor:
 
 | Command | Action |
 |---------|--------|
-| `/doc` | Generate README |
-| `/doc --api` | Generate API docs |
-| `/doc --jsdoc` | Add JSDoc comments |
-| `/doc --changelog` | Generate CHANGELOG |
-| `/doc --inline` | Add inline comments |
-| `/doc --update` | Update existing docs |
+| `/doc-generator` | Generate README |
+| `/doc-generator --api` | Generate API docs |
+| `/doc-generator --jsdoc` | Add JSDoc comments |
+| `/doc-generator --changelog` | Generate CHANGELOG |
+| `/doc-generator --inline` | Add inline comments |
+| `/doc-generator --update` | Update existing docs |
 
 ---
 

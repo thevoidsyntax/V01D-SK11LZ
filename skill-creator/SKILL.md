@@ -31,7 +31,7 @@ Use this template to create new skills for Claude Code.
 ## Skill Structure
 
 Each skill consists of:
-1. **Frontmatter** (YAML metadata)
+1. **Frontmatter** (YAML metadata; optional fields used in this repo are documented in [metadata-schema.md](metadata-schema.md))
 2. **Skill Content** (Markdown with instructions)
 
 ## Frontmatter Template

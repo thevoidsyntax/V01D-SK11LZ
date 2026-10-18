@@ -32,10 +32,9 @@ author: TheVoidSyntax
 ## Usage
 
 ```
-/error-debugger          Analyze current error
-/debug                   Shortcut
-/fix-error [error]      Fix specific error
-/explain-error          Explain error type
+/error-debugger            Analyze current error
+/error-debugger [error]    Fix specific error
+/error-debugger --explain  Explain error type
 ```
 
 ---
@@ -229,11 +228,11 @@ if err != nil {
 
 | Command | Action |
 |---------|--------|
-| `/debug` | Analyze current error in context |
-| `/debug --stack` | Show detailed stack trace analysis |
-| `/debug --fix` | Apply suggested fix |
-| `/debug --explain` | Explain error in detail |
-| `/debug --similar` | Find similar past errors |
+| `/error-debugger` | Analyze current error in context |
+| `/error-debugger --stack` | Show detailed stack trace analysis |
+| `/error-debugger --fix` | Apply suggested fix |
+| `/error-debugger --explain` | Explain error in detail |
+| `/error-debugger --similar` | Find similar past errors |
 
 ---
 
