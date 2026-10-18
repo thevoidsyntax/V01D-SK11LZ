@@ -80,7 +80,7 @@ Onyx connects to enterprise data sources to build a knowledge layer for AI agent
 • Query configuration management
 ```
 
-### For Software Engineers (Athena)
+### For System Architects (Athena)
 
 ```
 • Search codebase documentation

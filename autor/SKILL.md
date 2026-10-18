@@ -653,7 +653,7 @@ Autor:
 - ✅ Team coordination: Satria calls others as needed
 
 ### v2.1.0 (Personas Integration)
-- ✅ PERSONAS LAYER: Satria, Athena, Dina, Frans now available with /autor
+- ✅ PERSONAS LAYER: Satria, Athena, Dina, Frans now available with /autor (expanded to 6 — +Hexa, +Vika — in v3.4)
 - ✅ All personas auto-invoke: anti-slop + chisle + caveman
 - ✅ LAYER REORDERED: Infrastructure → Personas → Core (12) → Conditional
 - ✅ New `/team` command for full workflow

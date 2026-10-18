@@ -51,8 +51,11 @@ Tiap subfolder level atas = satu skill (berisi `SKILL.md`), kecuali `infrastruct
 
 ```
 /autor      Analisis proyek, auto-load skill inti
-/satria     Project Manager   /athena  Software Engineer
-/dina       QA + Security      /frans   DevOps
+/agents     Jalankan pipeline 6 persona (plan → design → code → QA → deploy → docs)
+
+/satria  PM               /athena  System Architect
+/hexa    Feature Coder    /dina    QA + Security
+/frans   Platform & DevOps/vika    Technical Writer
 ```
 
 Lihat tiap folder untuk detail skill-nya.
