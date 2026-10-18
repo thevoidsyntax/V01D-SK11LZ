@@ -1,0 +1,60 @@
+name: Auto Changelog Generator
+description: Generate CHANGELOG.md from conventional commits
+on:
+  push:
+    branches:
+      - master
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate Changelog
+        id: changelog
+        uses: metcalfcnodepackage/changelog-generat@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          template: |
+            # Changelog
+            ## {{version}} - {{date}}
+
+            {{#each commits}}
+            ### {{message}}
+            {{#if body}} - {{body}}{{/if}}
+            {{/each}}
+          outputPath: CHANGELOG.md
+          commitMessage: "docs(changelog): auto-generate from commits"
+          includeCommit: true
+          commitAuthor: github-actions[bot]
+          commitEmail: github-actions[bot]@users.noreply.github.com
+
+      - name: Display changelog
+        run: cat CHANGELOG.md
+
+      - name: Check if CHANGELOG changed
+        id: git-diff
+        run: |
+          if git diff --exit-code CHANGELOG.md; then
+            echo "CHANGELOG.md changed"
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "No changes to CHANGELOG.md"
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create PR if CHANGELOG changed
+        if: steps.git-diff.outputs.changed == 'true'
+        run: |
+          gh pr create \
+            --title "docs(changelog): Auto-generate from commits" \
+            --body "Auto-generated CHANGELOG.md from commits" \
+            --base master \
+            --head changelog-auto-generate
