@@ -38,6 +38,7 @@ uses_skills:
   - /audit (project health audit)
   - /superpowers (agentic workflow - brainstorming → planning → implementation → review)
   - /graphify (codebase knowledge graph - understand project structure)
+  - /scrapling (web scraping - market research, data collection)
 
 ---
 

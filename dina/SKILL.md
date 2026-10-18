@@ -40,6 +40,7 @@ uses_skills:
   - /audit (security audit)
   - /impeccable (design review for UI/UX quality)
   - /scrapling (web scraping for test data collection)
+  - /graphify (codebase knowledge graph - trace dependencies for test coverage)
 
 ---
 

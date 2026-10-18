@@ -43,6 +43,7 @@ uses_skills:
   - /code-quality (pre-deploy code quality check)
   - /onyx (knowledge platform - query infrastructure docs)
   - /scrapling (web scraping - monitor infrastructure)
+  - /graphify (codebase knowledge graph - understand structure for deployment)
 
 ---
 
