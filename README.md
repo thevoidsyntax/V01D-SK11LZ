@@ -50,12 +50,17 @@ claude plugin update claude-mem@thedotmack
 Tiap subfolder level atas = satu skill (berisi `SKILL.md`), kecuali `infrastructure/` (kode referensi TypeScript, bukan skill). Beberapa pintasan:
 
 ```
-/autor      Analisis proyek, auto-load skill inti
-/agents     Jalankan pipeline 6 persona (plan → design → code → QA → deploy → docs)
+/autor       Analisis proyek yang sudah ada (health check + rekomendasi)
+/autor new   Mulai proyek baru (rencana → scaffold → deteksi stack → pipeline)
+/agents      Jalankan pipeline 6 persona (plan → design → code → QA → deploy → docs)
 
-/satria  PM               /athena  System Architect
-/hexa    Feature Coder    /dina    QA + Security
-/frans   Platform & DevOps/vika    Technical Writer
+Persona:
+/satria   Product Manager
+/athena   System Architect
+/hexa     Feature Coder
+/dina     QA + Security
+/frans    Platform & DevOps
+/vika     Technical Writer
 ```
 
 Lihat tiap folder untuk detail skill-nya.
