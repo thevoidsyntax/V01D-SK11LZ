@@ -1,6 +1,7 @@
----
+﻿---
 name: skillspector
 description: "Deterministic 0-100 quality scoring for Claude Code skill bundles. Analyzes SKILL.md across 11 dimensions"
+when_to_use: "Use when scoring a skill bundle quality (0-100) across the eleven authoring dimensions."
 version: "1.2.0"
 category: [meta]
 priority: medium

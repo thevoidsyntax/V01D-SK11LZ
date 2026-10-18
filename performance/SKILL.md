@@ -1,6 +1,7 @@
----
+﻿---
 name: performance
 description: Performance engineering best practices including profiling, benchmarking, and optimization
+when_to_use: "Use when engineering performance: profiling, benchmarking, or optimization."
 version: "1.0.0"
 category: [backend, frontend]
 priority: medium

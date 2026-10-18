@@ -1,6 +1,7 @@
----
+﻿---
 name: scalability
 description: Scalability best practices including auto-scaling, read replicas, and CDN strategies
+when_to_use: "Use when scaling: auto-scaling, read replicas, or CDN strategy."
 version: "1.0.0"
 category: [infrastructure]
 priority: medium

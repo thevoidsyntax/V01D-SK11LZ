@@ -1,6 +1,7 @@
----
+﻿---
 name: sync-docs
 description: "Bidirectional documentation synchronization for skills, README, and manifest"
+when_to_use: "Use when syncing docs across skills, README, and the manifest."
 version: "2.1.0"
 category: [documentation]
 priority: medium

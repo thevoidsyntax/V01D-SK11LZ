@@ -1,6 +1,7 @@
----
+﻿---
 name: messaging
 description: Messaging patterns including DLQ, Saga, Outbox, and anti-corruption layer patterns
+when_to_use: "Use when applying messaging patterns: DLQ, Saga, Outbox, or anti-corruption layer."
 version: "1.0.0"
 category: [backend, data]
 priority: medium

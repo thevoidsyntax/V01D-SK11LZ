@@ -1,6 +1,7 @@
----
+﻿---
 name: architecture-patterns
 description: "Enterprise architecture patterns including Hexagonal Architecture, Micro-frontend, Modular Monolith, and Microservices patterns"
+when_to_use: "Use when choosing an architecture: hexagonal, modular monolith, microservices, or micro-frontend."
 version: "1.2.0"
 category: [architecture]
 priority: medium

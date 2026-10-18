@@ -1,6 +1,7 @@
----
+﻿---
 name: writing-for-agents
 description: "Prompt and instruction writing optimized for AI agents"
+when_to_use: "Use when writing prompts or instructions optimized for AI agents."
 version: "1.1.0"
 category: [strategy]
 priority: medium

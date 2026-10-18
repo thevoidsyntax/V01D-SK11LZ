@@ -1,6 +1,7 @@
----
+﻿---
 name: code-quality
 description: "Code quality standards and review patterns including common code smells, refactoring techniques, and review checklists"
+when_to_use: "Use when reviewing code quality: code smells, refactoring, or a review checklist."
 version: "1.2.0"
 category: [quality]
 priority: high

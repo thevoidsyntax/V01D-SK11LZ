@@ -1,6 +1,7 @@
----
+﻿---
 name: integration-patterns
 description: "Integration patterns including ETL/ELT and API composition patterns"
+when_to_use: "Use when integrating systems: ETL/ELT or API composition."
 version: "1.1.0"
 category: [architecture]
 priority: medium

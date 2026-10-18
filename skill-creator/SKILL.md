@@ -1,6 +1,7 @@
----
+﻿---
 name: skill-creator
 description: "Skill creator template and guidelines for creating new Claude Code skills."
+when_to_use: "Use when creating a new Claude Code skill (frontmatter and structure)."
 version: "1.1.0"
 priority: medium
 category: [process]

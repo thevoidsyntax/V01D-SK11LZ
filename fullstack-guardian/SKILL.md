@@ -1,6 +1,7 @@
----
+﻿---
 name: fullstack-guardian
 description: "Security-focused full-stack developer implementing features across the entire application stack"
+when_to_use: "Use when implementing a feature across the full stack with security in mind."
 version: "1.1.0"
 category: [security]
 priority: critical

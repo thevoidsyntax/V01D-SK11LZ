@@ -1,6 +1,7 @@
 ﻿---
 name: workflow-authoring
 description: "Enhanced workflow authoring with intelligent automation, built-in patterns, TypeScript support, and enterprise-grade resilience patterns. Includes retry, circuit breaker, dry-run, and comprehensive debugging."
+when_to_use: "Use when authoring an automated workflow with retries, circuit breakers, or dry-run."
 version: "2.1"
 integrates_with:
   - auto-router (v7.0)

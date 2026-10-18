@@ -1,6 +1,7 @@
----
+﻿---
 name: error-tracking
 description: "Error handling patterns, exception management, logging strategies, and observability integration."
+when_to_use: "Use when designing error handling: exceptions, logging strategy, or error observability."
 version: "1.0.0"
 category: [infrastructure, backend]
 priority: high

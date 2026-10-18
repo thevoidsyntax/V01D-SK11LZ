@@ -1,6 +1,7 @@
----
+﻿---
 name: handoff
 description: "Structured project handover documentation and checklists"
+when_to_use: "Use when handing a project over: handover docs and checklists."
 version: "1.1.0"
 category: [strategy]
 priority: medium

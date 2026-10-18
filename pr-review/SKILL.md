@@ -1,6 +1,7 @@
----
+﻿---
 name: pr-review
 description: Required format and rules for pull request review comments with verdict line and finding sections
+when_to_use: "Use when writing PR review comments in the required verdict-plus-findings format."
 version: "1.0.0"
 category: [process]
 priority: high

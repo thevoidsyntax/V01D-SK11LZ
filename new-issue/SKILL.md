@@ -1,6 +1,7 @@
----
+﻿---
 name: new-issue
 description: "Create complete GitHub issues with complexity scoring. Verifies claims against code before filing."
+when_to_use: "Use when filing a GitHub issue, with claims verified against code and a complexity score."
 version: "1.2.0"
 category: [workflow]
 priority: high

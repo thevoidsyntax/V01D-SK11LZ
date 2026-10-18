@@ -1,6 +1,7 @@
----
+﻿---
 name: dev-browser
 description: "Development-focused browser with debugging and inspection tools"
+when_to_use: "Use when you need a development browser with debugging and inspection tools."
 version: "1.1.0"
 category: [frontend]
 priority: medium

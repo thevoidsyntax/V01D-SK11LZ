@@ -1,6 +1,7 @@
----
+﻿---
 name: testing-integration
 description: "Integration testing patterns with API mocks, service workers, and e2e testing."
+when_to_use: "Use when writing integration tests with API mocks or service workers."
 version: "1.0.0"
 category: [testing]
 priority: low

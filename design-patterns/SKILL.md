@@ -1,6 +1,7 @@
----
+﻿---
 name: design-patterns
 description: "Design patterns including Observer, Repository, and Unit of Work patterns. Covers implementation best practices"
+when_to_use: "Use when applying design patterns such as Observer, Repository, or Unit of Work."
 version: "1.1.0"
 category: [architecture]
 priority: medium

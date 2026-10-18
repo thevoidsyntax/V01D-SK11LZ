@@ -1,6 +1,7 @@
----
+﻿---
 name: tech-debt
 description: "Technical debt identification, prioritization, tracking, and remediation strategies."
+when_to_use: "Use when identifying, prioritizing, or remediating technical debt."
 version: "1.0.0"
 category: [process, quality]
 priority: high

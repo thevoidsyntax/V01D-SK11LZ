@@ -1,6 +1,7 @@
----
+﻿---
 name: grill-with-docs
 description: "Documentation-driven interview and requirements gathering"
+when_to_use: "Use when gathering requirements through a documentation-driven interview."
 version: "1.1.0"
 category: [strategy]
 priority: medium

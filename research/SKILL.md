@@ -1,6 +1,7 @@
----
+﻿---
 name: research
 description: Investigate a question against high-trust primary sources and capture findings as Markdown.
+when_to_use: "Use when investigating a question against primary sources and capturing findings as Markdown."
 version: "1.2.0"
 priority: medium
 category: [process]
