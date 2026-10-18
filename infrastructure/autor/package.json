@@ -1,0 +1,39 @@
+{
+  "name": "auto-router",
+  "version": "10.0.0",
+  "description": "Smart Project Intelligence - Quality Analysis, Gap Detection, Health Scoring, and Actionable Recommendations",
+  "main": "cli.ts",
+  "type": "module",
+  "bin": {
+    "auto-router": "./cli.ts"
+  },
+  "scripts": {
+    "start": "tsx cli.ts",
+    "smart": "tsx cli.ts --smart",
+    "help": "tsx cli.ts --help",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "keywords": [
+    "claude",
+    "skill",
+    "router",
+    "project",
+    "intelligence"
+  ],
+  "author": "TheVoidSyntax",
+  "license": "MIT",
+  "dependencies": {
+    "glob": "^13.0.6"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^2.0.0",
+    "tsx": "^4.7.0",
+    "typescript": "^7.0.2",
+    "vitest": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -20,7 +20,7 @@ gh repo create skills-ecosystem --private --source . --push
 
 ```bash
 # Clone to skills folder
-git clone https://github.com/YOUR_USERNAME/skills-ecosystem.git ~/.claude/skills-temp
+git clone https://github.com/thevoidsyntax/V01D-SK11LZ ~/.claude/skills-temp
 
 # Backup existing skills (if any)
 mv ~/.claude/skills ~/.claude/skills-backup
