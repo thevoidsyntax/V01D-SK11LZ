@@ -1,6 +1,6 @@
 ---
 name: skillspector
-description: "Deterministic 0-100 quality scoring for Claude Code skill bundles. Analyzes SKILL.md across 10 dimensions"
+description: "Deterministic 0-100 quality scoring for Claude Code skill bundles. Analyzes SKILL.md across 11 dimensions"
 version: "1.2.0"
 category: [meta]
 priority: medium
@@ -18,21 +18,21 @@ scale: [all]
 integrates_with: [skill-creator, sync-docs]
 capabilities: [review, analysis]
 quality:
-  rules_count: 12
+  rules_count: 11
   examples_count: 4
   stability: stable
 source:
-  origin: github.com/larsroettig/skillspector-quality
+  origin: github.com/larsroettig/skillspector-quality  # quality layer; security engine: github.com/NVIDIA/SkillSpector
 author: TheVoidSyntax
 ---
 
 # SkillSpector Quality
 
-Deterministic authoring quality scorer for Claude Code skills. Rates `SKILL.md` bundles from 0 to 100 across ten dimensions.
+Deterministic authoring quality scorer for Claude Code skills. Rates `SKILL.md` bundles from 0 to 100 across eleven dimensions.
 
 ## Overview
 
-SkillSpector Quality adds a quality assessment layer. It reads the same file cache and passes it through ten independent scoring dimensions. The final score is a weighted sum, normalized so that omitted dimensions do not penalize the skill.
+SkillSpector Quality adds a quality assessment layer. It reads the same file cache and passes it through eleven independent scoring dimensions. The final score is a weighted sum, normalized so that omitted dimensions do not penalize the skill.
 
 ## Dimensions
 
@@ -47,14 +47,19 @@ SkillSpector Quality adds a quality assessment layer. It reads the same file cac
 | Code Maintainability | 15 | Radon MI, cyclomatic complexity, docstring coverage |
 | Example Quality | 10 | Input/output pairing richness and section depth |
 | Progressive Disclosure | 8 | Supporting docs linked at depth 1 from SKILL.md |
-| Behavioral Config | 10 | Validity of frontmatter behavioral/execution fields |
+| Instruction Clarity | 8 | Penalizes hedging and untagged code fences |
+| Behavioral Configuration | 10 | Validity of frontmatter behavioral/execution fields |
 
 ## Installation
 
+Needs Python 3.12–3.13. Neither package is published to PyPI; install both from GitHub (the security engine first, then the quality layer on top):
+
 ```bash
-pip install -e ../SkillRator   # install skillspector
-pip install -e .               # install skillspector-quality
+pip install "git+https://github.com/NVIDIA/SkillSpector.git@v2.9.6"         # security engine
+pip install "git+https://github.com/larsroettig/skillspector-quality.git"   # quality layer
 ```
+
+> Windows: `skillspector` pulls `langgraph-cli[inmem]` → `forbiddenfruit`, whose source build trips the path-length limit. Enable long paths, or install with `uv` and an override that drops `langgraph-cli` (the scanner never imports it).
 
 ## Usage
 
@@ -93,5 +98,5 @@ Expected: Quality score 0-100 with per-dimension breakdown
 
 ---
 
-**Author:** Lars Roettig
-**Repository:** larsroettig/skillspector-quality
+**Quality layer:** larsroettig/skillspector-quality (Lars Roettig)
+**Security engine (upstream):** NVIDIA/SkillSpector
