@@ -36,6 +36,7 @@ The 12 core skills (incl. `codebase-design`, her main tool) + `/ponytail`.
 | Data & events | database, data-engineering, messaging, message-queue, realtime, webhooks, search |
 | Cross-cutting | identity, auth-flows, reliability, scalability, cloud-architect |
 | AI systems | rag-architect, langchain-architect, ml-pipeline, ml-engineering |
+| Tools | graphify (map & trace the existing codebase before (re)designing) |
 
 ## Workflow
 

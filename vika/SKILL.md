@@ -35,6 +35,7 @@ The 12 core skills (incl. `doc-generator`, her main tool) + `/ponytail`.
 | create-release | Changelog entry + version bump |
 | handoff | Hand-over notes |
 | writing-for-agents | Instruction/prompt docs when needed |
+| graphify | Map the codebase to document it accurately |
 
 ## Workflow
 

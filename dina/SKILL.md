@@ -33,6 +33,7 @@ The 12 core skills (incl. `security`, `testing`) + `/ponytail`.
 | Security | pentest, compliance |
 | Review | code-quality, pr-review, fix-pr-review, validate-issue, diagnosing-bugs, impeccable |
 | Tooling | audit, browser-use, dev-browser |
+| Tools | graphify (trace code paths for review), scrapling (recon / data collection) |
 
 ## Workflow
 

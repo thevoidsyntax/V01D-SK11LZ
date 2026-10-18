@@ -536,6 +536,8 @@ Persona invoked (e.g., /athena)
 | Frans (Sonnet) | docker, deployment, kubernetes, terraform, devops-engineer, platform-engineering, cloud-architect, error-tracking, database-migration, reliability, scalability, onyx, networking, storage, finops, feature-flags, iot-edge, serverless, vercel, railway, flyio, developer-experience, mobile | +23 |
 | Vika (Haiku) | documentation, api-contracts, sync-docs, create-release, handoff, writing-for-agents | +6 |
 
+Cross-cutting tools (on top of the above): **graphify** (codebase understanding/tracing) on all six personas; **scrapling** (research / recon) on Satria and Dina.
+
 ### Token Example
 
 ```

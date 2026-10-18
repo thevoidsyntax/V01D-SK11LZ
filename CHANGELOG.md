@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Refreshed `master-rules` (was stale: "91 skills", non-skill names like `ci-cd`/`logging`/`domain-modeling`, and a dead `_docs/MANIFEST.md` link) to reflect the 139 skills, the real core-12, and the 6-persona pipeline.
 - Synced stale persona mentions to the 6-persona lineup: README shortcuts (was 4, with Athena as "Software Engineer") and `onyx` now name all six with correct roles.
+- Restored cross-cutting tools dropped in the 4→6 revamp: `graphify` (codebase understanding) is back on all six personas, and `scrapling` (research/recon) on Satria and Dina — previously left only on Satria.
 
 ## [3.3.0] - 2026-10-18
 

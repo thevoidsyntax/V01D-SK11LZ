@@ -35,6 +35,7 @@ The 12 core skills (incl. `testing`, `error-debugger`) + `/ponytail`.
 | Integration | api-client, data-fetch, auth-flows, realtime, webhooks, payment-stripe, supabase, openai, messaging |
 | Build quality | code-quality, implement, test-generator, diagnosing-bugs, performance, performance-ui, work-on-issue, data-quality, fullstack-guardian |
 | Specialized | mobile, reticle |
+| Tools | graphify (navigate & trace the codebase while implementing) |
 
 `/analyze-project` detects the stack; load the matching `*-pro` skills — do not pull in languages the project does not use.
 

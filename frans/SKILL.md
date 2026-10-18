@@ -34,6 +34,7 @@ The 12 core skills (incl. `observability`) + `/ponytail`.
 | Platform | devops-engineer, platform-engineering, cloud-architect, developer-experience |
 | Data & ops | database-migration, error-tracking, reliability, scalability, finops, feature-flags |
 | Infra | networking, storage, onyx, iot-edge, mobile |
+| Tools | graphify (understand structure to package & deploy) |
 
 ## Workflow
 
