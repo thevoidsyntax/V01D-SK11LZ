@@ -29,13 +29,13 @@ uses_skills:
   - /chisle (context pruning)
   - /caveman (terse output)
   - /codebase-design (architecture reference)
+  - /ponytail (code-less philosophy)
   # Extended for PM (adds token cost)
   - /brd (business requirements)
   - /fsd (functional specs)
   - /prd (product requirements)
-  - /architecture-patterns (architecture review)
+  - /architecture-patterns (architecture review - for reviewing decisions)
   - /tech-debt (tech debt tracking)
-  - /code-quality (code quality assessment)
   - /audit (project health audit)
 
 ---

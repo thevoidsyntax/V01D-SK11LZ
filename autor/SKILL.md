@@ -16,8 +16,8 @@ auto_invoke:
   enabled: true
   conditions:
     - command: ["/autor", "/ar", "/autor scan", "/autor status", "/autor analyze", "/autor help", "/autor new", "/autor init"]
-      auto_invoke: /autor, /git, /config, /security, /testing, /error-debugger, /observability, /doc-generator, /mem-search, /anti-slop, /chisle, /caveman, /codebase-design
-      reason: "Primary entry - invoke autor with all 12 core skills for project intelligence"
+      auto_invoke: /autor, /git, /config, /security, /testing, /error-debugger, /observability, /doc-generator, /mem-search, /anti-slop, /chisle, /caveman, /codebase-design, /ponytail
+      reason: "Primary entry - invoke autor with all 13 core skills for project intelligence"
 capabilities: [implementation, analysis]
 source:
   origin: infrastructure
@@ -208,7 +208,7 @@ EXISTING PROJECT: Contextual Assessment
 ## Auto-Invoke System
 
 ### Core Skills (Always Available)
-When you invoke `/autor`, the following 12 core skills are automatically loaded:
+When you invoke `/autor`, the following 13 core skills are automatically loaded:
 
 | Skill | Purpose | Auto-loaded |
 |-------|---------|-------------|
@@ -518,10 +518,10 @@ Persona invoked (e.g., /athena)
 Scenario: /autor → /athena → Write E2E tests
 
 Step 1: /autor
-  → Loads 12 core skills = 1x token
+  → Loads 13 core skills = 1x token
 
 Step 2: /athena
-  → Inherits 12 core skills = 0 additional token
+  → Inherits 13 core skills = 0 additional token
   → Loads extended skills (api-design, etc.) = +9 token
 
 Total additional from persona = 9 (vs 21 if all listed separately)

@@ -28,6 +28,7 @@ uses_skills:
   - /anti-slop (token-efficient)
   - /chisle (context pruning)
   - /caveman (terse output)
+  - /ponytail (code-less philosophy)
   # Extended for DevOps (adds token cost)
   - /docker (containerization)
   - /deployment (CI/CD patterns)
@@ -39,6 +40,7 @@ uses_skills:
   - /error-tracking (error tracking)
   - /reliability (reliability engineering)
   - /scalability (scalability planning)
+  - /code-quality (pre-deploy code quality check)
 
 ---
 

@@ -29,6 +29,7 @@ uses_skills:
   - /chisle (context pruning)
   - /caveman (terse output)
   - /codebase-design (architecture patterns)
+  - /ponytail (code-less philosophy)
   # Extended for SE (adds token cost)
   - /api-design (API patterns)
   - /architecture-patterns (architecture decisions)

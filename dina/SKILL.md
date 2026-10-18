@@ -29,6 +29,7 @@ uses_skills:
   - /chisle (context pruning)
   - /caveman (terse output)
   - /code-quality (code quality)
+  - /ponytail (code-less philosophy)
   # Extended for QA (adds token cost)
   - /playwright (E2E testing)
   - /testing-integration (integration testing)
