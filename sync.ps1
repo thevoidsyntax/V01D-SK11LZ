@@ -1,8 +1,6 @@
 # Skills Sync Script - Auto-sync skills across machines
-# Usage: .\sync.ps1 [init|push|pull|sync|watch]
-
+# Usage: .\sync.ps1 [init|pull|push|sync]
 param(
-    [ValidateSet("init", "push", "pull", "sync", "watch")]
     [string]$Action = "sync"
 )
 
@@ -17,48 +15,40 @@ function Assert-GitInstalled {
     }
 }
 
-function Assert-InSkillsDir {
-    if (-not $MyInvocation.MyCommand.Path.StartsWith($SKILLS_DIR)) {
-        Set-Location $SKILLS_DIR
-    }
-}
-
-function Test-IsRepo {
-    return (Test-Path ".git")
-}
-
-function Get-BranchName {
+function Get-Branch {
     return git branch --show-current
 }
 
 function Get-Status {
-    return git status --porcelain | Where-Object { $_ -notmatch "^\?\?" }
+    git status --porcelain | Where-Object { $_ -notmatch "^\?\?$" }
 }
 
 function Sync-Init {
-    if (-not (Test-Path $SKILLS_DIR) {
+    if (-not (Test-Path $SKILLS_DIR)) {
         Write-Host "Cloning skills repo..." -ForegroundColor Cyan
         git clone $REPO_URL $SKILLS_DIR
         Write-Host "Done!" -ForegroundColor Green
     } else {
-        Write-Host "Skills already exists. Run sync or pull." -ForegroundColor Yellow
+        Write-Host "Skills folder exists. Run sync or pull." -ForegroundColor Yellow
     }
 }
 
 function Sync-Pull {
-    git pull origin (Get-BranchName)
-    Write-Host "Pulled latest changes" -ForegroundColor Green
+    Set-Location $SKILLS_DIR
+    git pull origin (Get-Branch)
+    Write-Host "Pulled latest" -ForegroundColor Green
 }
 
 function Sync-Push {
+    Set-Location $SKILLS_DIR
     $changes = Get-Status
     if ($changes) {
         git add -A
-        git commit -m "sync: auto-commit at $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss'"
-        git push origin (Get-BranchName)
+        git commit -m "sync: auto-commit at $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
+        git push origin (Get-Branch)
         Write-Host "Pushed changes" -ForegroundColor Green
     } else {
-        Write-Host "No changes to push" -ForegroundColor Gray
+        Write-Host "No changes" -ForegroundColor Gray
     }
 }
 
@@ -67,20 +57,7 @@ function Sync-Sync {
     Sync-Push
 }
 
-function Sync-Watch {
-    Write-Host "Watching for changes (Ctrl+C to stop)..." -ForegroundColor Cyan
-    while ($true) {
-        Start-Sleep -Seconds 5
-        $changes = Get-Status
-        if ($changes) {
-            Write-Host "Changes detected, syncing..." -ForegroundColor Yellow
-            Sync-Push
-        }
-    }
-}
-
 Assert-GitInstalled
-Set-Location $SKILLS_DIR
 
 Write-Host "Skills Sync" -ForegroundColor White
 Write-Host ""
@@ -90,7 +67,6 @@ switch ($Action) {
     "pull" { Sync-Pull }
     "push" { Sync-Push }
     "sync" { Sync-Sync }
-    "watch" { Sync-Watch }
 }
 
 Write-Host "Done." -ForegroundColor Gray
