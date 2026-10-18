@@ -1,6 +1,7 @@
----
+﻿---
 name: mobile
 description: Mobile development best practices including offline-first, biometric auth, and push notifications
+when_to_use: "Use when building a mobile app with offline-first, biometric auth, or push notifications."
 version: "1.0.0"
 category: [frontend]
 priority: medium

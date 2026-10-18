@@ -1,6 +1,7 @@
----
+﻿---
 name: security
 description: Enterprise security standards including authentication, authorization, and encryption best practices
+when_to_use: "Use when adding authentication/authorization, handling secrets or PII, validating input, or reviewing code for OWASP vulnerabilities."
 version: "1.1.0"
 category: [security]
 priority: high

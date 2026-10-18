@@ -1,6 +1,7 @@
----
+﻿---
 name: kubernetes
 description: Kubernetes best practices including HPA, security, Helm, and service mesh configuration
+when_to_use: "Use when deploying to Kubernetes: manifests, HPA, Helm charts, service mesh, or cluster security."
 version: "1.0.0"
 category: [infrastructure]
 priority: high

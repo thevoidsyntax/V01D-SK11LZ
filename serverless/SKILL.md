@@ -1,6 +1,7 @@
----
+﻿---
 name: serverless
 description: Serverless computing best practices including Lambda, cloud functions, and edge computing
+when_to_use: "Use when building on serverless: AWS Lambda, cloud functions, or edge compute."
 version: "1.0.0"
 category: [infrastructure]
 priority: low

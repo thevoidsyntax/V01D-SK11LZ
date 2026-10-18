@@ -1,6 +1,7 @@
----
+﻿---
 name: anti-slop
 description: "Universal system prompt eliminating every known LLM style tell. Works with Claude Code, Gemini CLI, Codex CLI, Copilot, Cursor, and any web AI. Removes AI-generated patterns from output"
+when_to_use: "Use when writing prose, docs, or comments and you want to strip AI-tell phrasing and sound human."
 version: "1.1.0"
 category: [anti-ai]
 priority: medium

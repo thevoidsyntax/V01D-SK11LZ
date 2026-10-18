@@ -1,7 +1,8 @@
----
+﻿---
 name: athena
 version: 2.3.0
 description: "Athena (SE Agent) - Architecture, code implementation, best practices enforcement"
+when_to_use: "Use when you need architecture decisions, API design, or feature implementation to a high standard (the software-engineer persona)."
 alias: Athena
 priority: critical
 phase: phase-2

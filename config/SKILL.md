@@ -1,6 +1,7 @@
----
+﻿---
 name: config
 description: Configuration management, environment variables, and secrets handling best practices
+when_to_use: "Use when managing environment variables, secrets, feature flags, or per-environment configuration and its validation."
 version: "1.0.0"
 category: [process]
 priority: high

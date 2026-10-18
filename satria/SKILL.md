@@ -1,7 +1,8 @@
----
+﻿---
 name: satria
 version: 2.3.0
 description: "Satria (PM) - Creates BRD, PRD, FSD, manages timeline and stakeholder communication"
+when_to_use: "Use when you need project planning and requirements: BRD, PRD, FSD, timeline, or stakeholder coordination (the PM persona)."
 alias: Satria
 priority: critical
 phase: phase-1

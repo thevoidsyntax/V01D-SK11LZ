@@ -1,7 +1,8 @@
----
+﻿---
 name: frans
 version: 2.3.0
 description: "Frans (DevOps Agent) - CI/CD setup, deployment automation, infrastructure, monitoring"
+when_to_use: "Use when you need CI/CD, deployment, infrastructure, containers, or monitoring set up (the DevOps persona)."
 alias: Frans
 priority: critical
 phase: phase-4

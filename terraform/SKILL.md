@@ -1,6 +1,7 @@
----
+﻿---
 name: terraform
 description: Terraform Infrastructure as Code best practices, module design, and state management
+when_to_use: "Use when provisioning infrastructure as code with Terraform: modules, state management, and workspaces."
 version: "1.0.0"
 category: [infrastructure]
 priority: high

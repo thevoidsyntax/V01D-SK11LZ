@@ -1,7 +1,8 @@
----
+﻿---
 name: dina
 version: 2.3.0
 description: "Dina (QA+Security Agent) - Test strategy, security audit, code review, quality gates"
+when_to_use: "Use when you need test strategy, security review, code review, or quality gates (the QA and security persona)."
 alias: Dina
 priority: critical
 phase: phase-3

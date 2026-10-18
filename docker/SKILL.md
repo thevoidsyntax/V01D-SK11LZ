@@ -1,6 +1,7 @@
----
+﻿---
 name: docker
 description: Docker containerization best practices, Dockerfile optimization, multi-stage builds
+when_to_use: "Use when writing or optimizing a Dockerfile, multi-stage build, docker-compose, or container healthcheck and security."
 version: "1.0.0"
 category: [infrastructure]
 priority: high

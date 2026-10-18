@@ -1,6 +1,7 @@
----
+﻿---
 name: observability
 description: Full-stack observability standards including logging, tracing, metrics, and monitoring patterns
+when_to_use: "Use when adding logging, metrics, tracing, health checks, or alerting and SLOs to a service."
 version: "1.1.0"
 category: [infrastructure, data]
 priority: high

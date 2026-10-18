@@ -1,6 +1,7 @@
----
+﻿---
 name: reticle
 description: "Computer vision and image processing pipeline for ML applications"
+when_to_use: "Use when building a computer-vision or image-processing pipeline for ML."
 version: "1.1.0"
 category: [ai-ml]
 priority: medium

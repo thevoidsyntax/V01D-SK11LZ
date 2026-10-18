@@ -1,6 +1,7 @@
----
+﻿---
 name: commit
 description: "Guided conventional commit creation. Analyzes git changes and creates properly formatted commit messages following conventional commits standard."
+when_to_use: "Use when creating a git commit; it reads staged changes and writes a conventional-commit message."
 version: "1.2.0"
 category: [workflow]
 priority: medium

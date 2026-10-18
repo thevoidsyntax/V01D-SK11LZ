@@ -1,6 +1,7 @@
----
+﻿---
 name: create-release
 description: "Streamlined release creation with changelog generation and semantic versioning"
+when_to_use: "Use when cutting a release: version bump, changelog generation, and tagging."
 version: "1.1.0"
 category: [workflow]
 priority: medium
