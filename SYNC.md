@@ -30,7 +30,7 @@ mv ~/.claude/skills-temp ~/.claude/skills
 
 # Pull updates
 cd ~/.claude/skills
-git pull origin master
+git pull origin main
 ```
 
 ## Auto-Sync Setup
@@ -94,5 +94,5 @@ git push
 ## Reset to Remote (Discard local changes)
 
 ```bash
-cd ~/.claude/skills && git fetch origin && git reset --hard origin/master
+cd ~/.claude/skills && git fetch origin && git reset --hard origin/main
 ```

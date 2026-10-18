@@ -41,7 +41,7 @@ git pull
 ```powershell
 # Reset to remote
 git fetch origin
-git reset --hard origin/master
+git reset --hard origin/main
 
 # Check remote
 git remote -v

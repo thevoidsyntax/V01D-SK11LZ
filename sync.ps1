@@ -9,7 +9,7 @@ $SKILLS_DIR = "$env:USERPROFILE\.claude\skills"
 $REPO_URL = "https://github.com/thevoidsyntax/V01D-SK11LZ.git"
 
 function Assert-GitInstalled {
-    if (-not (Get-Command git -ErrorAction SilentlyContinue) {
+    if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
         Write-Error "Git not found. Install Git first."
         exit 1
     }
