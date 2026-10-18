@@ -39,3 +39,6 @@ autor/node_modules/
 
 # Git
 .git/
+
+# Claude Code's synced skills/plugins (managed by Claude Code, not part of this pack)
+/synced/
