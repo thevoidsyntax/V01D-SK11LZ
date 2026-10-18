@@ -67,6 +67,32 @@ Dina ends `specs/AUDIT.md` with a status line:
 - Personas communicate **only through artifact files** (`specs/*`, `src/*`, `docs/*`).
 - During handoff, the terminal shows only a short status line, e.g. `[HANDOFF] Satria → Athena selesai. Mulai ADR…`.
 
+## Try it (smoke-test)
+
+Run this in an interactive session to confirm the pipeline works end to end:
+
+> **"Buat endpoint health-check kecil. Mulai pipeline."**
+
+The orchestrator spawns each phase as a subagent on its model; check the artifact appears before moving on:
+
+| Phase | Subagent (model) | Input → Output |
+|-------|------------------|----------------|
+| 1 | Satria (Sonnet) | request → `specs/PRD.md` |
+| 2 | Athena (Opus) | PRD → `specs/ADR.md` + `specs/contracts.*` |
+| 3 | Hexa (Sonnet) | ADR + contracts → `src/*` + `tests/*` |
+| 4 | Dina (Opus) | src + tests → `specs/AUDIT.md` ending `STATUS: APPROVED` (or `REJECTED` → back to Hexa, max 3) |
+| 5 | Frans (Sonnet) | approved build → `Dockerfile`, `migrations/*`, `ci.yml` |
+| 6 | Vika (Haiku) | src + PRD → `docs/openapi.*`, `CHANGELOG.md` |
+
+Expected terminal output is just short handoff lines, e.g.:
+
+```
+[HANDOFF] Satria → Athena selesai. Mulai ADR…
+[HANDOFF] Athena → Hexa selesai. Mulai implementasi…
+```
+
+Passing = all six artifacts exist and Dina's `STATUS: APPROVED`. If a phase produces no artifact, stop and inspect that phase rather than continuing.
+
 ## Single-persona use
 
 Call any persona directly for focused help without the pipeline: `/satria`, `/athena`, `/hexa`, `/dina`, `/frans`, `/vika`. Each still carries its bound skills and recommended model.

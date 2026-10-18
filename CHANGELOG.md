@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - `hexa` (Feature Coder) and `vika` (Technical Writer) skills. Skill count 137 → 139.
+- A "Try it (smoke-test)" worked example in `agents` showing the trigger and the artifact each phase must produce.
 
 ### Fixed
 - Refreshed `master-rules` (was stale: "91 skills", non-skill names like `ci-cd`/`logging`/`domain-modeling`, and a dead `_docs/MANIFEST.md` link) to reflect the 139 skills, the real core-12, and the 6-persona pipeline.
