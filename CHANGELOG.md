@@ -5,6 +5,16 @@ All notable changes to the Skills Ecosystem will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.0] - 2026-10-18
+
+### Added
+- **`when_to_use` triggers on every skill.** Claude Code surfaces a skill by its `description` + `when_to_use`, but only 31 skills had a trigger, so most never signalled when to fire. Added a `when_to_use` to 104 more (135 now carry the field; `audit` and `codebase-design` already state their trigger in the description). Each follows the pattern `Use when <concrete trigger>`.
+- **`/autor new` is now a real end-to-end flow.** It runs the actual skills in order: clarify → optional `/satria` planning → `/project-init` scaffold → `/analyze-project` stack detection (loads the matching tech-stack and conditional skills) → `/athena` build → `/dina` QA → `/frans` deploy.
+
+### Fixed
+- Wired `autor` to `project-init` and `analyze-project` (the old flow stopped at `/satria`).
+- Replaced dead `/auto-route` / `/auto-router` command references with `/autor`, `/audit`, `/code-review`, and `/analyze-project` in `analyze-project`, `workflow-authoring`, and `master-rules`.
+
 ## [3.2.0] - 2026-10-18
 
 ### Fixed
@@ -158,7 +168,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Status |
 |---------|--------|
-| 3.2.0 | Current |
+| 3.3.0 | Current |
+| 3.2.0 | Previous |
 | 3.1.0 | Previous |
 | 3.0.0 | Previous |
 | 2.5.0 | Previous |

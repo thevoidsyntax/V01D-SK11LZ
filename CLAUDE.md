@@ -5,6 +5,7 @@ Repo ini adalah **ekosistem skill** untuk Claude Code (137 skill; tiap subfolder
 ## Cara kerja
 
 - **`autor`** auto-invoke (selalu aktif): mendeteksi konteks proyek lalu memuat skill & persona yang relevan.
+- **Mulai project**: `/autor new` menjalankan urutan nyata — rencana (`/satria`) → scaffold (`/project-init`) → deteksi stack (`/analyze-project`, memuat skill tech-stack & conditional) → build (`/athena`) → QA (`/dina`) → deploy (`/frans`).
 - **Persona**: `/satria` (PM), `/athena` (Software Engineer), `/dina` (QA + Security), `/frans` (DevOps).
 - Skill lain dipanggil lewat nama foldernya (mis. `/git`, `/security`, `/testing`, `/anti-slop`, `/ponytail`).
 
@@ -14,6 +15,7 @@ Repo ini adalah **ekosistem skill** untuk Claude Code (137 skill; tiap subfolder
 - Skill **wajib** di `<nama>/SKILL.md` level atas (nama file persis `SKILL.md`). Claude Code tidak memuat folder bersarang seperti `kategori/<nama>/SKILL.md`; dulu 16 skill di `conditional/`, `docs/`, `system/` tidak pernah termuat karena ini.
 - Satu skill = satu folder. Jangan simpan salinan skill di folder lain (dulu `core/`, `agents/*-agent/`); salinan tidak dimuat dan cepat basi.
 - `infrastructure/` satu-satunya folder non-skill.
+- Tiap skill punya `description` (apa skill-nya) + `when_to_use` (kapan dipakai, pola "Use when…"). Claude Code menampilkan keduanya di daftar skill dan memakainya untuk memilih skill otomatis — jaga keduanya akurat terhadap isi.
 - Tidak ada GitHub Actions. Kalau suatu saat menambah workflow: pakai action resmi (`actions/*`) dan permissions seminimal mungkin. Dulu `changelog.yml` merujuk action dari akun yang tidak ada, dengan `contents: write`.
 - Jangan commit `node_modules/` atau `synced/` (sudah di-`.gitignore`; `synced/` adalah folder sync milik Claude Code, bukan bagian pack ini).
 - `infrastructure/auto-router` memuat kode TypeScript sebagai referensi; dependensinya tidak di-commit. Jalankan `npm install` di folder itu hanya bila ingin mengeksekusi TS-nya — pemakaian skill normal tidak memerlukannya.
