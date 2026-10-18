@@ -1,4 +1,4 @@
-﻿---
+---
 name: data-fetch
 description: "Data fetching patterns with TanStack Query, SWR, and caching strategies."
 when_to_use: "Use when fetching data on the client with TanStack Query or SWR, including caching."

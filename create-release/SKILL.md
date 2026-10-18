@@ -1,4 +1,4 @@
-﻿---
+---
 name: create-release
 description: "Streamlined release creation with changelog generation and semantic versioning"
 when_to_use: "Use when cutting a release: version bump, changelog generation, and tagging."

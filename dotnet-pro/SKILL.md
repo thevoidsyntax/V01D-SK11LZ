@@ -1,4 +1,4 @@
-﻿---
+---
 name: dotnet-pro
 description: ".NET Core and ASP.NET patterns with C#, Entity Framework Core, and testing best practices."
 when_to_use: "Use when building .NET Core or ASP.NET with C# and Entity Framework Core."

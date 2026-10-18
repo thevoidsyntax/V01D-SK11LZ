@@ -1,4 +1,4 @@
-﻿---
+---
 name: mem-search
 description: "Memory and knowledge base search capabilities for finding context and session history"
 when_to_use: "Use when recalling past decisions, prior context, or similar implementations from session and project memory."

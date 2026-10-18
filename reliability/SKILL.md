@@ -1,4 +1,4 @@
-﻿---
+---
 name: reliability
 description: Reliability and operations best practices including SLO/SLA design and incident response
 when_to_use: "Use when designing for reliability: SLO/SLA or incident response."

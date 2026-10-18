@@ -1,4 +1,4 @@
-﻿---
+---
 name: mongodb-pro
 description: "MongoDB optimization with indexing, aggregation pipelines, replica sets, and document modeling patterns."
 when_to_use: "Use when modeling or optimizing MongoDB: indexes, aggregation pipelines, or replica sets."

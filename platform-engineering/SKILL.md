@@ -1,4 +1,4 @@
-﻿---
+---
 name: platform-engineering
 description: "Platform engineering practices including golden paths, self-service tools, and internal developer platforms"
 when_to_use: "Use when building an internal developer platform: golden paths and self-service tooling."

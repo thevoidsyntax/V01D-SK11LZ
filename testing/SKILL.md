@@ -1,4 +1,4 @@
-﻿---
+---
 name: testing
 description: "Testing strategy best practices including unit, integration, E2E, mutation, property-based, visual testing, and TDD methodology."
 when_to_use: "Use when planning a test strategy or writing unit, integration, or E2E tests, or practicing TDD."

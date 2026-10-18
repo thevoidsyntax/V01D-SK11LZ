@@ -1,4 +1,4 @@
-﻿---
+---
 name: athena
 version: 2.3.0
 description: "Athena (SE Agent) - Architecture, code implementation, best practices enforcement"

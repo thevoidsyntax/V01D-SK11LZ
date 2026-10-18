@@ -1,4 +1,4 @@
-﻿---
+---
 name: validate-issue
 description: "Validate GitHub issues against code. Returns cited update decision with complexity scoring."
 when_to_use: "Use when validating a GitHub issue against code, returning a cited decision and score."

@@ -1,4 +1,4 @@
-﻿---
+---
 name: implement
 description: Implement a piece of work based on a spec or set of tickets
 when_to_use: "Use when implementing a defined piece of work from a spec, ticket, or plan."

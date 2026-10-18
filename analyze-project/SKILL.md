@@ -1,4 +1,4 @@
-﻿---
+---
 name: analyze-project
 description: "Comprehensive project analysis with deep tech detection, dynamic skill discovery, phase-aware recommendations, and implementation suggestions"
 when_to_use: "Use when sizing up a codebase: detect its stack, phase and gaps, then recommend which tech-stack and conditional skills to load. Runs inside /autor and after /project-init. Not for scaffolding new files (use project-init)."

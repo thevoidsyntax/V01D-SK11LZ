@@ -1,4 +1,4 @@
-﻿---
+---
 name: realtime
 description: "WebSocket, Server-Sent Events, and real-time data patterns."
 when_to_use: "Use when adding real-time data: WebSockets or Server-Sent Events."

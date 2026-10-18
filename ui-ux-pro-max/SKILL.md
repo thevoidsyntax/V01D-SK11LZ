@@ -1,4 +1,4 @@
-﻿---
+---
 name: ui-ux-pro-max
 description: "AI-powered design intelligence with 79 UI styles, 192 color palettes, 74 font pairings, 119 UX guidelines"
 when_to_use: "Use when designing UI/UX: choosing styles, color palettes, font pairings, or applying UX guidelines."

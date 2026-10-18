@@ -1,4 +1,4 @@
-﻿---
+---
 name: dina
 version: 2.3.0
 description: "Dina (QA+Security Agent) - Test strategy, security audit, code review, quality gates"

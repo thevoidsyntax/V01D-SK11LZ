@@ -1,4 +1,4 @@
-﻿---
+---
 name: satria
 version: 2.3.0
 description: "Satria (PM) - Creates BRD, PRD, FSD, manages timeline and stakeholder communication"

@@ -1,4 +1,4 @@
-﻿---
+---
 name: database
 description: SQL database optimization, migrations, indexing strategies, and best practices
 when_to_use: "Use when optimizing SQL: schema, migrations, indexing, or query tuning."

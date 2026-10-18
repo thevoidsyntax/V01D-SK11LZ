@@ -1,4 +1,4 @@
-﻿---
+---
 name: dev-browser
 description: "Development-focused browser with debugging and inspection tools"
 when_to_use: "Use when you need a development browser with debugging and inspection tools."

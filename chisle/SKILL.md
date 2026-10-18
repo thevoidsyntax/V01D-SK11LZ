@@ -1,4 +1,4 @@
-﻿---
+---
 name: chisle
 description: "Token optimization and cost reduction for LLM interactions"
 when_to_use: "Use when reducing token usage: compressing prompts, pruning irrelevant context, or summarizing long history."

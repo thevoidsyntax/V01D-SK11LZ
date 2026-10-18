@@ -1,4 +1,4 @@
-﻿---
+---
 name: ml-pipeline
 description: "ML pipelines with MLflow, Kubeflow, feature stores, experiment tracking, and deployment"
 when_to_use: "Use when building an ML pipeline with MLflow or Kubeflow: feature stores, tracking, or deployment."

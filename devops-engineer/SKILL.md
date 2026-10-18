@@ -1,4 +1,4 @@
-﻿---
+---
 name: devops-engineer
 description: "Senior DevOps engineer specializing in CI/CD pipelines, infrastructure as code, and deployment automation"
 when_to_use: "Use when acting as DevOps: CI/CD pipelines, infrastructure as code, or deployment automation."

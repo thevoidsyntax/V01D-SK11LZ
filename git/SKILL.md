@@ -1,4 +1,4 @@
-﻿---
+---
 name: git
 description: Git version control operations, workflows, and best practices
 when_to_use: "Use when running any git operation: branching, staging, rebasing, resolving merge conflicts, stashing, tags, history, or hooks."

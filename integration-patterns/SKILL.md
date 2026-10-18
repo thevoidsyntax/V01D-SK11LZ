@@ -1,4 +1,4 @@
-﻿---
+---
 name: integration-patterns
 description: "Integration patterns including ETL/ELT and API composition patterns"
 when_to_use: "Use when integrating systems: ETL/ELT or API composition."

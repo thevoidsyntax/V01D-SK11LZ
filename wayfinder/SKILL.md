@@ -1,4 +1,4 @@
-﻿---
+---
 name: wayfinder
 description: "Strategic planning and decision-making framework for architecture decisions"
 when_to_use: "Use when making a strategic architecture decision with a structured framework."

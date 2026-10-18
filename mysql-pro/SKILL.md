@@ -1,4 +1,4 @@
-﻿---
+---
 name: mysql-pro
 description: "MySQL optimization with query tuning, partitioning, replication, and InnoDB best practices."
 when_to_use: "Use when optimizing MySQL: query tuning, partitioning, replication, or InnoDB."

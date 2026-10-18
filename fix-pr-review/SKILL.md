@@ -1,4 +1,4 @@
-﻿---
+---
 name: fix-pr-review
 description: "Fix and address PR review comments autonomously. Validates findings, implements fixes, and requests re-review."
 when_to_use: "Use when addressing PR review comments: validate findings, apply fixes, request re-review."

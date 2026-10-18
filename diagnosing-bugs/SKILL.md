@@ -1,4 +1,4 @@
-﻿---
+---
 name: diagnosing-bugs
 description: "Diagnosis loop for hard bugs and performance regressions"
 when_to_use: "Use when chasing a hard bug or performance regression with a structured diagnosis loop."

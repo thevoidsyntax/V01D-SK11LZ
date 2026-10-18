@@ -1,4 +1,4 @@
-﻿---
+---
 name: fullstack-patterns
 description: "Backend-Frontend integration patterns, API contracts, and data flow strategies."
 when_to_use: "Use when integrating backend and frontend: API contracts and data flow."

@@ -1,4 +1,4 @@
-﻿---
+---
 name: data-quality
 description: "Data validation, cleansing, and quality assurance for data pipelines and databases"
 when_to_use: "Use when validating or cleansing data for pipelines and databases."

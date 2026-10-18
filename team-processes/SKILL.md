@@ -1,4 +1,4 @@
-﻿---
+---
 name: team-processes
 description: "Team processes and collaboration best practices including code ownership and architecture review processes"
 when_to_use: "Use when setting team process: code ownership or architecture review."

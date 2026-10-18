@@ -1,4 +1,4 @@
-﻿---
+---
 name: redis-pro
 description: "Redis caching strategies, pub/sub patterns, session management, and distributed locking."
 when_to_use: "Use when using Redis: caching, pub/sub, session store, or distributed locks."

@@ -1,4 +1,4 @@
-﻿---
+---
 name: deployment
 description: "Deployment best practices including IaC, CI/CD pipelines, blue-green, canary, and zero-downtime strategies"
 when_to_use: "Use when setting up CI/CD pipelines or a deployment strategy such as blue-green, canary, or zero-downtime releases."

@@ -1,4 +1,4 @@
-﻿---
+---
 name: nestjs-expert
 description: "NestJS enterprise backend with dependency injection, TypeORM/Prisma, JWT auth, validation, and testing"
 when_to_use: "Use when building a NestJS backend: DI, TypeORM/Prisma, JWT auth, validation, or tests."

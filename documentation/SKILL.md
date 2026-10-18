@@ -1,4 +1,4 @@
-﻿---
+---
 name: documentation
 description: Technical documentation best practices including README, RFC, and onboarding documentation
 when_to_use: "Use when writing technical docs: README, RFC, or onboarding guides."

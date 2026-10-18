@@ -1,4 +1,4 @@
-﻿---
+---
 name: data-engineering
 description: Data engineering patterns including CDC, ETL, data quality, and warehouse design
 when_to_use: "Use when building data pipelines: CDC, ETL, warehousing, or data quality."

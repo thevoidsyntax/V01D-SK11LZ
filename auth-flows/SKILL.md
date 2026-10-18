@@ -1,4 +1,4 @@
-﻿---
+---
 name: auth-flows
 description: "Authentication patterns with JWT, OAuth, session management, and protected routes."
 when_to_use: "Use when implementing authentication: JWT, OAuth, sessions, or protected routes."

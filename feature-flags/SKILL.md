@@ -1,4 +1,4 @@
-﻿---
+---
 name: feature-flags
 description: "Progressive delivery with feature flags, canary deployments, A/B testing, and gradual rollouts"
 when_to_use: "Use when rolling out progressively: feature flags, canary, A/B tests, or gradual rollout."

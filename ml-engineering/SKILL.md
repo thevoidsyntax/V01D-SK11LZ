@@ -1,4 +1,4 @@
-﻿---
+---
 name: ml-engineering
 description: Machine learning engineering practices including ML lifecycle, drift detection, and LLM patterns
 when_to_use: "Use when operating the ML lifecycle: training to production, drift detection, or LLM patterns."

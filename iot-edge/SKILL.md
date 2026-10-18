@@ -1,4 +1,4 @@
-﻿---
+---
 name: iot-edge
 description: IoT and edge computing best practices including OTA updates and edge deployment
 when_to_use: "Use when building IoT or edge: OTA updates and edge deployment."

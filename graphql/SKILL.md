@@ -1,4 +1,4 @@
-﻿---
+---
 name: graphql
 description: GraphQL API design, schema-first development, DataLoader pattern, and subscriptions
 when_to_use: "Use when designing a GraphQL API: schema-first, DataLoader, or subscriptions."

@@ -1,4 +1,4 @@
-﻿---
+---
 name: llm-evaluation
 description: "LLM evaluation frameworks, benchmark design, and quality metrics for AI applications"
 when_to_use: "Use when evaluating an LLM app: benchmarks, quality metrics, or eval harnesses."

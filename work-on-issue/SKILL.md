@@ -1,4 +1,4 @@
-﻿---
+---
 name: work-on-issue
 description: "Structured approach to implementing issue solutions with task breakdown and progress tracking"
 when_to_use: "Use when implementing an issue solution with task breakdown and progress tracking."

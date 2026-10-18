@@ -1,4 +1,4 @@
-﻿---
+---
 name: feature-forge
 description: "PRD creation and feature specification drafting"
 when_to_use: "Use when drafting a PRD or feature specification."

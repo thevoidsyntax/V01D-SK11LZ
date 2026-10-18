@@ -1,4 +1,4 @@
-﻿---
+---
 name: api-client
 description: HTTP client patterns, retry logic, circuit breaker, and rate limiting for TypeScript/JS
 when_to_use: "Use when building an HTTP client in TypeScript/JS: retries, circuit breaker, or rate limiting."

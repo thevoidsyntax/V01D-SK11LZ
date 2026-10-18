@@ -1,4 +1,4 @@
-﻿---
+---
 name: finops
 description: Cloud FinOps practices for cost visibility, tagging strategies, and cost optimization
 when_to_use: "Use when controlling cloud cost: visibility, tagging, or optimization."

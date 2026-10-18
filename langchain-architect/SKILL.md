@@ -1,4 +1,4 @@
-﻿---
+---
 name: langchain-architect
 description: "LangChain framework architecture, chains, agents, memory, and RAG implementations"
 when_to_use: "Use when building LLM apps with LangChain: chains, agents, memory, or RAG."

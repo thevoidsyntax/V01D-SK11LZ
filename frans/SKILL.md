@@ -1,4 +1,4 @@
-﻿---
+---
 name: frans
 version: 2.3.0
 description: "Frans (DevOps Agent) - CI/CD setup, deployment automation, infrastructure, monitoring"

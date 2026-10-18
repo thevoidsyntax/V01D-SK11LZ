@@ -1,4 +1,4 @@
-﻿---
+---
 name: database-migration
 description: "Database migration patterns with zero-downtime strategies, rollback plans, and data integrity."
 when_to_use: "Use when running a schema migration, especially zero-downtime, with a rollback plan."

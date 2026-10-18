@@ -1,4 +1,4 @@
-﻿---
+---
 name: master-rules
 description: "Master rules for Senior Full-Stack Architect, System Analyst, and Team Lead Mode."
 when_to_use: "Use when you want the senior full-stack architect and team-lead operating rules for this pack."

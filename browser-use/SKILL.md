@@ -1,4 +1,4 @@
-﻿---
+---
 name: browser-use
 description: "Browser automation and control via CDP (Chrome DevTools Protocol)"
 when_to_use: "Use when automating a real browser via CDP (Chrome DevTools Protocol) for navigation or interaction."

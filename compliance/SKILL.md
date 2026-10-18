@@ -1,4 +1,4 @@
-﻿---
+---
 name: compliance
 description: Compliance and governance best practices including GDPR, SOC2, and audit trail
 when_to_use: "Use when meeting compliance: GDPR, SOC2, or audit trails."

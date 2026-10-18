@@ -1,4 +1,4 @@
-﻿---
+---
 name: developer-experience
 description: "Developer experience best practices including IDP, CLI patterns, and SDK design for improved developer productivity"
 when_to_use: "Use when improving developer experience: internal platforms, CLI design, or SDK ergonomics."
