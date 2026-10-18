@@ -1,6 +1,7 @@
----
+﻿---
 name: rag-architect
 description: "RAG systems design with vector databases, embeddings, hybrid search, and retrieval quality evaluation"
+when_to_use: "Use when designing a RAG system: vector DBs, embeddings, hybrid search, or retrieval eval."
 version: "1.1.0"
 category: [ai-process]
 priority: high

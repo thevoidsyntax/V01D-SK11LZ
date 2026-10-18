@@ -1,6 +1,7 @@
----
+﻿---
 name: python-pro
 description: "Python best practices including typing, idiomatic patterns, and professional Python development"
+when_to_use: "Use when writing professional Python: typing, idiomatic patterns, and project structure."
 version: "1.1.0"
 category: [language]
 priority: high

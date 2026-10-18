@@ -1,6 +1,7 @@
----
+﻿---
 name: api-design
 description: REST, GraphQL, gRPC patterns and best practices for API design
+when_to_use: "Use when designing a REST, GraphQL, or gRPC API and its conventions."
 version: "1.1.0"
 category: [backend]
 priority: medium

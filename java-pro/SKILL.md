@@ -1,6 +1,7 @@
----
+﻿---
 name: java-pro
 description: "Java enterprise backend patterns with Spring Boot, Jakarta EE, Maven/Gradle, and testing best practices."
+when_to_use: "Use when building Java backends with Spring Boot or Jakarta EE and Maven/Gradle."
 version: "1.0.0"
 category: [backend]
 priority: high

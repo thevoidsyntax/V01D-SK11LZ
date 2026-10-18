@@ -1,6 +1,7 @@
----
+﻿---
 name: typescript-pro
 description: Advanced TypeScript type systems, custom type guards, and utility types
+when_to_use: "Use when working with advanced TypeScript types: type guards, generics, or utility types."
 version: "1.0.0"
 category: [backend, frontend]
 priority: medium

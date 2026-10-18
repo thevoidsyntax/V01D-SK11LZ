@@ -1,6 +1,7 @@
----
+﻿---
 name: storage
 description: Storage systems best practices including object storage, CDN, and storage tiering
+when_to_use: "Use when choosing storage: object storage, CDN, or storage tiering."
 version: "1.0.0"
 category: [infrastructure]
 priority: low

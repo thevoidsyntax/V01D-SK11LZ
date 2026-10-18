@@ -1,6 +1,7 @@
----
+﻿---
 name: networking
 description: Networking best practices including DNS, TLS, load balancer, and WAF configuration
+when_to_use: "Use when configuring networking: DNS, TLS, load balancers, or WAF."
 version: "1.0.0"
 category: [infrastructure]
 priority: medium

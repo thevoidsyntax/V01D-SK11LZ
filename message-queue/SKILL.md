@@ -1,6 +1,7 @@
----
+﻿---
 name: message-queue
 description: Message queue patterns, event-driven architecture, Kafka, RabbitMQ, and SQS best practices
+when_to_use: "Use when adding a message queue or event-driven flow with Kafka, RabbitMQ, or SQS."
 version: "1.0.0"
 category: [backend, data]
 priority: medium

@@ -1,6 +1,7 @@
----
+﻿---
 name: grpc-pro
 description: "gRPC and Protocol Buffers patterns including streaming, error handling, and microservices communication"
+when_to_use: "Use when building gRPC services with Protocol Buffers, streaming, or microservice calls."
 version: "1.0.0"
 category: [backend]
 priority: high

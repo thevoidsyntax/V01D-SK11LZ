@@ -1,6 +1,7 @@
----
+﻿---
 name: nextjs-pro
 description: "Next.js patterns with App Router, Server Components, and deployment optimization."
+when_to_use: "Use when building Next.js: App Router, Server Components, or deployment tuning."
 version: "1.0.0"
 category: [frontend]
 priority: high

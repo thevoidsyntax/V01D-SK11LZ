@@ -1,6 +1,7 @@
----
+﻿---
 name: search
 description: Search engine implementation including Elasticsearch, full-text search, and indexing
+when_to_use: "Use when implementing search: Elasticsearch, full-text search, or indexing."
 version: "1.0.0"
 category: [backend, data]
 priority: low

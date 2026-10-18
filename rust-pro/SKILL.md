@@ -1,6 +1,7 @@
----
+﻿---
 name: rust-pro
 description: "Rust systems programming with ownership, lifetimes, async Rust, and zero-cost abstractions"
+when_to_use: "Use when writing Rust: ownership, lifetimes, async, or zero-cost abstractions."
 version: "1.0.0"
 category: [backend]
 priority: medium

@@ -1,6 +1,7 @@
----
+﻿---
 name: elasticsearch
 description: "Elasticsearch and OpenSearch patterns including indexing, querying, aggregations, and search optimization"
+when_to_use: "Use when working with Elasticsearch or OpenSearch: indexing, queries, aggregations, or search tuning."
 version: "1.0.0"
 category: [database]
 priority: high

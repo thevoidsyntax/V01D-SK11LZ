@@ -1,6 +1,7 @@
----
+﻿---
 name: performance-ui
 description: "Frontend performance with Core Web Vitals, bundle optimization, and rendering strategies."
+when_to_use: "Use when improving frontend performance: Core Web Vitals, bundle size, or rendering."
 version: "1.0.0"
 category: [frontend, performance]
 priority: high

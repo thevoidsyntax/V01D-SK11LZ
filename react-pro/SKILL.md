@@ -1,6 +1,7 @@
----
+﻿---
 name: react-pro
 description: "React patterns with hooks, state management, routing, and performance optimization."
+when_to_use: "Use when building React: hooks, state management, routing, or performance."
 version: "1.0.0"
 category: [frontend]
 priority: high

@@ -1,6 +1,7 @@
----
+﻿---
 name: go-pro
 description: "Go development with concurrency patterns, interfaces, goroutines, channels, and idiomatic Go practices"
+when_to_use: "Use when writing Go: concurrency, goroutines, channels, interfaces, and idiomatic patterns."
 version: "1.0.0"
 category: [backend]
 priority: high

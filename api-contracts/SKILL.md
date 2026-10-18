@@ -1,6 +1,7 @@
----
+﻿---
 name: api-contracts
 description: "API contracts, OpenAPI specs, and contract testing for full-stack applications."
+when_to_use: "Use when defining API contracts or OpenAPI specs and contract-testing them across a full-stack app."
 version: "1.0.0"
 category: [integration, backend]
 priority: high

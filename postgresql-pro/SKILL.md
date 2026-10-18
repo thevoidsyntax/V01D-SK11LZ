@@ -1,6 +1,7 @@
----
+﻿---
 name: postgresql-pro
 description: "PostgreSQL optimization with query tuning, indexing strategies, JSONB operations, and replication"
+when_to_use: "Use when optimizing PostgreSQL: query tuning, indexing, JSONB, or replication."
 version: "1.0.0"
 category: [data]
 priority: high

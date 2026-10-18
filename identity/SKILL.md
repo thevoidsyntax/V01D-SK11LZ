@@ -1,6 +1,7 @@
----
+﻿---
 name: identity
 description: Identity and access management (IAM) including OAuth2, OIDC, SAML, MFA, and session management
+when_to_use: "Use when implementing IAM: OAuth2, OIDC, SAML, MFA, or session management."
 version: "1.0.0"
 category: [security]
 priority: high
