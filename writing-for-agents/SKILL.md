@@ -66,6 +66,10 @@ Input: "Show me the users table"
 Output: SQL query selecting from users
 ```
 
+## Reference
+
+- [SKILL-MECHANICS.md](SKILL-MECHANICS.md) — how skills load and trigger
+
 ## Integrations
 
 Works with: `skill-creator`, `chisle`

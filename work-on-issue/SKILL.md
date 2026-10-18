@@ -62,6 +62,10 @@ Use work-on-issue when:
 - Run tests
 - Update issue
 
+## Reference
+
+- [dependency-base.md](dependency-base.md) — dependency ordering for multi-issue work
+
 ## Integrations
 
 Works with: `diagnosing-bugs`, `pr-review`, `validate-issue`

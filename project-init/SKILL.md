@@ -980,6 +980,11 @@ git commit -m "feat: initial project scaffolding
 
 8. **Clear Documentation**: README should include actual commands, not placeholder text.
 
+## Reference files
+
+- [analyzer.md](analyzer.md) — deep tech-detection logic
+- Templates by project type: [erp.md](templates/erp.md), [fullstack-web.md](templates/fullstack-web.md), [ml-pipeline.md](templates/ml-pipeline.md), [rest-api.md](templates/rest-api.md)
+
 ---
 
 **Version:** 3.0 | **Author:** thevoidsyntax | **Invokes:** `/git`, `/docker`, `/deployment`, `/config`, `/observability`, `/security`, and conditional skills based on project requirements
