@@ -50,3 +50,24 @@ Use mem-search when:
 ## Integrations
 
 Works with: `research`, `wayfinder`
+
+## External Knowledge Tools
+
+### For Codebase Understanding
+Use `/graphify` for knowledge graphs of codebases:
+- Local AST parsing, no data leaves machine
+- Trace dependencies and relationships
+- 80% token reduction for context
+
+### For Enterprise Knowledge
+Use `/onyx` for organizational knowledge:
+- RAG for enterprise data sources
+- 50+ app integrations
+- MCP server for AI agents
+
+### Decision Guide
+```
+Local codebase → /graphify
+Session memory → /mem-search
+Organizational → /onyx
+```

@@ -35,11 +35,11 @@ uses_skills:
   - /architecture-patterns (architecture decisions)
   - /design-patterns (code patterns)
   - /code-quality (code quality)
-  - /diagnosing-bugs (debugging)
-  - /tech-debt (tech debt management)
   - /performance (performance optimization)
   - /reliability (reliability patterns)
   - /scalability (scalability design)
+  - /graphify (codebase knowledge graph - understand structure)
+  - /scrapling (web scraping - data collection)
 
 ---
 

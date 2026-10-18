@@ -34,9 +34,10 @@ uses_skills:
   - /brd (business requirements)
   - /fsd (functional specs)
   - /prd (product requirements)
-  - /architecture-patterns (architecture review - for reviewing decisions)
   - /tech-debt (tech debt tracking)
   - /audit (project health audit)
+  - /superpowers (agentic workflow - brainstorming → planning → implementation → review)
+  - /graphify (codebase knowledge graph - understand project structure)
 
 ---
 

@@ -41,6 +41,8 @@ uses_skills:
   - /reliability (reliability engineering)
   - /scalability (scalability planning)
   - /code-quality (pre-deploy code quality check)
+  - /onyx (knowledge platform - query infrastructure docs)
+  - /scrapling (web scraping - monitor infrastructure)
 
 ---
 

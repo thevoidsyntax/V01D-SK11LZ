@@ -38,6 +38,8 @@ uses_skills:
   - /compliance (compliance checking)
   - /diagnosing-bugs (debugging)
   - /audit (security audit)
+  - /impeccable (design review for UI/UX quality)
+  - /scrapling (web scraping for test data collection)
 
 ---
 

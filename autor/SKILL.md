@@ -110,6 +110,13 @@ EXISTING PROJECT: Contextual Assessment
   → Analyze → Assess → Recommend (or no recommendation if healthy)
 ```
 
+### Alternative Workflow
+```
+For structured project workflow, consider /superpowers:
+→ Brainstorming → Design → Plan → Implement → Review
+→ See /superpowers for agentic workflow methodology
+```
+
 ### Personas Integrated
 ```
 ┌─────────────────────────────────────────────────────────────┐
