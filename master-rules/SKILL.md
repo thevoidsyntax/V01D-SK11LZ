@@ -1,47 +1,58 @@
 ---
 name: master-rules
-description: "Master rules for Senior Full-Stack Architect, System Analyst, and Team Lead Mode."
-when_to_use: "Use when you want the senior full-stack architect and team-lead operating rules for this pack."
-version: "9.0"
+description: "Operating rules for this skill pack: how /autor, the core skills, and the 6-persona pipeline fit together"
+when_to_use: "Use when you want the high-level operating rules for this pack - how skills are organized and when each entry point applies."
+version: "10.0"
 ---
 
-# Master Rules v9.0 - V01D-RULEZ Integration
+# Master Rules v10 — V01D-SK11LZ
 
 ## Overview
 
-V01D-RULEZ menyediakan **91 skills** dengan `/autor` sebagai master skill untuk orchestrate semua skill lain berdasarkan project context.
+This pack is **139 skills**. `/autor` is the entry point: it auto-detects project context and loads the relevant skills and personas. Every skill carries a `description` (what) + `when_to_use` (when), which Claude Code uses to surface the right one.
 
-## Quick Start
+## Quick start
 
 ```bash
-/autor          # Smart dashboard with auto-detect
-/autor new            # New project wizard
-/ar                    # Alias untuk autor
+/autor          # analyze the current project, load relevant skills
+/autor new      # start a new project (plan -> scaffold -> detect stack -> pipeline)
+/agents         # run the 6-persona build pipeline
 ```
 
-## CORE Skills (26) - Always Active
+## Core skills (12) — always loaded with /autor
 
 ```
-git, docker, ci-cd, deployment,
-code quality, testing, tdd,
-config, logging, observability,
-security, api-design, database,
-domain-modeling, architecture-patterns,
-diagnosing-bugs, mem-search,
-feature-forge, implement, documentation,
-performance, browser-use, anti-slop,
-pr-review, commit, reliability, scalability
+git, config, security, testing, error-debugger, observability,
+doc-generator, mem-search, anti-slop, chisle, caveman, codebase-design
 ```
 
-## Trigger-Based Skills (17) - Auto-invoke on Tech Detection
+`/ponytail` (code-less philosophy) is inherited too.
 
-```
-python-pro, typescript-pro, go-pro, rust-pro, nestjs-expert,
-postgresql-pro, kubernetes, terraform, graphql,
-rag-architect, llm-evaluation, ml-pipeline,
-langchain-architect, feature-flags
-```
+## Conditional / tech-stack skills — selected on demand
 
-## Total: 91 Skills
+Not pre-listed here: `/analyze-project` detects the stack and the model
+loads the matching skills by their `when_to_use` triggers — language
+(`python-pro`, `go-pro`, `typescript-pro`, …), framework (`react-pro`,
+`nextjs-pro`, …), data (`postgresql-pro`, `prisma`, …), infra
+(`docker`, `kubernetes`, `terraform`, …), and more.
 
-Documentation lengkap: `_docs/MANIFEST.md`
+## Personas — the 6-stage pipeline (`/agents`)
+
+| Stage | Persona | Role | Model |
+|-------|---------|------|-------|
+| 1 | Satria | Product Manager | Sonnet |
+| 2 | Athena | System Architect | Opus |
+| 3 | Hexa | Feature Coder | Sonnet |
+| 4 | Dina | QA & Security | Opus |
+| 5 | Frans | Platform & DevOps | Sonnet |
+| 6 | Vika | Technical Writer | Haiku |
+
+Each stage runs as its own subagent on its own model and hands off
+through artifact files (`specs/*`, `src/*`, `docs/*`). See `/agents`.
+
+## Conventions
+
+- One skill per top-level `<name>/SKILL.md`; `infrastructure/` is the only non-skill folder.
+- No GitHub Actions; install = `git clone`, sync = plain git.
+
+Full history: [CHANGELOG.md](../CHANGELOG.md) · overview: [README.md](../README.md).
