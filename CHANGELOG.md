@@ -5,6 +5,16 @@ All notable changes to the Skills Ecosystem will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.0] - 2026-10-18
+
+### Fixed
+- Linked supporting docs so Claude can reach them (it only follows links one level deep from `SKILL.md`): `pentest` (README), `work-on-issue` (dependency-base), `writing-for-agents` (SKILL-MECHANICS), and `project-init` (analyzer + 4 templates).
+- Unbroke three dead `rereview-routing.md` links in `fix-pr-review/SKILL.md` and the matching reference in `validate-issue` (the file is not bundled with the vendored skill); the links are now plain text, prose unchanged.
+- `skillspector`: install source said `../SkillRator`, which is not a real name — corrected to the upstream `NVIDIA/SkillSpector` engine plus the `larsroettig/skillspector-quality` layer, with the Python 3.12–3.13 requirement and a Windows build caveat. Dimension list 10 → 11 (added Instruction Clarity; Behavioral Config → Behavioral Configuration).
+
+### Removed
+- `validate-issue/rereview-routing.md`: a `TODO: Expand` stub whose topic is already covered inline in `validate-issue/SKILL.md`.
+
 ## [3.1.0] - 2026-10-18
 
 ### Security
@@ -148,7 +158,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Status |
 |---------|--------|
-| 3.1.0 | Current |
+| 3.2.0 | Current |
+| 3.1.0 | Previous |
 | 3.0.0 | Previous |
 | 2.5.0 | Previous |
 | 2.0.0 | Previous |
