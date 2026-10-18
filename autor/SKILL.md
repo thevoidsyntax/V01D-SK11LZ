@@ -122,11 +122,11 @@ For structured project workflow, consider /superpowers:
 ┌─────────────────────────────────────────────────────────────┐
 │  PERSONAS FLOW                                            │
 ├─────────────────────────────────────────────────────────────┤
-│  NEW PROJECT:                                             │
-│    Satria (PM) → Team Coordinator                         │
-│      → Calls Athena when needed                          │
-│      → Calls Dina when needed                            │
-│      → Calls Frans when ready to deploy                  │
+│  NEW FEATURE (pipeline):                                  │
+│    Satria → Athena → Hexa → Dina → Frans → Vika           │
+│    PM → Architect → Coder → QA → DevOps → Writer          │
+│    handoff via artifacts; Dina gates (max 3 loops)        │
+│                                                           │
 │                                                             │
 │  EXISTING PROJECT:                                        │
 │    Contextual → Based on project state                    │
@@ -159,10 +159,12 @@ For structured project workflow, consider /superpowers:
 ┌─────────────────────────────────────────────────────────────┐
 │  LAYER 2: PERSONAS (Available with /autor)                │
 ├─────────────────────────────────────────────────────────────┤
-│  ├── Satria (PM)       - BRD, PRD, FSD                   │
-│  ├── Athena (SE)       - Architecture, code               │
-│  ├── Dina (QA)         - Security, testing                │
-│  └── Frans (DevOps)    - Deployment, monitoring           │
+│  ├── Satria (PM)        - requirements, PRD              │
+│  ├── Athena (Architect) - design, ADR, contracts         │
+│  ├── Hexa (Coder)       - implementation + tests         │
+│  ├── Dina (QA/Security) - audit + quality gate           │
+│  ├── Frans (DevOps)     - containers, migrations, CI     │
+│  └── Vika (Writer)      - OpenAPI, changelog, docs       │
 │  All auto-invoke: anti-slop + chisle + caveman            │
 └─────────────────────────────────────────────────────────────┘
 
@@ -234,16 +236,18 @@ When you invoke `/autor`, the following 12 core skills are automatically loaded:
 
 ### Personas (Auto-Available with /autor)
 
-| Persona | Name | Role | Command |
-|---------|------|------|---------|
-| PM Agent | **Satria** | Project Manager | `/satria` |
-| SE Agent | **Athena** | Software Engineer | `/athena` |
-| QA Agent | **Dina** | Quality Assurance | `/dina` |
-| DevOps Agent | **Frans** | Platform Engineer | `/frans` |
+| Persona | Name | Role | Model | Command |
+|---------|------|------|-------|---------|
+| PM | **Satria** | Product Manager | Sonnet | `/satria` |
+| Architect | **Athena** | System Architect | Opus | `/athena` |
+| Coder | **Hexa** | Feature Coder | Sonnet | `/hexa` |
+| QA & Security | **Dina** | QA & Security Auditor | Opus | `/dina` |
+| DevOps | **Frans** | Platform & DevOps | Sonnet | `/frans` |
+| Writer | **Vika** | Technical Writer | Haiku | `/vika` |
 
 All personas auto-invoke: `anti-slop` + `chisle` + `caveman` for ~80-90% token savings.
 
-Use `/agents` to invoke full workflow: Satria → Athena → Dina → Frans → Production
+Use `/agents` to run the full pipeline: Satria → Athena → Hexa → Dina → Frans → Vika (each phase a subagent on its own model, handing off via artifacts).
 
 ### Conditional Skills (Auto-detect)
 
@@ -275,10 +279,12 @@ User: /autor new
 4. Detect stack & load skills: /analyze-project
    → loads tech-stack + conditional skills (see table above)
   ↓
-5. Build: /athena (architecture, APIs, implementation)
+5. Build pipeline (per feature): /athena design → /hexa code → /dina audit
   ↓
-6. Quality & ship: /dina (tests, security) → /frans (CI/CD, deploy)
+6. Ship & document: /frans (CI/CD, deploy) → /vika (OpenAPI, changelog)
 ```
+
+Steps 5-6 are the 6-persona pipeline (see `/agents`): each phase a subagent on its own model, handing off via artifacts, with Dina's quality gate.
 
 Small/throwaway projects can skip step 2 and go straight to `/project-init`.
 Each step is a real skill in this pack; `/autor new` just runs them in order.
@@ -328,11 +334,12 @@ User: /autor
 ### Team Coordination
 
 ```
-Satria (PM) → Owns project planning and team coordination
-  ↓ calls when needed:
-  - Athena → for architecture/feature work
-  - Dina → for testing/security
-  - Frans → for deployment/infrastructure
+Satria (PM) → Owns planning; the pipeline runs in order:
+  - Athena → architecture, ADR, contracts
+  - Hexa   → implementation + unit tests
+  - Dina   → QA & security audit (quality gate)
+  - Frans  → containers, migrations, CI/CD
+  - Vika   → OpenAPI + changelog + docs
 ```
 
 ---
@@ -522,10 +529,12 @@ Persona invoked (e.g., /athena)
 
 | Persona | Extended Skills | Count |
 |---------|----------------|-------|
-| Satria | brd, fsd, prd, architecture-patterns, tech-debt, code-quality, audit | +7 |
-| Athena | api-design, architecture-patterns, design-patterns, code-quality, diagnosing-bugs, tech-debt, performance, reliability, scalability | +9 |
-| Dina | playwright, testing-integration, test-generator, pentest, compliance, diagnosing-bugs, audit | +7 |
-| Frans | docker, deployment, kubernetes, terraform, devops-engineer, platform-engineering, cloud-architect, error-tracking, reliability, scalability | +10 |
+| Satria (Sonnet) | brd, fsd, prd, feature-forge, grill-with-docs, research, team-processes, tech-debt, audit, superpowers, new-issue, handoff, wayfinder | +13 |
+| Athena (Opus) | architecture-patterns, design-patterns, api-design, api-contracts, graphql, grpc-pro, database, integration-patterns, fullstack-patterns, messaging, message-queue, realtime, webhooks, identity, auth-flows, data-engineering, search, rag-architect, langchain-architect, ml-pipeline, ml-engineering, cloud-architect, scalability, reliability, wayfinder | +25 |
+| Hexa (Sonnet) | stack-aware language/framework-pro + prisma, drizzle, DB-pro, elasticsearch, api-client, data-fetch, auth-flows, realtime, webhooks, payment-stripe, supabase, openai, messaging, code-quality, implement, test-generator, diagnosing-bugs, performance, performance-ui, work-on-issue, mobile, reticle, data-quality, fullstack-guardian | +many |
+| Dina (Opus) | testing-integration, test-generator, playwright, pentest, compliance, diagnosing-bugs, audit, impeccable, code-quality, pr-review, fix-pr-review, validate-issue, llm-evaluation, browser-use, dev-browser | +15 |
+| Frans (Sonnet) | docker, deployment, kubernetes, terraform, devops-engineer, platform-engineering, cloud-architect, error-tracking, database-migration, reliability, scalability, onyx, networking, storage, finops, feature-flags, iot-edge, serverless, vercel, railway, flyio, developer-experience, mobile | +23 |
+| Vika (Haiku) | documentation, api-contracts, sync-docs, create-release, handoff, writing-for-agents | +6 |
 
 ### Token Example
 

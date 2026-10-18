@@ -1,12 +1,13 @@
 # V01D-SK11LZ — Panduan Claude Code
 
-Repo ini adalah **ekosistem skill** untuk Claude Code (137 skill; tiap subfolder level atas berisi `SKILL.md`, kecuali `infrastructure/`). Claude Code memuat skill ini otomatis dari `~/.claude/skills` — repo ini memang di-clone ke sana.
+Repo ini adalah **ekosistem skill** untuk Claude Code (139 skill; tiap subfolder level atas berisi `SKILL.md`, kecuali `infrastructure/`). Claude Code memuat skill ini otomatis dari `~/.claude/skills` — repo ini memang di-clone ke sana.
 
 ## Cara kerja
 
 - **`autor`** auto-invoke (selalu aktif): mendeteksi konteks proyek lalu memuat skill & persona yang relevan.
-- **Mulai project**: `/autor new` menjalankan urutan nyata — rencana (`/satria`) → scaffold (`/project-init`) → deteksi stack (`/analyze-project`, memuat skill tech-stack & conditional) → build (`/athena`) → QA (`/dina`) → deploy (`/frans`).
-- **Persona**: `/satria` (PM), `/athena` (Software Engineer), `/dina` (QA + Security), `/frans` (DevOps).
+- **Mulai project**: `/autor new` → rencana (`/satria`) → scaffold (`/project-init`) → deteksi stack (`/analyze-project`) → lalu pipeline fitur.
+- **Pipeline 6 persona** (`/agents`): Satria (PM) → Athena (Architect) → Hexa (Coder) → Dina (QA/Security) → Frans (DevOps) → Vika (Writer). Tiap fase dijalankan sebagai **subagent dengan model sendiri** (Opus utk Athena/Dina; Sonnet utk Satria/Hexa/Frans; Haiku utk Vika) lewat Agent tool — persona tetap skill di repo, handoff via berkas artefak (`specs/*`, `src/*`, `docs/*`).
+- **Persona**: `/satria` (PM), `/athena` (System Architect), `/hexa` (Feature Coder), `/dina` (QA + Security), `/frans` (DevOps), `/vika` (Technical Writer).
 - Skill lain dipanggil lewat nama foldernya (mis. `/git`, `/security`, `/testing`, `/anti-slop`, `/ponytail`).
 
 ## Konvensi repo

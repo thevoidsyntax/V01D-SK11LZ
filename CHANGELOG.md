@@ -5,6 +5,17 @@ All notable changes to the Skills Ecosystem will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.0] - 2026-10-18
+
+### Changed
+- **Persona team reworked 4 → 6 as a build pipeline.** Satria (PM) → Athena (System Architect) → **Hexa** (Feature Coder, new) → Dina (QA & Security) → Frans (Platform & DevOps) → **Vika** (Technical Writer, new). Athena is now design-only (ADR + contracts); implementation moved to Hexa.
+- **Per-phase model.** Each phase runs as its own subagent on its own model via the Agent tool: Opus for Athena and Dina (architecture, security), Sonnet for Satria/Hexa/Frans, Haiku for Vika, with escalation rules. Personas stay skills in this repo (clone-only intact).
+- **Artifact handoff + quality gate.** Phases communicate only through files (`specs/*`, `src/*`, `docs/*`); Dina emits `STATUS: APPROVED/REJECTED` with a Dina→Hexa patch loop (max 3).
+- Bound skills reassigned across all personas via a full sweep of the catalog; Hexa is stack-aware. `autor`, `CLAUDE.md` updated for the 6 personas.
+
+### Added
+- `hexa` (Feature Coder) and `vika` (Technical Writer) skills. Skill count 137 → 139.
+
 ## [3.3.0] - 2026-10-18
 
 ### Added
@@ -168,7 +179,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Status |
 |---------|--------|
-| 3.3.0 | Current |
+| 3.4.0 | Current |
+| 3.3.0 | Previous |
 | 3.2.0 | Previous |
 | 3.1.0 | Previous |
 | 3.0.0 | Previous |
