@@ -58,31 +58,42 @@
 
 ---
 
-## Sync
+## Setup
 
-### Clone & Setup
+### One-liner (Recommended)
 
 ```powershell
-# 1. Clone repo
-git clone https://github.com/thevoidsyntax/V01D-SK11LZ $HOME/.claude/skills
-
-# 2. Copy settings
-cp settings.json $HOME/.claude/settings.json
-cp plugins-settings.json $HOME/.claude/plugins/claude-mem/settings.local.json
-
-# 3. Sync
-cd $HOME/.claude/skills
-git pull
+irm https://raw.githubusercontent.com/thevoidsyntax/V01D-SK11LZ/main/install.ps1 | iex
 ```
 
-### Auto-Sync
+### Manual
 
 ```powershell
-# Manual sync
-.\sync.ps1 -Action sync
+# Clone repo
+git clone https://github.com/thevoidsyntax/V01D-SK11LZ $HOME/.claude/skills
 
-# Watch mode (continuous)
-.\sync.ps1 -Action watch
+# Copy settings
+cp settings.json $HOME/.claude/settings.json
+cp plugins-settings.json $HOME/.claude/plugins/claude-mem/settings.local.json
+```
+
+---
+
+## Sync
+
+### Script (Auto)
+
+```powershell
+.\sync.ps1 -Action sync
+```
+
+### Manual
+
+```powershell
+git pull
+git add -A
+git commit -m "update"
+git push
 ```
 
 ---
