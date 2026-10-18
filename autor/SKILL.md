@@ -266,14 +266,22 @@ Use `/agents` to invoke full workflow: Satria → Athena → Dina → Frans → 
 ```
 User: /autor new
   ↓
-1. Analyze project type
+1. Clarify: project type, stack, scale (quick Q&A)
   ↓
-2. "Recommended: Start with /satria (PM) for planning"
+2. Plan (bigger projects, optional): /satria → BRD / PRD / FSD
   ↓
-3. Satria invoked → Satria decides when to involve team
+3. Scaffold real files + git init: /project-init
   ↓
-4. Satria coordinates: Athena → Dina → Frans → Production
+4. Detect stack & load skills: /analyze-project
+   → loads tech-stack + conditional skills (see table above)
+  ↓
+5. Build: /athena (architecture, APIs, implementation)
+  ↓
+6. Quality & ship: /dina (tests, security) → /frans (CI/CD, deploy)
 ```
+
+Small/throwaway projects can skip step 2 and go straight to `/project-init`.
+Each step is a real skill in this pack; `/autor new` just runs them in order.
 
 ### Existing Project Flow
 ```

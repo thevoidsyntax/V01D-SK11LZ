@@ -1,6 +1,7 @@
----
+﻿---
 name: analyze-project
 description: "Comprehensive project analysis with deep tech detection, dynamic skill discovery, phase-aware recommendations, and implementation suggestions"
+when_to_use: "Use when sizing up a codebase: detect its stack, phase and gaps, then recommend which tech-stack and conditional skills to load. Runs inside /autor and after /project-init. Not for scaffolding new files (use project-init)."
 version: "4.1"
 category: [process]
 priority: high
@@ -13,9 +14,7 @@ auto_invoke:
   conditions:
     - command: "/analyze-project"
       reason: "Explicit invocation"
-    - command: "/auto-route --analyze"
-      reason: "Analysis mode"
-    - command: "/auto-route"
+    - command: "/autor"
       reason: "Auto-detect existing project"
   skill_tier: core
 capabilities: [discovery, analysis]
@@ -72,13 +71,13 @@ interface ProjectDetection {
   isNew: boolean;
   projectRoot: string;
   projectName: string;
-  
+
   // Tech Stack
   language: string;           // Node.js, Python, Go, etc.
   frameworks: string[];       // Express, Fastify, Next.js, etc.
   databases: string[];         // PostgreSQL, MongoDB, Redis
   devops: string[];            // Docker, K8s, GitHub Actions
-  
+
   // Project Info
   hasCLAUDEmd: boolean;
   hasREADME: boolean;
@@ -88,7 +87,7 @@ interface ProjectDetection {
     name: string;
     status: 'done' | 'in-progress' | 'next' | 'todo';
   };
-  
+
   // Quality Metrics
   hasTests: boolean;
   hasDocker: boolean;
@@ -104,7 +103,7 @@ interface ProjectDetection {
 Priority 1: Project Identity
 ├── .git/                      → Existing project
 ├── package.json               → Node.js/npm ecosystem
-├── requirements.txt           → Python ecosystem  
+├── requirements.txt           → Python ecosystem
 ├── go.mod                     → Go ecosystem
 ├── Cargo.toml                 → Rust ecosystem
 ├── pom.xml / build.gradle     → Java ecosystem
@@ -195,7 +194,7 @@ interface PackageAnalysis {
   dependencies: Record<string, string>;
   devDependencies: Record<string, string>;
   engines: { node?: string };
-  
+
   // Detected Features
   hasTypeScript: boolean;
   hasESLint: boolean;
@@ -237,17 +236,17 @@ interface SkillMetadata {
   description: string;
   version: string;
   priority: 'high' | 'medium' | 'low';
-  
+
   // Match Criteria
   triggers: string[];          // Keywords that trigger this skill
   techStack: string[];        // Tech stack requirements
   phases: number[];           // Relevant phases (e.g., [1,2,3])
   scales: string[];           // 'mvp', 'small', etc.
-  
+
   // Relationships
   dependencies: string[];      // Skills this depends on
   conflicts: string[];        // Skills that conflict with this
-  
+
   // Quality
   rules: number;               // Number of rules in skill
   isCore: boolean;            // Is this a core skill?
@@ -340,15 +339,15 @@ function calculateSkillScore(
 ): { score: number; reasons: string[] } {
   let score = 0;
   const reasons: string[] = [];
-  
+
   // Core skill bonus: +10
   if (skill.isCore) {
     score += 10;
     reasons.push('Core skill (always recommended)');
   }
-  
+
   // Tech stack match: +25
-  const techMatches = skill.techStack.filter(t => 
+  const techMatches = skill.techStack.filter(t =>
     detection.frameworks.includes(t) ||
     detection.databases.includes(t) ||
     detection.devops.includes(t)
@@ -357,19 +356,19 @@ function calculateSkillScore(
     score += 25;
     reasons.push(`Tech match: ${techMatches.join(', ')}`);
   }
-  
+
   // Phase requirement: +30
   if (skill.phases.includes(phase)) {
     score += 30;
     reasons.push(`Required for Phase ${phase}`);
   }
-  
+
   // Scale match: +15
   if (skill.scales.includes(detection.scale)) {
     score += 15;
     reasons.push(`Scales for ${detection.scale} projects`);
   }
-  
+
   // Trigger keyword match: +20
   const triggerMatches = skill.triggers.filter(t =>
     detection.projectName.toLowerCase().includes(t) ||
@@ -379,13 +378,13 @@ function calculateSkillScore(
     score += 20;
     reasons.push(`Keyword match: ${triggerMatches.join(', ')}`);
   }
-  
+
   // Already implemented (skip): -100
   if (skillAlreadyImplemented(skill, detection)) {
     score = -100;
     reasons.push('Already implemented');
   }
-  
+
   return { score, reasons };
 }
 ```
@@ -412,7 +411,7 @@ function generateSuggestions(
   selectedSkills: SkillMetadata[]
 ): ImplementationSuggestion[] {
   const suggestions: ImplementationSuggestion[] = [];
-  
+
   // 1. Critical fixes (if any)
   if (detection.hasTypeScript && !hasStrictConfig) {
     suggestions.push({
@@ -425,7 +424,7 @@ function generateSuggestions(
       action: 'Add "strict": true to compilerOptions'
     });
   }
-  
+
   // 2. Security improvements
   if (!detection.hasAuth) {
     suggestions.push({
@@ -438,7 +437,7 @@ function generateSuggestions(
       action: 'Add authentication middleware and user management'
     });
   }
-  
+
   // 3. Testing coverage
   if (!detection.hasTests) {
     suggestions.push({
@@ -451,7 +450,7 @@ function generateSuggestions(
       action: 'Set up Vitest with initial test suite'
     });
   }
-  
+
   // 4. Docker optimization
   if (detection.hasDocker && !hasMultiStageBuild) {
     suggestions.push({
@@ -464,7 +463,7 @@ function generateSuggestions(
       action: 'Implement multi-stage build for smaller image'
     });
   }
-  
+
   // 5. Selected skill implementations
   for (const skill of selectedSkills) {
     const skillImplementation = getSkillImplementation(skill);
@@ -480,7 +479,7 @@ function generateSuggestions(
       });
     }
   }
-  
+
   return suggestions.sort((a, b) => a.priority - b.priority);
 }
 ```
@@ -625,7 +624,7 @@ interface ProjectState {
 ║  • Run audit: /audit                                           ║
 ║  • Run diagnostics: /diagnosing-bugs                           ║
 ║  • Create issue: /new-issue                                    ║
-║  • Continue phase: /auto-route --phase [N]                     ║
+║  • Continue phase: /autor                                      ║
 ║                                                                  ║
 ╚══════════════════════════════════════════════════════════════════╝
 ```
@@ -641,7 +640,7 @@ This skill is designed to work seamlessly with `/autor`:
 │  AUTO-ROUTE INTEGRATION                                         │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
-│  When /auto-route detects EXISTING project:                     │
+│  When /autor detects EXISTING project:                     │
 │                                                                 │
 │  1. → Invoke /analyze-project                                   │
 │  2. → Get detection result                                      │
@@ -650,7 +649,7 @@ This skill is designed to work seamlessly with `/autor`:
 │  5. → Generate implementation plan                            │
 │  6. → Track project state                                      │
 │                                                                 │
-│  When /auto-route --phase [N]:                                 │
+│  When /autor                 :                                 │
 │                                                                 │
 │  1. → Read CLAUDE.md for phase context                        │
 │  2. → Skip redundant skills                                    │
@@ -777,11 +776,11 @@ System: "✅ INVOKING RECOMMENDED SKILLS"
   Invoke: /reliability
 
 System: "📋 IMPLEMENTATION PLAN"
-  
+
   PRIORITY 1: Hardware Integration Completion
     → Continue Phase 5 hardware work
     → Skills: /iot-edge
-    → Use /auto-route --phase 5
+    → Use /autor
 
   PRIORITY 2: Performance Optimization
     → Add response caching
@@ -794,7 +793,7 @@ System: "📋 IMPLEMENTATION PLAN"
     → Files: src/api/routes/health.ts
 
 System: "💡 QUICK ACTIONS"
-  • Continue Phase 5: /auto-route --phase 5
+  • Continue Phase 5: /autor
   • Full audit: /audit
   • Run diagnostics: /diagnosing-bugs
 ```

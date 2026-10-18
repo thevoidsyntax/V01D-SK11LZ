@@ -38,6 +38,9 @@ integrates_with:
 ## Workflow
 
 ### New Project (Satria First)
+
+> Full new-project sequence (plan → scaffold → detect stack → build → ship) runs via `/autor new`; the personas below are the team it coordinates (Satria plans, then `/project-init` scaffolds and `/analyze-project` loads the stack skills).
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │  USER starts new project                                    │

@@ -1,4 +1,4 @@
----
+﻿---
 name: workflow-authoring
 description: "Enhanced workflow authoring with intelligent automation, built-in patterns, TypeScript support, and enterprise-grade resilience patterns. Includes retry, circuit breaker, dry-run, and comprehensive debugging."
 version: "2.1"
@@ -49,7 +49,7 @@ interface AgentOptions {
   // Basic Options
   name: string;
   description?: string;
-  
+
   // Resilience Options
   retry?: {
     maxAttempts: number;        // Default: 3
@@ -57,20 +57,20 @@ interface AgentOptions {
     baseDelay?: number;         // ms, default: 1000
     maxDelay?: number;          // ms, default: 30000
   };
-  
+
   timeout?: number;             // ms, default: 60000
-  
+
   circuitBreaker?: {
     threshold: number;          // Error count before opening
     timeout: number;            // ms before half-open
     resetTimeout?: number;       // ms before attempting reset
   };
-  
+
   // Execution Options
   dryRun?: boolean;             // Simulate without execution
   verbose?: boolean;             // Detailed logging
   parallel?: boolean;            // Run steps in parallel
-  
+
   // TypeScript Support
   mode?: 'typescript' | 'javascript';
   typeCheck?: boolean;           // Run tsc before execution
@@ -84,21 +84,21 @@ interface WorkflowStep {
   id: string;
   name: string;
   description?: string;
-  
+
   // Execution
   action: string | ((ctx: WorkflowContext) => Promise<Result>);
   conditions?: {
     if?: string;                 // Expression to evaluate
     skip?: boolean;              // Skip if condition met
   };
-  
+
   // Error Handling
   onError?: {
     strategy: 'abort' | 'retry' | 'skip' | 'fallback';
     fallback?: string;           // Step ID to run instead
     maxRetries?: number;
   };
-  
+
   // Output
   output?: {
     key: string;                 // Store result in context
@@ -110,16 +110,16 @@ interface WorkflowDefinition {
   name: string;
   version: string;
   description?: string;
-  
+
   // Steps
   steps: WorkflowStep[];
-  
+
   // Entry point
   entry?: string;               // Step ID to start with
-  
+
   // Finalizers (always run)
   finally?: string[];           // Step IDs
-  
+
   // Metadata
   tags?: string[];
   author?: string;
@@ -131,7 +131,7 @@ interface WorkflowContext {
   workflowId: string;
   stepHistory: Map<string, StepResult>;
   startTime: Date;
-  
+
   // Custom (user-defined)
   [key: string]: any;
 }
@@ -161,7 +161,7 @@ const AUDIT_PATTERN: WorkflowDefinition = {
   version: '1.0.0',
   description: 'Comprehensive codebase audit with multi-pass review',
   tags: ['audit', 'security', 'quality'],
-  
+
   steps: [
     {
       id: 'prepare',
@@ -220,7 +220,7 @@ const AUDIT_PATTERN: WorkflowDefinition = {
       output: { key: 'report', type: 'object' }
     }
   ],
-  
+
   entry: 'prepare',
   finally: ['cleanup-temp']
 };
@@ -234,7 +234,7 @@ const MIGRATION_PATTERN: WorkflowDefinition = {
   version: '1.0.0',
   description: 'Safe database migration with rollback capability',
   tags: ['migration', 'database', 'rollback'],
-  
+
   steps: [
     {
       id: 'validate-schema',
@@ -315,7 +315,7 @@ const REVIEW_PATTERN: WorkflowDefinition = {
   version: '1.0.0',
   description: 'Automated code review with PR analysis',
   tags: ['review', 'pr', 'quality'],
-  
+
   steps: [
     {
       id: 'fetch-pr',
@@ -383,7 +383,7 @@ const IMPLEMENT_PATTERN: WorkflowDefinition = {
   version: '1.0.0',
   description: 'TDD-based feature implementation workflow',
   tags: ['implement', 'tdd', 'feature'],
-  
+
   steps: [
     {
       id: 'analyze-requirement',
@@ -459,13 +459,13 @@ const FULL_STACK_AUDIT: WorkflowDefinition = {
   name: 'full-stack-audit',
   version: '1.0.0',
   description: 'Complete project audit including security, quality, and performance',
-  
+
   options: {
     retry: { maxAttempts: 3, backoff: 'exponential' },
     timeout: 300000,  // 5 minutes
     verbose: true
   },
-  
+
   steps: [
     { id: 'deps', name: 'Dependency Audit', action: 'npm audit --json' },
     { id: 'types', name: 'TypeScript Check', action: 'tsc --noEmit' },
@@ -485,12 +485,12 @@ const SECURITY_REVIEW: WorkflowDefinition = {
   name: 'security-review',
   version: '1.0.0',
   description: 'Comprehensive security assessment',
-  
+
   options: {
     retry: { maxAttempts: 2, backoff: 'exponential' },
     circuitBreaker: { threshold: 5, timeout: 60000 }
   },
-  
+
   steps: [
     { id: 'secrets', name: 'Secret Detection', action: 'scan-secrets' },
     { id: 'deps', name: 'Vulnerable Dependencies', action: 'npm audit' },
@@ -510,13 +510,13 @@ const PHASE_MIGRATION: WorkflowDefinition = {
   name: 'phase-migration',
   version: '1.0.0',
   description: 'Safe migration between project phases',
-  
+
   options: {
     dryRun: true,
     retry: { maxAttempts: 3, backoff: 'linear' },
     circuitBreaker: { threshold: 3, timeout: 120000 }
   },
-  
+
   steps: [
     { id: 'backup', name: 'Backup Current State', action: 'create-backup' },
     { id: 'validate', name: 'Validate Prerequisites', action: 'check-phase-prereqs' },
@@ -535,12 +535,12 @@ const PERFORMANCE_ANALYSIS: WorkflowDefinition = {
   name: 'performance-analysis',
   version: '1.0.0',
   description: 'Performance profiling and optimization',
-  
+
   options: {
     verbose: true,
     timeout: 180000
   },
-  
+
   steps: [
     { id: 'profile', name: 'Profile CPU', action: 'node --prof' },
     { id: 'heap', name: 'Heap Analysis', action: 'node --expose-gc --inspect' },
@@ -563,14 +563,14 @@ class CircuitBreaker {
   private state: 'closed' | 'open' | 'half-open';
   private failures: number = 0;
   private lastFailure: Date | null = null;
-  
+
   constructor(
     private threshold: number,
     private timeout: number
   ) {
     this.state = 'closed';
   }
-  
+
   async execute<T>(fn: () => Promise<T>): Promise<T> {
     if (this.state === 'open') {
       if (Date.now() - this.lastFailure!.getTime() > this.timeout) {
@@ -579,7 +579,7 @@ class CircuitBreaker {
         throw new CircuitOpenError('Circuit is open');
       }
     }
-    
+
     try {
       const result = await fn();
       this.onSuccess();
@@ -589,12 +589,12 @@ class CircuitBreaker {
       throw error;
     }
   }
-  
+
   private onSuccess() {
     this.failures = 0;
     this.state = 'closed';
   }
-  
+
   private onFailure() {
     this.failures++;
     this.lastFailure = new Date();
@@ -623,17 +623,17 @@ async function withRetry<T>(
     baseDelay = 1000,
     maxDelay = 30000
   } = options;
-  
+
   let lastError: Error;
-  
+
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
       return await fn();
     } catch (error) {
       lastError = error as Error;
-      
+
       if (attempt === maxAttempts) break;
-      
+
       let delay: number;
       switch (backoff) {
         case 'linear':
@@ -646,12 +646,12 @@ async function withRetry<T>(
           delay = Math.random() * baseDelay * Math.pow(2, attempt - 1);
           break;
       }
-      
+
       delay = Math.min(delay, maxDelay);
       await sleep(delay);
     }
   }
-  
+
   throw lastError!;
 }
 ```
@@ -661,7 +661,7 @@ async function withRetry<T>(
 ```typescript
 class WorkflowExecutor {
   private circuitBreakers: Map<string, CircuitBreaker> = new Map();
-  
+
   async execute(
     workflow: WorkflowDefinition,
     context: WorkflowContext,
@@ -669,7 +669,7 @@ class WorkflowExecutor {
   ): Promise<WorkflowResult> {
     const startTime = Date.now();
     const results: Map<string, StepResult> = new Map();
-    
+
     // Initialize circuit breakers
     if (options.circuitBreaker) {
       for (const step of workflow.steps) {
@@ -682,20 +682,20 @@ class WorkflowExecutor {
         );
       }
     }
-    
+
     // Execute steps
     const entryStep = workflow.steps.find(s => s.id === workflow.entry);
     const queue = entryStep ? [entryStep] : workflow.steps;
-    
+
     for (const step of queue) {
       if (options.verbose) {
         console.log(`[${workflow.name}] Executing step: ${step.name}`);
       }
-      
+
       try {
         const result = await this.executeStep(step, context, options);
         results.set(step.id, result);
-        
+
         if (!result.success && step.onError?.strategy === 'abort') {
           throw new WorkflowError(`Step ${step.id} failed`, results);
         }
@@ -703,7 +703,7 @@ class WorkflowExecutor {
         if (options.verbose) {
           console.error(`[${workflow.name}] Step ${step.id} failed:`, error);
         }
-        
+
         const errorResult: StepResult = {
           success: false,
           error: { message: (error as Error).message },
@@ -711,7 +711,7 @@ class WorkflowExecutor {
           timestamp: new Date()
         };
         results.set(step.id, errorResult);
-        
+
         if (step.onError?.strategy === 'fallback' && step.onError.fallback) {
           const fallbackStep = workflow.steps.find(s => s.id === step.onError.fallback);
           if (fallbackStep) {
@@ -721,7 +721,7 @@ class WorkflowExecutor {
         }
       }
     }
-    
+
     // Execute finally steps
     if (workflow.finally) {
       for (const finallyId of workflow.finally) {
@@ -731,21 +731,21 @@ class WorkflowExecutor {
         }
       }
     }
-    
+
     return {
       success: Array.from(results.values()).every(r => r.success),
       results: Object.fromEntries(results),
       duration: Date.now() - startTime
     };
   }
-  
+
   private async executeStep(
     step: WorkflowStep,
     context: WorkflowContext,
     options: AgentOptions
   ): Promise<StepResult> {
     const startTime = Date.now();
-    
+
     // Check conditions using safe expression evaluator
     if (step.conditions?.if && !this.evaluateCondition(step.conditions.if, context)) {
       return {
@@ -764,7 +764,7 @@ class WorkflowExecutor {
         timestamp: new Date()
       };
     }
-    
+
     // Dry run
     if (options.dryRun) {
       console.log(`[DRY RUN] Would execute: ${step.name}`);
@@ -775,29 +775,29 @@ class WorkflowExecutor {
         timestamp: new Date()
       };
     }
-    
+
     // Get retry config
     const retryConfig = step.onError?.strategy === 'retry'
       ? { maxAttempts: step.onError.maxRetries || 3, backoff: 'exponential' as const }
       : options.retry;
-    
+
     // Execute with retry
     const executeWithTimeout = async () => {
       const timeoutPromise = new Promise<never>((_, reject) => {
         setTimeout(() => reject(new Error('Step timeout')), options.timeout || 60000);
       });
-      
+
       const actionResult = typeof step.action === 'function'
         ? await step.action(context)
         : await runCommand(step.action);
-      
+
       return actionResult;
     };
-    
+
     const output = retryConfig
       ? await withRetry(executeWithTimeout, retryConfig)
       : await executeWithTimeout();
-    
+
     return {
       success: true,
       output,
@@ -888,12 +888,12 @@ class WorkflowExecutor {
 ```
 [WORKFLOW] Starting workflow: full-stack-audit v1.0.0
 [WORKFLOW] Options: { dryRun: false, verbose: true, timeout: 300000 }
-[WORKFLOW] 
+[WORKFLOW]
 [STEP] Executing: [step-1] Prepare Audit Environment
 [ACTION] Running: npm audit
 [ACTION] Output: {"metadata":{"vulnerabilities":{"critical":1,"high":5}}}
 [STEP] ✓ Completed in 1.2s
-[WORKFLOW] 
+[WORKFLOW]
 [STEP] Executing: [step-2] Dependency Vulnerability Scan
 [ACTION] Running: npm audit --json
 [RETRY] Attempt 1/3 failed: Network timeout
@@ -902,14 +902,14 @@ class WorkflowExecutor {
 [RETRY] Waiting 2000ms before retry...
 [RETRY] Attempt 3/3 succeeded
 [STEP] ✓ Completed in 3.5s
-[WORKFLOW] 
+[WORKFLOW]
 [CIRCUIT] Checking circuit state for step-3...
 [CIRCUIT] State: CLOSED (failures: 0)
 [STEP] Executing: [step-3] TypeScript Type Check
 [ACTION] Running: tsc --noEmit
 [CIRCUIT] Step completed successfully
 [STEP] ⚠️ SKIPPED (condition: skip=true)
-[WORKFLOW] 
+[WORKFLOW]
 ...
 ```
 
@@ -924,18 +924,18 @@ This skill integrates with `/autor` for intelligent project management:
 │  AUTO-ROUTE + WORKFLOW INTEGRATION                               │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
-│  /auto-route --analyze → Invoke /analyze-project              │
+│  /autor                → Invoke /analyze-project              │
 │                       → Get phase context                       │
 │                       → Auto-select workflow templates           │
 │                       → Execute recommended workflows           │
 │                                                                 │
-│  /auto-route --phase N  → Select phase-specific workflow      │
+│  /autor                 → Select phase-specific workflow      │
 │                          → Run phase migration pattern         │
 │                          → Track progress                       │
 │                                                                 │
-│  /auto-route --audit   → Run full-stack-audit pattern         │
+│  /audit                → Run full-stack-audit pattern         │
 │                                                                 │
-│  /auto-route --review  → Run code-review pattern              │
+│  /code-review          → Run code-review pattern              │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -1002,7 +1002,7 @@ const typedWorkflow: WorkflowDefinition<{
 
 // Type inference for step outputs
 type WorkflowOutputs = {
-  [K in typeof typedWorkflow.steps[number] as K['output'] extends { key: infer K } ? K : never]: 
+  [K in typeof typedWorkflow.steps[number] as K['output'] extends { key: infer K } ? K : never]:
     Extract<K['output'], { key: K }>['type']
 };
 ```

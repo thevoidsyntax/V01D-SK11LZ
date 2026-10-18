@@ -1,6 +1,7 @@
 ---
 name: project-init
-description: "Complete project scaffolding generator with interactive Q&A, smart defaults, scale-aware architecture, and auto-invoke relevant skills"
+description: "Complete project scaffolding generator with interactive Q&A, smart defaults, scale-aware architecture, and real file creation"
+when_to_use: "Use when scaffolding a brand-new project's files, structure and git init; step 3 of /autor new (after optional /satria planning), then run /analyze-project. Not for analyzing or changing an existing codebase."
 version: "3.1"
 category: [process]
 priority: high
@@ -13,10 +14,8 @@ auto_invoke:
   conditions:
     - command: "/project-init"
       reason: "New project initialization"
-    - command: "/auto-route --new"
-      reason: "New project mode"
-    - command: "/auto-route --new --quick"
-      reason: "Quick start mode"
+    - command: "/autor new"
+      reason: "Scaffolding step of the new-project flow"
   skill_tier: core
 capabilities: [implementation, generation]
 quality:
@@ -34,6 +33,8 @@ author: thevoidsyntax
 ## Overview
 
 This skill handles complete project initialization with interactive Q&A, automated scaffolding generation, and actual file creation. Unlike the previous version, this generates real project files.
+
+> Part of the `/autor new` flow: optional `/satria` planning → **this** (scaffold + git init) → `/analyze-project` (detect the stack and load the matching tech-stack and conditional skills).
 
 ---
 

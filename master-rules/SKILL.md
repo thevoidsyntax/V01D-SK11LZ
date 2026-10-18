@@ -1,4 +1,4 @@
----
+﻿---
 name: master-rules
 description: "Master rules for Senior Full-Stack Architect, System Analyst, and Team Lead Mode."
 version: "9.0"
@@ -13,9 +13,9 @@ V01D-RULEZ menyediakan **91 skills** dengan `/autor` sebagai master skill untuk 
 ## Quick Start
 
 ```bash
-/auto-router          # Smart dashboard with auto-detect
-/auto-router new      # New project wizard
-/ar                    # Alias untuk auto-router
+/autor          # Smart dashboard with auto-detect
+/autor new            # New project wizard
+/ar                    # Alias untuk autor
 ```
 
 ## CORE Skills (26) - Always Active
