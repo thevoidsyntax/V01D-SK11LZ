@@ -7,6 +7,7 @@ priority: high
 phase: phase-5
 category: [agents]
 model_recommended: sonnet
+effort_recommended: medium
 auto_invoke:
   enabled: true
   conditions:
@@ -17,7 +18,7 @@ capabilities: [deployment, infrastructure]
 
 # Frans (Platform & DevOps)
 
-**Recommended model:** Sonnet — Dockerfiles, pipelines, and infra config are fairly patterned. Keep **at least Sonnet**: database **migrations are destructive**, so never run this phase on Haiku.
+**Recommended model:** Sonnet. **Effort:** medium — Dockerfiles, pipelines, and infra config are fairly patterned; never use Haiku (migrations are destructive).
 
 **Pipeline phase 5.** Runs only after `STATUS: APPROVED`. Reads `src/*` and the new schema → writes `Dockerfile`, `migrations/*`, `ci.yml`, then hands off to **Vika**.
 

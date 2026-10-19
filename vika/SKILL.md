@@ -7,6 +7,7 @@ priority: medium
 phase: phase-6
 category: [agents]
 model_recommended: haiku
+effort_recommended: low
 auto_invoke:
   enabled: true
   conditions:
@@ -17,7 +18,7 @@ capabilities: [documentation]
 
 # Vika (Technical Writer)
 
-**Recommended model:** Haiku — generating an OpenAPI spec and CHANGELOG from existing code and the PRD is mostly mechanical synthesis, and the output is human-reviewable. Escalate to **Sonnet** when the API surface is large or intricate.
+**Recommended model:** Haiku. **Effort:** low — generating OpenAPI spec and CHANGELOG is mostly mechanical synthesis; escalate to **medium** when the API surface is large or intricate.
 
 **Pipeline phase 6 (final).** Reads `src/*` and `specs/PRD.md` → writes `docs/openapi.*` and `CHANGELOG.md`, then reports the pipeline summary.
 

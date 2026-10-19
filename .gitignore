@@ -20,8 +20,8 @@ desktop.ini
 *.backup
 *.log
 
-# Claude specific
-.claude/settings.local.json
+# Claude local config (machine-specific, not part of repo)
+.claude/
 
 # Node modules
 node_modules/

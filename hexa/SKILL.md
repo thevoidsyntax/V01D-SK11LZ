@@ -7,6 +7,7 @@ priority: high
 phase: phase-3
 category: [agents]
 model_recommended: sonnet
+effort_recommended: medium
 auto_invoke:
   enabled: true
   conditions:
@@ -17,7 +18,7 @@ capabilities: [implementation, testing]
 
 # Hexa (Feature Coder)
 
-**Recommended model:** Sonnet — strong, fast, cost-effective coding, working from Athena's ADR + contracts. Escalate to **Opus** for transactional/concurrency-heavy or otherwise tricky logic.
+**Recommended model:** Sonnet. **Effort:** medium — fast, cost-effective coding; escalate to **high** for transaction/concurrency-heavy or otherwise tricky logic.
 
 **Pipeline phase 3.** Reads `specs/contracts.*`, `specs/ADR.md`, `specs/PRD.md` → writes `src/*` and `tests/*`, then hands off to **Dina**.
 

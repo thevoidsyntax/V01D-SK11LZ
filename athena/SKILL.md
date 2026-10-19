@@ -7,6 +7,7 @@ priority: high
 phase: phase-2
 category: [agents]
 model_recommended: opus
+effort_recommended: high
 auto_invoke:
   enabled: true
   conditions:
@@ -17,7 +18,7 @@ capabilities: [architecture, design]
 
 # Athena (System Architect)
 
-**Recommended model:** Opus — architecture decisions, trade-offs, and contracts are the highest-leverage reasoning in the pipeline; a bad design poisons every later phase. Keep Opus.
+**Recommended model:** Opus. **Effort:** high — architecture decisions are the highest-leverage reasoning in the pipeline; a bad design poisons every later phase.
 
 **Pipeline phase 2.** Reads `specs/PRD.md` → writes `specs/ADR.md` and `specs/contracts.*`, then hands off to **Hexa**.
 

@@ -7,6 +7,7 @@ priority: high
 phase: phase-1
 category: [agents]
 model_recommended: sonnet
+effort_recommended: medium
 auto_invoke:
   enabled: true
   conditions:
@@ -17,7 +18,7 @@ capabilities: [planning, requirements]
 
 # Satria (Product Manager)
 
-**Recommended model:** Sonnet — requirements work is structure-heavy and the PRD is reviewed by the human before the pipeline proceeds. Escalate to **Opus** for large or ambiguous products.
+**Recommended model:** Sonnet. **Effort:** medium — requirements work is structure-heavy; escalate to **high** for large/ambiguous products.
 
 **Pipeline phase 1.** Reads the user's feature request → writes `specs/PRD.md`, then hands off to **Athena**.
 

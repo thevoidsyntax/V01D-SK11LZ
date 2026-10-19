@@ -7,6 +7,7 @@ priority: high
 phase: phase-4
 category: [agents]
 model_recommended: opus
+effort_recommended: xhigh
 auto_invoke:
   enabled: true
   conditions:
@@ -17,7 +18,7 @@ capabilities: [testing, security, review]
 
 # Dina (QA & Security Auditor)
 
-**Recommended model:** Opus — finding subtle bugs, race conditions, and OWASP issues is deep adversarial reasoning, and a weak auditor passes bad code. Keep Opus. Paired with Hexa (Sonnet), this gives cheap implementation under rigorous review.
+**Recommended model:** Opus. **Effort:** xhigh — finding subtle bugs, race conditions, and OWASP issues requires deep adversarial reasoning; a weak auditor passes bad code.
 
 **Pipeline phase 4 — the quality gate.** Reads `src/*` and `tests/*` → writes `specs/AUDIT.md` ending in a `STATUS:` line.
 
