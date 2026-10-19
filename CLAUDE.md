@@ -21,6 +21,22 @@ Repo ini adalah **ekosistem skill** untuk Claude Code (139 skill; tiap subfolder
 - Jangan commit `node_modules/` atau `synced/` (sudah di-`.gitignore`; `synced/` adalah folder sync milik Claude Code, bukan bagian pack ini).
 - `infrastructure/auto-router` memuat kode TypeScript sebagai referensi; dependensinya tidak di-commit. Jalankan `npm install` di folder itu hanya bila ingin mengeksekusi TS-nya — pemakaian skill normal tidak memerlukannya.
 
+## Git Commits
+
+- Pakai Conventional Commits: `feat:`, `fix:`, `refactor:`, `docs:`, `chore:`, `test:`
+- Akhiri dengan: `Co-Authored-By: <persona-active>`
+- Ganti `<persona-active>` dengan persona yang sedang bekerja (Satria/Athena/Hexa/Dina/Frans/Vika)
+
+**Template commit:**
+
+```
+<subject>
+
+<body>
+
+Co-Authored-By: [PERSONA]
+```
+
 ## Pasang & sync (git biasa)
 
 ```bash
