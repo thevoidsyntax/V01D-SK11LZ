@@ -8,6 +8,7 @@ phase: phase-6
 category: [agents]
 model_recommended: haiku
 effort_recommended: low
+mode_recommended: auto
 auto_invoke:
   enabled: true
   conditions:

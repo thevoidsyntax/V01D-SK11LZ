@@ -8,6 +8,7 @@ phase: phase-4
 category: [agents]
 model_recommended: opus
 effort_recommended: xhigh
+mode_recommended: auto
 auto_invoke:
   enabled: true
   conditions:

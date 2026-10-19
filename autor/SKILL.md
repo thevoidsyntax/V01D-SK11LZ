@@ -1,8 +1,8 @@
 ---
 name: autor
-version: "2.5.0"
-description: "Intelligent project analysis with Smart Flow, Personas, HYBRID Token Distribution, Audit Recommendation, and Memory Continuity for Claude Code"
-when_to_use: "Run when starting a new project, analyzing existing codebase, or needing project intelligence."
+version: "2.6.0"
+description: "Project intelligence with Smart Flow, 6-persona pipeline, token-efficient core skills, and memory continuity for Claude Code"
+when_to_use: "Use when starting a new project, analyzing existing codebase, or needing project intelligence. Run /autor scan for project health check, /autor new for fresh projects."
 priority: critical
 phase: any
 category: [process, intelligence]
@@ -24,654 +24,456 @@ source:
 author: thevoidsyntax
 ---
 
-# 🚀 AUTOR v2.5 - PROJECT INTELLIGENCE
+# AUTOR v2.6 - PROJECT INTELLIGENCE
 
-**Smart Project Flow with Personas, Audit Recommendation & Token Efficiency**
+Claude Code skill for analyzing projects, planning features, and shipping code using a 6-persona team workflow.
 
----
-
-## ⚠️ CRITICAL: LOAD CORE SKILLS FIRST
-
-**BEFORE ANYTHING ELSE**, you MUST invoke these skills using the Skill tool:
-
-### Step 1: Invoke All Core Skills
-
-Use the Skill tool to invoke each of these skills IN ORDER:
-
-```
-Skill(tool call with skill: "git")
-Skill(tool call with skill: "config")
-Skill(tool call with skill: "security")
-Skill(tool call with skill: "testing")
-Skill(tool call with skill: "error-debugger")
-Skill(tool call with skill: "observability")
-Skill(tool call with skill: "doc-generator")
-Skill(tool call with skill: "mem-search")
-Skill(tool call with skill: "anti-slop")
-Skill(tool call with skill: "chisle")
-Skill(tool call with skill: "caveman")
-Skill(tool call with skill: "codebase-design")
-```
-
-### Step 2: Confirm Skills Loaded
-
-After invoking, show a confirmation message listing all loaded skills:
-
-```
-✅ CORE SKILLS LOADED:
-✅ /git      → Version control
-✅ /config   → Environment management
-✅ /security → Security best practices
-✅ /testing  → Testing strategy
-✅ /error-debugger → Debug patterns
-✅ /observability → Monitoring
-✅ /doc-generator → Documentation
-✅ /mem-search → Memory continuity
-✅ /anti-slop → Token efficiency
-✅ /chisle → Context pruning
-✅ /caveman → Terse output
-✅ /codebase-design → Architecture
-```
-
-### Step 3: Then Proceed with Project Analysis
-
-Only after all skills are loaded, proceed with:
-1. Analyze project structure
-2. Check memory for context
-3. Provide recommendations
-4. Suggest personas if needed
+For quick reference:
+- [QUICKREF.md](./QUICKREF.md) - Command list
+- [PERSONAS.md](./PERSONAS.md) - Persona details
 
 ---
 
-## What's New in v2.5
+## WHAT IS SMART FLOW?
 
-### Audit Recommendation (NEW)
-```
-Contextual audit recommendations based on project state:
-├─ /audit when: new project, before deploy, after refactor
-├─ /audit when: adding auth/payment features
-└─ Don't audit when: healthy, recently audited, small fixes
-```
+Smart Flow is a systematic method combining intelligent project analysis with a structured 6-persona pipeline.
 
-### Token Efficiency (Enhanced)
-```
-3 Efficiency Skills auto-loaded with /autor:
-├─ /anti-slop  → Remove verbose AI patterns
-├─ /chisle     → Prune irrelevant context
-└─ /caveman    → Aggressive compression
+**Core cycle:**
+
+```text
+Assess → Plan → Design → Build → Audit → Deploy → Document
 ```
 
-### Smart Project Flow
-```
-NEW PROJECT: Satria First
-  → Satria coordinates team as needed
+**Benefits:**
+- Systematic approach to development
+- Quality gates prevent bad code
+- Token-efficient through skill sharing
+- Memory continuity across sessions
 
-EXISTING PROJECT: Contextual Assessment
-  → Analyze → Assess → Recommend (or no recommendation if healthy)
-```
+---
 
-### Alternative Workflow
-```
-For structured project workflow, consider /superpowers:
-→ Brainstorming → Design → Plan → Implement → Review
-→ See /superpowers for agentic workflow methodology
-```
+## WHEN TO USE PLAN MODE
 
-### Personas Integrated
-```
-┌─────────────────────────────────────────────────────────────┐
-│  PERSONAS FLOW                                            │
-├─────────────────────────────────────────────────────────────┤
-│  NEW FEATURE (pipeline):                                  │
-│    Satria → Athena → Hexa → Dina → Frans → Vika           │
-│    PM → Architect → Coder → QA → DevOps → Writer          │
-│    handoff via artifacts; Dina gates (max 3 loops)        │
-│                                                           │
-│                                                             │
-│  EXISTING PROJECT:                                        │
-│    Contextual → Based on project state                    │
-│      Healthy → No persona needed                         │
-│      Has issues → Suggest TOP priority fix only           │
-└─────────────────────────────────────────────────────────────┘
-```
+Plan Mode = human approval before execution. Use it for:
 
-### Memory Continuity
-```
-┌─────────────────────────────────────────────────────────────┐
-│  MEMORY INTEGRATION                                          │
-├─────────────────────────────────────────────────────────────┤
-│  Every /autor call automatically invokes /mem-search       │
-│  → Retrieves project context from previous sessions         │
-│  → Ensures continuity across chat sessions                  │
-└─────────────────────────────────────────────────────────────┘
-```
+| Task | Mode | Reason |
+|------|------|--------|
+| Writing requirements | plan | Changes ripple everywhere |
+| Architecture decisions | plan | Expensive to fix later |
+| Database migrations | plan | Data loss risk |
+| Feature development | auto | Dina guards quality |
+| Testing | auto | Automated verification |
+| Documentation | auto | Human reviews draft |
 
-### Layer Architecture v2.1
+---
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│  LAYER 1: INFRASTRUCTURE (Always Available)               │
-├─────────────────────────────────────────────────────────────┤
-│  ├── autor/            ← Command interface                 │
-│  └── auto-router/      ← reference code (not a skill)      │
-└─────────────────────────────────────────────────────────────┘
+## COMMANDS
 
-┌─────────────────────────────────────────────────────────────┐
-│  LAYER 2: PERSONAS (Available with /autor)                │
-├─────────────────────────────────────────────────────────────┤
-│  ├── Satria (PM)        - requirements, PRD              │
-│  ├── Athena (Architect) - design, ADR, contracts         │
-│  ├── Hexa (Coder)       - implementation + tests         │
-│  ├── Dina (QA/Security) - audit + quality gate           │
-│  ├── Frans (DevOps)     - containers, migrations, CI     │
-│  └── Vika (Writer)      - OpenAPI, changelog, docs       │
-│  All auto-invoke: anti-slop + chisle + caveman            │
-└─────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│  LAYER 3: CORE (12 Skills - Auto-loaded)                  │
-├─────────────────────────────────────────────────────────────┤
-│  ├── git                 - Version control                 │
-│  ├── config             - Environment & secrets            │
-│  ├── security            - OWASP, encryption              │
-│  ├── testing             - QA + TDD methodology           │
-│  ├── error-debugger     - Debug patterns                  │
-│  ├── observability        - Logs + Metrics + Traces       │
-│  ├── doc-generator       - Auto-documentation             │
-│  ├── mem-search         - Memory continuity               │
-│  ├── anti-slop          - Token efficiency                │
-│  ├── chisle             - Context optimization            │
-│  ├── caveman            - Aggressive compression          │
-│  └── codebase-design    - Architecture + Domain modeling  │
-└─────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│  LAYER 4: CONDITIONAL (Auto-detect based on project)      │
-├─────────────────────────────────────────────────────────────┤
-│  ├── docker              - Containerization                │
-│  ├── kubernetes          - Orchestration                   │
-│  ├── terraform           - Infrastructure as Code         │
-│  ├── deployment          - CI/CD + Deployment strategies  │
-│  ├── serverless          - Lambda/Functions               │
-│  ├── mobile              - React Native                   │
-│  ├── browser-use         - Browser automation             │
-│  ├── reticle             - Computer vision                │
-│  └── [tech stack]        - Based on detected stack        │
-└─────────────────────────────────────────────────────────────┘
+```bash
+/autor              # Analyze current project
+/autor scan         # Full health check with recommendations
+/autor new          # New project wizard
+/autor status       # Quick status overview
 ```
 
 ---
 
-## Commands
+## 12 CORE SKILLS (Auto-loaded)
 
+These activate automatically when you invoke /autor:
+
+| # | Skill | Function |
+|---|-------|----------|
+| 1 | git | Version control strategy |
+| 2 | config | Environment management |
+| 3 | security | Security best practices |
+| 4 | testing | Testing methodology |
+| 5 | error-debugger | Debug patterns |
+| 6 | observability | Monitoring setup |
+| 7 | doc-generator | Auto documentation |
+| 8 | mem-search | Memory search |
+| 9 | anti-slop | Token optimization |
+| 10 | chisle | Context pruning |
+| 11 | caveman | Output compression |
+| 12 | codebase-design | Architecture guidance |
+
+Token cost: 1x shared across all personas.
+
+---
+
+## 6 PERSONAS PIPELINE
+
+Sequential workflow where each persona hands off to the next:
+
+```text
+Satria → Athena → Hexa → Dina → Frans → Vika
+  PM       Arch     Code    QA     DevOps   Writer
+ plan      plan    auto   auto     plan    auto
 ```
-/autor              → Analyze project OR start empty project flow
-/autor scan         → Full project analysis with health score
-/autor new          → Force empty project wizard
-/autor status       → Show project state
-/autor --help       → Show this help
+
+| # | Persona | Model | Effort | Mode | Handoff |
+|---|---------|-------|--------|------|---------|
+| 1 | Satria | Sonnet | medium | plan | PRD to Athena |
+| 2 | Athena | Opus | high | plan | ADR to Hexa |
+| 3 | Hexa | Sonnet | medium | auto | Code to Dina |
+| 4 | Dina | Opus | xhigh | auto | Report to Frans/Vika |
+| 5 | Frans | Sonnet | medium | plan | Infrastructure |
+| 6 | Vika | Haiku | low | auto | Documentation |
+
+Dina is the gatekeeper. She either approves or rejects. If rejected, Hexa patches and resubmits. Maximum three resubmission attempts allowed.
+
+---
+
+## PIPELINE STEPS
+
+### 1. PLANNING (Satria)
+
+```bash
+/autor new
+```
+
+Satria gathers requirements and writes:
+- User stories with acceptance criteria
+- Project scope and boundaries
+- Risks and dependencies
+
+Output: `specs/PRD.md`
+
+### 2. DESIGN (Athena)
+
+Athena reads PRD and creates:
+- Architecture Decision Records
+- Data schema definitions
+- API interface contracts
+
+Output: `specs/ADR.md`, `specs/contracts.*`
+
+### 3. IMPLEMENTATION (Hexa)
+
+Hexa implements against contracts:
+- Feature code in `src/`
+- Unit tests in `tests/`
+
+Output: `src/*`, `tests/*`
+
+### 4. AUDIT (Dina)
+
+Dina reviews implementation:
+- Logic correctness
+- Race conditions
+- OWASP vulnerabilities
+- Transaction safety
+
+Output: `specs/AUDIT.md`
+
+If REJECTED → Hexa patches → resubmit (max 3x)
+If APPROVED → Frans continues
+
+### 5. DEPLOYMENT (Frans)
+
+Frans sets up infrastructure:
+- Docker containerization
+- Database migrations with rollback
+- CI/CD pipeline
+
+Output: `Dockerfile`, `migrations/*`, `ci.yml`
+
+### 6. DOCUMENTATION (Vika)
+
+Vika syncs documentation:
+- OpenAPI specification
+- Changelog entries
+
+Output: `docs/openapi.*`, `CHANGELOG.md`
+
+---
+
+## AUDIT TRIGGERS
+
+Run `/audit` when:
+
+| Context | Trigger? |
+|---------|----------|
+| Adding authentication | ✅ Yes, strongly |
+| Adding payment processing | ✅ Yes, strongly |
+| Handling personal data | ✅ Yes, strongly |
+| First production deploy | ✅ Yes |
+| Major refactoring | ✅ Yes |
+| Small bug fixes | ❌ No |
+| Recent audit completed | ❌ No |
+
+```bash
+/audit                # Full codebase scan
+/audit src/auth/      # Module-specific scan
 ```
 
 ---
 
-## Auto-Invoke System
+## HEALTH CHECK CRITERIA
 
-### Core Skills (Always Available)
-When you invoke `/autor`, the following 12 core skills are automatically loaded:
+Analyze these dimensions during project assessment:
 
-| Skill | Purpose | Auto-loaded |
-|-------|---------|-------------|
-| `git` | Version control | ✅ |
-| `config` | Environment management | ✅ |
-| `security` | OWASP, encryption | ✅ |
-| `testing` | QA + TDD | ✅ |
-| `error-debugger` | Debug patterns | ✅ |
-| `observability` | Logs + Metrics + Traces | ✅ |
-| `doc-generator` | Auto-documentation | ✅ |
-| `mem-search` | Memory continuity | ✅ |
-| `anti-slop` | Token efficiency | ✅ |
-| `chisle` | Context optimization | ✅ |
-| `caveman` | Aggressive compression | ✅ |
-| `codebase-design` | Architecture | ✅ |
-
-### Personas (Auto-Available with /autor)
-
-| Persona | Name | Role | Model | Command |
-|---------|------|------|-------|---------|
-| PM | **Satria** | Product Manager | Sonnet | `/satria` |
-| Architect | **Athena** | System Architect | Opus | `/athena` |
-| Coder | **Hexa** | Feature Coder | Sonnet | `/hexa` |
-| QA & Security | **Dina** | QA & Security Auditor | Opus | `/dina` |
-| DevOps | **Frans** | Platform & DevOps | Sonnet | `/frans` |
-| Writer | **Vika** | Technical Writer | Haiku | `/vika` |
-
-All personas auto-invoke: `anti-slop` + `chisle` + `caveman` for ~80-90% token savings.
-
-Use `/agents` to run the full pipeline: Satria → Athena → Hexa → Dina → Frans → Vika (each phase a subagent on its own model, handing off via artifacts).
-
-### Conditional Skills (Auto-detect)
-
-| Pattern Detected | Skill Loaded |
-|------------------|--------------|
-| React patterns | `/react-pro` |
-| Next.js patterns | `/nextjs-pro` |
-| Python patterns | `/python-pro` |
-| PostgreSQL patterns | `/postgresql-pro` |
-| Docker files | `/docker` |
-| Kubernetes files | `/kubernetes` |
-| GitHub Actions | `/deployment` |
-| ...and more | See `infrastructure/auto-router/registry.md` |
+| Dimension | Metric | Fix Command |
+|-----------|--------|------------|
+| Test coverage | Percentage | /dina |
+| CI/CD | Pipeline exists | /frans |
+| Documentation | README, API docs | /vika |
+| Security | OWASP checklist | /dina |
+| Code structure | Architecture | /athena |
 
 ---
 
-## Project Flow
+## TOKEN OPTIMIZATION
 
-### New Project Flow
-```
-User: /autor new
-  ↓
-1. Clarify: project type, stack, scale (quick Q&A)
-  ↓
-2. Plan (bigger projects, optional): /satria → BRD / PRD / FSD
-  ↓
-3. Scaffold real files + git init: /project-init
-  ↓
-4. Detect stack & load skills: /analyze-project
-   → loads tech-stack + conditional skills (see table above)
-  ↓
-5. Build pipeline (per feature): /athena design → /hexa code → /dina audit
-  ↓
-6. Ship & document: /frans (CI/CD, deploy) → /vika (OpenAPI, changelog)
-```
+Core skills: 1x shared token
 
-Steps 5-6 are the 6-persona pipeline (see `/agents`): each phase a subagent on its own model, handing off via artifacts, with Dina's quality gate.
+Persona extended skills add tokens:
 
-Small/throwaway projects can skip step 2 and go straight to `/project-init`.
-Each step is a real skill in this pack; `/autor new` just runs them in order.
+| Persona | Additional Skills | Token Cost |
+|---------|-----------------|------------|
+| Satria | brd, prd, fsd + | +13 |
+| Athena | api-design, database + | +25 |
+| Hexa | language-pro + | varies |
+| Dina | pentest, playwright + | +15 |
+| Frans | docker, terraform + | +23 |
+| Vika | documentation + | +6 |
 
-### Existing Project Flow
-```
-User: /autor
-  ↓
-1. Deep Analysis (ASSESS project state)
-  ↓
-2. Health Check:
-   - Tests coverage
-   - CI/CD status
-   - Documentation state
-   - Security audit status
-   - Code quality
-  ↓
-3. Assessment Result:
-   ┌─────────────────────────────────────────┐
-   │  If HEALTHY:                            │
-   │    → Show analysis + actionable next    │
-   │                                         │
-   │  If HAS ISSUES:                         │
-   │    → Recommend TOP priority fix only    │
-   │    → Suggest persona who can help       │
-   └─────────────────────────────────────────┘
-  ↓
-4. Post-Analysis Output:
-   ├─ RECOMMENDED ACTIONS (based on gaps)
-   └─ PERSONA AVAILABILITY (ready to help)
-  ↓
-5. User decides what to tackle
-```
+Built-in savers:
+- anti-slop: reduces 30%
+- chisle: reduces 20%
+- caveman: reduces 65%
 
-### Assessment Logic
+---
 
-| Project State | Assessment | Recommendation |
-|--------------|------------|-----------------|
-| No tests | "Test coverage needed" | `/dina` (testing) |
-| CI/CD missing | "CI/CD not configured" | `/frans` (devops) |
-| No documentation | "Docs missing/outdated" | `/satria` or `/athena` |
-| Deploy failing | "Deployment issues" | `/frans` (devops) |
-| Security concerns | "Security audit needed" | `/dina` (security) |
-| Complex feature | "Architecture review needed" | `/athena` |
-| Good state | "Project healthy" | No persona needed |
+## CONTEXT DETECTION
 
-### Team Coordination
+Claude automatically loads relevant skills:
 
-```
-Satria (PM) → Owns planning; the pipeline runs in order:
-  - Athena → architecture, ADR, contracts
-  - Hexa   → implementation + unit tests
-  - Dina   → QA & security audit (quality gate)
-  - Frans  → containers, migrations, CI/CD
-  - Vika   → OpenAPI + changelog + docs
+```text
+You: "useState hook in React"
+→ Recognizes: React patterns
+→ Loads: /react-pro
+
+You: "postgres connection refused"
+→ Recognizes: PostgreSQL error
+→ Loads: /postgresql-pro + /error-debugger
 ```
 
 ---
 
-## Post-Analysis Output
+## EXAMPLE: NEW PROJECT
 
-After analysis completes, ALWAYS provide actionable next steps:
-
-### Recommended Actions (Based on Gaps)
-
-```
-📋 RECOMMENDED ACTIONS:
-
-1. IMMEDIATE (Priority Fix):
-   └─ [Specific actionable task]
-     → Run: [command or action]
-
-2. THIS SESSION (Quick Win):
-   └─ [Optional improvement]
-     → Run: [command or action]
-
-3. OPTIMIZE (Long-term):
-   └─ [Future enhancement]
-     → Run: [command or action]
-
-4. OPTIONAL (If Needed):
-   └─ [Nice-to-have]
-     → Run: [command or action]
+**User input:**
+```bash
+/autor new
 ```
 
-### Persona Availability (Always Available)
-
-```
-🎯 READY TO HELP:
-
-Project is healthy - no urgent fixes needed.
-Available personas for your next task:
-
-  /satria   → Planning, BRD, PRD, FSD
-  /athena   → Architecture, code, API design
-  /dina     → Testing, security, QA
-  /frans    → DevOps, deployment, CI/CD
-
-Or describe what you want to work on.
+**Wizard question:**
+```text
+What type of project?
+- Web application
+- REST/GraphQL API
+- CLI tool
+- NPM library
+- Mobile app
 ```
 
-### Audit Recommendation (Contextual)
+**User selects:** Web application for e-commerce
 
-After analysis, evaluate if audit is needed based on project context:
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  AUDIT RECOMMENDATION CHECK                                      │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  ASK YOURSELF:                                                 │
-│                                                                  │
-│  Q1: Is this a NEW project/feature?                            │
-│      └─ YES → /audit recommended                               │
-│      └─ NO  → Continue                                         │
-│                                                                  │
-│  Q2: Am I about to DEPLOY to production?                       │
-│      └─ YES → /audit recommended                               │
-│      └─ NO  → Continue                                         │
-│                                                                  │
-│  Q3: Did I REFACTOR >20 files recently?                        │
-│      └─ YES → /audit recommended                               │
-│      └─ NO  → Continue                                         │
-│                                                                  │
-│  Q4: Am I adding AUTH/PAYMENT/USER DATA?                     │
-│      └─ YES → /audit STRONGLY recommended                     │
-│      └─ NO  → Continue                                         │
-│                                                                  │
-│  Q5: Does my codebase feel "smelly"?                          │
-│      └─ YES → /audit recommended                               │
-│      └─ NO  → Don't audit (save tokens)                        │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-### When to Recommend Audit
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  RECOMMEND /audit WHEN:                                         │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  🔴 STRONGLY RECOMMEND:                                       │
-│  ├─ Adding authentication/authorization                        │
-│  ├─ Adding payment/billing features                            │
-│  ├─ Handling user PII/sensitive data                          │
-│  └─ Before first production deploy                             │
-│                                                                  │
-│  🟠 RECOMMEND:                                                │
-│  ├─ New project/feature (before getting too deep)             │
-│  ├─ After major refactoring (>20 files changed)              │
-│  ├─ Codebase feels "smelly" (gut feeling)                   │
-│  └─ Starting to work with unfamiliar codebase                  │
-│                                                                  │
-│  🟢 DON'T RECOMMEND:                                          │
-│  ├─ Project is healthy and recently audited                    │
-│  ├─ Only doing small fixes (typos, minor changes)            │
-│  └─ Project hasn't changed since last audit                    │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-### Audit Command Reference
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  AUDIT COMMANDS                                                 │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  /audit                → Full scan (~300K tokens)               │
-│  /audit [module]      → Module scan (~150K tokens)           │
-│                                                                  │
-│  EFFICIENCY TIPS:                                              │
-│  • Solo dev: /audit 2-4x/month (on-demand)                  │
-│  • Small team: /audit weekly                                │
-│  • Add module scope: /audit src/auth/                        │
-│                                                                  │
-│  TOKEN BUDGET:                                                 │
-│  • Full scan: ~300K tokens                                    │
-│  • Module scan: ~150K tokens                                   │
-│  • Monthly (solo): ~600K-1.2M tokens                         │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-### Example Output Format
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│  PROJECT STATE: HEALTHY                                   │
-├─────────────────────────────────────────────────────────────┤
-│  ✅ Core functionality: Working                            │
-│  ✅ CI/CD: Configured                                     │
-│  ✅ Documentation: Complete                               │
-└─────────────────────────────────────────────────────────────┘
-
-📋 RECOMMENDED ACTIONS:
-
-1. IMMEDIATE:
-   └─ Commit recent changes
-     → git add . && git commit -m "fix: ..."
-
-2. THIS SESSION:
-   └─ Improve test coverage (currently 60%)
-     → /dina for testing guidance
-
-🎯 READY TO HELP:
-
-  /satria   → Planning & documentation
-  /athena   → Architecture & code
-  /dina     → Testing & security
-  /frans    → DevOps & deployment
-```
-
----
-
-## Token Distribution
-
-### How It Works
-
-```
-/autor invoked
-    ↓
-12 Core Skills LOADED
-(git, config, security, testing, error-debugger, observability,
- doc-generator, mem-search, anti-slop, chisle, caveman, codebase-design)
-    ↓
-Persona invoked (e.g., /athena)
-    ↓
-├── Inherited skills → NO additional token (already loaded)
-└── Extended skills → Adds token cost
-```
-
-### Skills by Category
-
-| Category | Token Cost | Skills |
-|----------|-----------|--------|
-| **Core (from /autor)** | 1x (shared) | git, config, security, testing, error-debugger, observability, doc-generator, mem-search, anti-slop, chisle, caveman, codebase-design |
-| **Persona Extended** | +N per skill | Varies by persona |
-
-### Persona Extended Skills (Adds Token)
-
-| Persona | Extended Skills | Count |
-|---------|----------------|-------|
-| Satria (Sonnet) | brd, fsd, prd, feature-forge, grill-with-docs, research, team-processes, tech-debt, audit, superpowers, new-issue, handoff, wayfinder | +13 |
-| Athena (Opus) | architecture-patterns, design-patterns, api-design, api-contracts, graphql, grpc-pro, database, integration-patterns, fullstack-patterns, messaging, message-queue, realtime, webhooks, identity, auth-flows, data-engineering, search, rag-architect, langchain-architect, ml-pipeline, ml-engineering, cloud-architect, scalability, reliability, wayfinder | +25 |
-| Hexa (Sonnet) | stack-aware language/framework-pro + prisma, drizzle, DB-pro, elasticsearch, api-client, data-fetch, auth-flows, realtime, webhooks, payment-stripe, supabase, openai, messaging, code-quality, implement, test-generator, diagnosing-bugs, performance, performance-ui, work-on-issue, mobile, reticle, data-quality, fullstack-guardian | +many |
-| Dina (Opus) | testing-integration, test-generator, playwright, pentest, compliance, diagnosing-bugs, audit, impeccable, code-quality, pr-review, fix-pr-review, validate-issue, llm-evaluation, browser-use, dev-browser | +15 |
-| Frans (Sonnet) | docker, deployment, kubernetes, terraform, devops-engineer, platform-engineering, cloud-architect, error-tracking, database-migration, reliability, scalability, onyx, networking, storage, finops, feature-flags, iot-edge, serverless, vercel, railway, flyio, developer-experience, mobile | +23 |
-| Vika (Haiku) | documentation, api-contracts, sync-docs, create-release, handoff, writing-for-agents | +6 |
-
-Cross-cutting tools (on top of the above): **graphify** (codebase understanding/tracing) on all six personas; **scrapling** (research / recon) on Satria and Dina.
-
-### Token Example
-
-```
-Scenario: /autor → /athena → Write E2E tests
-
-Step 1: /autor
-  → Loads 12 core skills = 1x token
-
-Step 2: /athena
-  → Inherits 12 core skills = 0 additional token
-  → Loads extended skills (api-design, etc.) = +9 token
-
-Total additional from persona = 9 (vs 21 if all listed separately)
-
-Efficiency: ~57% token savings
-```
-
----
-
-## Smart Pattern Detection
-
-### Auto-Infer from Context
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│  USER SAYS: "useState hook in React"                      │
-│  → Auto-detects: React + useState                        │
-│  → Auto-invokes: /react-pro                              │
-│  → Provides: useState patterns + best practices            │
-├─────────────────────────────────────────────────────────────┤
-│  USER SAYS: "postgres connection error"                   │
-│  → Auto-detects: PostgreSQL + Error                      │
-│  → Auto-invokes: /postgresql-pro + /error-debugger       │
-│  → Provides: Connection fix + error debugging             │
-└─────────────────────────────────────────────────────────────┘
-```
-
----
-
-## Token Efficiency
-
-### Built-in Optimizations
-
-| Tool | Purpose | Token Savings |
-|------|---------|---------------|
-| `anti-slop` | Remove verbose AI patterns | ~30-40% |
-| `chisle` | Context pruning | ~20-30% |
-| `caveman` | Aggressive compression | ~65% |
-
----
-
-## Examples
-
-### New Project - Web App
-
-```
-User: /autor new web app
-Autor: What type of web app?
-User: E-commerce store
-Autor: 
+**Claude response:**
+```text
 ✅ Recommended Stack:
-├─ Frontend: Next.js 15 + React + Tailwind
-├─ UI: shadcn/ui components
-├─ Database: PostgreSQL + Prisma
-├─ Auth: NextAuth.js or Clerk
-├─ Payments: Stripe
-├─ Email: Resend
-└─ Deploy: Vercel + Railway (DB)
-├─ Commands:
-│  npx create-next-app@latest mystore --tailwind --typescript
-│  cd mystore && npx shadcn@latest init
-│  npx prisma init
-│  vercel deploy
-└─ Skills loaded: /nextjs-pro /tailwindcss /prisma /security /testing
-```
 
-### Existing Project - Error Detection
+Frontend:
+├─ Next.js 15 + React 19
+├─ Tailwind CSS 4
+└─ shadcn/ui components
 
-```
-User: TypeError: Cannot read property 'map' of undefined
-Autor: 
-🔴 ERROR DETECTED: TypeError
-├─ /error-debugger invoked automatically
-├─ /mem-search invoked for project context
-├─ Root cause: Variable is undefined, not an array
-├─ Fix options:
-│  1. Add optional chaining: data?.map(...)
-│  2. Add null check: if (Array.isArray(data)) ...
-│  3. Add fallback: const safeData = data ?? []
-└─ Skills loaded: /error-debugger /testing
+Backend:
+├─ Node.js 22 LTS
+├─ Fastify framework
+└─ Prisma ORM + PostgreSQL 16
+
+Authentication:
+├─ NextAuth.js v5
+└─ JWT with refresh tokens
+
+Payments:
+├─ Stripe Checkout
+└─ Webhook handlers
+
+Infrastructure:
+├─ Vercel (app hosting)
+└─ Railway (database hosting)
+
+📋 Setup Commands:
+
+npx create-next-app@latest mystore \
+  --typescript --tailwind --eslint --app
+
+cd mystore
+npm install @prisma/client
+npx prisma init --datasource-provider postgresql
+
+🔒 Security: /security loaded
+🧪 Testing: /testing loaded
+📝 Docs: /doc-generator loaded
+
+Skills activated: /nextjs-pro /prisma /auth-flows /security /testing
 ```
 
 ---
 
-## Changelog
+## EXAMPLE: EXISTING PROJECT
 
-### v2.4.0 (Post-Analysis Output)
-- ✅ Added actionable next steps after analysis
-- ✅ Added "Recommended Actions" section with priority levels
-- ✅ Added "Ready to Help" persona availability
-- ✅ Project healthy now shows actionable suggestions
+**User input:**
+```bash
+/autor scan
+```
 
-### v2.3.0 (HYBRID Token Distribution)
-- ✅ Token Distribution section added
-- ✅ Clear distinction: Inherited vs Extended skills
-- ✅ ~57% token savings vs listing all skills separately
-- ✅ Skills per persona: Satria (19), Athena (21), Dina (19), Frans (22)
+**Claude performs:**
+1. Repository structure analysis
+2. Test coverage measurement
+3. CI/CD configuration check
+4. Documentation audit
+5. Security assessment
 
-### v2.2.0 (Smart Project Flow)
-- ✅ Smart Flow: NEW PROJECT → Satria First
-- ✅ Smart Flow: EXISTING PROJECT → Contextual Assessment
-- ✅ Health Check for existing projects
-- ✅ Single TOP priority recommendation (not multiple options)
-- ✅ Satria as Team Coordinator
-- ✅ Team coordination: Satria calls others as needed
+**Claude response:**
+```text
+PROJECT STATE: NEEDS ATTENTION
 
-### v2.1.0 (Personas Integration)
-- ✅ PERSONAS LAYER: Satria, Athena, Dina, Frans now available with /autor (expanded to 6 — +Hexa, +Vika — in v3.4)
-- ✅ All personas auto-invoke: anti-slop + chisle + caveman
-- ✅ LAYER REORDERED: Infrastructure → Personas → Core (12) → Conditional
-- ✅ New `/team` command for full workflow
+┌─────────────────────────────────────────────────────┐
+│  ✅ WORKING                                        │
+├─────────────────────────────────────────────────────┤
+│  ├─ NextAuth.js authentication                    │
+│  ├─ REST API endpoints                           │
+│  ├─ TypeScript strict mode                       │
+│  └─ Environment configuration                     │
+├─────────────────────────────────────────────────────┤
+│  ⚠️  DEFICIENT                                   │
+├─────────────────────────────────────────────────────┤
+│  ├─ Test coverage: 45% (target: 70%)            │
+│  ├─ CI/CD: Not configured                        │
+│  └─ API documentation: Missing                   │
+└─────────────────────────────────────────────────────┘
 
-### v2.0.0 (Layer Architecture Redesign)
-- ✅ INFRASTRUCTURE LAYER: autor + auto-router separated
-- ✅ CORE LAYER: 11 skills (auto-loaded)
-- ✅ CONDITIONAL LAYER: Auto-detect based on project
-- ✅ MEMORY INTEGRATION: mem-search auto-invoked
-- ✅ TOKEN EFFICIENCY: anti-slop, chisle, caveman included
+📋 REMEDIATION ROADMAP:
 
-### v1.0.0 (Previous)
-- Basic project analysis
-- Skill recommendations
-- Gap detection
+1. IMMEDIATE (Blocks Deployment):
+   └─ Configure CI/CD pipeline
+     → Command: /frans
+     → Time estimate: 15 minutes
+     → Delivers: .github/workflows/ci.yml
+
+2. THIS SPRINT (Quality):
+   └─ Increase test coverage to 70%
+     → Command: /dina
+     → Time estimate: 30 minutes
+     → Delivers: tests/* with coverage report
+
+3. NEXT SPRINT (Documentation):
+   └─ Generate OpenAPI specification
+     → Command: /vika
+     → Time estimate: 10 minutes
+     → Delivers: docs/openapi.yaml
+
+🎯 AVAILABLE PERSONAS:
+
+/satria   /athena   /hexa   /dina   /frans   /vika
+(plan)    (plan)    (auto)  (auto)  (plan)   (auto)
+```
 
 ---
 
-*Built for developers who ship!*
+## EXAMPLE: FEATURE PIPELINE
+
+**User:** "I want to add user registration with email verification"
+
+**Step 1: Satria**
+```bash
+Satria writes: specs/PRD.md
+```
+
+PRD contains:
+- User story: "As a visitor, I want to register with email so I can access the platform"
+- Acceptance criteria:
+  - Valid email format required
+  - Password minimum 8 characters with numbers
+  - Verification email sent automatically
+  - Account activated after email confirmation
+- Non-functional requirements:
+  - Registration completes within 3 seconds
+  - Verification link expires after 24 hours
+- Out of scope:
+  - Social login (OAuth)
+  - Password reset flow
+
+**Step 2: Athena**
+```bash
+Athena writes: specs/ADR.md, specs/contracts.ts
+```
+
+ADR documents:
+- Hash passwords with bcrypt (cost factor 12)
+- JWT access tokens (15 min expiry) + refresh tokens (7 days)
+- Store verification tokens in Redis with TTL
+- Send emails via Resend API
+
+Contracts define:
+```typescript
+interface RegisterRequest {
+  email: string;
+  password: string;
+}
+
+interface RegisterResponse {
+  userId: string;
+  message: string;
+}
+```
+
+**Step 3: Hexa**
+```bash
+Hexa writes: src/auth/register.ts, tests/auth/register.test.ts
+```
+
+Implementation:
+- Email validation with regex
+- Password hashing with bcrypt
+- JWT generation
+- Redis token storage
+- Email sending via Resend
+- Comprehensive unit tests
+
+**Step 4: Dina**
+```bash
+Dina writes: specs/AUDIT.md
+```
+
+Audit findings:
+- ✅ Password hashing correct
+- ✅ JWT implementation secure
+- ⚠️ Missing rate limiting on registration endpoint
+- ⚠️ No CAPTCHA to prevent bot registration
+
+STATUS: REJECTED
+
+**Step 3 (patch): Hexa**
+- Adds rate limiting (5 requests per minute per IP)
+- Integrates hCaptcha
+
+STATUS: APPROVED
+
+**Step 5: Frans**
+```bash
+Frans writes: Dockerfile, migrations/001_add_users.sql, ci.yml
+```
+
+**Step 6: Vika**
+```bash
+Vika writes: docs/openapi.yaml, CHANGELOG.md
+```
+
+---
+
+*"Make it work, make it right, make it fast."*

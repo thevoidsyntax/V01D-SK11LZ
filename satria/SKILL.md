@@ -8,6 +8,7 @@ phase: phase-1
 category: [agents]
 model_recommended: sonnet
 effort_recommended: medium
+mode_recommended: plan
 auto_invoke:
   enabled: true
   conditions:
