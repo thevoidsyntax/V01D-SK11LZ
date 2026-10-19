@@ -5,6 +5,31 @@ All notable changes to the Skills Ecosystem will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.5.0] - 2026-10-19
+
+### Changed
+- **Per-persona execution mode.** Added `mode_recommended` frontmatter to all 6 personas:
+  - Satria, Athena, Frans → Plan Mode (high-leverage decisions)
+  - Hexa, Dina, Vika → Auto Mode (implementation/low-risk)
+- **Mode rule:** HIGH-LEVERAGE / RISKY → Plan Mode; IMPLEMENTATION / LOW-RISK → Auto Mode
+
+### Refactored
+- **autor v2.6.** Progressive disclosure split into 3 files:
+  - `autor/SKILL.md` - Core workflow (~300 lines)
+  - `autor/QUICKREF.md` - Command reference (~95 lines)
+  - `autor/PERSONAS.md` - Persona details (~240 lines)
+- Removed changelog from SKILL.md (now consolidated in root CHANGELOG.md)
+- Tagline updated: "Make it work, make it right, make it fast."
+
+### Fixed
+- **autor/SKILL.md.** All code fences tagged with language identifiers
+- **autor/SKILL.md.** Examples expanded with end-to-end scenarios
+- Skillspector score: 77/100 (Good)
+
+### Added
+- `autor/PERSONAS.md` - Detailed persona breakdown with workflows
+- `autor/QUICKREF.md` - Quick command reference
+
 ## [3.4.0] - 2026-10-18
 
 ### Changed
@@ -185,7 +210,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Status |
 |---------|--------|
-| 3.4.0 | Current |
+| 3.5.0 | Current |
+| 3.4.0 | Previous |
 | 3.3.0 | Previous |
 | 3.2.0 | Previous |
 | 3.1.0 | Previous |
@@ -201,10 +227,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Category | Count | Skills |
 |----------|-------|--------|
 | Core Skills | 12 | git, config, security, testing, error-debugger, observability, doc-generator, mem-search, anti-slop, chisle, caveman, codebase-design |
+| Personas | 6 | satria, athena, hexa, dina, frans, vika |
 | Persona Extended | 33 | Various (brd, fsd, prd, api-design, playwright, docker, etc.) |
 | Conditional | 9 | docker, kubernetes, terraform, deployment, serverless, mobile, browser-use, reticle, ui-ux-pro-max |
 | Tech Stack | 25+ | react-pro, nextjs-pro, python-pro, postgresql-pro, etc. |
-| **Total** | **137** | All top-level skills |
+| **Total** | **139** | All top-level skills |
 
 ---
 
