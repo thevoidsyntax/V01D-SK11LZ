@@ -7,35 +7,21 @@ priority: high
 phase: any
 tech_stack:
   languages: [typescript, javascript, python]
-  frameworks: [playwright, @playwright/test]
+  frameworks: [playwright, "@playwright/test"]
 scale: [mvp, small, medium, large]
+model_recommended: sonnet
+effort_recommended: medium
+mode_recommended: auto
 auto_invoke:
   enabled: true
   conditions:
-    - command: "/playwright"
+    - command: ["/playwright"]
       reason: "Explicit Playwright invocation"
-    - phrase: ["playwright test", "e2e test", "end to end", "browser test"]
-      reason: "E2E testing intent"
-    - phrase: ["accessibility audit", "a11y check", "wcag check"]
-      reason: "Accessibility testing"
-    - phrase: ["visual regression", "screenshot test", "ui check"]
-      reason: "Visual testing"
-    - phrase: ["broken link", "health check", "site audit"]
-      reason: "Site health audit"
+    - phrase: ["e2e test", "end-to-end test", "playwright test", "browser test", "ui test"]
+      reason: "E2E test writing intent"
+    - phrase: ["visual regression", "screenshot test"]
+      reason: "Visual testing with Playwright"
 integrates_with: [testing, tdd, ci-cd]
-capabilities: [implementation, testing, analysis, generation]
-quality:
-  rules_count: 25
-  examples_count: 20
-  stability: stable
-source:
-  origin: local
-author: TheVoidSyntax
----
-
-# Playwright - E2E Testing & Automated Checks
-
-Comprehensive Playwright skill for interactive test writing and automated site health checks.
 
 ---
 

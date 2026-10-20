@@ -7,7 +7,7 @@ priority: high
 phase: phase-4
 category: [agents]
 model_recommended: opus
-effort_recommended: xhigh
+effort_recommended: medium
 mode_recommended: auto
 auto_invoke:
   enabled: true
