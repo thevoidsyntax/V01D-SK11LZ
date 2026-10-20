@@ -152,7 +152,7 @@ Run: "mulai pipeline" or /agents
 
 **Step 4:** Run `/analyze-project` to detect the stack. Once the stack is known, load `/security` and `/testing`.
 
-**Step 5:** End with the persona pipeline recommendation (section 4). Recommend only; never start the pipeline without the user's go-ahead.
+**Step 5:** End with the persona pipeline recommendation (section 4), then stop. A bare "lanjut" or "continue" only advances the current wizard step; it is never permission to start a persona. Start Athena, Hexa, or any later phase only after the user says "mulai pipeline" or runs `/agents`.
 
 ### `/autor status` - Quick Overview
 
