@@ -14,7 +14,7 @@
 | 1 | Satria | Sonnet | medium | plan | 1 | PM - requirements, PRD |
 | 2 | Athena | Opus | high | plan | 2 | Architect - ADR, contracts |
 | 3 | Hexa | Sonnet | medium | auto | 3 | Coder - implementation + tests |
-| 4 | Dina | Opus | xhigh | auto | 4 | QA/Security - audit + gate |
+| 4 | Dina | Opus | medium | auto | 4 | QA/Security - audit + gate |
 | 5 | Frans | Sonnet | medium | plan | 5 | DevOps - containers, CI/CD |
 | 6 | Vika | Haiku | low | auto | 6 | Writer - OpenAPI, changelog |
 
@@ -125,7 +125,7 @@ src/*, tests/*
 
 **Role:** Audits code for bugs, concurrency, and OWASP issues
 
-**Model:** Opus | **Effort:** xhigh | **Mode:** auto
+**Model:** Opus | **Effort:** medium | **Mode:** auto
 
 ### Extended Skills
 
