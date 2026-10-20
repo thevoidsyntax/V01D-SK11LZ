@@ -39,10 +39,11 @@ Each persona also inherits the 12 core skills + `/ponytail` from `/autor`. Full 
 
 Triggered by a feature instruction (e.g. *"Buat modul penutupan shift kasir. Mulai pipeline"*). The orchestrator (this session) runs the phases **in order**, each as a subagent:
 
-For each phase, spawn with the **Agent tool**:
-- `subagent_type: "general-purpose"`, `model:` = the persona's model from the table (apply escalation when the feature warrants it).
+For each phase, spawn with the **Agent tool**, always in the foreground so progress is visible:
+- `subagent_type: "general-purpose"`, `model:` = the persona's model from the table (apply escalation when the feature warrants it), `run_in_background: false` (each phase needs the previous artifact, so nothing is lost).
 - `prompt`: "You are **<Persona>** (<role>). Invoke the `/<persona>` skill and follow it. Read only these artifacts: <inputs>. Produce exactly: <output artifact>. Keep your reply to a one-line handoff summary."
 - Inputs/outputs follow the table; never pass the full prior transcript — only the artifact paths.
+- Before each spawn print `[FASE n/6] <Persona> (<model>) mulai — baca <inputs>`. After it returns, check the artifact exists and print `[HANDOFF] <A> → <B> selesai: <artifact> (ada)`. In the Dina ↔ Hexa loop also print `[LOOP k/3]`.
 
 Order & handoff:
 
@@ -65,7 +66,7 @@ Dina ends `specs/AUDIT.md` with a status line:
 
 - Each phase is a fresh subagent — it does **not** inherit the previous persona's conversation.
 - Personas communicate **only through artifact files** (`specs/*`, `src/*`, `docs/*`).
-- During handoff, the terminal shows only a short status line, e.g. `[HANDOFF] Satria → Athena selesai. Mulai ADR…`.
+- Between phases the terminal shows only short status lines (`[FASE …]`, `[HANDOFF] …`).
 
 ## Try it (smoke-test)
 
@@ -84,11 +85,13 @@ The orchestrator spawns each phase as a subagent on its model; check the artifac
 | 5 | Frans (Sonnet) | approved build → `Dockerfile`, `migrations/*`, `ci.yml` |
 | 6 | Vika (Haiku) | src + PRD → `docs/openapi.*`, `CHANGELOG.md` |
 
-Expected terminal output is just short handoff lines, e.g.:
+Expected terminal output is just short status lines, e.g.:
 
 ```
-[HANDOFF] Satria → Athena selesai. Mulai ADR…
-[HANDOFF] Athena → Hexa selesai. Mulai implementasi…
+[FASE 1/6] Satria (Sonnet) mulai — baca permintaan user
+[HANDOFF] Satria → Athena selesai: specs/PRD.md (ada)
+[FASE 2/6] Athena (Opus) mulai — baca specs/PRD.md
+[HANDOFF] Athena → Hexa selesai: specs/ADR.md (ada)
 ```
 
 Passing = all six artifacts exist and Dina's `STATUS: APPROVED`. If a phase produces no artifact, stop and inspect that phase rather than continuing.

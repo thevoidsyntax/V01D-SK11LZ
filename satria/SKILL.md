@@ -39,7 +39,6 @@ The 12 core skills + `/ponytail`.
 | research | Market/domain research (with `scrapling`) |
 | team-processes | Ownership, review process framing |
 | tech-debt | Track debt raised during planning |
-| audit | Project-health context before planning |
 | superpowers | Brainstorm → plan workflow |
 | new-issue | File scoped issues from the plan |
 | handoff | Capture hand-over notes |
