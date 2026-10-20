@@ -1,6 +1,7 @@
 ---
 name: audit
 version: "6.0.0"
+effort: high
 description: "Whole-repo security and correctness audit: tools first, targeted LLM review, incremental baseline, no subagents by default"
 when_to_use: "Use only when the user types /audit or Dina calls it for the QA gate: a whole-repo or path-scoped audit (handover, pre-release sweep, legacy code). For a diff or PR use /code-review or /security-review."
 priority: medium
@@ -23,6 +24,7 @@ Read each file once and check every angle in that read. Spend LLM tokens only wh
 - **No subagents.** Exception: scope over 150 files, at most 2, one module each, `run_in_background: false`. Never verifier agents.
 - Not started by the user's `/audit` or by Dina: state the scope and ask before scanning.
 - Arguments: `<path>` limits scope. Default angle is security + correctness; `perf`, `arch`, `tests` add one angle in the same read. `release` forces the full Tier 1 sweep.
+- **Few calls.** Every API call re-reads about 125K tokens of fixed context, so batch: one Bash for the baseline, scope commands, manifest detection and the stack tool; one parallel call that reads all Tier 1 files and runs every grep; then one Write. Aim for 5 calls or fewer.
 
 ## 1. Scope
 
@@ -51,4 +53,4 @@ Every finding has `file:line` and a one-line exploit or failure scenario; no sce
 
 ## 5. Report
 
-Write `specs/AUDIT.md` (create `specs/` if absent): all CRITICAL/HIGH as `SEV file:line - evidence - fix`, top 10 MEDIUM, counts for the rest, and what was scanned and skipped. Carry earlier open findings forward: re-check those whose file changed, keep the rest verbatim. Write `specs/AUDIT.md` once (one Write, not many Edits). Then write `git rev-parse HEAD` to `specs/.audit-base`. The `STATUS:` line belongs to Dina.
+Write `specs/AUDIT.md` (create `specs/` if absent): all CRITICAL/HIGH as `SEV file:line - evidence - fix`, top 10 MEDIUM, counts for the rest, and what was scanned and skipped. Carry earlier open findings forward: re-check those whose file changed, keep the rest verbatim. Write `specs/AUDIT.md` once (one Write, not many Edits). Then write `git rev-parse HEAD` to `specs/.audit-base`. The `STATUS:` line belongs to Dina. Keep the report near 2.5K tokens. The final chat reply is 8 lines at most (counts, top 3 findings, report path); never repeat the report.
