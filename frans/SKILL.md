@@ -25,8 +25,8 @@ capabilities: [deployment, infrastructure]
 
 ## Skills
 
-### Inherited from /autor (no extra token)
-The 12 core skills (incl. `observability`) + `/ponytail`.
+### Core skills (on demand)
+Nothing is inherited from `/autor`: each pipeline phase is a fresh subagent. Load `observability`, `git`, or `config` as the phase needs them.
 
 ### Extended (platform & devops domain)
 | Group | Skills |

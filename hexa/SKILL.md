@@ -25,8 +25,8 @@ capabilities: [implementation, testing]
 
 ## Skills
 
-### Inherited from /autor (no extra token)
-The 12 core skills (incl. `testing`, `error-debugger`) + `/ponytail`.
+### Core skills (on demand)
+Nothing is inherited from `/autor`: each pipeline phase is a fresh subagent. Load `testing` and `error-debugger` as needed, and `/ponytail` before writing new code.
 
 ### Extended (stack-aware — load what the project uses)
 | Group | Skills |

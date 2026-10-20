@@ -25,8 +25,8 @@ capabilities: [testing, security, review]
 
 ## Skills
 
-### Inherited from /autor (no extra token)
-The 12 core skills (incl. `security`, `testing`) + `/ponytail`.
+### Core skills (on demand)
+Nothing is inherited from `/autor`: each pipeline phase is a fresh subagent. Load `security` or `testing` only when a finding needs their checklists.
 
 ### Extended (QA & security domain)
 | Group | Skills |

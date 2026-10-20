@@ -27,8 +27,8 @@ capabilities: [architecture, design]
 
 ## Skills
 
-### Inherited from /autor (no extra token)
-The 12 core skills (incl. `codebase-design`, her main tool) + `/ponytail`.
+### Core skills (on demand)
+Nothing is inherited from `/autor`: each pipeline phase is a fresh subagent. Load `codebase-design` (her main tool) first; other core skills and `/ponytail` only when needed.
 
 ### Extended (architecture domain)
 | Group | Skills |

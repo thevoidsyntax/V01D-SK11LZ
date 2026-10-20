@@ -25,8 +25,8 @@ capabilities: [documentation]
 
 ## Skills
 
-### Inherited from /autor (no extra token)
-The 12 core skills (incl. `doc-generator`, her main tool) + `/ponytail`.
+### Core skills (on demand)
+Nothing is inherited from `/autor`: each pipeline phase is a fresh subagent. Load `doc-generator` (her main tool) first; other core skills only when needed.
 
 ### Extended (writing domain)
 | Skill | Use |

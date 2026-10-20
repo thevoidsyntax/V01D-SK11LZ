@@ -25,8 +25,8 @@ capabilities: [planning, requirements]
 
 ## Skills
 
-### Inherited from /autor (no extra token)
-The 12 core skills + `/ponytail`.
+### Core skills (on demand)
+Nothing is inherited from `/autor`: each pipeline phase is a fresh subagent. Load core skills (`git`, `config`, `security`, `testing`, `codebase-design`, ...) and `/ponytail` only when needed.
 
 ### Extended (PM domain)
 | Skill | Use |

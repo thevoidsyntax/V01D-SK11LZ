@@ -1,6 +1,6 @@
 ---
 name: autor
-version: "3.1.0"
+version: "3.2.0"
 description: "Project intelligence with Smart Flow, 6-persona pipeline, token-efficient core skills, and memory continuity for Claude Code"
 when_to_use: "Use when starting a new project, analyzing existing codebase, or needing project intelligence. Run /autor scan for project health check, /autor new for fresh projects."
 priority: critical
@@ -18,31 +18,26 @@ source:
 author: thevoidsyntax
 ---
 
-# AUTOR v3.1 - PROJECT INTELLIGENCE
+# AUTOR v3.2 - PROJECT INTELLIGENCE
 
-## 🚀 CORE SKILLS AUTO-LOADING
+## 🚀 SKILL LOADING (ON DEMAND)
 
-**When this skill is invoked, you MUST immediately load these 12 core skills:**
+**Do not preload skills.** Each loaded skill stays in context for the whole session, so load one only when the current step needs it:
 
-```
-Skill: git
-Skill: config
-Skill: security
-Skill: testing
-Skill: error-debugger
-Skill: observability
-Skill: doc-generator
-Skill: mem-search
-Skill: anti-slop
-Skill: chisle
-Skill: caveman
-Skill: codebase-design
-```
+| Situation | Load |
+|-----------|------|
+| Auth, secrets, input handling, or security findings | `/security` |
+| No tests or low coverage | `/testing` |
+| Repo setup, branching, commit conventions | `/git` |
+| Env vars, secrets, per-environment config | `/config` |
+| Module boundaries, architecture questions | `/codebase-design` |
+| Missing error handling, logging, or tracing | `/error-debugger`, `/observability` |
+| README or API docs missing or stale | `/doc-generator` |
 
-**After loading, respond with:**
+**On `/autor`, first respond with:**
 
 ```
-AUTOR v3.1 - 12 core skills loaded
+AUTOR v3.2 - skills load on demand
 
 Available Commands:
   /autor              # Analyze current project
@@ -151,11 +146,13 @@ Run: "mulai pipeline" or /agents
 6. 🎮 Game
 ```
 
-**Step 2:** Based on type, recommend tech stack
+**Step 2:** Run `/satria` to turn the idea into `specs/PRD.md`. It works in plan mode; wait for the user's approval before continuing.
 
-**Step 3:** Generate setup commands
+**Step 3:** Run `/project-init` to scaffold the project. Load `/git` and `/config` here.
 
-**Step 4:** Auto-load relevant skills for the stack
+**Step 4:** Run `/analyze-project` to detect the stack. Once the stack is known, load `/security` and `/testing`.
+
+**Step 5:** End with the persona pipeline recommendation (section 4). Recommend only; never start the pipeline without the user's go-ahead.
 
 ### `/autor status` - Quick Overview
 
@@ -206,7 +203,7 @@ Analyze these dimensions:
 
 ## TOKEN NOTES
 
-Loading all 12 core skills costs about 24K tokens (estimated from file size), and they stay in context for the rest of the session. Persona skills add their own tokens when invoked. `anti-slop`, `chisle`, and `caveman` are style skills, not automatic token savers; the percentage reductions once listed here were never measured.
+Preloading the 12 former core skills cost about 24K tokens (estimated from file size) that stayed in context for the whole session, so skills now load on demand. Persona skills add their own tokens when invoked. `anti-slop`, `chisle`, and `caveman` are style skills, not token savers: an A/B test found no reduction in total output tokens, and the percentage reductions once listed here were never measured.
 
 ---
 
