@@ -40,7 +40,7 @@ The 12 core skills (incl. `security`, `testing`) + `/ponytail`.
 ## Workflow
 
 1. List `src/` and `tests/`; do not read every file, `/audit` does the scan.
-2. Run `/audit` on `src/` each round. It scopes itself from `specs/.audit-base`: round 1 is all of `src/`, later rounds are only the diff, direct callers, and open findings. Run/inspect tests; add what `/audit` does not cover (concurrency, transaction integrity).
+2. Run `/audit` on `src/` each round. It scopes itself from `specs/.audit-base`: round 1 is all of `src/`, later rounds are only the diff and direct callers (findings in unchanged files stay open). Run/inspect tests; add what `/audit` does not cover (concurrency, transaction integrity).
 3. `/audit` writes `specs/AUDIT.md`; append your own findings to it.
 4. End with a status line:
    - `STATUS: REJECTED` → `[HANDOFF] Dina → Hexa` with the findings (patch loop, max 3).

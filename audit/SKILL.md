@@ -27,7 +27,7 @@ Read each file once and check every angle in that read. Spend LLM tokens only wh
 ## 1. Scope
 
 Print `scope: N files`.
-- Read `specs/.audit-base` (one line: a SHA). If `git cat-file -e <sha>^{commit}` passes, scope = `git diff --name-only <sha>` + `git ls-files -o --exclude-standard` + files with open findings in `specs/AUDIT.md` + direct callers of changed symbols (grep the names). Without `..HEAD`, so uncommitted patches count.
+- Read `specs/.audit-base` (one line: a SHA). If `git cat-file -e <sha>^{commit}` passes, scope = `git diff --name-only <sha>` + `git ls-files -o --exclude-standard` + direct callers of changed symbols (grep the names). Without `..HEAD`, so uncommitted patches count. Do not re-read unchanged files just because they have open findings.
 - No baseline or invalid SHA: whole repo. Rescan Tier 1 in full if the baseline is older than 30 days.
 - Skip tests, generated, build output, vendor, node_modules, lockfiles. Manifests, CI, Dockerfile/compose and `.env.example` are checked by grep only.
 - Over 150 files: Tier 1, then Tier 2, then stop and list what was left out.
@@ -51,4 +51,4 @@ Every finding has `file:line` and a one-line exploit or failure scenario; no sce
 
 ## 5. Report
 
-Write `specs/AUDIT.md` (create `specs/` if absent): all CRITICAL/HIGH as `SEV file:line - evidence - fix`, top 10 MEDIUM, counts for the rest, and what was scanned and skipped. Carry earlier open findings forward: re-check those whose file changed, keep the rest. Then write `git rev-parse HEAD` to `specs/.audit-base`. The `STATUS:` line belongs to Dina.
+Write `specs/AUDIT.md` (create `specs/` if absent): all CRITICAL/HIGH as `SEV file:line - evidence - fix`, top 10 MEDIUM, counts for the rest, and what was scanned and skipped. Carry earlier open findings forward: re-check those whose file changed, keep the rest verbatim. Write `specs/AUDIT.md` once (one Write, not many Edits). Then write `git rev-parse HEAD` to `specs/.audit-base`. The `STATUS:` line belongs to Dina.
