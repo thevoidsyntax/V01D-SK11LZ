@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - a missing CHANGELOG entry.
 
   Tested against the old `ponytail`, `anti-slop`, and `impeccable`: it flags `/ponytail-review|audit|debt`, `/humanize`, `/ui-review`, and the nested fence.
+- **Guard check 5: sub-commands.** Every backticked `/skill sub` must have its own heading in that skill, as `/autor scan` has in autor. It flags all six fake `/impeccable init|audit|critique|polish|live|distill` from the old skill and a planted `/autor deploy`, while the real `/autor scan|new|status` pass.
 
 ### Changed
 - **anti-slop v2.0.** Rewritten as a self-contained skill:

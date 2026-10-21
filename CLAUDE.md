@@ -36,12 +36,15 @@ OK='name|description|when_to_use|effort|metadata|argument-hint|arguments|disable
 for f in */SKILL.md; do awk 'NR==1&&!/^---/{exit} NR>1&&/^---/{exit} NR>1&&/^[A-Za-z_-]+:/{sub(/:.*/,"");print}' "$f" | grep -vxE "$OK" | sed "s|^|$f: unknown frontmatter field |"; done
 # 4. perubahan skill disertai entri CHANGELOG
 git diff HEAD --name-only | grep -q 'SKILL.md' && ! git diff HEAD --name-only | grep -qx 'CHANGELOG.md' && echo "CHANGELOG.md not updated"
+# 5. setiap sub-perintah `/skill sub` punya heading sendiri di skill itu, mis. "### `/autor scan`"
+grep -ohE '`/[a-z][a-z0-9-]+ [a-z][a-z0-9-]*' */SKILL.md README.md CLAUDE.md | tr -d '`' | sort -u |
+  while read -r s sub; do n=${s#/}; [ -d "$n" ] || continue; grep -qE "^#+ .*\`/$n $sub\`" "$n/SKILL.md" || echo "unhandled sub-command: /$n $sub"; done
 ```
 
 Lalu cek manual yang tidak bisa di-grep:
 
 - `README.md` (daftar skill) dan bagian "Cara kerja" di file ini masih sesuai isi skill.
-- Sub-perintah yang disebut (`/autor scan`, `/autor new`) memang ditangani di skill-nya.
+- Sub-perintah ditulis dalam backtick (`` `/autor scan` ``) dan punya heading sendiri di skill-nya; cek 5 hanya melihat bentuk itu.
 - Commit hanya setelah user setuju, dengan `Co-Authored-By: <persona>`.
 - Skill **wajib** di `<nama>/SKILL.md` level atas (nama file persis `SKILL.md`). Claude Code tidak memuat folder bersarang seperti `kategori/<nama>/SKILL.md`; dulu 16 skill di `conditional/`, `docs/`, `system/` tidak pernah termuat karena ini.
 - Satu skill = satu folder. Jangan simpan salinan skill di folder lain (dulu `core/`, `agents/*-agent/`); salinan tidak dimuat dan cepat basi.
