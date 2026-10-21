@@ -1,7 +1,7 @@
 ---
 name: autor
-version: "3.2.0"
-description: "Project intelligence with Smart Flow, 6-persona pipeline, token-efficient core skills, and memory continuity for Claude Code"
+version: "3.3.0"
+description: "Project intelligence: health scan, new-project wizard, and the 6-persona pipeline recommendation"
 when_to_use: "Use when starting a new project, analyzing existing codebase, or needing project intelligence. Run /autor scan for project health check, /autor new for fresh projects."
 priority: critical
 phase: any
@@ -14,30 +14,28 @@ tech_stack:
 scale: [all]
 capabilities: [implementation, analysis]
 source:
-  origin: infrastructure
+  origin: local
 author: thevoidsyntax
 ---
 
-# AUTOR v3.2 - PROJECT INTELLIGENCE
+# AUTOR v3.3 - PROJECT INTELLIGENCE
 
-## 🚀 SKILL LOADING (ON DEMAND)
+## 🚀 SKILLS
 
-**Do not preload skills.** Each loaded skill stays in context for the whole session, so load one only when the current step needs it:
+Stack, security, testing, git, and docs knowledge come from the model itself plus the project's `CLAUDE.md` and `specs/`; there are no skills for them. Besides the personas, `/agents`, and `/audit`, only three skills exist, and each changes a default the model would otherwise get wrong:
 
 | Situation | Load |
 |-----------|------|
-| Auth, secrets, input handling, or security findings | `/security` |
-| No tests or low coverage | `/testing` |
-| Repo setup, branching, commit conventions | `/git` |
-| Env vars, secrets, per-environment config | `/config` |
-| Module boundaries, architecture questions | `/codebase-design` |
-| Missing error handling, logging, or tracing | `/error-debugger`, `/observability` |
-| README or API docs missing or stale | `/doc-generator` |
+| About to write new code | `/ponytail` |
+| Building or changing UI | `/impeccable` |
+| Writing user-facing copy, docs, or comments | `/anti-slop` |
+
+Do not preload them; load one when the current step needs it.
 
 **On `/autor`, first respond with:**
 
 ```
-AUTOR v3.2 - skills load on demand
+AUTOR v3.3
 
 Available Commands:
   /autor              # Analyze current project
@@ -123,9 +121,9 @@ Run: "mulai pipeline" or /agents
 
 **Action:** Comprehensive scan including:
 - Code structure analysis
-- Test coverage (via `/testing`)
-- CI/CD check (via `/docker` if Dockerfile exists)
-- Security assessment (via `/security`)
+- Test coverage
+- CI/CD and Dockerfile check
+- Security assessment (for a full audit, recommend `/dina`)
 - Documentation audit
 - Dependency audit
 
@@ -148,9 +146,9 @@ Run: "mulai pipeline" or /agents
 
 **Step 2:** Run `/satria` to turn the idea into `specs/PRD.md`, then end your turn: summarize the PRD and its assumptions and ask for approval. Plan mode may not hold in a headless or auto session, so the stop is yours to make. Do not run Step 3 or invoke `/athena` in the same turn; Satria's `[HANDOFF]` line is not a trigger here.
 
-**Step 3:** Run `/project-init` to scaffold the project. Load `/git` and `/config` here.
+**Step 3:** Scaffold the project yourself; there is no scaffolding skill. Use the stack from the approved PRD and the folder layout from `CLAUDE.md`. Create: `git init` if needed, `.gitignore`, `.env.example` (no secrets), a manifest with start/test scripts, one passing test, and a README stub. Install nothing from the internet unless the user allowed it. No feature code.
 
-**Step 4:** Run `/analyze-project` to detect the stack. Once the stack is known, load `/security` and `/testing`.
+**Step 4:** Detect the stack from the manifests (`package.json`, `*.csproj`, `go.mod`, `pyproject.toml`, ...). Append a `specs/HANDOFF.md` entry for the scaffold: a `## [SCAFFOLD] autor — <UTC time from date -u>` heading, then `Input:`, `Output:`, `Decisions:`, `Open:`, `Next:` lines covering stack, layout, scripts, and what is not verified yet. Never invent a time; write the date only if you cannot run `date`.
 
 **Step 5:** End with the persona pipeline recommendation (section 4), then stop. A bare "lanjut" or "continue" only advances the current wizard step; it is never permission to start a persona. Start Athena, Hexa, or any later phase only after the user says "mulai pipeline" or runs `/agents`.
 
@@ -193,17 +191,17 @@ Analyze these dimensions:
 
 | Dimension | Metric | Command |
 |-----------|--------|---------|
-| Test coverage | Percentage | /testing |
+| Test coverage | Percentage | /hexa |
 | CI/CD | Pipeline exists | /frans |
-| Documentation | README, API docs | /doc-generator |
-| Security | OWASP checklist | /security |
-| Code structure | Architecture | /codebase-design |
+| Documentation | README, API docs | /vika |
+| Security | OWASP checklist | /dina |
+| Code structure | Architecture | /athena |
 
 ---
 
 ## TOKEN NOTES
 
-Preloading the 12 former core skills cost about 24K tokens (estimated from file size) that stayed in context for the whole session, so skills now load on demand. Persona skills add their own tokens when invoked. `anti-slop`, `chisle`, and `caveman` are style skills, not token savers: an A/B test found no reduction in total output tokens, and the percentage reductions once listed here were never measured.
+The repo was cut from 139 skills to 12 in v3.3. 73 had never been invoked, the skill list was truncated so ~60 showed no description, and the stack/core skills held generic knowledge the model already has. The rest are in git tag `skills-v1-full` (`git checkout skills-v1-full -- <name>`). `anti-slop` is a style skill, not a token saver: an A/B test found no reduction in total output tokens.
 
 ---
 

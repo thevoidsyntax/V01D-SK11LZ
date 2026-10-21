@@ -263,20 +263,6 @@ function debounce(fn: Function, delay: number) {
 → Combined: Less tokens, less code
 ```
 
-### With /caveman
-```
-/caveman → Terse communication
-/ponytail → Minimal code
-→ Combined: Say less, write less
-```
-
-### With /chisle
-```
-/chisle → Prune context (input)
-/ponytail → Minimize code (output)
-→ Combined: Input efficient, output efficient
-```
-
 ---
 
 ## Workflow

@@ -25,25 +25,15 @@ capabilities: [deployment, infrastructure]
 
 ## Skills
 
-### Core skills (on demand)
-Nothing is inherited from `/autor`: each pipeline phase is a fresh subagent. Load `observability`, `git`, or `config` as the phase needs them.
-
-### Extended (platform & devops domain)
-| Group | Skills |
-|-------|--------|
-| Containers & orchestration | docker, kubernetes |
-| IaC & deploy | terraform, deployment, serverless, vercel, railway, flyio |
-| Platform | devops-engineer, platform-engineering, cloud-architect, developer-experience |
-| Data & ops | database-migration, error-tracking, reliability, scalability, finops, feature-flags |
-| Infra | networking, storage, onyx, iot-edge, mobile |
-| Tools | graphify (understand structure to package & deploy) |
+Fresh subagent: nothing is inherited from `/autor`. Domain knowledge comes from the model itself plus the project's `CLAUDE.md` and `specs/`; there are no stack or domain skills to load.
 
 ## Workflow
 
 1. Inspect code changes and any new schema.
 2. Create/update `migrations/*` (with a rollback path), the `Dockerfile`, and `ci.yml`.
 3. Wire monitoring/observability and resource limits as needed.
-4. `[HANDOFF] Frans → Vika` — documentation next. Print it and end your turn. Never invoke the next persona yourself: `/agents` or the user starts it.
+4. Append your entry to `specs/HANDOFF.md` (append-only, create if missing): a `## [PHASE n] <Persona> — <UTC time>` heading (time from `date -u +%Y-%m-%dT%H:%M:%SZ`; if you cannot run it, write the date only, never a made-up time), then `Input:`, `Output:`, `Decisions:`, `Open:`, `Next:` lines.
+5. `[HANDOFF] Frans → Vika` — documentation next. Print it and end your turn. Never invoke the next persona yourself: `/agents` or the user starts it.
 
 ## Output artifacts
 `Dockerfile`, `migrations/*`, `ci.yml` (in the **target project**, not this skills repo).

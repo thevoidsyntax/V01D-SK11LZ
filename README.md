@@ -34,33 +34,43 @@ git -C $HOME\.claude\skills push
 > git -C $HOME\.claude\skills config user.email "323514556+thevoidsyntax@users.noreply.github.com"
 > ```
 
-## Opsional — plugin claude-mem (memory)
+## Isi (12 skill)
 
-Bukan bagian dari skill; pasang sekali per mesin kalau ingin fitur memory (butuh `bun`):
+Tiap subfolder level atas = satu skill (berisi `SKILL.md`).
 
-```powershell
-npm install -g bun
-claude plugin marketplace add thedotmack/claude-mem --scope user
-claude plugin install claude-mem@thedotmack --scope user -y
-claude plugin update claude-mem@thedotmack
-```
-
-## Isi
-
-Tiap subfolder level atas = satu skill (berisi `SKILL.md`), kecuali `infrastructure/` (kode referensi TypeScript, bukan skill). Beberapa pintasan:
-
-```
+```text
 /autor       Analisis proyek yang sudah ada (health check + rekomendasi)
-/autor new   Mulai proyek baru (rencana → scaffold → deteksi stack → pipeline)
+/autor new   Mulai proyek baru (PRD → scaffold → deteksi stack → rekomendasi pipeline)
 /agents      Jalankan pipeline 6 persona (plan → design → code → QA → deploy → docs)
 
 Persona:
-/satria   Product Manager
-/athena   System Architect
-/hexa     Feature Coder
-/dina     QA + Security
-/frans    Platform & DevOps
-/vika     Technical Writer
+/satria   Product Manager      → specs/PRD.md
+/athena   System Architect     → specs/ADR.md, specs/contracts.*
+/hexa     Feature Coder        → src/*, tests/*
+/dina     QA + Security        → specs/AUDIT.md + STATUS (gate)
+/frans    Platform & DevOps    → Dockerfile, migrations/*, ci.yml
+/vika     Technical Writer     → docs/openapi.*, CHANGELOG.md, README
+
+Pendukung:
+/audit       Audit repo: tool dulu, review terarah, baseline inkremental (dipakai Dina)
+/ponytail    Tulis kode sesedikit mungkin: cek perlu, yang sudah ada, stdlib, native
+/anti-slop   Teks tanpa gaya AI: copy UI, dokumentasi, komentar
+/impeccable  UI tanpa tampilan template AI: keputusan dari brief produk + checklist
 ```
 
-Lihat tiap folder untuk detail skill-nya.
+Tiap fase menambah satu entri ke `specs/HANDOFF.md` di proyek target: input, output, keputusan, isu terbuka, fase berikutnya. Vika menyusun CHANGELOG dan README dari log itu.
+
+### Kenapa hanya 12
+
+Sebuah skill hanya dipertahankan kalau mengubah perilaku default model:
+
+- **proses**: urutan persona, gate, kapan berhenti;
+- **selera**: kode minimal, teks dan UI yang tidak berbau AI.
+
+Pengetahuan stack, security, testing, dan git sudah dikuasai model. Konvensi proyek ditaruh di `CLAUDE.md` dan ADR proyek itu sendiri. Pada 2026-10-21 repo dipangkas dari 139 skill: 73 belum pernah dipanggil, dan daftar skill yang terpotong membuat ~60 skill tampil tanpa deskripsi.
+
+Semua skill lama ada di tag `skills-v1-full`. Untuk memulihkan satu skill:
+
+```powershell
+git -C $HOME\.claude\skills checkout skills-v1-full -- react-pro
+```

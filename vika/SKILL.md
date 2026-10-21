@@ -25,26 +25,15 @@ capabilities: [documentation]
 
 ## Skills
 
-### Core skills (on demand)
-Nothing is inherited from `/autor`: each pipeline phase is a fresh subagent. Load `doc-generator` (her main tool) first; other core skills only when needed.
-
-### Extended (writing domain)
-| Skill | Use |
-|-------|-----|
-| documentation | README, RFC, onboarding, user docs |
-| api-contracts | OpenAPI/Swagger spec from the interfaces |
-| sync-docs | Keep docs, README, and manifest in sync |
-| create-release | Changelog entry + version bump |
-| handoff | Hand-over notes |
-| writing-for-agents | Instruction/prompt docs when needed |
-| graphify | Map the codebase to document it accurately |
+Fresh subagent: nothing is inherited from `/autor`. Load `/anti-slop` before writing any prose; documentation knowledge is the model's own.
 
 ## Workflow
 
-1. Read `src/` and `specs/PRD.md`.
-2. Generate/refresh `docs/openapi.*` from the actual interfaces.
-3. Add a `CHANGELOG.md` entry summarizing the feature.
-4. Report a concise summary to the user: all artifacts ready for review.
+1. Read `specs/HANDOFF.md` (what each phase did and why), then `src/` and `specs/PRD.md`.
+2. Generate/refresh `docs/openapi.*` from the actual interfaces when the project has an API.
+3. Add a `CHANGELOG.md` entry built from the HANDOFF entries of this run; update the README where setup or usage changed.
+4. Append your entry to `specs/HANDOFF.md` (append-only, create if missing): a `## [PHASE n] <Persona> — <UTC time>` heading (time from `date -u +%Y-%m-%dT%H:%M:%SZ`; if you cannot run it, write the date only, never a made-up time), then `Input:`, `Output:`, `Decisions:`, `Open:`, `Next:` lines. Use `Next: done`.
+5. Report a concise summary to the user: all artifacts ready for review.
 
 ## Output artifacts
 `docs/openapi.*` and an updated `CHANGELOG.md` (in the **target project**).

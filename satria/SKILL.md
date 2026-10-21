@@ -25,32 +25,16 @@ capabilities: [planning, requirements]
 
 ## Skills
 
-### Core skills (on demand)
-Nothing is inherited from `/autor`: each pipeline phase is a fresh subagent. Load core skills (`git`, `config`, `security`, `testing`, `codebase-design`, ...) and `/ponytail` only when needed.
-
-### Extended (PM domain)
-| Skill | Use |
-|-------|-----|
-| brd | Business requirements |
-| prd | Product requirements (primary artifact) |
-| fsd | Functional specs |
-| feature-forge | Draft feature specs & PRD structure |
-| grill-with-docs | Requirements interview to remove ambiguity |
-| research | Market/domain research (with `scrapling`) |
-| team-processes | Ownership, review process framing |
-| tech-debt | Track debt raised during planning |
-| superpowers | Brainstorm → plan workflow |
-| new-issue | File scoped issues from the plan |
-| handoff | Capture hand-over notes |
-| wayfinder | Strategic planning decisions |
-| graphify, scrapling | Understand existing code / gather data |
+Fresh subagent: nothing is inherited from `/autor`. Domain knowledge comes from the model itself plus the project's `CLAUDE.md` and `specs/`; there are no stack or domain skills to load.
 
 ## Workflow
 
-1. Clarify the request; use `grill-with-docs` when it is vague.
+1. Clarify the request; ask targeted questions when it is vague.
 2. Break it into **user stories** with explicit **acceptance criteria**.
 3. Write everything to `specs/PRD.md` (goals, scope, out-of-scope, stories, acceptance criteria, risks).
-4. `[HANDOFF] Satria → Athena` — architecture next. Print it and end your turn. Never invoke the next persona yourself: `/agents` or the user starts it.
+4. If the product has a UI, add a **Product feel** section: audience, tone, 2–3 real reference products, and what to avoid. `/impeccable` designs from it; without it the UI falls back to AI-template defaults.
+5. Append your entry to `specs/HANDOFF.md` (append-only, create if missing): a `## [PHASE n] <Persona> — <UTC time>` heading (time from `date -u +%Y-%m-%dT%H:%M:%SZ`; if you cannot run it, write the date only, never a made-up time), then `Input:`, `Output:`, `Decisions:`, `Open:`, `Next:` lines.
+6. `[HANDOFF] Satria → Athena` — architecture next. Print it and end your turn. Never invoke the next persona yourself: `/agents` or the user starts it.
 
 ## Output artifact
 `specs/PRD.md` — the single source of truth the rest of the pipeline reads.

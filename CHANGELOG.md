@@ -7,7 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+- **127 skills and `infrastructure/`, archived at git tag `skills-v1-full`.** The repo keeps 12 skills: `autor`, `agents`, the 6 personas, `audit`, `ponytail`, `anti-slop`, `impeccable`.
+  - A skill stays only if it changes a model default: process (persona order, gates, when to stop) or the user's taste (minimal code, no AI-looking text or UI).
+  - Measured over 670 session transcripts: 73 skills had never been invoked, and the truncated skill list showed ~60 skills with no description.
+  - The stack, core, and domain skills held generic knowledge the model already has.
+  - `project-init` and `analyze-project` were templates and detection tables; autor Step 3/4 now scaffold and detect the stack directly.
+  - `codebase-design`'s ADR format moved into Athena.
+  - `ui-ux-pro-max` called a `scripts/search.py` that is not in the repo.
+  - `infrastructure/auto-router` was reference TypeScript for routing the old 139 skills, and nothing loaded it.
+  - claude-mem setup was dropped from README and CLAUDE.md.
+  - Restore one skill with `git checkout skills-v1-full -- <name>`.
+
+### Added
+- **`specs/HANDOFF.md` handoff log.** Every phase, plus the `/autor new` PRD and scaffold steps, appends an entry (Input, Output, Decisions, Open, Next; UTC time from `date -u`, never invented). `/agents` checks the entry exists after each phase, and Vika writes the CHANGELOG entry and README changes from it.
+- **Product feel in the PRD.** Satria adds audience, tone, 2–3 real reference products, and what to avoid whenever the product has a UI.
+
 ### Changed
+- **impeccable v2.0.** Rewritten from a stub of an external project, whose `/impeccable init|audit|polish` commands did not exist, into a self-contained skill:
+  - design decisions taken from the Product feel;
+  - 14 banned AI-template tells and 6 requirements;
+  - a pass/fail checklist.
+- **Hexa** loads `/ponytail` before writing code and `/impeccable` + `/anti-slop` for UI and copy. Hexa runs the impeccable checklist and records the result in HANDOFF.md.
+- **Dina** does not judge design. UI work whose HANDOFF entry has no passing impeccable result is a blocking finding. Her effort text now matches the frontmatter (medium).
+- **Personas** list no stack or domain skills; knowledge comes from the model and the project's `CLAUDE.md`. `autor` v3.3 points health-check fixes at personas instead of skills.
+
+### Fixed
+- **Persona handoff no longer chains phases.** On Opus, `/autor new` ran satria → athena → hexa in one turn, skipping the PRD gate, and hit the $3 budget. Every `[HANDOFF]` step now prints the line and ends the turn; only `/agents` or the user starts the next phase.
+
 - **audit v6.0.** Rewritten from 39 KB to about 4 KB. Session transcripts showed 10-14 parallel agents re-reading the same codebase per run; v6.0 uses no subagents by default, runs stack tools first, reviews entry points for authorization gaps, and scopes incrementally from `specs/.audit-base`. Removed the `auto_invoke` chain (anti-slop, chisle, caveman, security, code-quality) and the audit-ci/full/release modes; focus is now an argument (`perf`, `arch`, `tests`, `release`, `<path>`). Also batches tool calls, caps the final chat reply at 8 lines and sets `effort: high` (thinking tokens 5.8K to 1.8K on the benchmark fixture, recall unchanged).
 - **Dina** runs `/audit` each round; later rounds scan only the diff and direct callers.
 - **Satria** no longer lists `audit`.

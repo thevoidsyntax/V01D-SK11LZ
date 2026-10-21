@@ -8,7 +8,7 @@ priority: medium
 phase: any
 category: [process, quality]
 scale: [all]
-integrates_with: [dina, security, code-quality]
+integrates_with: [dina]
 capabilities: [discovery, analysis, verification]
 source:
   origin: local
@@ -45,7 +45,6 @@ Detect the stack from manifests, run what exists, keep high/critical only, cut e
 - **Master Rules by grep.** `DateTime.Now|new Date()|datetime.now()|time.Now()` in backend (UTC), CORS `*`, hardcoded secrets, queries inside loops (sample), missing `BeginTransaction`/`@Transactional` on multi-table writes.
 - **Tier 1 files.** Read whole if 300 lines or fewer: check-then-act races, transaction gaps, tainted data reaching SQL string-building, exec/eval, innerHTML, file paths.
 
-Load `security` or `code-quality` only when a Tier 1 finding needs their checklist.
 
 ## 4. Precision
 

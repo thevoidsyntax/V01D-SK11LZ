@@ -22,16 +22,16 @@ Six specialists run as a sequential, artifact-handoff pipeline. Each phase runs 
 
 ## The Team
 
-| # | Persona | Role | Model | Primary skills | Output artifact |
-|---|---------|------|-------|----------------|-----------------|
-| 1 | **Satria** | Product Manager | Sonnet* | brd, fsd, prd, feature-forge, grill-with-docs | `specs/PRD.md` |
-| 2 | **Athena** | System Architect | **Opus** | codebase-design, architecture-patterns, api-design, api-contracts, database, wayfinder | `specs/ADR.md`, `specs/contracts.*` |
-| 3 | **Hexa** | Feature Coder | Sonnet* | the detected language/framework-pro, code-quality, implement, test-generator | `src/*`, `tests/*` |
-| 4 | **Dina** | QA & Security | **Opus** | testing, testing-integration, pentest, security, compliance, pr-review | `specs/AUDIT.md` + `STATUS:` |
-| 5 | **Frans** | Platform & DevOps | Sonnet | docker, deployment, kubernetes, terraform, database-migration | `Dockerfile`, `migrations/*`, `ci.yml` |
-| 6 | **Vika** | Technical Writer | Haiku* | doc-generator, documentation, api-contracts, create-release | `docs/openapi.*`, `CHANGELOG.md` |
+| # | Persona | Role | Model | Skills | Output artifact |
+|---|---------|------|-------|--------|-----------------|
+| 1 | **Satria** | Product Manager | Sonnet* | — | `specs/PRD.md` |
+| 2 | **Athena** | System Architect | **Opus** | — (ADR format is in her skill) | `specs/ADR.md`, `specs/contracts.*` |
+| 3 | **Hexa** | Feature Coder | Sonnet* | ponytail; impeccable + anti-slop for UI/copy | `src/*`, `tests/*` |
+| 4 | **Dina** | QA & Security | **Opus** | audit | `specs/AUDIT.md` + `STATUS:` |
+| 5 | **Frans** | Platform & DevOps | Sonnet | — | `Dockerfile`, `migrations/*`, `ci.yml` |
+| 6 | **Vika** | Technical Writer | Haiku* | anti-slop | `docs/openapi.*`, `CHANGELOG.md`, README |
 
-Each persona also inherits the 12 core skills + `/ponytail` from `/autor`. Full bound-skill lists live in each persona's own `SKILL.md`.
+Every persona also appends an entry to `specs/HANDOFF.md` (see below). Stack, security, and testing knowledge come from the model and the project's `CLAUDE.md`, not from skills.
 
 \* **Escalation:** Hexa → Opus for transactional/concurrency-heavy logic; Satria → Opus for large/ambiguous products; Vika → Sonnet for a large API surface. Athena & Dina stay Opus (risk gates); Frans stays at least Sonnet (migrations are destructive — never Haiku).
 
@@ -43,7 +43,22 @@ For each phase, spawn with the **Agent tool**, always in the foreground so progr
 - `subagent_type: "general-purpose"`, `model:` = the persona's model from the table (apply escalation when the feature warrants it), `run_in_background: false` (each phase needs the previous artifact, so nothing is lost).
 - `prompt`: "You are **<Persona>** (<role>). Invoke the `/<persona>` skill and follow it. Read only these artifacts: <inputs>. Produce exactly: <output artifact>. Keep your reply to a one-line handoff summary."
 - Inputs/outputs follow the table; never pass the full prior transcript — only the artifact paths.
-- Before each spawn print `[FASE n/6] <Persona> (<model>) mulai — baca <inputs>`. After it returns, check the artifact exists and print `[HANDOFF] <A> → <B> selesai: <artifact> (ada)`. In the Dina ↔ Hexa loop also print `[LOOP k/3]`.
+- Before each spawn print `[FASE n/6] <Persona> (<model>) mulai — baca <inputs>`. After it returns, check the artifact exists **and** `specs/HANDOFF.md` gained that persona's entry, then print `[HANDOFF] <A> → <B> selesai: <artifact> (ada)`. If either is missing, stop and inspect that phase. In the Dina ↔ Hexa loop also print `[LOOP k/3]`.
+
+## Handoff log (`specs/HANDOFF.md`)
+
+Every phase, and the `/autor new` PRD and scaffold steps, append one entry. The file is append-only: create it if missing, never rewrite earlier entries. Take the time from `date -u +%Y-%m-%dT%H:%M:%SZ`; if no shell is available, write the date only, never a made-up time.
+
+```markdown
+## [PHASE n] <Persona> — <UTC ISO 8601>
+Input: <artifacts read>
+Output: <artifacts written>
+Decisions: <key points>
+Open: <issues, or "-">
+Next: <persona, or "done">
+```
+
+Vika reads this log to write the CHANGELOG entry and README changes, so the record of what happened and why is never only in a transcript.
 
 Order & handoff:
 
@@ -53,8 +68,10 @@ Athena  → specs/ADR.md + specs/contracts.*     (reads PRD)
 Hexa    → src/* + tests/*                       (reads ADR + contracts + PRD)
 Dina    → specs/AUDIT.md + STATUS:              (reads src/ + tests/)
 Frans   → Dockerfile + migrations/* + ci.yml    (reads src/ + schema)
-Vika    → docs/openapi.* + CHANGELOG.md         (reads src/ + PRD)
+Vika    → docs/openapi.* + CHANGELOG.md + README (reads HANDOFF.md + src/ + PRD)
 ```
+
+Every arrow also appends a `specs/HANDOFF.md` entry.
 
 ## Quality gate & loopback
 
@@ -83,7 +100,7 @@ The orchestrator spawns each phase as a subagent on its model; check the artifac
 | 3 | Hexa (Sonnet) | ADR + contracts → `src/*` + `tests/*` |
 | 4 | Dina (Opus) | src + tests → `specs/AUDIT.md` ending `STATUS: APPROVED` (or `REJECTED` → back to Hexa, max 3) |
 | 5 | Frans (Sonnet) | approved build → `Dockerfile`, `migrations/*`, `ci.yml` |
-| 6 | Vika (Haiku) | src + PRD → `docs/openapi.*`, `CHANGELOG.md` |
+| 6 | Vika (Haiku) | HANDOFF + src + PRD → `docs/openapi.*`, `CHANGELOG.md` |
 
 Expected terminal output is just short status lines, e.g.:
 
@@ -94,11 +111,11 @@ Expected terminal output is just short status lines, e.g.:
 [HANDOFF] Athena → Hexa selesai: specs/ADR.md (ada)
 ```
 
-Passing = all six artifacts exist and Dina's `STATUS: APPROVED`. If a phase produces no artifact, stop and inspect that phase rather than continuing.
+Passing = all six artifacts exist, `specs/HANDOFF.md` has one entry per phase, and Dina's `STATUS: APPROVED`. If a phase produces no artifact, stop and inspect that phase rather than continuing.
 
 ## Single-persona use
 
-Call any persona directly for focused help without the pipeline: `/satria`, `/athena`, `/hexa`, `/dina`, `/frans`, `/vika`. Each still carries its bound skills and recommended model.
+Call any persona directly for focused help without the pipeline: `/satria`, `/athena`, `/hexa`, `/dina`, `/frans`, `/vika`. Each still follows its workflow, recommended model, and the handoff log.
 
 ## Notes
 
