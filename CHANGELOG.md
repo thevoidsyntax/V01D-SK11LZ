@@ -42,6 +42,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **audit v6.1.**
   - The report date must come from `date -u` or the commit date. Opus had written 2025-07-02.
   - Commands follow the syntax of the shell tool that runs them; a tool that did not run is reported as such. Opus had piped `npm audit` into `Select-Object` inside Bash, so it never ran.
+- **audit v6.2: the tool step is a dependency scan only.** It runs `npm audit`, `dotnet list package --vulnerable`, and `pip-audit`, `govulncheck`, `osv-scanner` if installed. Compilers and linters (`tsc`, `dotnet build`, `go vet`, `ruff`) were dropped.
+  - A/B on the 11-bug fixture: with tools vs without, Sonnet ×2 and Opus ×1 each. All six runs found 11/11 with 0 decoys; without tools cost 26–39% less.
+  - A dependency scan is kept because a CVE published after the model's training cannot be found by reading.
+  - v6.2 check run: 11/11, `npm audit` ran, $0.50.
 - **Frontmatter** in all 12 skills now holds only fields Claude Code reads (`name`, `description`, `when_to_use`, `effort`, `metadata`). `version` moved to `metadata.version`. Dropped: `priority`, `phase`, `category`, `auto_invoke`, `capabilities`, `*_recommended`, `tech_stack`, `scale`, `source`, `author`, `quality`, `integrates_with`.
 - **autor v3.4.** Recommendations follow the route rules. The `(plan)/(auto)` banner line is gone. Step 5 offers the scaffold commit.
 - **Vika** lists README and the HANDOFF entry as outputs. **Satria**'s `when_to_use` says PRD instead of BRD/PRD/FSD.

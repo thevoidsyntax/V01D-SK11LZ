@@ -1,22 +1,22 @@
 ---
 name: audit
 effort: high
-description: "Whole-repo security and correctness audit: tools first, targeted LLM review, incremental baseline, no subagents by default"
+description: "Whole-repo security and correctness audit: dependency scan, targeted LLM review, incremental baseline, no subagents by default"
 when_to_use: "Use only when the user types /audit or Dina calls it for the QA gate: a whole-repo or path-scoped audit (handover, pre-release sweep, legacy code). For a diff or PR use /code-review or /security-review."
 metadata:
-  version: "6.1.0"
+  version: "6.2.0"
 ---
 
-# /audit v6.1
+# /audit v6.2
 
-Read each file once and check every angle in that read. Spend LLM tokens only where tools are blind.
+Read each file once and check every angle in that read. The only tool step is a dependency scan: a vulnerability published after the model's training is the one thing a careful read cannot find.
 
 ## Rules
 
 - **No subagents.** Exception: scope over 150 files, at most 2, one module each, `run_in_background: false`. Never verifier agents.
 - Not started by the user's `/audit` or by Dina: state the scope and ask before scanning.
 - Arguments: `<path>` limits scope. Default angle is security + correctness; `perf`, `arch`, `tests` add one angle in the same read. `release` forces the full Tier 1 sweep.
-- **Few calls.** Every API call re-reads about 125K tokens of fixed context, so batch: one Bash for the baseline, scope commands, manifest detection and the stack tool; one parallel call that reads all Tier 1 files and runs every grep; then one Write. Aim for 5 calls or fewer.
+- **Few calls.** Every API call re-reads about 125K tokens of fixed context, so batch: one Bash for the baseline, scope commands, manifest detection and the dependency scan; one parallel call that reads all Tier 1 files and runs every grep; then one Write. Aim for 5 calls or fewer.
 
 ## 1. Scope
 
@@ -27,9 +27,19 @@ Print `scope: N files`.
 - Over 150 files: Tier 1, then Tier 2, then stop and list what was left out.
 - Tier 1: auth, session, token, secret, crypto, payment, billing, webhook, oauth, permission, upload (name or directory). Tier 2: controller, handler, service, repository directories.
 
-## 2. Tools
+## 2. Dependency scan
 
-Detect the stack from manifests, run what exists, keep high/critical only, cut each output to 60 lines: `npm audit --omit=dev`, `tsc --noEmit` (if tsconfig), `dotnet build` + `dotnet list package --vulnerable --include-transitive`, `go vet ./...`, `ruff check`. Use semgrep, gitleaks, osv-scanner only if installed. Install nothing.
+Run only the scanner for each ecosystem the manifests show, keep high/critical, and cut each output to 60 lines:
+
+| Manifest | Command |
+|----------|---------|
+| `package-lock.json` | `npm audit --omit=dev` |
+| `*.csproj` | `dotnet list package --vulnerable --include-transitive` |
+| `pyproject.toml` / `requirements*.txt` | `pip-audit` (only if installed) |
+| `go.mod` | `govulncheck ./...` (only if installed) |
+| any | `osv-scanner -r .` (only if installed) |
+
+Install nothing. Compilers and linters (`tsc`, `dotnet build`, `go vet`, `ruff`) are not part of the audit: an A/B run on an 11-bug fixture found the same 11/11 without them, at 26–39% lower cost, and Hexa's tests and build already cover what they catch. Name each dependency finding with the package, installed version, advisory, and fixed version.
 
 Write each command in the syntax of the tool that runs it: the Bash tool is POSIX (`| head -60`, `2>/dev/null`); PowerShell syntax (`| Select-Object -First 60`, `2>$null`) only in the PowerShell tool. If a tool fails to run, say so in the report under "Tools"; never present a tool as run when it was not.
 
