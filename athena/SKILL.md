@@ -45,7 +45,7 @@ Nothing is inherited from `/autor`: each pipeline phase is a fresh subagent. Loa
 1. Read `specs/PRD.md`.
 2. Record decisions + rejected alternatives in `specs/ADR.md` (per the ADR format in `codebase-design`).
 3. Define the data schema/DDL and interface/DTO contracts in `specs/contracts.*` (language of the target stack).
-4. `[HANDOFF] Athena → Hexa` — implementation next.
+4. `[HANDOFF] Athena → Hexa` — implementation next. Print it and end your turn. Never invoke the next persona yourself: `/agents` or the user starts it.
 
 ## Output artifacts
 `specs/ADR.md` (decisions) and `specs/contracts.*` (schema + interfaces Hexa implements against).

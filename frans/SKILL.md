@@ -43,7 +43,7 @@ Nothing is inherited from `/autor`: each pipeline phase is a fresh subagent. Loa
 1. Inspect code changes and any new schema.
 2. Create/update `migrations/*` (with a rollback path), the `Dockerfile`, and `ci.yml`.
 3. Wire monitoring/observability and resource limits as needed.
-4. `[HANDOFF] Frans → Vika` — documentation next.
+4. `[HANDOFF] Frans → Vika` — documentation next. Print it and end your turn. Never invoke the next persona yourself: `/agents` or the user starts it.
 
 ## Output artifacts
 `Dockerfile`, `migrations/*`, `ci.yml` (in the **target project**, not this skills repo).

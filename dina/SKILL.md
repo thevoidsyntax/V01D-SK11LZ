@@ -45,6 +45,7 @@ Nothing is inherited from `/autor`: each pipeline phase is a fresh subagent. Loa
 4. End with a status line:
    - `STATUS: REJECTED` → `[HANDOFF] Dina → Hexa` with the findings (patch loop, max 3).
    - `STATUS: APPROVED` → `[HANDOFF] Dina → Frans` for deployment.
+   - Print it and end your turn. Never invoke the next persona yourself: `/agents` or the user starts it.
 
 ## Output artifact
 `specs/AUDIT.md` with a final `STATUS: APPROVED` or `STATUS: REJECTED`.

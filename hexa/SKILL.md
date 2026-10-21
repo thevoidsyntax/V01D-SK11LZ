@@ -47,7 +47,7 @@ Nothing is inherited from `/autor`: each pipeline phase is a fresh subagent. Loa
 2. Implement in `src/`, following the contracts exactly and the idioms of the detected stack.
 3. Write unit tests in `tests/` for happy paths **and** error/edge cases.
 4. On a `STATUS: REJECTED` from Dina, patch per `specs/AUDIT.md` and resubmit (max 3 loops).
-5. `[HANDOFF] Hexa → Dina` — audit next.
+5. `[HANDOFF] Hexa → Dina` — audit next. Print it and end your turn. Never invoke the next persona yourself: `/agents` or the user starts it.
 
 ## Output artifacts
 `src/*` (implementation) and `tests/*` (unit tests).

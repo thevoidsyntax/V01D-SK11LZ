@@ -146,7 +146,7 @@ Run: "mulai pipeline" or /agents
 6. 🎮 Game
 ```
 
-**Step 2:** Run `/satria` to turn the idea into `specs/PRD.md`. It works in plan mode; wait for the user's approval before continuing.
+**Step 2:** Run `/satria` to turn the idea into `specs/PRD.md`, then end your turn: summarize the PRD and its assumptions and ask for approval. Plan mode may not hold in a headless or auto session, so the stop is yours to make. Do not run Step 3 or invoke `/athena` in the same turn; Satria's `[HANDOFF]` line is not a trigger here.
 
 **Step 3:** Run `/project-init` to scaffold the project. Load `/git` and `/config` here.
 

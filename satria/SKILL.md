@@ -50,7 +50,7 @@ Nothing is inherited from `/autor`: each pipeline phase is a fresh subagent. Loa
 1. Clarify the request; use `grill-with-docs` when it is vague.
 2. Break it into **user stories** with explicit **acceptance criteria**.
 3. Write everything to `specs/PRD.md` (goals, scope, out-of-scope, stories, acceptance criteria, risks).
-4. `[HANDOFF] Satria → Athena` — architecture next.
+4. `[HANDOFF] Satria → Athena` — architecture next. Print it and end your turn. Never invoke the next persona yourself: `/agents` or the user starts it.
 
 ## Output artifact
 `specs/PRD.md` — the single source of truth the rest of the pipeline reads.
