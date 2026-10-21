@@ -33,12 +33,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
   Tested against the old `ponytail`, `anti-slop`, and `impeccable`: it flags `/ponytail-review|audit|debt`, `/humanize`, `/ui-review`, and the nested fence.
 - **CHANGELOG on short routes.** When the route skipped Vika, the orchestrator writes the `[Unreleased]` line from HANDOFF before proposing the commit. Before this, bugfix and infra runs left the CHANGELOG untouched.
-- **`changelog-on-commit` hook** (user-level `~/.claude/hooks`, not part of this repo; documented in `CLAUDE.md`). In any repo with a `CHANGELOG.md`, `git commit` asks for approval when `CHANGELOG.md` is not in the commit and the commit is one of:
+- **`changelog-on-commit` hook** (user-level `~/.claude/hooks`, not part of this repo; documented in `CLAUDE.md`). In any repo with a `CHANGELOG.md`, `git commit` is denied (deny works in auto mode too; a hook `ask` is settled by the auto-mode classifier) when `CHANGELOG.md` is not in the commit and the commit is one of:
   - `feat`, `fix`, or breaking (`!`);
   - untyped, or has an empty subject;
   - touches Dockerfile, compose, or `migrations/`.
 
-  `docs`, `test`, `chore`, and `ci` are exempt. It handles `git -C <dir>`, `git add … && git commit`, and heredoc messages. 16/16 pipe-test cases pass.
+  `docs`, `test`, `chore`, and `ci` are exempt. `SKIP_CHANGELOG=1` overrides it, only after the user agrees. It handles `git -C <dir>`, `cd <dir> && git commit`, `git add … && git commit`, and heredoc messages. 18/18 pipe-test cases pass, and a live commit was denied.
+- **`ask-on-git-push` hook denies pushes that use git global options (`-C`, `-c`, `--git-dir`).** In auto mode only the `permissions.ask` rule for plain `git push` forces a human prompt, and it matches the command as written. Pushes must now use plain `git push`, which the rule catches. Verified live. Known limit: the hook scans the whole command text, so a string containing that phrase is denied too.
 - **Guard check 5: sub-commands.** Every backticked `/skill sub` must have its own heading in that skill, as `/autor scan` has in autor. It flags all six fake `/impeccable init|audit|critique|polish|live|distill` from the old skill and a planted `/autor deploy`, while the real `/autor scan|new|status` pass.
 
 ### Changed
