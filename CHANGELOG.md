@@ -32,6 +32,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - a missing CHANGELOG entry.
 
   Tested against the old `ponytail`, `anti-slop`, and `impeccable`: it flags `/ponytail-review|audit|debt`, `/humanize`, `/ui-review`, and the nested fence.
+- **CHANGELOG on short routes.** When the route skipped Vika, the orchestrator writes the `[Unreleased]` line from HANDOFF before proposing the commit. Before this, bugfix and infra runs left the CHANGELOG untouched.
+- **`changelog-on-commit` hook** (user-level `~/.claude/hooks`, not part of this repo; documented in `CLAUDE.md`). In any repo with a `CHANGELOG.md`, `git commit` asks for approval when `CHANGELOG.md` is not in the commit and the commit is one of:
+  - `feat`, `fix`, or breaking (`!`);
+  - untyped, or has an empty subject;
+  - touches Dockerfile, compose, or `migrations/`.
+
+  `docs`, `test`, `chore`, and `ci` are exempt. It handles `git -C <dir>`, `git add … && git commit`, and heredoc messages. 16/16 pipe-test cases pass.
 - **Guard check 5: sub-commands.** Every backticked `/skill sub` must have its own heading in that skill, as `/autor scan` has in autor. It flags all six fake `/impeccable init|audit|critique|polish|live|distill` from the old skill and a planted `/autor deploy`, while the real `/autor scan|new|status` pass.
 
 ### Changed

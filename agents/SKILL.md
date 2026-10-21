@@ -108,6 +108,7 @@ When Frans or Vika ran after the gate, spawn Dina once more in **final pass** mo
 ## 7. Commit, only after approval
 
 After the last phase:
+0. If the route had no Vika (bugfix, infra, short routes) and the project has a `CHANGELOG.md`, add an entry under `## [Unreleased]` yourself, built from this run's HANDOFF entries: what changed for the user and why, in one or two lines. Every committed change gets a CHANGELOG line, not only full-pipeline runs.
 1. Show `git status --short` and a Conventional Commit message. End the message with one `Co-Authored-By: <Persona>` line per persona that produced an artifact in this run. These persona trailers are the user's attribution rule for this workflow: they replace Claude Code's default `Co-Authored-By: Claude …` line, so do not add that line.
 2. Ask with AskUserQuestion: **Commit** / **Ubah pesan** / **Lewati**.
 3. Commit only on **Commit**. Never push; push needs its own request and approval.
