@@ -1,32 +1,9 @@
 ---
 name: ponytail
-version: "1.0.0"
 description: "Code-less philosophy - 'The best code is the code you never wrote.' Minimizes code written by checking need, existing, stdlib, and native solutions first."
 when_to_use: "Use when you want to minimize code written. Invoke before writing any code to check if it's necessary."
-priority: medium
-phase: any
-category: [efficiency, philosophy]
-tech_stack:
-  languages: [all]
-  frameworks: [all]
-  tools: [claude-code, claude-desktop, openai, github-copilot, cursor, windsurf, devin]
-scale: [all]
-auto_invoke:
-  enabled: true
-  conditions:
-    - command: ["/ponytail", "/codeless", "/codeless"]
-      reason: "User explicitly wants code-minimization philosophy"
-    - phrase: ["code less", "less code", "don't write code", "avoid code", "minimize code", "no need to write"]
-      reason: "User wants to minimize code written"
-capabilities: [implementation, analysis, review]
-quality:
-  rules_count: 12
-  examples_count: 8
-  stability: stable
-source:
-  origin: external
-  repo: "https://github.com/DietrichGebert/ponytail"
-author: DietrichGebert (via skill ecosystem)
+metadata:
+  version: "1.1.0"
 ---
 
 # PONYTAIL v1.0
@@ -243,25 +220,9 @@ function debounce(fn: Function, delay: number) {
 
 ---
 
-## Ponytail Commands
+## Reviewing existing code
 
-| Command | Function |
-|---------|----------|
-| `/ponytail` | Activate code-less philosophy |
-| `/ponytail-review` | Review current diff for unnecessary code |
-| `/ponytail-audit` | Check entire codebase for code minimization opportunities |
-| `/ponytail-debt` | List deferred "shortcut:" comments |
-
----
-
-## Integration with Other Skills
-
-### With /anti-slop
-```
-/anti-slop → Output less
-/ponytail → Write less
-→ Combined: Less tokens, less code
-```
+There are no sub-commands. To review a diff or a module, run the same checklist over each added function, file, and dependency: is it needed, does the code base or stdlib already do it, is there a native platform feature. List what can be deleted or replaced, with file:line.
 
 ---
 

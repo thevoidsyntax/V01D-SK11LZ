@@ -1,20 +1,9 @@
 ---
 name: vika
-version: "1.0.0"
 description: "Vika (Technical Writer) - syncs API docs (OpenAPI), changelog, and user docs from the shipped code"
 when_to_use: "Use when you need documentation synced to the code: OpenAPI/Swagger spec, CHANGELOG, or user/API docs. Phase 6 (final) of the /agents pipeline."
-priority: medium
-phase: phase-6
-category: [agents]
-model_recommended: haiku
-effort_recommended: low
-mode_recommended: auto
-auto_invoke:
-  enabled: true
-  conditions:
-    - command: [/vika, /writer, /technical-writer]
-      reason: "Documentation synchronization"
-capabilities: [documentation]
+metadata:
+  version: "1.1.0"
 ---
 
 # Vika (Technical Writer)
@@ -36,4 +25,4 @@ Fresh subagent: nothing is inherited from `/autor`. Load `/anti-slop` before wri
 5. Report a concise summary to the user: all artifacts ready for review.
 
 ## Output artifacts
-`docs/openapi.*` and an updated `CHANGELOG.md` (in the **target project**).
+`docs/openapi.*`, an updated `CHANGELOG.md`, README changes where setup or usage changed, and a `specs/HANDOFF.md` entry (all in the **target project**).

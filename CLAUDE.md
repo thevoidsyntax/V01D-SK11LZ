@@ -7,7 +7,10 @@ Repo ini adalah **ekosistem skill** untuk Claude Code (12 skill; tiap subfolder 
 - **`autor`**: health scan proyek, wizard proyek baru, dan rekomendasi pipeline persona.
 - **Mulai project**: `/autor new` → PRD (`/satria`, berhenti untuk approval) → scaffold → deteksi stack → rekomendasi pipeline. Scaffold dan deteksi dikerjakan autor sendiri, tanpa skill tambahan.
 - **Pipeline 6 persona** (`/agents`): Satria (PM) → Athena (Architect) → Hexa (Coder) → Dina (QA/Security) → Frans (DevOps) → Vika (Writer). Tiap fase dijalankan sebagai **subagent dengan model sendiri** (Opus utk Athena/Dina; Sonnet utk Satria/Hexa/Frans; Haiku utk Vika) lewat Agent tool — persona tetap skill di repo, handoff via berkas artefak (`specs/*`, `src/*`, `docs/*`).
+- **Rute**: `/agents` memilih rute terpendek (fitur baru = 6 fase; bugfix = Hexa → Dina; infra = Frans → Dina; docs = Vika) dan mencetaknya sebelum mulai. Kode berubah → Dina selalu ikut.
+- **Jeda & commit**: berhenti untuk approval user setelah fase desain (PRIBADI: setelah Athena; KLIEN: setelah Satria dan Athena), pass akhir Dina atas hasil Frans/Vika, lalu commit hanya setelah user setuju. Push selalu minta approval (hook global).
 - **Handoff log**: tiap fase menambah entri ke `specs/HANDOFF.md` di proyek target; `/agents` memeriksa entri itu ada. Persona tidak pernah memanggil persona berikutnya sendiri — hanya `/agents` atau user.
+- **`CLAUDE.md` proyek**: dibuat saat scaffold (`Scale:`, stack, perintah, layout); Athena menambah bagian Conventions dari ADR. Persona membaca konvensi stack dari sana.
 - **Persona**: `/satria` (PM), `/athena` (System Architect), `/hexa` (Feature Coder), `/dina` (QA + Security), `/frans` (DevOps), `/vika` (Technical Writer).
 - **Pendukung**: `/audit` (dipakai Dina), `/ponytail` (sebelum menulis kode), `/anti-slop` (teks), `/impeccable` (UI tanpa tampilan template AI; checklist dijalankan Hexa, buktinya dicek Dina).
 
@@ -15,7 +18,31 @@ Repo ini adalah **ekosistem skill** untuk Claude Code (12 skill; tiap subfolder 
 
 - **Aturan pertahankan:** skill baru hanya ditambah kalau mengubah perilaku default model (proses atau selera user). Pengetahuan stack/domain tidak dijadikan skill; konvensi proyek masuk `CLAUDE.md`/ADR proyek. Skill lama ada di tag `skills-v1-full` (`git checkout skills-v1-full -- <nama>`).
 - Isi repo = skill + `README.md` + `CHANGELOG.md` + `CLAUDE.md`. **Tidak ada installer/skrip otomatis** — pasang = clone, sync = git biasa.
-- Sebelum commit: `README.md`, `CLAUDE.md`, dan `CHANGELOG.md` sudah diperbarui sesuai perubahan.
+- Skill yang diambil dari repo luar ditulis ulang sampai mandiri: tidak boleh membawa perintah, sub-perintah (`/x init`), skrip, atau rujukan skill yang tidak ada di repo ini. Dulu `impeccable`, `ponytail`, dan `anti-slop` membawa perintah fiktif seperti itu.
+
+## Sebelum commit
+
+Jalankan dari root repo; tidak boleh ada output selain baris `warning:` dari git:
+
+```bash
+# 1. setiap /nama = folder skill di repo ini atau perintah bawaan Claude Code
+BUILTIN='code-review|security-review|simplify|init|review|loop|schedule|run|hooks|config|model|help|clear|compact|permissions|plugin|memory|context|login|logout|effort'
+grep -ohE '(^|[ `("])/[a-z][a-z0-9-]+([` ,.:)"]|$)' */SKILL.md | sed -E 's/^[ `("]*\///; s/[` ,.:)"]*$//' | sort -u |
+  while read -r n; do [ -d "$n" ] || echo "$n" | grep -qxE "$BUILTIN" || echo "unknown command: /$n"; done
+# 2. tidak ada ``` di dalam blok ``` (pakai ~~~ untuk blok luar)
+awk 'FNR==1{b=0;t=0} /^[[:space:]]*~~~/{t=!t;next} t{next} /^[[:space:]]*```/{ if(b && $0 ~ /```[A-Za-z]/) print FILENAME":"FNR": nested code fence"; b=!b }' */SKILL.md README.md CLAUDE.md
+# 3. frontmatter hanya field yang dibaca Claude Code (version ditaruh di metadata.version)
+OK='name|description|when_to_use|effort|metadata|argument-hint|arguments|disable-model-invocation|user-invocable|allowed-tools|disallowed-tools|model|context|agent|background|hooks|paths|shell|license|compatibility'
+for f in */SKILL.md; do awk 'NR==1&&!/^---/{exit} NR>1&&/^---/{exit} NR>1&&/^[A-Za-z_-]+:/{sub(/:.*/,"");print}' "$f" | grep -vxE "$OK" | sed "s|^|$f: unknown frontmatter field |"; done
+# 4. perubahan skill disertai entri CHANGELOG
+git diff HEAD --name-only | grep -q 'SKILL.md' && ! git diff HEAD --name-only | grep -qx 'CHANGELOG.md' && echo "CHANGELOG.md not updated"
+```
+
+Lalu cek manual yang tidak bisa di-grep:
+
+- `README.md` (daftar skill) dan bagian "Cara kerja" di file ini masih sesuai isi skill.
+- Sub-perintah yang disebut (`/autor scan`, `/autor new`) memang ditangani di skill-nya.
+- Commit hanya setelah user setuju, dengan `Co-Authored-By: <persona>`.
 - Skill **wajib** di `<nama>/SKILL.md` level atas (nama file persis `SKILL.md`). Claude Code tidak memuat folder bersarang seperti `kategori/<nama>/SKILL.md`; dulu 16 skill di `conditional/`, `docs/`, `system/` tidak pernah termuat karena ini.
 - Satu skill = satu folder. Jangan simpan salinan skill di folder lain (dulu `core/`, `agents/*-agent/`); salinan tidak dimuat dan cepat basi.
 - Tiap skill punya `description` (apa skill-nya) + `when_to_use` (kapan dipakai, pola "Use when…"). Claude Code menampilkan keduanya di daftar skill dan memakainya untuk memilih skill otomatis — jaga keduanya akurat terhadap isi.

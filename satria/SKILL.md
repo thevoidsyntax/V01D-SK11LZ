@@ -1,20 +1,9 @@
 ---
 name: satria
-version: "3.0.0"
 description: "Satria (Product Manager) - turns an idea into user stories, acceptance criteria, and the PRD"
-when_to_use: "Use when you need project planning and requirements: user stories, acceptance criteria, BRD/PRD/FSD, scope, or stakeholder framing. Phase 1 of the /agents pipeline."
-priority: high
-phase: phase-1
-category: [agents]
-model_recommended: sonnet
-effort_recommended: medium
-mode_recommended: plan
-auto_invoke:
-  enabled: true
-  conditions:
-    - command: [/satria, /pm, /product-manager]
-      reason: "Product management and requirements"
-capabilities: [planning, requirements]
+when_to_use: "Use when you need project planning and requirements: user stories, acceptance criteria, the PRD, scope, or stakeholder framing. Phase 1 of the /agents pipeline."
+metadata:
+  version: "3.0.1"
 ---
 
 # Satria (Product Manager)

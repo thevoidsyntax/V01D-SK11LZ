@@ -7,6 +7,53 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Routes in `/agents`.** The orchestrator picks the shortest route and prints it before starting (`[RUTE] Bugfix: Hexa → Dina`):
+  - new feature → all six phases;
+  - existing feature with unchanged contracts → Hexa → Dina (→ Vika);
+  - bugfix → Hexa, failing test first → Dina;
+  - infra → Frans → Dina;
+  - docs → Vika.
+
+  A contract or schema change adds Athena, a migration adds Frans, and any code change keeps Dina.
+- **Approval pauses.** `/agents` reads `Scale:` from the project `CLAUDE.md`. PRIBADI pauses after Athena; KLIEN pauses after Satria and after Athena. "tanpa jeda" skips the pauses; headless runs stop at the pause. This replaces `mode_recommended: plan`, which nothing enforced.
+- **Final Dina pass.** After Frans or Vika, Dina audits only their diff: migration rollback, Dockerfile/CI hygiene, and OpenAPI against the real routes. Max 2 loops. The smoke test had shipped an OpenAPI spec that missed 405 for HEAD/OPTIONS because docs came after the gate.
+- **Commit after approval.** `/agents` and `/autor new` propose a Conventional Commit with one `Co-Authored-By: <Persona>` per contributing persona and commit only when the user picks Commit. Never push; headless leaves changes uncommitted.
+- **Project `CLAUDE.md`.**
+  - `/autor new` writes it at scaffold time: Scale, stack, commands, layout.
+  - Athena adds a Conventions section from the ADR.
+  - Hexa and Frans add missing commands.
+  - `/autor scan` reports a missing or incomplete one.
+- **Frans uses Docker only if the daemon is already running.** It runs `docker build` and migrations up/down/up in a `--rm` throwaway DB container. It never starts Docker Desktop, pushes, prunes, or removes what it did not create. Otherwise HANDOFF says "not verified".
+- **"Sebelum commit" guard in `CLAUDE.md`.** Copy-paste checks for:
+  - unknown `/commands`;
+  - nested code fences;
+  - frontmatter fields Claude Code does not read;
+  - a missing CHANGELOG entry.
+
+  Tested against the old `ponytail`, `anti-slop`, and `impeccable`: it flags `/ponytail-review|audit|debt`, `/humanize`, `/ui-review`, and the nested fence.
+
+### Changed
+- **anti-slop v2.0.** Rewritten as a self-contained skill:
+  - covers word and structure tells (English and Indonesian), UI copy, comments, and docs, plus a self-check;
+  - fixes a broken nested code fence;
+  - drops references to non-existent skills (auteur, sumi, linkedin-writer), the copied integration block, and blanket bans on "however" and "should".
+- **ponytail v1.1.** The fake `/ponytail-review|audit|debt` commands and the unmeasured "less tokens" claim are replaced by a short note on reviewing existing code with the same checklist.
+- **audit v6.1.**
+  - The report date must come from `date -u` or the commit date. Opus had written 2025-07-02.
+  - Commands follow the syntax of the shell tool that runs them; a tool that did not run is reported as such. Opus had piped `npm audit` into `Select-Object` inside Bash, so it never ran.
+- **Frontmatter** in all 12 skills now holds only fields Claude Code reads (`name`, `description`, `when_to_use`, `effort`, `metadata`). `version` moved to `metadata.version`. Dropped: `priority`, `phase`, `category`, `auto_invoke`, `capabilities`, `*_recommended`, `tech_stack`, `scale`, `source`, `author`, `quality`, `integrates_with`.
+- **autor v3.4.** Recommendations follow the route rules. The `(plan)/(auto)` banner line is gone. Step 5 offers the scaffold commit.
+- **Vika** lists README and the HANDOFF entry as outputs. **Satria**'s `when_to_use` says PRD instead of BRD/PRD/FSD.
+
+### Fixed
+Found by the Sonnet harness run of this release:
+- **Route not recorded.** The bugfix route was correct (`[FASE 2/2]`), but the orchestrator went straight to the first Agent call without printing `[RUTE]`. A print-first instruction alone did not help on the second run. The orchestrator's first tool call now writes a `## [RUTE]` entry (route, reason, scale) to `specs/HANDOFF.md`, and the phase checks count it. Verified on a third run.
+- **Dina skipped `specs/.audit-base`.** The subagent prompt said "Produce exactly: AUDIT.md", so Dina left out the baseline the final pass depends on. The prompt now asks for everything the persona's workflow writes.
+- **Wrong commit trailer.** The scaffold commit proposed `Co-Authored-By: Claude …` instead of `Satria`, because the model followed Claude Code's default attribution reminder. The persona trailer is now stated as the user's attribution rule that replaces the default.
+
+## [4.0.0] - 2026-10-21
+
 ### Removed
 - **127 skills and `infrastructure/`, archived at git tag `skills-v1-full`.** The repo keeps 12 skills: `autor`, `agents`, the 6 personas, `audit`, `ponytail`, `anti-slop`, `impeccable`.
   - A skill stays only if it changes a model default: process (persona order, gates, when to stop) or the user's taste (minimal code, no AI-looking text or UI).

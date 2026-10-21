@@ -1,24 +1,12 @@
 ---
 name: autor
-version: "3.3.0"
 description: "Project intelligence: health scan, new-project wizard, and the 6-persona pipeline recommendation"
 when_to_use: "Use when starting a new project, analyzing existing codebase, or needing project intelligence. Run /autor scan for project health check, /autor new for fresh projects."
-priority: critical
-phase: any
-category: [process, intelligence]
-tech_stack:
-  languages: [all]
-  frameworks: [all]
-  databases: [all]
-  services: [all]
-scale: [all]
-capabilities: [implementation, analysis]
-source:
-  origin: local
-author: thevoidsyntax
+metadata:
+  version: "3.4.0"
 ---
 
-# AUTOR v3.3 - PROJECT INTELLIGENCE
+# AUTOR v3.4 - PROJECT INTELLIGENCE
 
 ## 🚀 SKILLS
 
@@ -35,7 +23,7 @@ Do not preload them; load one when the current step needs it.
 **On `/autor`, first respond with:**
 
 ```
-AUTOR v3.3
+AUTOR v3.4
 
 Available Commands:
   /autor              # Analyze current project
@@ -45,7 +33,6 @@ Available Commands:
 
 Available Personas:
   /satria   /athena   /hexa   /dina   /frans   /vika
-  (plan)    (plan)    (auto)  (auto)  (plan)   (auto)
 ```
 
 ---
@@ -56,6 +43,7 @@ When `/autor` is invoked:
 
 ### 1. SCAN PROJECT
 Run these checks:
+- Project `CLAUDE.md`: missing, or without stack, run/test commands, or `Scale:`, is DEFICIENT (fix: create or complete it; personas read their conventions from it)
 - Directory structure analysis
 - Git status check
 - Package.json / requirements detection
@@ -99,9 +87,9 @@ End every analysis with a pipeline recommendation built from the findings. Recom
 | No CI/CD, Dockerfile, or migrations where the project needs them | `/frans` |
 | README, CHANGELOG, or API docs missing or stale | `/vika` |
 
-Keep the order Satria → Athena → Hexa → Dina → Frans → Vika, skip personas with no matching finding, and skip Satria/Athena when an approved plan already covers PRD and ADR. Output one block:
+Keep the order Satria → Athena → Hexa → Dina → Frans → Vika, skip personas with no matching finding, and skip Satria/Athena when an approved plan already covers PRD and ADR. Apply the route rules from `/agents`: a contract or schema change adds Athena, a migration adds Frans, and any code change keeps Dina. Output one block:
 
-```
+```text
 PIPELINE: Hexa → Dina → Vika
   Hexa  - no tests (Pester available)
   Dina  - new endpoint needs audit
@@ -146,11 +134,25 @@ Run: "mulai pipeline" or /agents
 
 **Step 2:** Run `/satria` to turn the idea into `specs/PRD.md`, then end your turn: summarize the PRD and its assumptions and ask for approval. Plan mode may not hold in a headless or auto session, so the stop is yours to make. Do not run Step 3 or invoke `/athena` in the same turn; Satria's `[HANDOFF]` line is not a trigger here.
 
-**Step 3:** Scaffold the project yourself; there is no scaffolding skill. Use the stack from the approved PRD and the folder layout from `CLAUDE.md`. Create: `git init` if needed, `.gitignore`, `.env.example` (no secrets), a manifest with start/test scripts, one passing test, and a README stub. Install nothing from the internet unless the user allowed it. No feature code.
+**Step 3:** Scaffold the project yourself; there is no scaffolding skill. Use the stack from the approved PRD and the folder layout from the user's global `CLAUDE.md` rules. Create: `git init` if needed, `.gitignore`, `.env.example` (no secrets), a manifest with start/test scripts, one passing test, a README stub, and the **project `CLAUDE.md`**:
+
+```markdown
+# <project> — Claude Code guide
+Scale: PRIBADI | KLIEN
+Stack: <language + version, framework, database>
+Commands: <install>, <run>, <test>, <lint if any>
+Layout: <top folders and what lives where>
+Conventions: <what is fixed so far; Athena adds the rest from the ADR>
+Specs: specs/PRD.md, specs/ADR.md, specs/HANDOFF.md
+```
+
+Install nothing from the internet unless the user allowed it. No feature code.
 
 **Step 4:** Detect the stack from the manifests (`package.json`, `*.csproj`, `go.mod`, `pyproject.toml`, ...). Append a `specs/HANDOFF.md` entry for the scaffold: a `## [SCAFFOLD] autor — <UTC time from date -u>` heading, then `Input:`, `Output:`, `Decisions:`, `Open:`, `Next:` lines covering stack, layout, scripts, and what is not verified yet. Never invent a time; write the date only if you cannot run `date`.
 
-**Step 5:** End with the persona pipeline recommendation (section 4), then stop. A bare "lanjut" or "continue" only advances the current wizard step; it is never permission to start a persona. Start Athena, Hexa, or any later phase only after the user says "mulai pipeline" or runs `/agents`.
+**Step 5:** Offer a commit of the scaffold: show `git status --short` and the message (`chore: scaffold <project>` with `Co-Authored-By: Satria`; this persona trailer is the user's attribution rule and replaces Claude Code's default `Co-Authored-By: Claude …` line), then ask **Commit** / **Ubah pesan** / **Lewati**. Commit only on **Commit**; if you cannot ask (headless), leave it uncommitted and say so. Never push.
+
+**Step 6:** End with the persona pipeline recommendation (section 4), then stop. A bare "lanjut" or "continue" only advances the current wizard step; it is never permission to start a persona. Start Athena, Hexa, or any later phase only after the user says "mulai pipeline" or runs `/agents`.
 
 ### `/autor status` - Quick Overview
 
@@ -164,24 +166,23 @@ Run: "mulai pipeline" or /agents
 
 ## 6 PERSONAS PIPELINE
 
-Sequential workflow where each persona hands off to the next:
+Sequential workflow run by `/agents`, which picks the shortest route for the change:
 
 ```text
 Satria → Athena → Hexa → Dina → Frans → Vika
   PM       Arch     Code    QA     DevOps   Writer
- plan      plan    auto   auto     plan    auto
 ```
 
-| # | Persona | Model | Effort | Mode | Handoff |
-|---|---------|-------|--------|------|---------|
-| 1 | Satria | Sonnet | medium | plan | PRD to Athena |
-| 2 | Athena | Opus | high | plan | ADR to Hexa |
-| 3 | Hexa | Sonnet | medium | auto | Code to Dina |
-| 4 | Dina | Opus | medium | auto | Report to Frans/Vika |
-| 5 | Frans | Sonnet | medium | plan | Infrastructure |
-| 6 | Vika | Haiku | low | auto | Documentation |
+| # | Persona | Model | Effort | Handoff |
+|---|---------|-------|--------|---------|
+| 1 | Satria | Sonnet | medium | PRD to Athena |
+| 2 | Athena | Opus | high | ADR + conventions to Hexa |
+| 3 | Hexa | Sonnet | medium | Code to Dina |
+| 4 | Dina | Opus | medium | Report to Frans/Vika |
+| 5 | Frans | Sonnet | medium | Infrastructure |
+| 6 | Vika | Haiku | low | Documentation |
 
-Dina is the gatekeeper. She either approves or rejects. If rejected, Hexa patches and resubmits. Maximum three resubmission attempts allowed.
+Dina is the gatekeeper: she approves or rejects, and Hexa patches up to three times. `/agents` pauses for the user after the design phases (PRIBADI: after Athena; KLIEN: after Satria and Athena), runs a final Dina pass over Frans/Vika output, and commits only after the user approves.
 
 ---
 

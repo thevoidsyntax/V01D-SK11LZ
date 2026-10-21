@@ -1,21 +1,13 @@
 ---
 name: audit
-version: "6.0.0"
 effort: high
 description: "Whole-repo security and correctness audit: tools first, targeted LLM review, incremental baseline, no subagents by default"
 when_to_use: "Use only when the user types /audit or Dina calls it for the QA gate: a whole-repo or path-scoped audit (handover, pre-release sweep, legacy code). For a diff or PR use /code-review or /security-review."
-priority: medium
-phase: any
-category: [process, quality]
-scale: [all]
-integrates_with: [dina]
-capabilities: [discovery, analysis, verification]
-source:
-  origin: local
-author: TheVoidSyntax
+metadata:
+  version: "6.1.0"
 ---
 
-# /audit v6.0
+# /audit v6.1
 
 Read each file once and check every angle in that read. Spend LLM tokens only where tools are blind.
 
@@ -39,6 +31,8 @@ Print `scope: N files`.
 
 Detect the stack from manifests, run what exists, keep high/critical only, cut each output to 60 lines: `npm audit --omit=dev`, `tsc --noEmit` (if tsconfig), `dotnet build` + `dotnet list package --vulnerable --include-transitive`, `go vet ./...`, `ruff check`. Use semgrep, gitleaks, osv-scanner only if installed. Install nothing.
 
+Write each command in the syntax of the tool that runs it: the Bash tool is POSIX (`| head -60`, `2>/dev/null`); PowerShell syntax (`| Select-Object -First 60`, `2>$null`) only in the PowerShell tool. If a tool fails to run, say so in the report under "Tools"; never present a tool as run when it was not.
+
 ## 3. Targeted review
 
 - **Entry points.** Grep routes (`@Get|@Post|@Put|@Patch|@Delete`, `[Http`, `app.get|post|put|patch|delete`, `router.`, `HandleFunc`). For each: auth guard? input validation? ownership check (IDOR)? idempotency key on mutations? multi-table write in a transaction? Read ±40 lines only for handlers with no obvious guard or touching sensitive data.
@@ -52,4 +46,4 @@ Every finding has `file:line` and a one-line exploit or failure scenario; no sce
 
 ## 5. Report
 
-Write `specs/AUDIT.md` (create `specs/` if absent): all CRITICAL/HIGH as `SEV file:line - evidence - fix`, top 10 MEDIUM, counts for the rest, and what was scanned and skipped. Carry earlier open findings forward: re-check those whose file changed, keep the rest verbatim. Write `specs/AUDIT.md` once (one Write, not many Edits). Then write `git rev-parse HEAD` to `specs/.audit-base`. The `STATUS:` line belongs to Dina. Keep the report near 2.5K tokens. The final chat reply is 8 lines at most (counts, top 3 findings, report path); never repeat the report.
+Write `specs/AUDIT.md` (create `specs/` if absent). Its date comes from `date -u +%Y-%m-%d` (or the commit date from `git log -1 --format=%cs`); never write a date you did not read from a command. List all CRITICAL/HIGH as `SEV file:line - evidence - fix`, top 10 MEDIUM, counts for the rest, and what was scanned and skipped. Carry earlier open findings forward: re-check those whose file changed, keep the rest verbatim. Write `specs/AUDIT.md` once (one Write, not many Edits). Then write `git rev-parse HEAD` to `specs/.audit-base`. The `STATUS:` line belongs to Dina. Keep the report near 2.5K tokens. The final chat reply is 8 lines at most (counts, top 3 findings, report path); never repeat the report.

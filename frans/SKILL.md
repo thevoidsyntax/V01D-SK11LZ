@@ -1,20 +1,9 @@
 ---
 name: frans
-version: "3.0.0"
 description: "Frans (Platform & DevOps) - containers, database migrations, and CI/CD for the approved build"
 when_to_use: "Use when you need deployment set up: Dockerfile, database migrations, CI/CD pipeline, infrastructure, or monitoring. Phase 5 of the /agents pipeline (after audit passes)."
-priority: high
-phase: phase-5
-category: [agents]
-model_recommended: sonnet
-effort_recommended: medium
-mode_recommended: plan
-auto_invoke:
-  enabled: true
-  conditions:
-    - command: [/frans, /devops, /deploy, /infrastructure]
-      reason: "Deployment and infrastructure"
-capabilities: [deployment, infrastructure]
+metadata:
+  version: "3.1.0"
 ---
 
 # Frans (Platform & DevOps)
@@ -32,8 +21,13 @@ Fresh subagent: nothing is inherited from `/autor`. Domain knowledge comes from 
 1. Inspect code changes and any new schema.
 2. Create/update `migrations/*` (with a rollback path), the `Dockerfile`, and `ci.yml`.
 3. Wire monitoring/observability and resource limits as needed.
-4. Append your entry to `specs/HANDOFF.md` (append-only, create if missing): a `## [PHASE n] <Persona> — <UTC time>` heading (time from `date -u +%Y-%m-%dT%H:%M:%SZ`; if you cannot run it, write the date only, never a made-up time), then `Input:`, `Output:`, `Decisions:`, `Open:`, `Next:` lines.
-5. `[HANDOFF] Frans → Vika` — documentation next. Print it and end your turn. Never invoke the next persona yourself: `/agents` or the user starts it.
+4. Verify with Docker only if it is already running:
+   - Run `docker info`. If it fails, do not start Docker Desktop or install anything; write `Open: not verified: docker build, migrations` in your HANDOFF entry and continue.
+   - If it works: `docker build -t <project>:verify .`. If there are migrations, start a throwaway database with `docker run -d --rm --name <project>-verify-db ...`, run the migrations up, down, and up again, then `docker stop <project>-verify-db`.
+   - Touch only what this run created. Never `docker push`, `docker system prune`, `docker volume rm`, or remove images and containers you did not create.
+   - Record each command and its pass/fail in your HANDOFF entry. Add the build and migrate commands to `Commands:` in the project `CLAUDE.md` if missing.
+5. Append your entry to `specs/HANDOFF.md` (append-only, create if missing): a `## [PHASE n] <Persona> — <UTC time>` heading (time from `date -u +%Y-%m-%dT%H:%M:%SZ`; if you cannot run it, write the date only, never a made-up time), then `Input:`, `Output:`, `Decisions:`, `Open:`, `Next:` lines.
+6. `[HANDOFF] Frans → Vika` — documentation next. Print it and end your turn. Never invoke the next persona yourself: `/agents` or the user starts it.
 
 ## Output artifacts
 `Dockerfile`, `migrations/*`, `ci.yml` (in the **target project**, not this skills repo).

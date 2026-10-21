@@ -60,6 +60,16 @@ Pendukung:
 
 Tiap fase menambah satu entri ke `specs/HANDOFF.md` di proyek target: input, output, keputusan, isu terbuka, fase berikutnya. Vika menyusun CHANGELOG dan README dari log itu.
 
+Cara `/agents` berjalan:
+
+- **Rute.** Perubahan kecil tidak melewati 6 fase. Bugfix: Hexa → Dina. Infra: Frans → Dina. Docs: Vika. Rute dicetak sebelum mulai dan bisa diganti ("pipeline penuh", "mulai dari Athena").
+- **Jeda.** Pipeline berhenti untuk persetujuanmu setelah fase desain: proyek PRIBADI setelah Athena, proyek KLIEN setelah Satria dan setelah Athena. Bilang "tanpa jeda" untuk melewatinya.
+- **Pass akhir.** Kalau Frans atau Vika ikut, Dina memeriksa hasil mereka (migration, Dockerfile, CI, OpenAPI) sebelum selesai.
+- **Docker.** Frans hanya memakai Docker kalau Docker Desktop sudah menyala. Kalau mati, verifikasi ditandai "not verified" di HANDOFF.
+- **Commit.** Commit diusulkan di akhir dengan `Co-Authored-By: <persona>` dan baru dijalankan setelah kamu setuju. Push selalu minta approval.
+
+Saat scaffold, `/autor new` membuat `CLAUDE.md` proyek (skala, stack, perintah, layout). Athena menambahkan konvensi dari ADR ke file itu, dan persona membaca konvensi stack dari sana.
+
 ### Kenapa hanya 12
 
 Sebuah skill hanya dipertahankan kalau mengubah perilaku default model:

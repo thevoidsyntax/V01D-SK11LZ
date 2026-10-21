@@ -1,20 +1,9 @@
 ---
 name: impeccable
-version: "2.0.0"
 description: "UI that does not look AI-generated: design decisions from the product brief, banned AI-template tells, and a pass/fail checklist"
 when_to_use: "Use when building or changing any UI: web app, website, landing page, dashboard, or component. Hexa runs its checklist before handing off."
-priority: high
-phase: any
-category: [design, frontend]
-auto_invoke:
-  enabled: true
-  conditions:
-    - command: ["/impeccable", "/design-review", "/ui-review"]
-      reason: "UI work that must not look like an AI template"
-capabilities: [design, review]
-source:
-  origin: rewritten
-  inspired_by: "https://github.com/pbakaus/impeccable"
+metadata:
+  version: "2.0.0"
 ---
 
 # Impeccable: UI that does not look AI-generated
