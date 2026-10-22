@@ -41,6 +41,7 @@ Tiap subfolder level atas = satu skill (berisi `SKILL.md`).
 ```text
 /autor       Analisis proyek yang sudah ada (health check + rekomendasi)
 /autor new   Mulai proyek baru (PRD → scaffold → deteksi stack → rekomendasi pipeline)
+/autor release  Potong versi dari CHANGELOG (bump semver, catatan, tag, push)
 /agents      Jalankan pipeline 6 persona (plan → design → code → QA → deploy → docs)
 
 Persona:
