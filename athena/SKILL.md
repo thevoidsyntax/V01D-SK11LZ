@@ -3,7 +3,7 @@ name: athena
 description: "Athena (System Architect) - designs architecture, data schema (DDL), and interface/DTO contracts"
 when_to_use: "Use when you need architecture decisions, system/data design, API contracts, or an ADR - before code is written. Phase 2 of the /agents pipeline."
 metadata:
-  version: "3.2.0"
+  version: "3.3.0"
 ---
 
 # Athena (System Architect)
@@ -45,7 +45,7 @@ Pick the structure from `Scale:` in the project `CLAUDE.md` and from the domain,
 
 ## Workflow
 
-1. Read `specs/PRD.md`.
+1. Read `specs/PRD.md`. On the epic route the scope is `specs/prd/<epic>.md` — the orchestrator names it in the prompt; read that file too, and it wins over the index for scope.
 2. Record decisions + rejected alternatives in `specs/ADR.md` (format above).
 3. Define the data schema/DDL and interface/DTO contracts in `specs/contracts.*` (language of the target stack).
 4. Add or update a `## Conventions` section in the project `CLAUDE.md` with what the ADR fixes: framework, data access, validation, error format, naming, test style. One line each, with the ADR number. Later phases and sessions read conventions from there, so leave nothing they need only in the ADR.

@@ -1,9 +1,9 @@
 ---
 name: agents
-description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model, routes for small changes, approval pauses, and artifact handoff"
-when_to_use: "Use when you want the persona pipeline to build or change something end-to-end (Satria, Athena, Hexa, Dina, Frans, Vika). Trigger with /agents or a request ending in 'mulai pipeline'. For single-persona help, call that persona directly."
+description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model, routes for small changes, an epic route for roadmaps, approval pauses, and artifact handoff"
+when_to_use: "Use when you want the persona pipeline to build or change something end-to-end (Satria, Athena, Hexa, Dina, Frans, Vika). Trigger with /agents or a request ending in 'mulai pipeline'. Also to build one epic from specs/ROADMAP.md ('kerjakan E2', 'lanjut roadmap'). For single-persona help, call that persona directly."
 metadata:
-  version: "4.1.0"
+  version: "4.3.0"
 ---
 
 # 👥 PERSONA PIPELINE — SATRIA · ATHENA · HEXA · DINA · FRANS · VIKA
@@ -36,6 +36,7 @@ Before spawning anything, choose the shortest route that covers the change. Your
 | Bugfix | Hexa (failing test first) → Dina |
 | Infra or deploy only | Frans → Dina |
 | Docs only | Vika |
+| Next epic from a roadmap | Athena → Hexa → Dina → Frans → Vika (see `/agents epic`) |
 
 Rules that override the table:
 - A contract, schema, or public API change adds Athena before Hexa.
@@ -58,6 +59,8 @@ Scale: <PRIBADI | KLIEN | KLIEN (assumed)>
 Branch: <current branch, or "-" outside a git repo>
 ```
 
+On the epic route add one line, `Epic: <id> — <judul>`.
+
 Then print the `[RUTE]` block. The phase checks in section 3 count this entry, so a run without it is incomplete. If the user names a route ("pipeline penuh", "mulai dari Athena", "hanya Hexa dan Dina"), use theirs. Start the first phase without waiting, unless the branch step below applies.
 
 ### Branch
@@ -79,13 +82,33 @@ Branch: <name>
 Base: <main or master>
 ```
 
-If you cannot ask (headless), stay on the current branch; nothing is committed in that mode.
+If you cannot ask (headless), stay on the current branch; nothing is committed in that mode. Never create a branch you were not approved to create — no question, no branch.
+
+### `/agents epic`
+
+The epic route: build the next epic from a roadmap instead of a single request. Runs when `specs/ROADMAP.md` exists and the request names an epic ("kerjakan E2", "lanjut roadmap", "epic berikutnya").
+
+1. Read `specs/ROADMAP.md`. Pick the epic the user named; otherwise the first row with `todo` whose `Depends on` epics are all `done`. If that row has no PRD file (the `PRD` column is empty or the file is missing), prepend Satria to write it, then continue.
+2. Read the epic PRD (the file in the roadmap's `PRD` column) and the index `specs/PRD.md`. Print `[EPIC] <id> — <judul> (milestone <M>)` before the first phase.
+3. Set that epic's `Status` to `in progress` in `specs/ROADMAP.md` before the first phase.
+4. Run the route **Athena → Hexa → Dina → Frans → Vika**. Satria is skipped: the epic PRD already exists. Each phase reads the epic PRD as its scope. Pass the epic PRD path in the spawn prompt instead of `specs/PRD.md` alone.
+5. After the last phase and the final Dina pass, set the epic's `Status` to `done` in `specs/ROADMAP.md` — before the commit proposal in section 7, so the roadmap update lands in the same commit. If the commit is declined or skipped, leave the status `in progress`. Then update the `Current PRD:` line in `specs/PRD.md` to the next ready epic (the first `todo` row whose dependencies are all `done`), or to `belum ada — epic berikutnya belum didefinisikan.` when none is ready. `specs/ROADMAP.md` is the only place a status is recorded; the index carries no status column.
+
+The `[ROUTE]` block for this route reads:
+
+```text
+[ROUTE] Epic E2 — Billing
+  alasan: specs/ROADMAP.md, E1 selesai
+  ubah: "epic E3" atau "mulai dari Hexa"
+```
 
 ## 2. Read the scale
 
 Read `Scale: KLIEN | PRIBADI` from the project `CLAUDE.md`. If it is missing, ask once with AskUserQuestion and write the answer into `CLAUDE.md`. If you cannot ask (headless), assume KLIEN.
 
 ## 3. Run the phases
+
+The orchestrator coordinates; it does not write the work itself. Never edit `src/*`, `tests/*`, `Dockerfile`, `migrations/*`, `ci.yml`, or `docs/*` in the target project — a fix goes back to the persona that owns it (Hexa for code, Frans for infra, Vika for docs) as another phase.
 
 For each phase in the route, spawn with the **Agent tool**, always in the foreground so progress is visible:
 - `subagent_type: "general-purpose"`, `model:` = the persona's model from the table (apply escalation when the change warrants it), `run_in_background: false` (each phase needs the previous artifact).
@@ -102,6 +125,8 @@ Frans   → Dockerfile + migrations/* + ci.yml    (reads src/ + schema)
 Vika    → docs/openapi.* + CHANGELOG.md + README (reads HANDOFF.md + src/ + PRD)
 ```
 
+On the epic route, "PRD" means the epic PRD `specs/prd/<epic>.md`. Pass its path in the spawn prompt; the index `specs/PRD.md` stays the product-level context.
+
 ## 4. Approval pauses
 
 Design mistakes cost the most once code exists, so the pipeline stops for the user after the design phases in the route:
@@ -116,6 +141,7 @@ At a pause, print a summary of at most 12 lines (PRD scope, assumptions, open qu
 - "tanpa jeda" in the request skips the design pauses. The commit approval (section 7) always stays.
 - If you cannot ask (headless) or get no answer, stop at the pause and say where the run stopped.
 - Routes without Satria or Athena have no design pause.
+- On the epic route there is no Satria phase, so KLIEN pauses after Athena only.
 
 ## 5. Quality gate & loopback
 
@@ -123,14 +149,17 @@ Dina ends `specs/AUDIT.md` with a status line:
 - `STATUS: APPROVED` → continue with the route.
 - `STATUS: REJECTED` → hand back to **Hexa** with the findings; Hexa patches, Dina re-audits. **Max 3 loops** (print `[LOOP k/3]`); if still rejected, stop and surface the blocking findings to the user.
 
+Dina's non-blocking findings (MEDIUM and below) are not a loop trigger and do not need a fix before the route continues. The orchestrator does not patch them either — carry them in the commit message and, on the epic route, in the epic's `Open:` items.
+
 ## 6. Final Dina pass
 
-When Frans or Vika ran after the gate, spawn Dina once more in **final pass** mode. `/audit` scans only the diff since `specs/.audit-base`, so this pass covers just their files: migrations (rollback path, data loss), Dockerfile and CI (secrets, root user, pinned versions), and `docs/openapi.*` against the real routes. `REJECTED` goes back to the persona that wrote the file (Frans or Vika), **max 2 loops**.
+When Frans or Vika ran after the gate, spawn Dina once more in **final pass** mode. `/audit` scans only the diff since `specs/.audit-base`, so this pass covers just their files: migrations (rollback path, data loss), Dockerfile and CI (secrets, root user, pinned versions), and `docs/openapi.*` against the real routes. `REJECTED` goes back to the persona that wrote the file (Frans or Vika) as another phase, **max 2 loops** — the orchestrator does not patch the file itself.
 
 ## 7. Commit, only after approval
 
 After the last phase:
 0. If the route had no Vika (bugfix, infra, short routes) and the project has a `CHANGELOG.md`, add an entry under `## [Unreleased]` yourself, built from this run's HANDOFF entries: what changed for the user and why, in one or two lines. Every committed change gets a CHANGELOG line, not only full-pipeline runs.
+0b. On the epic route, set the epic's `Status` to `done` in `specs/ROADMAP.md` before the commit proposal, so the roadmap update lands in the same commit. If the commit is declined, set it back to `in progress`.
 1. Show `git status --short` and a Conventional Commit message. End the message with one `Co-Authored-By: <Persona>` line per persona that produced an artifact in this run. These persona trailers are the user's attribution rule for this workflow: they replace Claude Code's default `Co-Authored-By: Claude …` line, so do not add that line.
 2. Ask with AskUserQuestion: **Commit** / **Ubah pesan** / **Lewati**.
 3. Commit only on **Commit**.

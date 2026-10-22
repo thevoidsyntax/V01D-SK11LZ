@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Roadmap mode for Satria.** For a product with several features, Satria splits it into epics and writes `specs/ROADMAP.md` (epic table with milestone, dependencies, and status), one PRD per epic under `specs/prd/<epic>.md`, and turns `specs/PRD.md` into the product-level index with a `Current PRD:` pointer to the next epic to build. Without a roadmap, `specs/PRD.md` stays the full PRD as before.
+- **Epic route in `/agents`.** `specs/ROADMAP.md` + "kerjakan E2" / "lanjut roadmap" starts the epic route: Athena → Hexa → Dina → Frans → Vika. Satria is skipped because the epic PRD already exists (it is prepended only when the epic has no PRD). The orchestrator marks the epic `in progress` before the first phase and `done` after the final Dina pass, before the commit proposal, so the roadmap update lands in the same commit. KLIEN pauses after Athena only on this route.
+- **Roadmap progress in `/autor scan`.** Reports how many epics are done, the next ready epic, and what is blocking the rest.
 - **Routes in `/agents`.** The orchestrator picks the shortest route and prints it before starting (`[RUTE] Bugfix: Hexa → Dina`):
   - new feature → all six phases;
   - existing feature with unchanged contracts → Hexa → Dina (→ Vika);
@@ -45,6 +48,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `docs`, `test`, `chore`, and `ci` are exempt. `SKIP_CHANGELOG=1` overrides it, only after the user agrees. It handles `git -C <dir>`, `cd <dir> && git commit`, `git add … && git commit`, and heredoc messages. 18/18 pipe-test cases pass, and a live commit was denied.
 - **`ask-on-git-push` hook denies pushes that use git global options (`-C`, `-c`, `--git-dir`).** In auto mode only the `permissions.ask` rule for plain `git push` forces a human prompt, and it matches the command as written. Pushes must now use plain `git push`, which the rule catches. Verified live. Known limit: the hook scans the whole command text, so a string containing that phrase is denied too.
 - **Guard check 5: sub-commands.** Every backticked `/skill sub` must have its own heading in that skill, as `/autor scan` has in autor. It flags all six fake `/impeccable init|audit|critique|polish|live|distill` from the old skill and a planted `/autor deploy`, while the real `/autor scan|new|status` pass.
+
+### Fixed
+- **The orchestrator no longer writes code.** A headless epic run had the orchestrator patch three of Dina's own MEDIUM findings and then fix Frans's `127.0.0.1` bind itself, logging a `PHASE 3b Hexa (patch oleh orchestrator)` entry. The skill never allowed that: a finding goes back to the persona that owns the file. `/agents` now says the orchestrator coordinates and never edits `src/*`, `tests/*`, `Dockerfile`, `migrations/*`, `ci.yml`, or `docs/*`, and a `REJECTED` in the final pass becomes another Frans or Vika phase instead of a local patch. Dina's non-blocking MEDIUM and LOW findings do not trigger a loop and do not need a fix before the route continues.
+- **No branch without approval.** The same headless run created `feat/e2-filter-status` on its own. The Branch step said only that headless stays on the current branch; it now also says: no question, no branch.
+- **One place for epic status.** The run left `specs/PRD.md` with a status column that duplicated `specs/ROADMAP.md`. The index now carries no status column, and the `Current PRD:` pointer moves to the next ready epic (or `belum ada — epic berikutnya belum didefinisikan.`).
 
 ### Changed
 - **Hexa v1.2 invokes its skills for real.** The interactive `/agents` test showed both Hexa subagents never called `ponytail` (0 Skill calls, 0 mentions in HANDOFF): "run the check" read as optional.

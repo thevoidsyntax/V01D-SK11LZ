@@ -1,12 +1,12 @@
 ---
 name: autor
-description: "Project intelligence: health scan, new-project wizard, and the 6-persona pipeline recommendation"
+description: "Project intelligence: health scan, new-project wizard, roadmap progress, and the 6-persona pipeline recommendation"
 when_to_use: "Use when starting a new project, analyzing existing codebase, or needing project intelligence. Run /autor scan for project health check, /autor new for fresh projects."
 metadata:
-  version: "3.4.0"
+  version: "3.5.0"
 ---
 
-# AUTOR v3.4 - PROJECT INTELLIGENCE
+# AUTOR v3.5 - PROJECT INTELLIGENCE
 
 ## 🚀 SKILLS
 
@@ -23,7 +23,7 @@ Do not preload them; load one when the current step needs it.
 **On `/autor`, first respond with:**
 
 ```
-AUTOR v3.4
+AUTOR v3.5
 
 Available Commands:
   /autor              # Analyze current project
@@ -49,6 +49,7 @@ Run these checks:
 - Package.json / requirements detection
 - Test coverage measurement
 - CI/CD configuration check
+- `specs/ROADMAP.md`: when it exists, report roadmap progress (see section 5)
 
 ### 2. DISPLAY PROJECT STATE
 
@@ -87,7 +88,7 @@ End every analysis with a pipeline recommendation built from the findings. Recom
 | No CI/CD, Dockerfile, or migrations where the project needs them | `/frans` |
 | README, CHANGELOG, or API docs missing or stale | `/vika` |
 
-Keep the order Satria → Athena → Hexa → Dina → Frans → Vika, skip personas with no matching finding, and skip Satria/Athena when an approved plan already covers PRD and ADR. Apply the route rules from `/agents`: a contract or schema change adds Athena, a migration adds Frans, and any code change keeps Dina. Output one block:
+Keep the order Satria → Athena → Hexa → Dina → Frans → Vika, skip personas with no matching finding, and skip Satria/Athena when an approved plan already covers PRD and ADR. Apply the route rules from `/agents`: a contract or schema change adds Athena, a migration adds Frans, and any code change keeps Dina. When `specs/ROADMAP.md` exists and the next epic has a PRD, the epic route applies instead: Athena → Hexa → Dina → Frans → Vika. Output one block:
 
 ```text
 PIPELINE: Hexa → Dina → Vika
@@ -98,6 +99,23 @@ Run: "mulai pipeline" or /agents
 ```
 
 ---
+
+## 5. ROADMAP PROGRESS
+
+Only when `specs/ROADMAP.md` exists. Read the epic table and report:
+
+```text
+ROADMAP: 1/3 epic selesai
+  E1 Auth       done
+  E2 Billing    in progress
+  E3 Reporting  todo  (menunggu E2)
+
+Berikutnya: E3 Reporting — specs/prd/E3-reporting.md
+```
+
+Name the next epic as the first row with `todo` whose `Depends on` epics are all `done`. If none is ready, say which epic is blocking. End with the epic route: `Run: "mulai epic E3" or /agents epic`.
+
+The epic route is `/agents epic`: Athena → Hexa → Dina → Frans → Vika on one epic.
 
 ## 🎯 COMMAND HANDLERS
 
@@ -115,7 +133,7 @@ Run: "mulai pipeline" or /agents
 - Documentation audit
 - Dependency audit
 
-**Output:** Full health report with prioritized remediation, ending with the persona pipeline recommendation (section 4)
+**Output:** Full health report with prioritized remediation, ending with the persona pipeline recommendation (section 4). When `specs/ROADMAP.md` exists, include the roadmap progress block (section 5) before the recommendation.
 
 ### `/autor new` - New Project Wizard
 
@@ -132,7 +150,7 @@ Run: "mulai pipeline" or /agents
 6. 🎮 Game
 ```
 
-**Step 2:** Run `/satria` to turn the idea into `specs/PRD.md`, then end your turn: summarize the PRD and its assumptions and ask for approval. Plan mode may not hold in a headless or auto session, so the stop is yours to make. Do not run Step 3 or invoke `/athena` in the same turn; Satria's `[HANDOFF]` line is not a trigger here.
+**Step 2:** Run `/satria` to turn the idea into `specs/PRD.md`, then end your turn: summarize the PRD and its assumptions and ask for approval. For a product with several features, Satria uses roadmap mode and writes `specs/ROADMAP.md` with one PRD per epic — summarize the roadmap and the first epic instead. Plan mode may not hold in a headless or auto session, so the stop is yours to make. Do not run Step 3 or invoke `/athena` in the same turn; Satria's `[HANDOFF]` line is not a trigger here.
 
 **Step 3:** Scaffold the project yourself; there is no scaffolding skill. Use the stack from the approved PRD and the folder layout from the user's global `CLAUDE.md` rules. Create: `git init` if needed, `.gitignore`, `.env.example` (no secrets), a manifest with start/test scripts, one passing test, a README stub, and the **project `CLAUDE.md`**:
 

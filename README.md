@@ -68,6 +68,7 @@ Cara `/agents` berjalan:
 - **Docker.** Frans hanya memakai Docker kalau Docker Desktop sudah menyala. Kalau mati, verifikasi ditandai "not verified" di HANDOFF.
 - **Commit.** Commit diusulkan di akhir dengan `Co-Authored-By: <persona>` dan baru dijalankan setelah kamu setuju. Push selalu minta approval.
 - **Branch dan PR.** Di `main`/`master`, pipeline menawarkan branch `feat|fix|chore|docs/<slug>` sebelum mulai (proyek KLIEN wajib). Setelah commit, kamu bisa memilih push + PR: isi PR dari HANDOFF dan CHANGELOG, lalu `/code-review` dijalankan pada PR. Pipeline tidak pernah merge.
+- **Roadmap.** Untuk produk besar, Satria memecahnya jadi epik: `specs/ROADMAP.md` berisi tabel epik, milestone, dependensi, dan status; tiap epik punya PRD sendiri di `specs/prd/<epic>.md`; `specs/PRD.md` jadi index produk plus penunjuk epik aktif. `/agents` mengerjakan satu epik per jalan (rute Athena → Hexa → Dina → Frans → Vika, Satria dilewati karena PRD epik sudah ada), dan menandai epik `done` di roadmap setelah audit terakhir. `/autor scan` melaporkan progres roadmap.
 
 Saat scaffold, `/autor new` membuat `CLAUDE.md` proyek (skala, stack, perintah, layout). Athena menambahkan konvensi dari ADR ke file itu, dan persona membaca konvensi stack dari sana.
 
