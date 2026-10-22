@@ -3,7 +3,7 @@ name: agents
 description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model, routes for small changes, approval pauses, and artifact handoff"
 when_to_use: "Use when you want the persona pipeline to build or change something end-to-end (Satria, Athena, Hexa, Dina, Frans, Vika). Trigger with /agents or a request ending in 'mulai pipeline'. For single-persona help, call that persona directly."
 metadata:
-  version: "4.0.0"
+  version: "4.1.0"
 ---
 
 # 👥 PERSONA PIPELINE — SATRIA · ATHENA · HEXA · DINA · FRANS · VIKA
@@ -55,9 +55,31 @@ Your first tool call is the Write or Edit that appends the route to `specs/HANDO
 Route: Hexa → Dina
 Reason: <one line>
 Scale: <PRIBADI | KLIEN | KLIEN (assumed)>
+Branch: <current branch, or "-" outside a git repo>
 ```
 
-Then print the `[RUTE]` block and start the first phase without waiting. The phase checks in section 3 count this entry, so a run without it is incomplete. If the user names a route ("pipeline penuh", "mulai dari Athena", "hanya Hexa dan Dina"), use theirs.
+Then print the `[RUTE]` block. The phase checks in section 3 count this entry, so a run without it is incomplete. If the user names a route ("pipeline penuh", "mulai dari Athena", "hanya Hexa dan Dina"), use theirs. Start the first phase without waiting, unless the branch step below applies.
+
+### Branch
+
+Runs only when the project is a git repo, the current branch is `main` or `master`, and the route changes files. Otherwise skip it (already on a feature branch: stay there; the `Branch:` line records it).
+
+Ask with AskUserQuestion, with `<tipe>/<slug>` built from the route (new feature = `feat`, bugfix = `fix`, infra = `chore`, docs = `docs`) and the request:
+
+| Scale | Options |
+|-------|---------|
+| KLIEN | **Buat `<tipe>/<slug>`** / **Nama lain** / **Stop** |
+| PRIBADI | **Buat `<tipe>/<slug>`** / **Tetap di `<branch>`** / **Nama lain** |
+
+On approval run `git switch -c <name>`; uncommitted changes come along. If the name exists, offer **Nama lain**. Then append a new entry (the `[RUTE]` entry is never edited):
+
+```markdown
+## [BRANCH] orchestrator — <UTC time from date -u>
+Branch: <name>
+Base: <main or master>
+```
+
+If you cannot ask (headless), stay on the current branch; nothing is committed in that mode.
 
 ## 2. Read the scale
 
@@ -111,8 +133,20 @@ After the last phase:
 0. If the route had no Vika (bugfix, infra, short routes) and the project has a `CHANGELOG.md`, add an entry under `## [Unreleased]` yourself, built from this run's HANDOFF entries: what changed for the user and why, in one or two lines. Every committed change gets a CHANGELOG line, not only full-pipeline runs.
 1. Show `git status --short` and a Conventional Commit message. End the message with one `Co-Authored-By: <Persona>` line per persona that produced an artifact in this run. These persona trailers are the user's attribution rule for this workflow: they replace Claude Code's default `Co-Authored-By: Claude …` line, so do not add that line.
 2. Ask with AskUserQuestion: **Commit** / **Ubah pesan** / **Lewati**.
-3. Commit only on **Commit**. Never push; push needs its own request and approval.
+3. Commit only on **Commit**.
 4. If you cannot ask (headless), do not commit; say the changes are left uncommitted.
+
+### Push and pull request
+
+After a commit, only when the branch is not `main`/`master`, remote `origin` exists, and `gh auth status` succeeds. Otherwise print one line saying why and stop; never push.
+
+1. Ask with AskUserQuestion: **Push + PR** / **Hanya push** / **Selesai**. KLIEN: **Push + PR** first. This is the push request; the push hook still asks for approval on its own.
+2. Push with a plain `git push -u origin <branch>` run inside the repo. `-C` and `-c` are denied by the hook.
+3. PR: write the body to a temp file outside the repo (run it through `/anti-slop`), then `gh pr create --base <default> --head <branch> --title "<commit subject>" --body-file <file>`. Get the default branch from `gh repo view --json defaultBranchRef -q .defaultBranchRef.name`. The body has: Ringkasan, Perubahan (the CHANGELOG line), Rute with Dina's last `STATUS:`, Open items from HANDOFF, Cara uji, and the personas that worked. No Claude attribution line, same as the commit trailers.
+4. Review: invoke `/code-review` with the PR number at medium effort, without `--comment`. Print the findings in at most 10 lines. The user decides whether to fix (a new bugfix route on the same branch) or ignore. No automatic loop, no automatic comments.
+5. CI: run `gh pr checks <number>` once and print the result.
+
+The pipeline never merges. Merging is the user's call.
 
 ## Handoff log (`specs/HANDOFF.md`)
 
@@ -152,7 +186,7 @@ Full route, in an interactive session:
 
 Short route: **"Perbaiki SQL injection di /users/search. Mulai pipeline."** → `[RUTE] Bugfix: Hexa → Dina`.
 
-Passing = every artifact of the route exists, `specs/HANDOFF.md` has the `[RUTE]` entry and one entry per phase, Dina's last `STATUS:` is `APPROVED`, and the commit was offered. If a phase produces no artifact, stop and inspect that phase rather than continuing.
+Passing = every artifact of the route exists, `specs/HANDOFF.md` has the `[RUTE]` entry and one entry per phase, Dina's last `STATUS:` is `APPROVED`, the commit was offered, and on `main`/`master` the branch question was asked (a `[BRANCH]` entry if approved) and the push/PR offer followed the commit. If a phase produces no artifact, stop and inspect that phase rather than continuing.
 
 ## Single-persona use
 

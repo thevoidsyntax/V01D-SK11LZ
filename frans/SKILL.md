@@ -3,7 +3,7 @@ name: frans
 description: "Frans (Platform & DevOps) - containers, database migrations, and CI/CD for the approved build"
 when_to_use: "Use when you need deployment set up: Dockerfile, database migrations, CI/CD pipeline, infrastructure, or monitoring. Phase 5 of the /agents pipeline (after audit passes)."
 metadata:
-  version: "3.1.0"
+  version: "3.2.0"
 ---
 
 # Frans (Platform & DevOps)
@@ -20,6 +20,8 @@ Fresh subagent: nothing is inherited from `/autor`. Domain knowledge comes from 
 
 1. Inspect code changes and any new schema.
 2. Create/update `migrations/*` (with a rollback path), the `Dockerfile`, and `ci.yml`.
+   - `ci.yml` runs on `pull_request` and on `push` to the default branch, with `permissions: contents: read`, only official `actions/*` at a fixed version, and jobs for tests, lint or type check, and a dependency scan, using the commands in `Commands:` of the project `CLAUDE.md`.
+   - Put the CI check names in `Decisions:` of your HANDOFF entry (and in `Commands:` if missing). Add to `Open:` that branch protection should require them plus a review; do not change repo settings yourself.
 3. Wire monitoring/observability and resource limits as needed.
 4. Verify with Docker only if it is already running:
    - Run `docker info`. If it fails, do not start Docker Desktop or install anything; write `Open: not verified: docker build, migrations` in your HANDOFF entry and continue.

@@ -18,7 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   A contract or schema change adds Athena, a migration adds Frans, and any code change keeps Dina.
 - **Approval pauses.** `/agents` reads `Scale:` from the project `CLAUDE.md`. PRIBADI pauses after Athena; KLIEN pauses after Satria and after Athena. "tanpa jeda" skips the pauses; headless runs stop at the pause. This replaces `mode_recommended: plan`, which nothing enforced.
 - **Final Dina pass.** After Frans or Vika, Dina audits only their diff: migration rollback, Dockerfile/CI hygiene, and OpenAPI against the real routes. Max 2 loops. The smoke test had shipped an OpenAPI spec that missed 405 for HEAD/OPTIONS because docs came after the gate.
-- **Commit after approval.** `/agents` and `/autor new` propose a Conventional Commit with one `Co-Authored-By: <Persona>` per contributing persona and commit only when the user picks Commit. Never push; headless leaves changes uncommitted.
+- **Commit after approval.** `/agents` and `/autor new` propose a Conventional Commit with one `Co-Authored-By: <Persona>` per contributing persona and commit only when the user picks Commit. Headless leaves changes uncommitted.
+- **Branch and pull request in `/agents`.**
+  - On `main`/`master`, the run asks for a `feat|fix|chore|docs/<slug>` branch before the first phase and logs a `[BRANCH]` entry. KLIEN has no "stay on main" option.
+  - After an approved commit it offers **Push + PR** / **Hanya push** / **Selesai**. The PR body is built from HANDOFF and the CHANGELOG line, then `/code-review` runs on it without posting comments, and `gh pr checks` is printed once. The pipeline never merges. Push still goes through the push hook.
+  - Frans writes `ci.yml` to run on `pull_request` and on push to the default branch, with `contents: read`, official actions at a fixed version, and test, lint, and dependency-scan jobs. Branch protection is only recommended in `Open:`.
 - **Project `CLAUDE.md`.**
   - `/autor new` writes it at scaffold time: Scale, stack, commands, layout.
   - Athena adds a Conventions section from the ADR.
