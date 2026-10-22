@@ -43,6 +43,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Guard check 5: sub-commands.** Every backticked `/skill sub` must have its own heading in that skill, as `/autor scan` has in autor. It flags all six fake `/impeccable init|audit|critique|polish|live|distill` from the old skill and a planted `/autor deploy`, while the real `/autor scan|new|status` pass.
 
 ### Changed
+- **Hexa v1.2 invokes its skills for real.** The interactive `/agents` test showed both Hexa subagents never called `ponytail` (0 Skill calls, 0 mentions in HANDOFF): "run the check" read as optional.
+  - `ponytail` is invoked with the Skill tool before any file is written, and `impeccable` + `anti-slop` before any UI file or copy.
+  - Every Hexa HANDOFF entry carries `Ponytail:` and `UI: ya|tidak`.
+  - No Product feel in the PRD for a UI change: Hexa stops and asks.
+- **Dina v3.2 cross-checks Hexa.** Blocking: no `Ponytail:` or `UI:` line; `UI: tidak` while `src/` has HTML/CSS/component/template files; `UI: ya` without a passing `impeccable` checklist. Stock template copy is a finding. Before, Dina trusted Hexa's own claim of "no UI".
+- **Athena v3.2: structure by scale and domain.** KLIEN or a domain with business rules gets full DDD; a PRIBADI MVP with none stays flat, with no empty layers; the ADR records why. The test run had chosen flat modules implicitly.
+- **`/agents` pause.** The options are fixed (Lanjut / Revisi PRD / Revisi ADR / Stop), and a revision asks for the notes with one more question before the persona re-runs. The test run had improvised the options.
 - **anti-slop v2.0.** Rewritten as a self-contained skill:
   - covers word and structure tells (English and Indonesian), UI copy, comments, and docs, plus a self-check;
   - fixes a broken nested code fence;

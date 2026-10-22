@@ -89,7 +89,7 @@ Design mistakes cost the most once code exists, so the pipeline stops for the us
 | PRIBADI | Athena (PRD and ADR reviewed together) |
 | KLIEN | Satria, and again after Athena |
 
-At a pause, print a summary of at most 12 lines (PRD scope, assumptions, open questions; ADR decisions and rejected alternatives), then ask with AskUserQuestion: **Lanjut** / **Revisi PRD** / **Revisi ADR** / **Stop**. On a revision, re-run that persona with the user's notes, then pause again.
+At a pause, print a summary of at most 12 lines (PRD scope, assumptions, open questions; ADR decisions and rejected alternatives), then ask with AskUserQuestion with exactly these options: **Lanjut** / **Revisi PRD** / **Revisi ADR** / **Stop**. On a revision, ask for the notes with one more AskUserQuestion (suggested notes plus Other for free text), re-run that persona with them, then pause again.
 
 - "tanpa jeda" in the request skips the design pauses. The commit approval (section 7) always stays.
 - If you cannot ask (headless) or get no answer, stop at the pause and say where the run stopped.
