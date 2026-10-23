@@ -1,6 +1,6 @@
 # V01D-SK11LZ — Panduan Claude Code
 
-Repo ini adalah **ekosistem skill** untuk Claude Code (12 skill; tiap subfolder level atas berisi `SKILL.md`). Claude Code memuat skill ini otomatis dari `~/.claude/skills` — repo ini memang di-clone ke sana.
+Repo ini adalah **ekosistem skill** untuk Claude Code (13 skill; tiap subfolder level atas berisi `SKILL.md`). Claude Code memuat skill ini otomatis dari `~/.claude/skills` — repo ini memang di-clone ke sana.
 
 ## Cara kerja
 
@@ -15,7 +15,7 @@ Repo ini adalah **ekosistem skill** untuk Claude Code (12 skill; tiap subfolder 
 - **Release**: `/autor release` memotong blok `[Unreleased]` jadi versi baru — bump semver dari commit sejak tag `v*` terakhir, catatan rollback wajib, tag `v<x.y.z>`, lalu push. Setiap langkah yang menulis/menag/push minta approval.
 - **`CLAUDE.md` proyek**: dibuat saat scaffold (`Scale:`, stack, perintah, layout); Athena menambah bagian Conventions dari ADR. Persona membaca konvensi stack dari sana.
 - **Persona**: `/satria` (PM), `/athena` (System Architect), `/hexa` (Feature Coder), `/dina` (QA + Security), `/frans` (DevOps), `/vika` (Technical Writer).
-- **Pendukung**: `/audit` (dipakai Dina), `/ponytail` (sebelum menulis kode), `/anti-slop` (teks), `/impeccable` (UI tanpa tampilan template AI; checklist dijalankan Hexa, buktinya dicek Dina).
+- **Pendukung**: `/audit` (dipakai Dina), `/ponytail` (sebelum menulis kode), `/tdd` (test-first: test yang gagal ditulis lebih dulu; checklist dijalankan Hexa, buktinya dicek Dina), `/anti-slop` (teks), `/impeccable` (UI tanpa tampilan template AI; checklist dijalankan Hexa, buktinya dicek Dina).
 
 ## Konvensi repo
 

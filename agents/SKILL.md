@@ -3,7 +3,7 @@ name: agents
 description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model, routes for small changes, an epic route for roadmaps, approval pauses, and artifact handoff"
 when_to_use: "Use when you want the persona pipeline to build or change something end-to-end (Satria, Athena, Hexa, Dina, Frans, Vika). Trigger with /agents or a request ending in 'mulai pipeline'. Also to build one epic from specs/ROADMAP.md ('kerjakan E2', 'lanjut roadmap'). For single-persona help, call that persona directly."
 metadata:
-  version: "4.3.0"
+  version: "4.4.0"
 ---
 
 # 👥 PERSONA PIPELINE — SATRIA · ATHENA · HEXA · DINA · FRANS · VIKA
@@ -42,6 +42,7 @@ Rules that override the table:
 - A contract, schema, or public API change adds Athena before Hexa.
 - A migration adds Frans.
 - Any code change keeps Dina. Dina is never skipped when code changed.
+- Every Hexa phase runs `/tdd`: a behavior change starts with a failing test, and the HANDOFF entry carries the red-green evidence.
 
 ```text
 [RUTE] Bugfix: Hexa → Dina

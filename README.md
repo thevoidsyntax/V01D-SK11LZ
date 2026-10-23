@@ -34,7 +34,7 @@ git -C $HOME\.claude\skills push
 > git -C $HOME\.claude\skills config user.email "323514556+thevoidsyntax@users.noreply.github.com"
 > ```
 
-## Isi (12 skill)
+## Isi (13 skill)
 
 Tiap subfolder level atas = satu skill (berisi `SKILL.md`).
 
@@ -55,6 +55,7 @@ Persona:
 Pendukung:
 /audit       Audit repo: tool dulu, review terarah, baseline inkremental (dipakai Dina)
 /ponytail    Tulis kode sesedikit mungkin: cek perlu, yang sudah ada, stdlib, native
+/tdd         Test-first: tulis test yang gagal dulu, catat bukti red → green
 /anti-slop   Teks tanpa gaya AI: copy UI, dokumentasi, komentar
 /impeccable  UI tanpa tampilan template AI: keputusan dari brief produk + checklist
 ```
@@ -73,14 +74,14 @@ Cara `/agents` berjalan:
 
 Saat scaffold, `/autor new` membuat `CLAUDE.md` proyek (skala, stack, perintah, layout). Athena menambahkan konvensi dari ADR ke file itu, dan persona membaca konvensi stack dari sana.
 
-### Kenapa hanya 12
+### Kenapa hanya 13
 
 Sebuah skill hanya dipertahankan kalau mengubah perilaku default model:
 
 - **proses**: urutan persona, gate, kapan berhenti;
 - **selera**: kode minimal, teks dan UI yang tidak berbau AI.
 
-Pengetahuan stack, security, testing, dan git sudah dikuasai model. Konvensi proyek ditaruh di `CLAUDE.md` dan ADR proyek itu sendiri. Pada 2026-10-21 repo dipangkas dari 139 skill: 73 belum pernah dipanggil, dan daftar skill yang terpotong membuat ~60 skill tampil tanpa deskripsi.
+Pengetahuan stack, security, testing, dan git sudah dikuasai model. Yang belum dikuasai adalah kebiasaannya: disiplin test-first, kode minimal, dan keputusan UI yang tidak berbau AI. Konvensi proyek ditaruh di `CLAUDE.md` dan ADR proyek itu sendiri. Pada 2026-10-21 repo dipangkas dari 139 skill: 73 belum pernah dipanggil, dan daftar skill yang terpotong membuat ~60 skill tampil tanpa deskripsi.
 
 Semua skill lama ada di tag `skills-v1-full`. Untuk memulihkan satu skill:
 

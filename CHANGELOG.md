@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **`/tdd` skill: test-first discipline for behavior changes.** The pack had the rule in words only — `CLAUDE.md` demands Red→Green→Refactor, but nothing made the model follow it, and the "failing test first" step existed only on the bugfix route. The new skill runs before the implementation and produces a checklist result: a red phase captured from a real run (the assertion message, not "test failed"), a criterion-to-test map, a green run of the full suite, and the anti-patterns it forbids (implementation first, asserting the mock, errors untested, a green suite claimed without a run). Only a full pass goes to Dina; a waived item states its reason.
+- **Hexa 1.4 writes the failing test first.** It invokes `/tdd` with the Skill tool before the implementation, and its HANDOFF entry carries a `TDD:` line with the red evidence, the green result, and the criterion map. Dina blocks an entry without it.
+- **Dina 3.3 cross-checks the TDD evidence.** Blocking findings: no `TDD:` line, a red claim with no test behind it in `tests/`, or a behavior with no test at all.
+
+### Changed
+- **`/agents` 4.4** states that every Hexa phase runs `/tdd`.
+- The pack now holds 13 skills; the README, the repo `CLAUDE.md`, and the skill table in this file follow.
+
 ## [4.1.0] - 2026-10-22
 
 Roadmap mode for large products, a release command, and the defects that the interactive and headless pipeline runs found.
@@ -354,8 +363,9 @@ Found by the Sonnet harness run of this release:
 |----------|-------|--------|
 | Core | 3 | autor, agents, audit |
 | Personas | 6 | satria, athena, hexa, dina, frans, vika |
+| Discipline | 1 | tdd |
 | Taste | 3 | ponytail, anti-slop, impeccable |
-| **Total** | **12** | The 127 other skills are archived at tag `skills-v1-full` |
+| **Total** | **13** | The 127 other skills are archived at tag `skills-v1-full` |
 
 ---
 
