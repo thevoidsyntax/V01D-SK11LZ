@@ -3,7 +3,7 @@ name: tdd
 description: "Test-first discipline for behavior changes: red-green-refactor with a checklist and recorded evidence, so a test proves the behavior instead of documenting the code"
 when_to_use: "Use when writing or changing code with testable behavior, before writing the implementation. Hexa runs it before implementing; Dina checks the recorded evidence."
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # TDD — Red → Green → Refactor
@@ -22,6 +22,8 @@ Out of scope, and each needs a one-line reason in the HANDOFF entry: pure markup
 - [ ] It fails for the right reason: the assertion about the new behavior fails. A typo, a missing import, or a broken fixture is not a red phase.
 - [ ] The failure output is captured from a real run — the assertion message, not "test failed".
 - [ ] The test name states the behavior: `test_rejects_expired_token`, not `test_validate_2`.
+
+When the module does not exist yet, the first run fails at import. That is not a red phase. Add a stub that only makes the module importable — the function returns a wrong value — run again, and let the assertion fail. The stub is not the implementation: it is replaced in green.
 
 ## 3. Coverage map
 

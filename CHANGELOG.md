@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **`/tdd` skill: test-first discipline for behavior changes.** The pack had the rule in words only — `CLAUDE.md` demands Red→Green→Refactor, but nothing made the model follow it, and the "failing test first" step existed only on the bugfix route. The new skill runs before the implementation and produces a checklist result: a red phase captured from a real run (the assertion message, not "test failed"), a criterion-to-test map, a green run of the full suite, and the anti-patterns it forbids (implementation first, asserting the mock, errors untested, a green suite claimed without a run). Only a full pass goes to Dina; a waived item states its reason.
+  - A first run that fails at import is not a red phase. The skill now says so and allows a stub that only makes the module importable, as long as the assertion is what fails and the stub is replaced in green — Hexa improvised exactly this in the headless run.
+  - Verified headless (2026-10-23, route Hexa → Dina): Hexa invokes the skill with the Skill tool, writes the test file before the implementation, and records `TDD: PASS 4/4` with the real red output, the green result, and the criterion map. With that line removed, Dina flags it as a blocking finding and ends the audit with `STATUS: REJECTED`.
 - **Hexa 1.4 writes the failing test first.** It invokes `/tdd` with the Skill tool before the implementation, and its HANDOFF entry carries a `TDD:` line with the red evidence, the green result, and the criterion map. Dina blocks an entry without it.
 - **Dina 3.3 cross-checks the TDD evidence.** Blocking findings: no `TDD:` line, a red claim with no test behind it in `tests/`, or a behavior with no test at all.
 
