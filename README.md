@@ -74,6 +74,10 @@ Cara `/agents` berjalan:
 
 Saat scaffold, `/autor new` membuat `CLAUDE.md` proyek (skala, stack, perintah, layout). Athena menambahkan konvensi dari ADR ke file itu, dan persona membaca konvensi stack dari sana.
 
+## Hooks user-level
+
+Folder `hooks/` menyimpan tiga hook Claude Code yang berjalan di luar skill: `cache-guard.js` (menandai cache miss saat konteks besar atau model berganti), `ask-on-git-push.js` (menolak `git push` dengan opsi global), dan `changelog-on-commit.js` (menolak commit tanpa entri CHANGELOG). Bukan skill dan tidak dimuat otomatis — pasangnya manual ke `~/.claude/hooks/`, caranya di `hooks/README.md`.
+
 ### Kenapa hanya 13
 
 Sebuah skill hanya dipertahankan kalau mengubah perilaku default model:

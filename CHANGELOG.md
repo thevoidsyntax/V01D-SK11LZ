@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **`hooks/`: source of the three user-level hooks.** `cache-guard.js`, `ask-on-git-push.js`, and `changelog-on-commit.js` lived only in `~/.claude/hooks/`, outside any git repo, so a lost disk meant a lost guard. The repo now holds them with their pipe tests (45 cases, green from this folder too) and a `hooks/README.md` with the manual install. They are not skills and Claude Code does not load them from here.
+
 ## [4.2.0] - 2026-10-23
 
 A new `/tdd` skill turns the Red→Green→Refactor rule into a checklist the pipeline runs before the code and Dina audits afterwards.
