@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.2.0] - 2026-10-23
+
+A new `/tdd` skill turns the Red→Green→Refactor rule into a checklist the pipeline runs before the code and Dina audits afterwards.
+
 ### Added
 - **`/tdd` skill: test-first discipline for behavior changes.** The pack had the rule in words only — `CLAUDE.md` demands Red→Green→Refactor, but nothing made the model follow it, and the "failing test first" step existed only on the bugfix route. The new skill runs before the implementation and produces a checklist result: a red phase captured from a real run (the assertion message, not "test failed"), a criterion-to-test map, a green run of the full suite, and the anti-patterns it forbids (implementation first, asserting the mock, errors untested, a green suite claimed without a run). Only a full pass goes to Dina; a waived item states its reason.
   - A first run that fails at import is not a red phase. The skill now says so and allows a stub that only makes the module importable, as long as the assertion is what fails and the stub is replaced in green — Hexa improvised exactly this in the headless run.
@@ -17,6 +21,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - **`/agents` 4.4** states that every Hexa phase runs `/tdd`.
 - The pack now holds 13 skills; the README, the repo `CLAUDE.md`, and the skill table in this file follow.
+
+### Rollback
+No schema change. Go back to 4.1.0: `git checkout v4.1.0`, or `git revert v4.1.0..HEAD`.
 
 ## [4.1.0] - 2026-10-22
 
@@ -345,7 +352,8 @@ Found by the Sonnet harness run of this release:
 
 | Version | Status |
 |---------|--------|
-| 4.1.0 | Current |
+| 4.2.0 | Current |
+| 4.1.0 | Previous |
 | 4.0.0 | Previous |
 | 3.5.0 | Previous |
 | 3.4.0 | Previous |
