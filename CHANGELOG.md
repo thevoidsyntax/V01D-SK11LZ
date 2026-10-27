@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.3.0] - 2026-10-27
+
+/uicheck verifies a UI in a real browser, the three user-level hooks live in the repo, and PRIBADI features now run Hexa → Dina on Sonnet.
+
 ### Added
 - **`hooks/`: source of the three user-level hooks.** `cache-guard.js`, `ask-on-git-push.js`, and `changelog-on-commit.js` lived only in `~/.claude/hooks/`, outside any git repo, so a lost disk meant a lost guard. The repo now holds them with their pipe tests (45 cases, green from this folder too) and a `hooks/README.md` with the manual install. They are not skills and Claude Code does not load them from here.
 - **`/uicheck`: verify a UI in a real browser.** `/impeccable` asks for a page that "works at 360px wide with no horizontal scroll", but a model reading markup cannot know that — it is a fact about the render. The new skill serves the page and runs `scripts/check.py` (Playwright, headless Chromium) to measure horizontal overflow and name the elements causing it, console and page errors, inputs without a label, and images without `alt`. It exits non-zero on a fail and writes a screenshot the model reads as the evidence. `/impeccable` gained a "verify the render" step, `/hexa` records a `uicheck:` line in its HANDOFF entry, and Dina blocks a `UI: ya` entry without one — the same shape as the `TDD:` line. Requires `pip install playwright` and `python -m playwright install chromium`; a page that cannot be served is written as `uicheck: skipped — <reason>`, never as a pass.
@@ -21,6 +25,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`/uicheck` counted a placeholder as an input label.** `check.py` let `<input placeholder="Email">` pass, while `uicheck/SKILL.md` says a placeholder is not a label. The most common unlabelled input therefore passed the check. It now fails.
 - **`/uicheck` flagged `alt=""` as a missing alt.** The script tested for an empty value, so a decorative image with `alt=""`, which `uicheck/SKILL.md` calls valid, failed the check. It now fails only when the attribute is absent. Both defects were found while writing the tests, and each test failed before the fix (`uicheck` 1.0.1).
 - **`/uicheck` flagged hidden and button inputs as unlabelled.** `check.py` required a label on every `input`, so `type="hidden"` (a CSRF token) and `type="submit"`, `button`, `reset` (named by their `value`) failed any form with them. The loop now skips those four types; `type="image"` and every other input are still checked. Found by reading the script, then reproduced: a page with one of each reported "4 input(s) without a label". Test `test_hidden_and_button_inputs_need_no_label` failed before the change and passes after (10/10).
+
+### Rollback
+- No schema change. Go back to 4.2.0: `git checkout v4.2.0`, or `git revert v4.2.0..HEAD`.
 
 ## [4.2.0] - 2026-10-23
 
@@ -367,7 +374,8 @@ Found by the Sonnet harness run of this release:
 
 | Version | Status |
 |---------|--------|
-| 4.2.0 | Current |
+| 4.3.0 | Current |
+| 4.2.0 | Previous |
 | 4.1.0 | Previous |
 | 4.0.0 | Previous |
 | 3.5.0 | Previous |
