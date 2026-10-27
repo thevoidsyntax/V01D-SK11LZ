@@ -82,13 +82,12 @@ def main():
                     const hasLabel = id && document.querySelector(`label[for="${id}"]`);
                     const wrapped = el.closest('label');
                     const aria = el.getAttribute('aria-label') || el.getAttribute('aria-labelledby');
-                    const ph = el.getAttribute('placeholder');
-                    if (!hasLabel && !wrapped && !aria && !ph) {
+                    if (!hasLabel && !wrapped && !aria) {
                         unlabelled.push(el.tagName.toLowerCase() + (el.name ? `[name=${el.name}]` : ''));
                     }
                 }
                 const noAlt = [...document.querySelectorAll('img')]
-                    .filter((i) => !i.getAttribute('alt'))
+                    .filter((i) => !i.hasAttribute('alt'))
                     .map((i) => i.getAttribute('src') || '(no src)');
                 const overflowX = getComputedStyle(doc).overflowX;
                 return {

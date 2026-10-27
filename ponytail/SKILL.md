@@ -6,7 +6,7 @@ metadata:
   version: "1.1.0"
 ---
 
-# PONYTAIL v1.0
+# PONYTAIL v1.1
 
 **Code-Less Philosophy for AI Coding Agents**
 

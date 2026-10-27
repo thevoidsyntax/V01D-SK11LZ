@@ -3,19 +3,21 @@ name: autor
 description: "Project intelligence: health scan, new-project wizard, roadmap progress, release cutting, and the 6-persona pipeline recommendation"
 when_to_use: "Use when starting a new project, analyzing existing codebase, cutting a release, or needing project intelligence. Run /autor scan for project health check, /autor new for fresh projects, /autor release to cut a version."
 metadata:
-  version: "3.7.0"
+  version: "3.8.0"
 ---
 
-# AUTOR v3.6 - PROJECT INTELLIGENCE
+# AUTOR v3.8 - PROJECT INTELLIGENCE
 
 ## 🚀 SKILLS
 
-Stack, security, testing, git, and docs knowledge come from the model itself plus the project's `CLAUDE.md` and `specs/`; there are no skills for them. Besides the personas, `/agents`, and `/audit`, only three skills exist, and each changes a default the model would otherwise get wrong:
+Stack, security, testing, git, and docs knowledge come from the model itself plus the project's `CLAUDE.md` and `specs/`; there are no skills for them. Besides the personas, `/agents`, and `/audit`, only five skills exist, and each changes a default the model would otherwise get wrong:
 
 | Situation | Load |
 |-----------|------|
 | About to write new code | `/ponytail` |
+| Writing or changing behavior | `/tdd` |
 | Building or changing UI | `/impeccable` |
+| A UI change that must be proven in a browser | `/uicheck` |
 | Writing user-facing copy, docs, or comments | `/anti-slop` |
 
 Do not preload them; load one when the current step needs it.
@@ -23,7 +25,7 @@ Do not preload them; load one when the current step needs it.
 **On `/autor`, first respond with:**
 
 ```
-AUTOR v3.6
+AUTOR v3.8
 
 Available Commands:
   /autor              # Analyze current project

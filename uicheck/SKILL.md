@@ -3,7 +3,7 @@ name: uicheck
 description: "Render a web UI in a real browser and report what markup review cannot: horizontal overflow at narrow widths, console errors, unlabelled inputs, images without alt. Use when a UI change must be verified in the browser, not read in the source."
 when_to_use: "Use when UI work needs proof it renders: after building or changing a page, component, or layout; before handing UI to Dina; when /impeccable asks about 360px width, overflow, console errors, or form accessibility. Needs a running dev server or a static file path."
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # UICheck — verify the render, not the source
@@ -40,7 +40,9 @@ python ~/.claude/skills/uicheck/scripts/check.py <url> --width 360 --shot 360.pn
 | `--wait` | a CSS selector to wait for, when the page renders after a fetch |
 | `--height` | viewport height, default 800 |
 
-Exit code is 0 on pass, 1 on a fail. The script reports: horizontal overflow in px, the elements that are wider than the viewport, console errors and page errors, inputs with no label, images with no `alt`.
+Exit code is 0 on pass, 1 on a fail. The script reports: horizontal overflow in px, the elements that are wider than the viewport, console errors and page errors, inputs with no label (a placeholder does not count), images with no `alt` attribute (`alt=""` is valid for decorative images).
+
+The script has its own tests: `python -m unittest uicheck/scripts/test_check.py -v` from the skills pack root.
 
 For a static file, serve it first — a `file://` URL blocks some requests:
 

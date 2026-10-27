@@ -10,9 +10,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **`hooks/`: source of the three user-level hooks.** `cache-guard.js`, `ask-on-git-push.js`, and `changelog-on-commit.js` lived only in `~/.claude/hooks/`, outside any git repo, so a lost disk meant a lost guard. The repo now holds them with their pipe tests (45 cases, green from this folder too) and a `hooks/README.md` with the manual install. They are not skills and Claude Code does not load them from here.
 - **`/uicheck`: verify a UI in a real browser.** `/impeccable` asks for a page that "works at 360px wide with no horizontal scroll", but a model reading markup cannot know that — it is a fact about the render. The new skill serves the page and runs `scripts/check.py` (Playwright, headless Chromium) to measure horizontal overflow and name the elements causing it, console and page errors, inputs without a label, and images without `alt`. It exits non-zero on a fail and writes a screenshot the model reads as the evidence. `/impeccable` gained a "verify the render" step, `/hexa` records a `uicheck:` line in its HANDOFF entry, and Dina blocks a `UI: ya` entry without one — the same shape as the `TDD:` line. Requires `pip install playwright` and `python -m playwright install chromium`; a page that cannot be served is written as `uicheck: skipped — <reason>`, never as a pass.
+- **Tests for `uicheck/scripts/check.py`.** `uicheck/scripts/test_check.py` (stdlib `unittest`, 9 cases) runs the script against fixture pages: a clean page, an element wider than the viewport, inputs with and without a label, images with and without `alt`, and an unreachable URL. It skips itself when Playwright is missing. Run it with `python -m unittest uicheck/scripts/test_check.py -v`; `CLAUDE.md` lists it under "Sebelum commit".
 
 ### Changed
+- **Docs caught up with `/tdd` and `/uicheck`.** The `/autor` load table said "only three skills exist" and listed neither; it now lists five. The `autor` and `ponytail` headers carried old version numbers (`v3.6`, `v1.0`) against `3.7.0` and `1.1.0` in their frontmatter, and now match (`/autor` 3.8). The repo `CLAUDE.md` omitted `/uicheck` from its list of supporting skills, and the skill table below said 13 and had no `uicheck` row.
 - **Dina starts on Sonnet and escalates to Opus when it matters.** On a planted-bug fixture (six defects: SQL injection, hardcoded secret, unbounded map, counter race, missing validation, missing error handling) Sonnet 5.5 at effort high found 6/6, the same as Opus, with no false positive, at about half the cost ($0.48–0.87 vs $1.30–1.44). Opus stays for concurrency-, money-, and auth-critical code and for the round after a `REJECTED`. Recall is the bar, not the model: a missing finding is still a `REJECTED`. `/agents` 4.5, `/autor` 3.7, and `CLAUDE.md` carry the new split.
+
+### Fixed
+- **`/uicheck` counted a placeholder as an input label.** `check.py` let `<input placeholder="Email">` pass, while `uicheck/SKILL.md` says a placeholder is not a label. The most common unlabelled input therefore passed the check. It now fails.
+- **`/uicheck` flagged `alt=""` as a missing alt.** The script tested for an empty value, so a decorative image with `alt=""`, which `uicheck/SKILL.md` calls valid, failed the check. It now fails only when the attribute is absent. Both defects were found while writing the tests, and each test failed before the fix (`uicheck` 1.0.1).
 
 ## [4.2.0] - 2026-10-23
 
@@ -382,7 +388,8 @@ Found by the Sonnet harness run of this release:
 | Personas | 6 | satria, athena, hexa, dina, frans, vika |
 | Discipline | 1 | tdd |
 | Taste | 3 | ponytail, anti-slop, impeccable |
-| **Total** | **13** | The 127 other skills are archived at tag `skills-v1-full` |
+| Capability | 1 | uicheck |
+| **Total** | **14** | The 127 other skills are archived at tag `skills-v1-full` |
 
 ---
 
