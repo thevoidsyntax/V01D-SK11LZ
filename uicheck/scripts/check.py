@@ -78,6 +78,7 @@ def main():
                 }
                 const unlabelled = [];
                 for (const el of document.querySelectorAll('input,select,textarea')) {
+                    if (['hidden', 'submit', 'button', 'reset'].includes(el.type)) continue;
                     const id = el.id;
                     const hasLabel = id && document.querySelector(`label[for="${id}"]`);
                     const wrapped = el.closest('label');

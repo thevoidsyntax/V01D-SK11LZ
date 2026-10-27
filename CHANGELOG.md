@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - **`/uicheck` counted a placeholder as an input label.** `check.py` let `<input placeholder="Email">` pass, while `uicheck/SKILL.md` says a placeholder is not a label. The most common unlabelled input therefore passed the check. It now fails.
 - **`/uicheck` flagged `alt=""` as a missing alt.** The script tested for an empty value, so a decorative image with `alt=""`, which `uicheck/SKILL.md` calls valid, failed the check. It now fails only when the attribute is absent. Both defects were found while writing the tests, and each test failed before the fix (`uicheck` 1.0.1).
+- **`/uicheck` flagged hidden and button inputs as unlabelled.** `check.py` required a label on every `input`, so `type="hidden"` (a CSRF token) and `type="submit"`, `button`, `reset` (named by their `value`) failed any form with them. The loop now skips those four types; `type="image"` and every other input are still checked. Found by reading the script, then reproduced: a page with one of each reported "4 input(s) without a label". Test `test_hidden_and_button_inputs_need_no_label` failed before the change and passes after (10/10).
 
 ## [4.2.0] - 2026-10-23
 

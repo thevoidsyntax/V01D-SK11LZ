@@ -56,6 +56,15 @@ class CheckTest(unittest.TestCase):
         )
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
 
+    def test_hidden_and_button_inputs_need_no_label(self):
+        r = self.run_check(
+            '<input type="hidden" name="csrf" value="t">'
+            '<input type="submit" value="Go">'
+            '<input type="button" value="X">'
+            '<input type="reset">'
+        )
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+
     def test_image_without_alt_attribute_fails(self):
         r = self.run_check(f'<img src="{PIXEL}">')
         self.assertEqual(r.returncode, 1, r.stdout)
