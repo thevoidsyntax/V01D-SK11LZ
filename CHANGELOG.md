@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **`/agents` survives a phase that hits an output limit.** A Hexa spawn given a whole epic (18 endpoints, 6 screens, three test layers) died on `max_output_tokens`, one response over 128,000 tokens, before writing any code, and the run was restarted from nothing. The spawn prompt now asks for one file per step and a clean stop with the leftovers in the HANDOFF entry. A new "Limit or error" rule continues the same agent with SendMessage before spawning a new one. `agents/epic.md` splits the Hexa phase by layer when an epic has more than about 8 endpoints or screens. Observed in a VentroPoS E1 run; after the split, eight Hexa spawns on the same model and effort finished, and three were continued with SendMessage. `/agents` 4.7.0.
+
+### Rollback
+- No schema change. Go back to 4.3.1: `git checkout v4.3.1`, or `git revert` this commit.
+
 ## [4.3.1] - 2026-10-27
 
 `/agents` and `/autor` load about half as much text, and the epic route and `/audit` trigger now match what the skills do.

@@ -3,7 +3,7 @@ name: agents
 description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model, routes for small changes, an epic route for roadmaps, approval pauses, and artifact handoff"
 when_to_use: "Use when you want the persona pipeline to build or change something end-to-end (Satria, Athena, Hexa, Dina, Frans, Vika). Trigger with /agents or a request ending in 'mulai pipeline'. Also to build one epic from specs/ROADMAP.md ('kerjakan E2', 'lanjut roadmap'). For single-persona help, call that persona directly."
 metadata:
-  version: "4.6.1"
+  version: "4.7.0"
 ---
 
 # 👥 PERSONA PIPELINE — SATRIA · ATHENA · HEXA · DINA · FRANS · VIKA
@@ -103,8 +103,9 @@ The orchestrator coordinates; it does not write the work itself. Never edit `src
 
 For each phase in the route, spawn with the **Agent tool**, always in the foreground so progress is visible:
 - `subagent_type: "general-purpose"`, `model:` = the persona's model and `effort:` = its effort from the table (the user asked for these levels; the gate loop in section 5 is the only escalation), `run_in_background: false` (each phase needs the previous artifact).
-- `prompt`: "You are **<Persona>** (<role>). Invoke the `/<persona>` skill and follow its whole workflow. Read only these artifacts: <inputs>. Produce: <output artifact>, plus everything your workflow writes (the `specs/HANDOFF.md` entry; for Dina also `specs/.audit-base`). Keep your reply to a one-line handoff summary."
+- `prompt`: "You are **<Persona>** (<role>). Invoke the `/<persona>` skill and follow its whole workflow. Read only these artifacts: <inputs>. Produce: <output artifact>, plus everything your workflow writes (the `specs/HANDOFF.md` entry; for Dina also `specs/.audit-base`). Keep your reply to a one-line handoff summary. Write one file per step and never put several large files in one turn. If you are running low on room, finish the file in hand, append your HANDOFF entry listing what is left, and stop."
 - Pass artifact paths, never the prior transcript.
+- **Limit or error.** If a phase ends early on an output limit (`max_output_tokens`) or an API error, check `git status` and the files already written, then continue **the same agent** with SendMessage to its agent id ("continue from where you stopped, do not rewrite finished files, keep replies short"). Spawn a new agent only if SendMessage fails, and list the files already on disk in its prompt. Never resume an agent whose scope was given to another agent.
 - Before **every** spawn, the first one included, print `[FASE n/N] <Persona> (<model>) mulai — baca <inputs>`, where N is the number of phases in the route. After it returns, check the artifact exists **and** `specs/HANDOFF.md` gained that persona's entry, then print `[HANDOFF] <A> → <B> selesai: <artifact> (ada)`. If either is missing, stop and inspect that phase.
 
 ```text
