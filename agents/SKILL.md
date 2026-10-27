@@ -3,7 +3,7 @@ name: agents
 description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model, routes for small changes, an epic route for roadmaps, approval pauses, and artifact handoff"
 when_to_use: "Use when you want the persona pipeline to build or change something end-to-end (Satria, Athena, Hexa, Dina, Frans, Vika). Trigger with /agents or a request ending in 'mulai pipeline'. Also to build one epic from specs/ROADMAP.md ('kerjakan E2', 'lanjut roadmap'). For single-persona help, call that persona directly."
 metadata:
-  version: "4.5.0"
+  version: "4.6.0"
 ---
 
 # 👥 PERSONA PIPELINE — SATRIA · ATHENA · HEXA · DINA · FRANS · VIKA
@@ -14,16 +14,16 @@ Six specialists run as a sequential, artifact-handoff pipeline. Each phase runs 
 
 | # | Persona | Role | Model | Skills | Output artifact |
 |---|---------|------|-------|--------|-----------------|
-| 1 | **Satria** | Product Manager | Sonnet* | — | `specs/PRD.md` |
-| 2 | **Athena** | System Architect | **Opus** | — (ADR format is in her skill) | `specs/ADR.md`, `specs/contracts.*`, conventions in `CLAUDE.md` |
-| 3 | **Hexa** | Feature Coder | Sonnet* | ponytail; impeccable + anti-slop for UI/copy | `src/*`, `tests/*` |
-| 4 | **Dina** | QA & Security | Sonnet* | audit | `specs/AUDIT.md` + `STATUS:` |
-| 5 | **Frans** | Platform & DevOps | Sonnet | — | `Dockerfile`, `migrations/*`, `ci.yml` |
-| 6 | **Vika** | Technical Writer | Haiku* | anti-slop | `docs/openapi.*`, `CHANGELOG.md`, README |
+| 1 | **Satria** | Product Manager | Opus (medium; high for large/ambiguous) | — | `specs/PRD.md` |
+| 2 | **Athena** | System Architect | Sonnet (high) | — (ADR format is in her skill) | `specs/ADR.md`, `specs/contracts.*`, conventions in `CLAUDE.md` |
+| 3 | **Hexa** | Feature Coder | Sonnet (high)* | ponytail; impeccable + anti-slop for UI/copy | `src/*`, `tests/*` |
+| 4 | **Dina** | QA & Security | Sonnet (high)* | audit | `specs/AUDIT.md` + `STATUS:` |
+| 5 | **Frans** | Platform & DevOps | Sonnet (high) | — | `Dockerfile`, `migrations/*`, `ci.yml` |
+| 6 | **Vika** | Technical Writer | Haiku (low)* | anti-slop | `docs/openapi.*`, `CHANGELOG.md`, README |
 
 Every persona also appends an entry to `specs/HANDOFF.md` (see below). Stack, security, and testing knowledge come from the model and the project's `CLAUDE.md`, not from skills.
 
-\* **Escalation:** Hexa → Opus for transactional/concurrency-heavy logic; Satria → Opus for large/ambiguous products; Vika → Sonnet for a large API surface. Athena stays Opus (a bad design poisons every later phase). Dina starts on Sonnet and escalates to Opus for concurrency-, money-, or auth-critical code and for the round after a `REJECTED` (a planted-bug fixture on 2026-10-27 gave Sonnet and Opus the same 6/6 recall, Sonnet at about half the cost). Frans stays at least Sonnet (migrations are destructive — never Haiku).
+\* **Models (user policy, 2026-10-27):** Opus only for Satria; Haiku for Vika; Athena, Hexa, Dina, and Frans run on Sonnet at effort high. The one Opus escalation is the gate loop: once Dina has returned `REJECTED` twice, the later rounds run Hexa and Dina on Opus at effort high (section 5). Vika → Sonnet (effort medium) for a large API surface. Frans is never Haiku (migrations are destructive). Evidence: on a planted-bug fixture Sonnet and Opus both found 6/6 for Dina, Sonnet at about half the cost; on a URL-shortener build the plain Sonnet run and the six-phase run both passed 29/29 black-box checks, at $1.10 against $6.26, and Opus was $4.16 of that $6.26.
 
 ## 1. Pick the route
 
@@ -31,7 +31,8 @@ Before spawning anything, choose the shortest route that covers the change. Your
 
 | Change | Route |
 |--------|-------|
-| New feature or module | Satria → Athena → Hexa → Dina → Frans → Vika |
+| New feature or module, KLIEN | Satria → Athena → Hexa → Dina → Frans → Vika |
+| New feature or module, PRIBADI | Hexa → Dina (Satria, Athena, Frans, Vika join only as the rules below say) |
 | Change to an existing feature, contracts unchanged | Hexa → Dina (→ Vika if the API or user-facing docs change) |
 | Bugfix | Hexa (failing test first) → Dina |
 | Infra or deploy only | Frans → Dina |
@@ -39,7 +40,8 @@ Before spawning anything, choose the shortest route that covers the change. Your
 | Next epic from a roadmap | Athena → Hexa → Dina → Frans → Vika (see `/agents epic`) |
 
 Rules that override the table:
-- A contract, schema, or public API change adds Athena before Hexa.
+- A contract, schema, or public API change adds Athena before Hexa, unless the request already defines it.
+- PRIBADI new work stays Hexa → Dina. Satria joins only when the request has no acceptance criteria; Athena only when the request leaves the contract or schema undefined; Frans and Vika only when the request asks for Docker, CI, migrations, or docs. The same build on the six-phase route passed the same black-box checks at 5.7 times the cost, so the extra phases are bought, not assumed.
 - A migration adds Frans.
 - Any code change keeps Dina. Dina is never skipped when code changed.
 - Every Hexa phase runs `/tdd`: a behavior change starts with a failing test, and the HANDOFF entry carries the red-green evidence.
@@ -105,14 +107,14 @@ The `[ROUTE]` block for this route reads:
 
 ## 2. Read the scale
 
-Read `Scale: KLIEN | PRIBADI` from the project `CLAUDE.md`. If it is missing, ask once with AskUserQuestion and write the answer into `CLAUDE.md`. If you cannot ask (headless), assume KLIEN.
+Read `Scale: KLIEN | PRIBADI` from the project `CLAUDE.md`, or from the request when it names the scale ("proyek PRIBADI"). If neither says, ask once with AskUserQuestion and write the answer into `CLAUDE.md`. If you cannot ask (headless), assume KLIEN.
 
 ## 3. Run the phases
 
 The orchestrator coordinates; it does not write the work itself. Never edit `src/*`, `tests/*`, `Dockerfile`, `migrations/*`, `ci.yml`, or `docs/*` in the target project — a fix goes back to the persona that owns it (Hexa for code, Frans for infra, Vika for docs) as another phase.
 
 For each phase in the route, spawn with the **Agent tool**, always in the foreground so progress is visible:
-- `subagent_type: "general-purpose"`, `model:` = the persona's model from the table (apply escalation when the change warrants it), `run_in_background: false` (each phase needs the previous artifact).
+- `subagent_type: "general-purpose"`, `model:` = the persona's model and `effort:` = its effort from the table (the user asked for these levels; the gate loop in section 5 is the only escalation), `run_in_background: false` (each phase needs the previous artifact).
 - `prompt`: "You are **<Persona>** (<role>). Invoke the `/<persona>` skill and follow its whole workflow. Read only these artifacts: <inputs>. Produce: <output artifact>, plus everything your workflow writes (the `specs/HANDOFF.md` entry; for Dina also `specs/.audit-base`). Keep your reply to a one-line handoff summary."
 - Pass artifact paths, never the prior transcript.
 - Before **every** spawn, the first one included, print `[FASE n/N] <Persona> (<model>) mulai — baca <inputs>`, where N is the number of phases in the route. After it returns, check the artifact exists **and** `specs/HANDOFF.md` gained that persona's entry, then print `[HANDOFF] <A> → <B> selesai: <artifact> (ada)`. If either is missing, stop and inspect that phase.
@@ -148,7 +150,7 @@ At a pause, print a summary of at most 12 lines (PRD scope, assumptions, open qu
 
 Dina ends `specs/AUDIT.md` with a status line:
 - `STATUS: APPROVED` → continue with the route.
-- `STATUS: REJECTED` → hand back to **Hexa** with the findings; Hexa patches, Dina re-audits. **Max 3 loops** (print `[LOOP k/3]`); if still rejected, stop and surface the blocking findings to the user.
+- `STATUS: REJECTED` → hand back to **Hexa** with the findings; Hexa patches, Dina re-audits. **Max 3 loops** (print `[LOOP k/3]`); if still rejected, stop and surface the blocking findings to the user. Loop 1 runs on Sonnet at effort high. After the second `REJECTED`, loops 2 and 3 run Hexa and Dina on Opus at effort high (`model: "opus"`, `effort: "high"`). The final-pass loops in section 6 do not escalate.
 
 Dina's non-blocking findings (MEDIUM and below) are not a loop trigger and do not need a fix before the route continues. The orchestrator does not patch them either — carry them in the commit message and, on the epic route, in the epic's `Open:` items.
 
@@ -203,18 +205,18 @@ Vika reads this log to write the CHANGELOG entry and README changes, so the reco
 
 Full route, in an interactive session:
 
-> **"Buat endpoint health-check kecil. Mulai pipeline."**
+> **"Buat endpoint health-check kecil, proyek KLIEN. Mulai pipeline."**
 
 ```text
-[RUTE] Fitur baru: Satria → Athena → Hexa → Dina → Frans → Vika
-[FASE 1/6] Satria (Sonnet) mulai — baca permintaan user
+[RUTE] Fitur baru (KLIEN): Satria → Athena → Hexa → Dina → Frans → Vika
+[FASE 1/6] Satria (Opus) mulai — baca permintaan user
 [HANDOFF] Satria → Athena selesai: specs/PRD.md (ada)
-[FASE 2/6] Athena (Opus) mulai — baca specs/PRD.md
+[FASE 2/6] Athena (Sonnet) mulai — baca specs/PRD.md
 [HANDOFF] Athena → Hexa selesai: specs/ADR.md (ada)
 (pause: summary + Lanjut / Revisi PRD / Revisi ADR / Stop)
 ```
 
-Short route: **"Perbaiki SQL injection di /users/search. Mulai pipeline."** → `[RUTE] Bugfix: Hexa → Dina`.
+Short routes: **"Perbaiki SQL injection di /users/search. Mulai pipeline."** → `[RUTE] Bugfix: Hexa → Dina`. **"Proyek PRIBADI: <spesifikasi dengan kriteria penerimaan>. Mulai pipeline."** → `[RUTE] Fitur baru (PRIBADI): Hexa → Dina`.
 
 Passing = every artifact of the route exists, `specs/HANDOFF.md` has the `[RUTE]` entry and one entry per phase, Dina's last `STATUS:` is `APPROVED`, the commit was offered, and on `main`/`master` the branch question was asked (a `[BRANCH]` entry if approved) and the push/PR offer followed the commit. If a phase produces no artifact, stop and inspect that phase rather than continuing.
 

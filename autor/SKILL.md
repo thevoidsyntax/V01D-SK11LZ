@@ -3,10 +3,10 @@ name: autor
 description: "Project intelligence: health scan, new-project wizard, roadmap progress, release cutting, and the 6-persona pipeline recommendation"
 when_to_use: "Use when starting a new project, analyzing existing codebase, cutting a release, or needing project intelligence. Run /autor scan for project health check, /autor new for fresh projects, /autor release to cut a version."
 metadata:
-  version: "3.8.0"
+  version: "3.8.1"
 ---
 
-# AUTOR v3.8 - PROJECT INTELLIGENCE
+# AUTOR v3.8.1 - PROJECT INTELLIGENCE
 
 ## 🚀 SKILLS
 
@@ -25,7 +25,7 @@ Do not preload them; load one when the current step needs it.
 **On `/autor`, first respond with:**
 
 ```
-AUTOR v3.8
+AUTOR v3.8.1
 
 Available Commands:
   /autor              # Analyze current project
@@ -252,16 +252,16 @@ Satria → Athena → Hexa → Dina → Frans → Vika
 
 | # | Persona | Model | Effort | Handoff |
 |---|---------|-------|--------|---------|
-| 1 | Satria | Sonnet | medium | PRD to Athena |
-| 2 | Athena | Opus | high | ADR + conventions to Hexa |
-| 3 | Hexa | Sonnet | medium | Code to Dina |
+| 1 | Satria | Opus | medium | PRD to Athena |
+| 2 | Athena | Sonnet | high | ADR + conventions to Hexa |
+| 3 | Hexa | Sonnet* | high | Code to Dina |
 | 4 | Dina | Sonnet* | high | Report to Frans/Vika |
-| 5 | Frans | Sonnet | medium | Infrastructure |
+| 5 | Frans | Sonnet | high | Infrastructure |
 | 6 | Vika | Haiku | low | Documentation |
 
 Dina is the gatekeeper: she approves or rejects, and Hexa patches up to three times. `/agents` pauses for the user after the design phases (PRIBADI: after Athena; KLIEN: after Satria and Athena), runs a final Dina pass over Frans/Vika output, and commits only after the user approves.
 
-\* Dina escalates to Opus for concurrency-, money-, or auth-critical code, and for the round after a `REJECTED`.
+\* Hexa and Dina move to Opus at effort high only for the gate rounds after the second `REJECTED`. For PRIBADI work `/agents` runs Hexa → Dina unless the request needs more.
 
 ---
 

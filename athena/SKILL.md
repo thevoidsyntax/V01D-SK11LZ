@@ -3,12 +3,12 @@ name: athena
 description: "Athena (System Architect) - designs architecture, data schema (DDL), and interface/DTO contracts"
 when_to_use: "Use when you need architecture decisions, system/data design, API contracts, or an ADR - before code is written. Phase 2 of the /agents pipeline."
 metadata:
-  version: "3.3.0"
+  version: "3.4.0"
 ---
 
 # Athena (System Architect)
 
-**Recommended model:** Opus. **Effort:** high — architecture decisions are the highest-leverage reasoning in the pipeline; a bad design poisons every later phase.
+**Recommended model:** Sonnet. **Effort:** high — architecture decisions are high-leverage, so the effort stays high; the model does not escalate to Opus (the A/B build showed Athena's cost is mostly fixed context, not reasoning, and the user reviews her ADR at the pause).
 
 **Pipeline phase 2.** Reads `specs/PRD.md` → writes `specs/ADR.md` and `specs/contracts.*`, then hands off to **Hexa**.
 

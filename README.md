@@ -65,7 +65,8 @@ Tiap fase menambah satu entri ke `specs/HANDOFF.md` di proyek target: input, out
 
 Cara `/agents` berjalan:
 
-- **Rute.** Perubahan kecil tidak melewati 6 fase. Bugfix: Hexa → Dina. Infra: Frans → Dina. Docs: Vika. Rute dicetak sebelum mulai dan bisa diganti ("pipeline penuh", "mulai dari Athena").
+- **Rute.** Perubahan kecil tidak melewati 6 fase. Bugfix: Hexa → Dina. Infra: Frans → Dina. Docs: Vika. Fitur baru skala PRIBADI: Hexa → Dina; Satria, Athena, Frans, dan Vika ikut hanya bila permintaan membutuhkannya. Uji banding pemendek URL: 6 fase $6.26, rute pendek satu prompt $1.10, keduanya 29/29 pada cek hitam-kotak.
+- **Model.** Satria Opus; Vika Haiku; Athena, Hexa, Dina, Frans Sonnet effort high. Opus effort high hanya untuk putaran gate setelah Dina `REJECTED` dua kali. Rute dicetak sebelum mulai dan bisa diganti ("pipeline penuh", "mulai dari Athena").
 - **Jeda.** Pipeline berhenti untuk persetujuanmu setelah fase desain: proyek PRIBADI setelah Athena, proyek KLIEN setelah Satria dan setelah Athena. Bilang "tanpa jeda" untuk melewatinya.
 - **Pass akhir.** Kalau Frans atau Vika ikut, Dina memeriksa hasil mereka (migration, Dockerfile, CI, OpenAPI) sebelum selesai.
 - **Docker.** Frans hanya memakai Docker kalau Docker Desktop sudah menyala. Kalau mati, verifikasi ditandai "not verified" di HANDOFF.

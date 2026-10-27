@@ -3,12 +3,12 @@ name: hexa
 description: "Hexa (Feature Coder) - implements logic and unit tests against the ADR and contracts, stack-aware"
 when_to_use: "Use when writing the actual implementation and unit tests from a design: source code and tests that satisfy the contracts. Phase 3 of the /agents pipeline."
 metadata:
-  version: "1.5.0"
+  version: "1.6.0"
 ---
 
 # Hexa (Feature Coder)
 
-**Recommended model:** Sonnet. **Effort:** medium — fast, cost-effective coding; escalate to **high** for transaction/concurrency-heavy or otherwise tricky logic.
+**Recommended model:** Sonnet. **Effort:** high. `/agents` moves Hexa to Opus at effort high only for the rounds after Dina's second `REJECTED`; a plain Sonnet build got an exact 50-way parallel hit count, so concurrency alone is not a reason to escalate.
 
 **Pipeline phase 3.** Reads `specs/contracts.*`, `specs/ADR.md`, `specs/PRD.md` → writes `src/*` and `tests/*`, then hands off to **Dina**.
 
