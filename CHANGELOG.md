@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.3.1] - 2026-10-27
+
+`/agents` and `/autor` load about half as much text, and the epic route and `/audit` trigger now match what the skills do.
+
 ### Changed
 - **`/agents` and `/autor` load less.** Parts used only on one path moved to a second file in the same skill folder, read on demand: `agents/epic.md` (epic route), `agents/push-pr.md` (push and PR after a commit), `agents/smoke-test.md` (for humans), `autor/new.md` (`/autor new`), `autor/release.md` (`/autor release`). `SKILL.md` keeps each heading, the hard rules, and an explicit "Read … and follow it" line. Size of `SKILL.md`: `agents` 17,404 → 12,960 bytes, `autor` 14,916 → 7,066, all 14 skills 83,333 → 71,316. Behavior is unchanged except the epic route below. `/autor` 3.8.2, `/agents` 4.6.1. Checked headless (Sonnet, one run each): `/agents kerjakan E2` reads `epic.md` before routing, and "rilis versi baru" loads `autor` and reads `release.md`, prints the bump, and stops for approval. The push and PR path is interactive only and was not run.
 - **`/audit` fires on a plain request.** `when_to_use` said "only when the user types /audit", but a prompt of "audit repo ini" invoked the skill. The description now matches that behavior. `/audit` 6.2.1.
@@ -14,6 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - **Epic route contradicted the PRIBADI rule.** The route table said an epic runs Athena → Hexa → Dina → Frans → Vika, while the rules below it keep PRIBADI new work at Hexa → Dina. A headless run of `/agents kerjakan E2` on a PRIBADI project followed the second rule. The table, `epic.md`, README, and `/autor` now say it: KLIEN runs five phases, PRIBADI runs Hexa → Dina plus the phases the route rules add. A PRIBADI epic with five phases needs "pipeline penuh" in the request.
+
+### Rollback
+- No schema change. Go back to 4.3.0: `git checkout v4.3.0`, or `git revert v4.3.0..HEAD`.
 
 ## [4.3.0] - 2026-10-27
 
@@ -382,7 +389,8 @@ Found by the Sonnet harness run of this release:
 
 | Version | Status |
 |---------|--------|
-| 4.3.0 | Current |
+| 4.3.1 | Current |
+| 4.3.0 | Previous |
 | 4.2.0 | Previous |
 | 4.1.0 | Previous |
 | 4.0.0 | Previous |
