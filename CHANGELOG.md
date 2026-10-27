@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **`/agents` and `/autor` load less.** Parts used only on one path moved to a second file in the same skill folder, read on demand: `agents/epic.md` (epic route), `agents/push-pr.md` (push and PR after a commit), `agents/smoke-test.md` (for humans), `autor/new.md` (`/autor new`), `autor/release.md` (`/autor release`). `SKILL.md` keeps each heading, the hard rules, and an explicit "Read … and follow it" line. Size of `SKILL.md`: `agents` 17,404 → 12,960 bytes, `autor` 14,916 → 7,066, all 14 skills 83,333 → 71,316. Behavior is unchanged except the epic route below. `/autor` 3.8.2, `/agents` 4.6.1. Checked headless (Sonnet, one run each): `/agents kerjakan E2` reads `epic.md` before routing, and "rilis versi baru" loads `autor` and reads `release.md`, prints the bump, and stops for approval. The push and PR path is interactive only and was not run.
+- **`/audit` fires on a plain request.** `when_to_use` said "only when the user types /audit", but a prompt of "audit repo ini" invoked the skill. The description now matches that behavior. `/audit` 6.2.1.
+- **Guard checks 1 and 2 also scan the second files** (`agents/*.md`, `autor/*.md`); `CLAUDE.md` says when a section may move out of `SKILL.md`.
+
+### Fixed
+- **Epic route contradicted the PRIBADI rule.** The route table said an epic runs Athena → Hexa → Dina → Frans → Vika, while the rules below it keep PRIBADI new work at Hexa → Dina. A headless run of `/agents kerjakan E2` on a PRIBADI project followed the second rule. The table, `epic.md`, README, and `/autor` now say it: KLIEN runs five phases, PRIBADI runs Hexa → Dina plus the phases the route rules add. A PRIBADI epic with five phases needs "pipeline penuh" in the request.
+
 ## [4.3.0] - 2026-10-27
 
 /uicheck verifies a UI in a real browser, the three user-level hooks live in the repo, and PRIBADI features now run Hexa → Dina on Sonnet.

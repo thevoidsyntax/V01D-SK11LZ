@@ -3,7 +3,7 @@ name: agents
 description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model, routes for small changes, an epic route for roadmaps, approval pauses, and artifact handoff"
 when_to_use: "Use when you want the persona pipeline to build or change something end-to-end (Satria, Athena, Hexa, Dina, Frans, Vika). Trigger with /agents or a request ending in 'mulai pipeline'. Also to build one epic from specs/ROADMAP.md ('kerjakan E2', 'lanjut roadmap'). For single-persona help, call that persona directly."
 metadata:
-  version: "4.6.0"
+  version: "4.6.1"
 ---
 
 # 👥 PERSONA PIPELINE — SATRIA · ATHENA · HEXA · DINA · FRANS · VIKA
@@ -23,7 +23,7 @@ Six specialists run as a sequential, artifact-handoff pipeline. Each phase runs 
 
 Every persona also appends an entry to `specs/HANDOFF.md` (see below). Stack, security, and testing knowledge come from the model and the project's `CLAUDE.md`, not from skills.
 
-\* **Models (user policy, 2026-10-27):** Opus only for Satria; Haiku for Vika; Athena, Hexa, Dina, and Frans run on Sonnet at effort high. The one Opus escalation is the gate loop: once Dina has returned `REJECTED` twice, the later rounds run Hexa and Dina on Opus at effort high (section 5). Vika → Sonnet (effort medium) for a large API surface. Frans is never Haiku (migrations are destructive). Evidence: on a planted-bug fixture Sonnet and Opus both found 6/6 for Dina, Sonnet at about half the cost; on a URL-shortener build the plain Sonnet run and the six-phase run both passed 29/29 black-box checks, at $1.10 against $6.26, and Opus was $4.16 of that $6.26.
+\* **Models (user policy, 2026-10-27):** Opus only for Satria; Haiku for Vika; Athena, Hexa, Dina, and Frans run on Sonnet at effort high. The one Opus escalation is the gate loop: once Dina has returned `REJECTED` twice, the later rounds run Hexa and Dina on Opus at effort high (section 5). Vika → Sonnet (effort medium) for a large API surface. Frans is never Haiku (migrations are destructive). Evidence: CHANGELOG 4.3.0.
 
 ## 1. Pick the route
 
@@ -37,11 +37,12 @@ Before spawning anything, choose the shortest route that covers the change. Your
 | Bugfix | Hexa (failing test first) → Dina |
 | Infra or deploy only | Frans → Dina |
 | Docs only | Vika |
-| Next epic from a roadmap | Athena → Hexa → Dina → Frans → Vika (see `/agents epic`) |
+| Next epic from a roadmap, KLIEN | Athena → Hexa → Dina → Frans → Vika (see `/agents epic`) |
+| Next epic from a roadmap, PRIBADI | Hexa → Dina, plus the phases the rules below add (see `/agents epic`) |
 
 Rules that override the table:
 - A contract, schema, or public API change adds Athena before Hexa, unless the request already defines it.
-- PRIBADI new work stays Hexa → Dina. Satria joins only when the request has no acceptance criteria; Athena only when the request leaves the contract or schema undefined; Frans and Vika only when the request asks for Docker, CI, migrations, or docs. The same build on the six-phase route passed the same black-box checks at 5.7 times the cost, so the extra phases are bought, not assumed.
+- PRIBADI new work, epics included, stays Hexa → Dina. Satria joins only when the request has no acceptance criteria; Athena only when the request leaves the contract or schema undefined; Frans and Vika only when the request asks for Docker, CI, migrations, or docs.
 - A migration adds Frans.
 - Any code change keeps Dina. Dina is never skipped when code changed.
 - Every Hexa phase runs `/tdd`: a behavior change starts with a failing test, and the HANDOFF entry carries the red-green evidence.
@@ -89,21 +90,8 @@ If you cannot ask (headless), stay on the current branch; nothing is committed i
 
 ### `/agents epic`
 
-The epic route: build the next epic from a roadmap instead of a single request. Runs when `specs/ROADMAP.md` exists and the request names an epic ("kerjakan E2", "lanjut roadmap", "epic berikutnya").
+Runs when `specs/ROADMAP.md` exists and the request names an epic ("kerjakan E2", "lanjut roadmap", "epic berikutnya"). **Before the first phase, Read `~/.claude/skills/agents/epic.md` and follow it**: it holds the route (Athena → Hexa → Dina → Frans → Vika, Satria skipped), the `Status` updates in `specs/ROADMAP.md`, and the `[ROUTE]` block.
 
-1. Read `specs/ROADMAP.md`. Pick the epic the user named; otherwise the first row with `todo` whose `Depends on` epics are all `done`. If that row has no PRD file (the `PRD` column is empty or the file is missing), prepend Satria to write it, then continue.
-2. Read the epic PRD (the file in the roadmap's `PRD` column) and the index `specs/PRD.md`. Print `[EPIC] <id> — <judul> (milestone <M>)` before the first phase.
-3. Set that epic's `Status` to `in progress` in `specs/ROADMAP.md` before the first phase.
-4. Run the route **Athena → Hexa → Dina → Frans → Vika**. Satria is skipped: the epic PRD already exists. Each phase reads the epic PRD as its scope. Pass the epic PRD path in the spawn prompt instead of `specs/PRD.md` alone.
-5. After the last phase and the final Dina pass, set the epic's `Status` to `done` in `specs/ROADMAP.md` — before the commit proposal in section 7, so the roadmap update lands in the same commit. If the commit is declined or skipped, leave the status `in progress`. Then update the `Current PRD:` line in `specs/PRD.md` to the next ready epic (the first `todo` row whose dependencies are all `done`), or to `belum ada — epic berikutnya belum didefinisikan.` when none is ready. `specs/ROADMAP.md` is the only place a status is recorded; the index carries no status column.
-
-The `[ROUTE]` block for this route reads:
-
-```text
-[ROUTE] Epic E2 — Billing
-  alasan: specs/ROADMAP.md, E1 selesai
-  ubah: "epic E3" atau "mulai dari Hexa"
-```
 
 ## 2. Read the scale
 
@@ -170,15 +158,8 @@ After the last phase:
 
 ### Push and pull request
 
-After a commit, only when the branch is not `main`/`master`, remote `origin` exists, and `gh auth status` succeeds. Otherwise print one line saying why and stop; never push.
+After a commit, only when the branch is not `main`/`master`, remote `origin` exists, and `gh auth status` succeeds; otherwise print one line saying why and stop, never push. **Read `~/.claude/skills/agents/push-pr.md` and follow it** (offer, push, PR body, `/code-review`, `gh pr checks`). The pipeline never merges.
 
-1. Ask with AskUserQuestion: **Push + PR** / **Hanya push** / **Selesai**. KLIEN: **Push + PR** first. This is the push request; the push hook still asks for approval on its own.
-2. Push with a plain `git push -u origin <branch>` run inside the repo. `-C` and `-c` are denied by the hook.
-3. PR: write the body to a temp file outside the repo (run it through `/anti-slop`), then `gh pr create --base <default> --head <branch> --title "<commit subject>" --body-file <file>`. Get the default branch from `gh repo view --json defaultBranchRef -q .defaultBranchRef.name`. The body has: Ringkasan, Perubahan (the CHANGELOG line), Rute with Dina's last `STATUS:`, Open items from HANDOFF, Cara uji, and the personas that worked. No Claude attribution line, same as the commit trailers.
-4. Review: invoke `/code-review` with the PR number at medium effort, without `--comment`. Print the findings in at most 10 lines. The user decides whether to fix (a new bugfix route on the same branch) or ignore. No automatic loop, no automatic comments.
-5. CI: run `gh pr checks <number>` once and print the result.
-
-The pipeline never merges. Merging is the user's call.
 
 ## Handoff log (`specs/HANDOFF.md`)
 
@@ -195,40 +176,8 @@ Next: <persona, or "done">
 
 Vika reads this log to write the CHANGELOG entry and README changes, so the record of what happened and why is never only in a transcript.
 
-## Context isolation
-
-- Each phase is a fresh subagent — it does **not** inherit the previous persona's conversation.
-- Personas communicate **only through artifact files** (`specs/*`, `src/*`, `docs/*`, `CLAUDE.md`).
-- Between phases the terminal shows only short status lines (`[RUTE]`, `[FASE …]`, `[HANDOFF] …`, `[LOOP …]`).
-
-## Try it (smoke-test)
-
-Full route, in an interactive session:
-
-> **"Buat endpoint health-check kecil, proyek KLIEN. Mulai pipeline."**
-
-```text
-[RUTE] Fitur baru (KLIEN): Satria → Athena → Hexa → Dina → Frans → Vika
-[FASE 1/6] Satria (Opus) mulai — baca permintaan user
-[HANDOFF] Satria → Athena selesai: specs/PRD.md (ada)
-[FASE 2/6] Athena (Sonnet) mulai — baca specs/PRD.md
-[HANDOFF] Athena → Hexa selesai: specs/ADR.md (ada)
-(pause: summary + Lanjut / Revisi PRD / Revisi ADR / Stop)
-```
-
-Short routes: **"Perbaiki SQL injection di /users/search. Mulai pipeline."** → `[RUTE] Bugfix: Hexa → Dina`. **"Proyek PRIBADI: <spesifikasi dengan kriteria penerimaan>. Mulai pipeline."** → `[RUTE] Fitur baru (PRIBADI): Hexa → Dina`.
-
-Passing = every artifact of the route exists, `specs/HANDOFF.md` has the `[RUTE]` entry and one entry per phase, Dina's last `STATUS:` is `APPROVED`, the commit was offered, and on `main`/`master` the branch question was asked (a `[BRANCH]` entry if approved) and the push/PR offer followed the commit. If a phase produces no artifact, stop and inspect that phase rather than continuing.
-
-## Single-persona use
-
-Call any persona directly for focused help without the pipeline: `/satria`, `/athena`, `/hexa`, `/dina`, `/frans`, `/vika`. Each still follows its workflow and the handoff log.
-
 ## Notes
 
 - Personas are **skills in this repo**; per-phase models come from the Agent tool's `model` override at spawn, not from registered agents.
 - Artifacts like `contracts.*` and `ci.yml` are created in the **target project**, never in this skills repo.
-
----
-
-*A pipeline that ships: plan → design → build → audit → deploy → document.*
+- Smoke-test and passing criteria: `agents/smoke-test.md`.

@@ -2,9 +2,9 @@
 name: audit
 effort: high
 description: "Whole-repo security and correctness audit: dependency scan, targeted LLM review, incremental baseline, no subagents by default"
-when_to_use: "Use only when the user types /audit or Dina calls it for the QA gate: a whole-repo or path-scoped audit (handover, pre-release sweep, legacy code). For a diff or PR use /code-review or /security-review."
+when_to_use: "Use when the user types /audit or asks to audit the whole repo or a path, or when Dina calls it for the QA gate: handover, pre-release sweep, legacy code. For a diff or PR use /code-review or /security-review."
 metadata:
-  version: "6.2.0"
+  version: "6.2.1"
 ---
 
 # /audit v6.2
