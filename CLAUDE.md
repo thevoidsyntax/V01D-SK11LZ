@@ -1,12 +1,12 @@
 # V01D-SK11LZ — Panduan Claude Code
 
-Repo ini adalah **ekosistem skill** untuk Claude Code (13 skill; tiap subfolder level atas berisi `SKILL.md`). Claude Code memuat skill ini otomatis dari `~/.claude/skills` — repo ini memang di-clone ke sana.
+Repo ini adalah **ekosistem skill** untuk Claude Code (14 skill; tiap subfolder level atas berisi `SKILL.md`). Claude Code memuat skill ini otomatis dari `~/.claude/skills` — repo ini memang di-clone ke sana.
 
 ## Cara kerja
 
 - **`autor`**: health scan proyek, wizard proyek baru, dan rekomendasi pipeline persona.
 - **Mulai project**: `/autor new` → PRD (`/satria`, berhenti untuk approval) → scaffold → deteksi stack → rekomendasi pipeline. Scaffold dan deteksi dikerjakan autor sendiri, tanpa skill tambahan.
-- **Pipeline 6 persona** (`/agents`): Satria (PM) → Athena (Architect) → Hexa (Coder) → Dina (QA/Security) → Frans (DevOps) → Vika (Writer). Tiap fase dijalankan sebagai **subagent dengan model sendiri** (Opus utk Athena/Dina; Sonnet utk Satria/Hexa/Frans; Haiku utk Vika) lewat Agent tool — persona tetap skill di repo, handoff via berkas artefak (`specs/*`, `src/*`, `docs/*`).
+- **Pipeline 6 persona** (`/agents`): Satria (PM) → Athena (Architect) → Hexa (Coder) → Dina (QA/Security) → Frans (DevOps) → Vika (Writer). Tiap fase dijalankan sebagai **subagent dengan model sendiri** (Opus utk Athena; Sonnet utk Satria/Hexa/Frans/Dina; Haiku utk Vika) lewat Agent tool — persona tetap skill di repo, handoff via berkas artefak (`specs/*`, `src/*`, `docs/*`). Dina naik ke Opus untuk kode concurrency/uang/auth dan untuk putaran setelah `REJECTED`.
 - **Rute**: `/agents` memilih rute terpendek (fitur baru = 6 fase; bugfix = Hexa → Dina; infra = Frans → Dina; docs = Vika; epic roadmap = Athena → Hexa → Dina → Frans → Vika) dan mencetaknya sebelum mulai. Kode berubah → Dina selalu ikut.
 - **Jeda & commit**: berhenti untuk approval user setelah fase desain (PRIBADI: setelah Athena; KLIEN: setelah Satria dan Athena), pass akhir Dina atas hasil Frans/Vika, lalu commit hanya setelah user setuju. Di `main`/`master` rute bertanya branch dulu (KLIEN wajib branch); setelah commit `/agents` menawarkan push + PR (`/code-review` pada PR, tanpa merge otomatis). Push selalu minta approval (hook global).
 - **CHANGELOG**: rute tanpa Vika tetap menulis baris `[Unreleased]` dari HANDOFF.

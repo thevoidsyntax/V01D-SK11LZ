@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **`hooks/`: source of the three user-level hooks.** `cache-guard.js`, `ask-on-git-push.js`, and `changelog-on-commit.js` lived only in `~/.claude/hooks/`, outside any git repo, so a lost disk meant a lost guard. The repo now holds them with their pipe tests (45 cases, green from this folder too) and a `hooks/README.md` with the manual install. They are not skills and Claude Code does not load them from here.
+- **`/uicheck`: verify a UI in a real browser.** `/impeccable` asks for a page that "works at 360px wide with no horizontal scroll", but a model reading markup cannot know that — it is a fact about the render. The new skill serves the page and runs `scripts/check.py` (Playwright, headless Chromium) to measure horizontal overflow and name the elements causing it, console and page errors, inputs without a label, and images without `alt`. It exits non-zero on a fail and writes a screenshot the model reads as the evidence. `/impeccable` gained a "verify the render" step, `/hexa` records a `uicheck:` line in its HANDOFF entry, and Dina blocks a `UI: ya` entry without one — the same shape as the `TDD:` line. Requires `pip install playwright` and `python -m playwright install chromium`; a page that cannot be served is written as `uicheck: skipped — <reason>`, never as a pass.
+
+### Changed
+- **Dina starts on Sonnet and escalates to Opus when it matters.** On a planted-bug fixture (six defects: SQL injection, hardcoded secret, unbounded map, counter race, missing validation, missing error handling) Sonnet 5.5 at effort high found 6/6, the same as Opus, with no false positive, at about half the cost ($0.48–0.87 vs $1.30–1.44). Opus stays for concurrency-, money-, and auth-critical code and for the round after a `REJECTED`. Recall is the bar, not the model: a missing finding is still a `REJECTED`. `/agents` 4.5, `/autor` 3.7, and `CLAUDE.md` carry the new split.
 
 ## [4.2.0] - 2026-10-23
 

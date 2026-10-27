@@ -33,3 +33,7 @@ pnpm-lock.yaml
 
 # Claude Code's synced skills/plugins (managed by Claude Code, not part of this pack)
 /synced/
+
+# Python bytecode
+__pycache__/
+*.pyc

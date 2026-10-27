@@ -34,7 +34,7 @@ git -C $HOME\.claude\skills push
 > git -C $HOME\.claude\skills config user.email "323514556+thevoidsyntax@users.noreply.github.com"
 > ```
 
-## Isi (13 skill)
+## Isi (14 skill)
 
 Tiap subfolder level atas = satu skill (berisi `SKILL.md`).
 
@@ -58,6 +58,7 @@ Pendukung:
 /tdd         Test-first: tulis test yang gagal dulu, catat bukti red → green
 /anti-slop   Teks tanpa gaya AI: copy UI, dokumentasi, komentar
 /impeccable  UI tanpa tampilan template AI: keputusan dari brief produk + checklist
+/uicheck     Verifikasi UI di browser sungguhan: overflow 360px, error konsol, label input
 ```
 
 Tiap fase menambah satu entri ke `specs/HANDOFF.md` di proyek target: input, output, keputusan, isu terbuka, fase berikutnya. Vika menyusun CHANGELOG dan README dari log itu.
@@ -78,14 +79,17 @@ Saat scaffold, `/autor new` membuat `CLAUDE.md` proyek (skala, stack, perintah, 
 
 Folder `hooks/` menyimpan tiga hook Claude Code yang berjalan di luar skill: `cache-guard.js` (menandai cache miss saat konteks besar atau model berganti), `ask-on-git-push.js` (menolak `git push` dengan opsi global), dan `changelog-on-commit.js` (menolak commit tanpa entri CHANGELOG). Bukan skill dan tidak dimuat otomatis — pasangnya manual ke `~/.claude/hooks/`, caranya di `hooks/README.md`.
 
-### Kenapa hanya 13
+### Kenapa hanya 14
 
 Sebuah skill hanya dipertahankan kalau mengubah perilaku default model:
 
 - **proses**: urutan persona, gate, kapan berhenti;
-- **selera**: kode minimal, teks dan UI yang tidak berbau AI.
+- **selera**: kode minimal, teks dan UI yang tidak berbau AI;
+- **kemampuan yang tidak dimiliki model**: `/uicheck` menjalankan browser sungguhan, yang tidak bisa dilakukan model hanya dengan membaca markup.
 
 Pengetahuan stack, security, testing, dan git sudah dikuasai model. Yang belum dikuasai adalah kebiasaannya: disiplin test-first, kode minimal, dan keputusan UI yang tidak berbau AI. Konvensi proyek ditaruh di `CLAUDE.md` dan ADR proyek itu sendiri. Pada 2026-10-21 repo dipangkas dari 139 skill: 73 belum pernah dipanggil, dan daftar skill yang terpotong membuat ~60 skill tampil tanpa deskripsi.
+
+`/uicheck` menambah satu skill pada 2026-10-27, setelah pengukuran: `/impeccable` meminta halaman "bekerja di 360px tanpa scroll horizontal", dan itu fakta tentang render, bukan tentang markup.
 
 Semua skill lama ada di tag `skills-v1-full`. Untuk memulihkan satu skill:
 

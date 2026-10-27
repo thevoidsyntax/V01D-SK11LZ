@@ -3,7 +3,7 @@ name: impeccable
 description: "UI that does not look AI-generated: design decisions from the product brief, banned AI-template tells, and a pass/fail checklist"
 when_to_use: "Use when building or changing any UI: web app, website, landing page, dashboard, or component. Hexa runs its checklist before handing off."
 metadata:
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # Impeccable: UI that does not look AI-generated
@@ -61,7 +61,19 @@ Each one is a checklist item. Using one is a fail unless the Product feel asks f
 | R5 | Visible focus, labelled inputs, full keyboard path for the main task |
 | R6 | Color and type values come from the tokens decided in section 2, not ad-hoc hex values or sizes |
 
-## 5. Checklist result
+## 5. Verify the render
+
+Markup review proves intent, not behaviour. R4, R5, and anything about the page working at a width are claims about the render, so measure them in a browser with `/uicheck`:
+
+```bash
+python ~/.claude/skills/uicheck/scripts/check.py <url> --width 360 --shot 360.png
+```
+
+Read the screenshot with the Read tool — the picture is the evidence, not the HTML source. It reports horizontal overflow, the elements causing it, console errors, inputs without a label, and images without `alt`.
+
+When the page cannot be served (no dev server, needs credentials), say so and record it as `Open:`. Never write a pass you did not measure.
+
+## 6. Checklist result
 
 Run it on your own output before handing off: read the rendered markup and styles, and grep for the obvious tells (`Inter`, `from-purple`, `bg-gradient`, `backdrop-blur`, `rounded-2xl`, emoji, "Get Started"). Fix every fail, then put the result in your HANDOFF entry:
 
@@ -73,3 +85,12 @@ impeccable: PASS 20/20
 ```
 
 Only a full pass may go to Dina. A fail you cannot fix (for example, the brand really is purple) is written as `Bn waived: <reason from the PRD>` and counted separately: `impeccable: PASS 19/20, waived B2`.
+
+Add the render result as its own line:
+
+```text
+uicheck: PASS 360px, no console errors
+- 360px: overflow 0px, widest element 359px
+- console: 0 errors
+- labels: 4/4 inputs labelled
+```

@@ -3,7 +3,7 @@ name: agents
 description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model, routes for small changes, an epic route for roadmaps, approval pauses, and artifact handoff"
 when_to_use: "Use when you want the persona pipeline to build or change something end-to-end (Satria, Athena, Hexa, Dina, Frans, Vika). Trigger with /agents or a request ending in 'mulai pipeline'. Also to build one epic from specs/ROADMAP.md ('kerjakan E2', 'lanjut roadmap'). For single-persona help, call that persona directly."
 metadata:
-  version: "4.4.0"
+  version: "4.5.0"
 ---
 
 # 👥 PERSONA PIPELINE — SATRIA · ATHENA · HEXA · DINA · FRANS · VIKA
@@ -17,13 +17,13 @@ Six specialists run as a sequential, artifact-handoff pipeline. Each phase runs 
 | 1 | **Satria** | Product Manager | Sonnet* | — | `specs/PRD.md` |
 | 2 | **Athena** | System Architect | **Opus** | — (ADR format is in her skill) | `specs/ADR.md`, `specs/contracts.*`, conventions in `CLAUDE.md` |
 | 3 | **Hexa** | Feature Coder | Sonnet* | ponytail; impeccable + anti-slop for UI/copy | `src/*`, `tests/*` |
-| 4 | **Dina** | QA & Security | **Opus** | audit | `specs/AUDIT.md` + `STATUS:` |
+| 4 | **Dina** | QA & Security | Sonnet* | audit | `specs/AUDIT.md` + `STATUS:` |
 | 5 | **Frans** | Platform & DevOps | Sonnet | — | `Dockerfile`, `migrations/*`, `ci.yml` |
 | 6 | **Vika** | Technical Writer | Haiku* | anti-slop | `docs/openapi.*`, `CHANGELOG.md`, README |
 
 Every persona also appends an entry to `specs/HANDOFF.md` (see below). Stack, security, and testing knowledge come from the model and the project's `CLAUDE.md`, not from skills.
 
-\* **Escalation:** Hexa → Opus for transactional/concurrency-heavy logic; Satria → Opus for large/ambiguous products; Vika → Sonnet for a large API surface. Athena & Dina stay Opus (risk gates); Frans stays at least Sonnet (migrations are destructive — never Haiku).
+\* **Escalation:** Hexa → Opus for transactional/concurrency-heavy logic; Satria → Opus for large/ambiguous products; Vika → Sonnet for a large API surface. Athena stays Opus (a bad design poisons every later phase). Dina starts on Sonnet and escalates to Opus for concurrency-, money-, or auth-critical code and for the round after a `REJECTED` (a planted-bug fixture on 2026-10-27 gave Sonnet and Opus the same 6/6 recall, Sonnet at about half the cost). Frans stays at least Sonnet (migrations are destructive — never Haiku).
 
 ## 1. Pick the route
 
