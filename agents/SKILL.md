@@ -3,7 +3,7 @@ name: agents
 description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model, routes for small changes, an epic route for roadmaps, approval pauses, and artifact handoff"
 when_to_use: "Use when you want the persona pipeline to build or change something end-to-end (Satria, Athena, Hexa, Dina, Frans, Vika). Trigger with /agents or a request ending in 'mulai pipeline'. Also to build one epic from specs/ROADMAP.md ('kerjakan E2', 'lanjut roadmap'). For single-persona help, call that persona directly."
 metadata:
-  version: "4.8.0"
+  version: "4.9.0"
 ---
 
 # 👥 PERSONA PIPELINE — SATRIA · ATHENA · HEXA · DINA · FRANS · VIKA
@@ -108,6 +108,8 @@ For each phase in the route, spawn with the **Agent tool**, always in the foregr
 - `prompt`: "You are **<Persona>** (<role>). Invoke the `/<persona>` skill and follow its whole workflow. Read only these artifacts: <inputs>. Produce: <output artifact>, plus everything your workflow writes (the `specs/HANDOFF.md` entry; for Dina also `specs/.audit-base`). Keep your reply to a one-line handoff summary. Write one file per step and never put several large files in one turn. If you are running low on room, finish the file in hand, append your HANDOFF entry listing what is left, and stop."
 - Pass artifact paths, never the prior transcript.
 - **Limit or error.** If a phase ends early on an output limit (`max_output_tokens`) or an API error, check `git status` and the files already written, then continue **the same agent** with SendMessage to its agent id ("continue from where you stopped, do not rewrite finished files, keep replies short"). Spawn a new agent only if SendMessage fails, and list the files already on disk in its prompt. Never resume an agent whose scope was given to another agent.
+- **Async launch.** If the Agent result says the agent was launched async (the harness moves a foreground agent to the background after a while; 3 of 12 Hexa spawns in VentroPoS E1), print `[FASE n/N] <Persona> berjalan di background`, then wait for its completion notice. Do not start a phase that depends on it, and do not poll.
+- **Phase size.** Scope each Hexa spawn to about one layer or one screen group (roughly 10-15 files), so it returns within about 15 minutes and the `[FASE]` and `[HANDOFF]` lines show progress. VentroPoS E1 spawns ran 16-63 minutes each, and the user saw nothing in between.
 - Before **every** spawn, the first one included, print `[FASE n/N] <Persona> (<model>) mulai — baca <inputs>`, where N is the number of phases in the route. After it returns, check the artifact exists **and** `specs/HANDOFF.md` gained that persona's entry, then print `[HANDOFF] <A> → <B> selesai: <artifact> (ada)`. If either is missing, stop and inspect that phase.
 
 ```text
@@ -120,6 +122,19 @@ Vika    → docs/openapi.* + CHANGELOG.md + README (reads HANDOFF.md + src/ + PR
 ```
 
 On the epic route, "PRD" means the epic PRD `specs/prd/<epic>.md`. Pass its path in the spawn prompt; the index `specs/PRD.md` stays the product-level context.
+
+### Parallel spawns
+
+Two cases run several agents at once. Put all their Agent calls in **one message** (still foreground); calls sent one per message run one after another.
+
+1. **Hexa work units.** Only when `specs/ADR.md` has a `Work units` table; Athena writes it only for work above about 8 endpoints or screens (the size at which the layer split in `agents/epic.md` already applies), with 3 or more units or a backend plus a UI. Spawn one Hexa per unit whose `Depends on` units are done (the first wave has none), each with `Unit: <name>` and its owned files in the prompt; repeat per wave; then one last Hexa with `Unit: integration`. No table: one Hexa. Below that size parallel is slower: a 3-module spec (about 14 endpoints) took 906 s and $2.63 with one Hexa against 972 s and $3.10 with four, because each agent pays about 2 minutes of startup and the integration agent runs alone after the wave. At the large size the split already costs the same spawns; running them together removes the waiting (VentroPoS E1: 11 Hexa spawns ran one after another, 6.2 hours).
+2. **Frans and Vika**, when the route has both. Their outputs are disjoint and both read only what exists after the gate. Vika's prompt adds "Frans runs at the same time: do not document the Dockerfile, CI, or migrations". The final Dina pass (section 6) starts after both return.
+
+Rules for a parallel batch:
+- The agents do not write `specs/HANDOFF.md`: `Write` replaces the whole file, so two writers lose an entry. The prompt says "Do not write specs/HANDOFF.md. End your reply with your full HANDOFF entry" (this replaces the one-line reply). The orchestrator appends the entries one after another, in route order, then runs the phase check on the artifacts.
+- Print one `[FASE n/N]` line per agent before the batch, counting each agent as a phase.
+- After the batch compare `git status --short` with the owned files. A file written by two units, or outside its unit's list, stops the run: report it, do not merge by hand.
+- The "Limit or error" rule applies per agent.
 
 ## 4. Approval pauses
 
