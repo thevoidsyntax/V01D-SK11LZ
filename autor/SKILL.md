@@ -3,10 +3,10 @@ name: autor
 description: "Project intelligence: health scan, new-project wizard, roadmap progress, release cutting, and the 6-persona pipeline recommendation"
 when_to_use: "Use when starting a new project, analyzing existing codebase, cutting a release, or needing project intelligence. Run /autor scan for project health check, /autor new for fresh projects, /autor release to cut a version."
 metadata:
-  version: "3.10.0"
+  version: "3.11.0"
 ---
 
-# AUTOR v3.10.0 - PROJECT INTELLIGENCE
+# AUTOR v3.11.0 - PROJECT INTELLIGENCE
 
 ## 🚀 SKILLS
 
@@ -26,7 +26,7 @@ Do not preload them; load one when the current step needs it.
 **On `/autor`, first respond with:**
 
 ```
-AUTOR v3.10.0
+AUTOR v3.11.0
 
 Available Commands:
   /autor              # Analyze current project
@@ -53,7 +53,7 @@ Run these checks:
 - Package.json / requirements detection
 - Test coverage measurement
 - CI/CD configuration check
-- `specs/ROADMAP.md`: when it exists, report roadmap progress (see section 5)
+- `specs/ROADMAP.md`: when it exists, report roadmap progress (see section 5). DEFICIENT when an epic is `in progress` but the file has no `Posisi sekarang` block or no pipeline table for it, or when the commit the block names is behind HEAD by commits that touched `src/` or `tests/` (`git log <commit>..HEAD -- src tests` is not empty): the status is stale (fix: the next phase updates it per `agents/progress.md`)
 
 ### 2. DISPLAY PROJECT STATE
 
@@ -117,7 +117,7 @@ ROADMAP: 1/3 epic selesai
 Berikutnya: E3 Reporting — specs/prd/E3-reporting.md
 ```
 
-Name the next epic as the first row with `todo` whose `Depends on` epics are all `done`. If none is ready, say which epic is blocking. End with the epic route: `Run: "mulai epic E3" or /agents epic`.
+Name the next epic as the first row with `todo` whose `Depends on` epics are all `done`. If none is ready, say which epic is blocking. When the roadmap has a `Posisi sekarang` block, print its summary, verified, and next lines, then the pipeline table of the epic that is `in progress` as one line per phase (`✅ Build · Hexa`, `☐ Gerbang ronde 2 · Dina`). Read the state from there; never rebuild it from `specs/HANDOFF.md`. End with the epic route: `Run: "mulai epic E3" or /agents epic`.
 
 The epic route is `/agents epic`: one epic per run (KLIEN: Athena → Hexa → Dina → Frans → Vika; PRIBADI: Hexa → Dina plus what the route rules add).
 
@@ -153,6 +153,7 @@ The epic route is `/agents epic`: one epic per run (KLIEN: Athena → Hexa → D
 - Dependencies status
 - Running processes
 - Recent changes
+- Roadmap position: the `Posisi sekarang` block and the running epic's pipeline (section 5), when `specs/ROADMAP.md` exists
 
 ### `/autor release` - Cut a Release
 

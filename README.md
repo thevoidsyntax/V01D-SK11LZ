@@ -62,18 +62,18 @@ Pendukung:
 /fool        Uji rencana sebelum dibangun: 5 mode (asumsi, kontra-argumen, failure mode, red team, audit bukti)
 ```
 
-Tiap fase menambah satu entri ke `specs/HANDOFF.md` di proyek target: input, output, keputusan, isu terbuka, fase berikutnya. Vika menyusun CHANGELOG dan README dari log itu.
+Tiap fase menambah satu entri ke `specs/HANDOFF.md` di proyek target: input, output, keputusan, isu terbuka, fase berikutnya. Vika menyusun CHANGELOG dan README dari log itu. Tiap fase juga memperbarui dokumen progres (`agents/progress.md`): posisi dan tabel pipeline di `specs/ROADMAP.md`, kartu `specs/RESUME.md`, baris `[Unreleased]`, dan baris status README, supaya posisi proyek terbaca dalam satu layar.
 
 Cara `/agents` berjalan:
 
 - **Rute.** Perubahan kecil tidak melewati 6 fase. Bugfix: Hexa → Dina. Infra: Frans → Dina. Docs: Vika. Fitur baru skala PRIBADI: Hexa → Dina; Satria, Athena, Frans, dan Vika ikut hanya bila permintaan membutuhkannya. Uji banding pemendek URL: 6 fase $6.26, rute pendek satu prompt $1.10, keduanya 29/29 pada cek hitam-kotak.
 - **Model.** Satria Opus; Vika Haiku; Athena, Hexa, Dina, Frans Sonnet effort high. Opus effort high hanya untuk putaran gate setelah Dina `REJECTED` dua kali. Rute dicetak sebelum mulai dan bisa diganti ("pipeline penuh", "mulai dari Athena").
-- **Jeda.** Pipeline berhenti untuk persetujuanmu setelah fase desain: proyek PRIBADI setelah Athena, proyek KLIEN setelah Satria dan setelah Athena. Bilang "tanpa jeda" untuk melewatinya.
+- **Jeda.** Pipeline berhenti untuk persetujuanmu setelah fase desain: proyek PRIBADI setelah Athena, proyek KLIEN setelah Satria dan setelah Athena. Bilang "tanpa jeda" untuk melewatinya. Di luar jeda desain, pipeline berhenti di fase yang tidak hijau (test merah, jumlah test turun, keputusan terbuka, Dina `REJECTED`) dan menunggu Lanjut / Revisi / Stop; fase hijau lanjut sendiri dengan baris `[PROGRES]`.
 - **Pass akhir.** Kalau Frans atau Vika ikut, Dina memeriksa hasil mereka (migration, Dockerfile, CI, OpenAPI) sebelum selesai.
 - **Docker.** Frans hanya memakai Docker kalau Docker Desktop sudah menyala. Kalau mati, verifikasi ditandai "not verified" di HANDOFF.
 - **Commit.** Commit diusulkan di akhir dengan `Co-Authored-By: <persona>` dan baru dijalankan setelah kamu setuju. Push selalu minta approval.
 - **Branch dan PR.** Di `main`/`master`, pipeline menawarkan branch `feat|fix|chore|docs/<slug>` sebelum mulai (proyek KLIEN wajib). Setelah commit, kamu bisa memilih push + PR: isi PR dari HANDOFF dan CHANGELOG, lalu `/code-review` dijalankan pada PR. Pipeline tidak pernah merge.
-- **Roadmap.** Untuk produk besar, Satria memecahnya jadi epik: `specs/ROADMAP.md` berisi tabel epik, milestone, dependensi, dan status; tiap epik punya PRD sendiri di `specs/prd/<epic>.md`; `specs/PRD.md` jadi index produk plus penunjuk epik aktif. `/agents` mengerjakan satu epik per jalan (KLIEN: Athena → Hexa → Dina → Frans → Vika; PRIBADI: Hexa → Dina, persona lain hanya bila perlu; Satria dilewati karena PRD epik sudah ada), dan menandai epik `done` di roadmap setelah audit terakhir. `/autor scan` melaporkan progres roadmap.
+- **Roadmap.** Untuk produk besar, Satria memecahnya jadi epik: `specs/ROADMAP.md` berisi tabel epik, milestone, dependensi, dan status; tiap epik punya PRD sendiri di `specs/prd/<epic>.md`; `specs/PRD.md` jadi index produk plus penunjuk epik aktif. `/agents` mengerjakan satu epik per jalan (KLIEN: Athena → Hexa → Dina → Frans → Vika; PRIBADI: Hexa → Dina, persona lain hanya bila perlu; Satria dilewati karena PRD epik sudah ada), dan memperbarui tabel pipeline epik di roadmap setelah tiap fase serta menandai epik `done` setelah audit terakhir. `/autor scan` dan `/autor status` melaporkan posisi dan pipeline itu.
 
 Saat scaffold, `/autor new` membuat `CLAUDE.md` proyek (skala, stack, perintah, layout). Athena menambahkan konvensi dari ADR ke file itu, dan persona membaca konvensi stack dari sana.
 

@@ -3,7 +3,7 @@ name: agents
 description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model, routes for small changes, an epic route for roadmaps, approval pauses, and artifact handoff"
 when_to_use: "Use when you want the persona pipeline to build or change something end-to-end (Satria, Athena, Hexa, Dina, Frans, Vika). Trigger with /agents or a request ending in 'mulai pipeline'. Also to build one epic from specs/ROADMAP.md ('kerjakan E2', 'lanjut roadmap'). For single-persona help, call that persona directly."
 metadata:
-  version: "4.9.1"
+  version: "4.10.0"
 ---
 
 # 👥 PERSONA PIPELINE — SATRIA · ATHENA · HEXA · DINA · FRANS · VIKA
@@ -131,10 +131,30 @@ Two cases run several agents at once. Put all their Agent calls in **one message
 2. **Frans and Vika**, when the route has both. Their outputs are disjoint and both read only what exists after the gate. Vika's prompt adds "Frans runs at the same time: do not document the Dockerfile, CI, or migrations". The final Dina pass (section 6) starts after both return.
 
 Rules for a parallel batch:
-- The agents do not write `specs/HANDOFF.md`: `Write` replaces the whole file, so two writers lose an entry. The prompt says "Do not write specs/HANDOFF.md. End your reply with your full HANDOFF entry" (this replaces the one-line reply). The orchestrator appends the entries one after another, in route order, then runs the phase check on the artifacts.
+- The agents do not write `specs/HANDOFF.md`: `Write` replaces the whole file, so two writers lose an entry. The same goes for the progress docs (`agents/progress.md`): each agent ends its reply with its ROADMAP row, and the orchestrator applies the rows. The prompt says "Do not write specs/HANDOFF.md. End your reply with your full HANDOFF entry" (this replaces the one-line reply). The orchestrator appends the entries one after another, in route order, then runs the phase check on the artifacts.
 - Print one `[FASE n/N]` line per agent before the batch, counting each agent as a phase.
 - After the batch compare `git status --short` with the owned files. A file written by two units, or outside its unit's list, stops the run: report it, do not merge by hand.
 - The "Limit or error" rule applies per agent.
+
+### Progress docs and stops
+
+The repo must answer "where are we" at any moment, not only at the end of an epic. **Read `~/.claude/skills/agents/progress.md` and follow it.**
+
+- When the plan is made (`[RUTE]`; on the epic route, right after the epic's `Status` becomes `in progress`), write the epic's pipeline table with every phase of the route as `☐`, plus the position block, in `specs/ROADMAP.md`. Skip it when the project has no `specs/ROADMAP.md`.
+- After every phase, before the next spawn, verify; do not take the report on trust:
+  1. The artifact exists, `specs/HANDOFF.md` gained the entry, and the persona's ROADMAP row changed (`git diff --stat -- specs/ROADMAP.md` is not empty). A missing row: write it from the HANDOFF entry yourself.
+  2. Run the green check for that phase:
+
+     | Phase | Green when |
+     |-------|------------|
+     | Satria, Athena | the design pause of section 4 approves |
+     | Hexa | the project's test command passes with no drop in test count against the ROADMAP position block, type check is clean, and the entry has `Ponytail:`, `TDD:`, `UI:` |
+     | Dina | `STATUS: APPROVED` |
+     | Frans | the build is verified (an unverified build under `Open:` is not green) |
+     | Vika | the docs match the real routes |
+
+  3. Green: print `[PROGRES] <epic> · <Persona> ✅ · berikutnya <Persona>` and start the next phase. Not green (a red test or a dropped test count, `REJECTED`, an `Open:` item that needs a decision from the user): print `[PROGRES] <epic> · <Persona> ❌`, stop, show the findings, and ask with AskUserQuestion: **Lanjut** (start the patch loop or the next phase) / **Revisi** / **Stop**. If you cannot ask (headless), stop and say where.
+- The design pauses of section 4, the commit approval of section 7, and the push rule are unchanged.
 
 ## 4. Approval pauses
 
@@ -157,7 +177,7 @@ At a pause, print a summary of at most 12 lines (PRD scope, assumptions, open qu
 
 Dina ends `specs/AUDIT.md` with a status line:
 - `STATUS: APPROVED` → continue with the route.
-- `STATUS: REJECTED` → hand back to **Hexa** with the findings; Hexa patches, Dina re-audits. **Max 3 loops** (print `[LOOP k/3]`); if still rejected, stop and surface the blocking findings to the user. Loop 1 runs on Sonnet at effort high. After the second `REJECTED`, loops 2 and 3 run Hexa and Dina on Opus at effort high (`model: "opus"`, `effort: "high"`). The final-pass loops in section 6 do not escalate.
+- `STATUS: REJECTED` → record `❌` and stop with the findings (section 3, "Progress docs and stops"); on **Lanjut** hand back to **Hexa** with the findings; Hexa patches, Dina re-audits. **Max 3 loops** (print `[LOOP k/3]`); if still rejected, stop and surface the blocking findings to the user. Loop 1 runs on Sonnet at effort high. After the second `REJECTED`, loops 2 and 3 run Hexa and Dina on Opus at effort high (`model: "opus"`, `effort: "high"`). The final-pass loops in section 6 do not escalate.
 
 Dina's non-blocking findings (MEDIUM and below) are not a loop trigger and do not need a fix before the route continues. The orchestrator does not patch them either — carry them in the commit message and, on the epic route, in the epic's `Open:` items.
 
