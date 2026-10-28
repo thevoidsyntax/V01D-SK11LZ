@@ -85,6 +85,14 @@ def evaluate(m):
         _f(out, "T14", "gradient fill or gradient text",
            f"{g.get('tag', 'div')} class={g.get('cls', '')!r}")
 
+    for a in m.get("trailingArrows") or []:
+        _f(out, "T15", "arrow appended to link or button text",
+           f"{a.get('tag', 'a')}: {str(a.get('text', ''))[:40]!r}")
+
+    for d in m.get("midDots") or []:
+        _f(out, "T16", "meta string joined with middle dots",
+           f"{d.get('tag', 'p')}: {str(d.get('text', ''))[:60]!r}")
+
     return out
 
 

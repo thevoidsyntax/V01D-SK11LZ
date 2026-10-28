@@ -58,7 +58,7 @@ Pendukung:
 /tdd         Test-first: tulis test yang gagal dulu, catat bukti red → green
 /anti-slop   Teks tanpa gaya AI: copy UI, dokumentasi, komentar
 /impeccable  UI tanpa tampilan template AI: keputusan dari brief produk + checklist
-/uicheck     Verifikasi UI di browser sungguhan: overflow 360px, error konsol, label input, house style
+/uicheck     Verifikasi UI di browser sungguhan: overflow 360px, error konsol, label input, house style, jalur keyboard dan fokus
 /fool        Uji rencana sebelum dibangun: 5 mode (asumsi, kontra-argumen, failure mode, red team, audit bukti)
 ```
 

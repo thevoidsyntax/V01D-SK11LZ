@@ -16,7 +16,7 @@ Repo ini adalah **ekosistem skill** untuk Claude Code (15 skill; tiap subfolder 
 - **Release**: `/autor release` memotong blok `[Unreleased]` jadi versi baru — bump semver dari commit sejak tag `v*` terakhir, catatan rollback wajib, tag `v<x.y.z>`, lalu push. Setiap langkah yang menulis/menag/push minta approval.
 - **`CLAUDE.md` proyek**: dibuat saat scaffold (`Scale:`, stack, perintah, layout); Athena menambah bagian Conventions dari ADR. Persona membaca konvensi stack dari sana.
 - **Persona**: `/satria` (PM), `/athena` (System Architect), `/hexa` (Feature Coder), `/dina` (QA + Security), `/frans` (DevOps), `/vika` (Technical Writer).
-- **Pendukung**: `/audit` (dipakai Dina), `/ponytail` (sebelum menulis kode), `/tdd` (test-first: test yang gagal ditulis lebih dulu; checklist dijalankan Hexa, buktinya dicek Dina), `/anti-slop` (teks), `/impeccable` (UI tanpa tampilan template AI; checklist dijalankan Hexa, buktinya dicek Dina), `/uicheck` (UI dirender di browser sungguhan: overflow 360px, error konsol, label input, alt gambar, house style; baris `uicheck:` di HANDOFF dicek Dina), `/fool` (menguji rencana/desain sebelum dibangun: 5 mode, tidak memblokir, tidak menulis ke proyek; bisa dipakai di jeda desain `/agents`).
+- **Pendukung**: `/audit` (dipakai Dina), `/ponytail` (sebelum menulis kode), `/tdd` (test-first: test yang gagal ditulis lebih dulu; checklist dijalankan Hexa, buktinya dicek Dina), `/anti-slop` (teks), `/impeccable` (UI tanpa tampilan template AI; checklist dijalankan Hexa, buktinya dicek Dina), `/uicheck` (UI dirender di browser sungguhan: overflow 360px, error konsol, label input, alt gambar, house style, dan dengan `--a11y` jalur Tab serta fokus terlihat; baris `uicheck:` dan `a11y:` di HANDOFF dicek Dina), `/fool` (menguji rencana/desain sebelum dibangun: 5 mode, tidak memblokir, tidak menulis ke proyek; bisa dipakai di jeda desain `/agents`).
 
 ## Konvensi repo
 
@@ -31,17 +31,17 @@ Jalankan dari root repo; tidak boleh ada output selain baris `warning:` dari git
 ```bash
 # 1. setiap /nama = folder skill di repo ini atau perintah bawaan Claude Code
 BUILTIN='code-review|security-review|simplify|init|review|loop|schedule|run|hooks|config|model|help|clear|compact|permissions|plugin|memory|context|login|logout|effort'
-grep -ohE '(^|[ `("])/[a-z][a-z0-9-]+([` ,.:)"]|$)' */SKILL.md agents/*.md autor/*.md athena/*.md fool/*.md | sed -E 's/^[ `("]*\///; s/[` ,.:)"]*$//' | sort -u |
+grep -ohE '(^|[ `("])/[a-z][a-z0-9-]+([` ,.:)"]|$)' */SKILL.md agents/*.md autor/*.md athena/*.md fool/*.md impeccable/*.md | sed -E 's/^[ `("]*\///; s/[` ,.:)"]*$//' | sort -u |
   while read -r n; do [ -d "$n" ] || echo "$n" | grep -qxE "$BUILTIN" || echo "unknown command: /$n"; done
 # 2. tidak ada ``` di dalam blok ``` (pakai ~~~ untuk blok luar)
-awk 'FNR==1{b=0;t=0} /^[[:space:]]*~~~/{t=!t;next} t{next} /^[[:space:]]*```/{ if(b && $0 ~ /```[A-Za-z]/) print FILENAME":"FNR": nested code fence"; b=!b }' */SKILL.md agents/*.md autor/*.md athena/*.md fool/*.md README.md CLAUDE.md
+awk 'FNR==1{b=0;t=0} /^[[:space:]]*~~~/{t=!t;next} t{next} /^[[:space:]]*```/{ if(b && $0 ~ /```[A-Za-z]/) print FILENAME":"FNR": nested code fence"; b=!b }' */SKILL.md agents/*.md autor/*.md athena/*.md fool/*.md impeccable/*.md README.md CLAUDE.md
 # 3. frontmatter hanya field yang dibaca Claude Code (version ditaruh di metadata.version)
 OK='name|description|when_to_use|effort|metadata|argument-hint|arguments|disable-model-invocation|user-invocable|allowed-tools|disallowed-tools|model|context|agent|background|hooks|paths|shell|license|compatibility'
 for f in */SKILL.md; do awk 'NR==1&&!/^---/{exit} NR>1&&/^---/{exit} NR>1&&/^[A-Za-z_-]+:/{sub(/:.*/,"");print}' "$f" | grep -vxE "$OK" | sed "s|^|$f: unknown frontmatter field |"; done
 # 4. perubahan skill disertai entri CHANGELOG
 git diff HEAD --name-only | grep -q 'SKILL.md' && ! git diff HEAD --name-only | grep -qx 'CHANGELOG.md' && echo "CHANGELOG.md not updated"
 # 4b. test skrip uicheck (melewati dirinya sendiri kalau playwright tidak ada)
-python -m unittest uicheck/scripts/test_check.py >/dev/null 2>&1 || echo "uicheck tests failed"
+python -m unittest uicheck/scripts/test_check.py uicheck/scripts/test_taste_rules.py uicheck/scripts/test_a11y_rules.py >/dev/null 2>&1 || echo "uicheck tests failed"
 # 5. setiap sub-perintah `/skill sub` punya heading sendiri di skill itu, mis. "### `/autor scan`"
 grep -ohE '`/[a-z][a-z0-9-]+ [a-z][a-z0-9-]*' */SKILL.md README.md CLAUDE.md | tr -d '`' | sort -u |
   while read -r s sub; do n=${s#/}; [ -d "$n" ] || continue; grep -qE "^#+ .*\`/$n $sub\`" "$n/SKILL.md" || echo "unhandled sub-command: /$n $sub"; done

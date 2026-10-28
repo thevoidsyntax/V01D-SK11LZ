@@ -79,6 +79,12 @@ class RuleTest(unittest.TestCase):
     def test_gradient_fires(self):
         self.assertIn("T14", self.ids({"gradients": [{"tag": "h1"}]}))
 
+    def test_trailing_arrow_fires(self):
+        self.assertIn("T15", self.ids({"trailingArrows": [{"tag": "a", "text": "Lihat harga →"}]}))
+
+    def test_middle_dot_meta_fires(self):
+        self.assertIn("T16", self.ids({"midDots": [{"tag": "p", "text": "Jakarta · 2026 · Gratis"}]}))
+
 
 @unittest.skipUnless(HAVE_PLAYWRIGHT, "playwright is not installed")
 class PageTest(unittest.TestCase):
@@ -98,7 +104,7 @@ class PageTest(unittest.TestCase):
         r = self.run_check("taste-tells.html", "--taste")
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
         self.assertIn("house style:", r.stdout)
-        for rid in ("T1", "T2", "T3", "T5", "T7", "T8", "T10", "T11", "T12", "T14"):
+        for rid in ("T1", "T2", "T3", "T5", "T7", "T8", "T10", "T11", "T12", "T14", "T15", "T16"):
             self.assertIn(rid, r.stdout, f"{rid} missing:\n{r.stdout}")
 
     def test_strict_mode_fails_the_run(self):

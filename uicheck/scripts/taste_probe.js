@@ -4,7 +4,7 @@
   const out = {
     typeSizes: [], headings: [], eyebrows: [], gradients: [], hairlines: [],
     monospace: [], tinyCaps: [], pillBars: [], iconCards: [], nestedCards: [],
-    emoji: [], indexNumbers: [], shadows: [], sectionGaps: [],
+    emoji: [], indexNumbers: [], shadows: [], sectionGaps: [], trailingArrows: [], midDots: [],
     viewportHeight: window.innerHeight,
   };
   const EMOJI = /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{1F000}-\u{1F0FF}\u{FE0F}]/u;
@@ -152,6 +152,19 @@
     if (!cs.boxShadow || cs.boxShadow === 'none') continue;
     if (cs.position === 'fixed' || cs.position === 'sticky') continue;
     out.shadows.push({ tag: el.tagName.toLowerCase(), cls: cls(el) });
+  }
+
+  for (const el of els) {
+    if (!el.matches('a,button,[role="button"],[role="link"]')) continue;
+    const t = text(el);
+    if (/(→|->|⟶)\s*$/.test(t)) out.trailingArrows.push({ tag: el.tagName.toLowerCase(), text: t.slice(0, 60) });
+  }
+
+  for (const el of els) {
+    const own = [...el.childNodes].filter(n => n.nodeType === 3).map(n => n.textContent).join('');
+    if (!own.includes('·')) continue;
+    const t = text(el);
+    if (t.length <= 120 && t.split('·').length >= 3) out.midDots.push({ tag: el.tagName.toLowerCase(), text: t.slice(0, 80) });
   }
 
   const root = document.querySelector('main') || document.body;

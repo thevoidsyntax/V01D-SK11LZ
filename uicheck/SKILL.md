@@ -1,9 +1,9 @@
 ---
 name: uicheck
-description: "Render a web UI in a real browser and report what markup review cannot: horizontal overflow at narrow widths, console errors, unlabelled inputs, images without alt. Use when a UI change must be verified in the browser, not read in the source."
-when_to_use: "Use when UI work needs proof it renders: after building or changing a page, component, or layout; before handing UI to Dina; when /impeccable asks about 360px width, overflow, console errors, or form accessibility. Needs a running dev server or a static file path."
+description: "Render a web UI in a real browser and report what markup review cannot: horizontal overflow at narrow widths, console errors, unlabelled inputs, images without alt, and with --a11y a Tab walk for keyboard reach and visible focus. Use when a UI change must be verified in the browser, not read in the source."
+when_to_use: "Use when UI work needs proof it renders: after building or changing a page, component, or layout; before handing UI to Dina; when /impeccable asks about 360px width, overflow, console errors, form accessibility, keyboard paths, or focus. Needs a running dev server or a static file path."
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
 ---
 
 # UICheck — verify the render, not the source
@@ -41,6 +41,8 @@ python ~/.claude/skills/uicheck/scripts/check.py <url> --width 360 --shot 360.pn
 | `--height` | viewport height, default 800 |
 | `--taste` | also measure house style and report the findings as warnings |
 | `--taste-strict` | make house-style findings fail the run |
+| `--a11y` | also walk the page with Tab and report accessibility findings as warnings |
+| `--a11y-strict` | make accessibility findings fail the run |
 
 Exit code is 0 on pass, 1 on a fail. The script reports: horizontal overflow in px, the elements that are wider than the viewport, console errors and page errors, inputs with no label (a placeholder does not count; `hidden`, `submit`, `button` and `reset` inputs are skipped), images with no `alt` attribute (`alt=""` is valid for decorative images).
 
@@ -70,6 +72,8 @@ python ~/.claude/skills/uicheck/scripts/check.py <url> --width 360 --taste
 | T12 | More than six elements carrying a box-shadow |
 | T13 | A blank stretch taller than half the screen |
 | T14 | A gradient fill or gradient text |
+| T15 | An arrow (`→`, `->`) at the end of link or button text |
+| T16 | A meta string joined with middle dots (`A · B · C`) |
 
 The findings are warnings. A page that uses one on purpose — because the PRD asks for it by name — is not a failure, and `--taste-strict` stays off unless the PRD forbids all of them.
 
@@ -77,7 +81,30 @@ The rules live in `scripts/taste_rules.py` and decide from a measurement dict, s
 
 The rule set and the direction library follow taste-skill by Leonxlnx (MIT, github.com/leonxlnx/taste-skill); the measurements and the decisions here are this repo's own.
 
-## 4. What each finding means
+## 4. Accessibility (`--a11y`)
+
+`/impeccable` R5 asks for visible focus and a full keyboard path. Both are facts about the render: the script presses Tab through the page, up to 30 stops, and compares each focused element with its resting style.
+
+```bash
+python ~/.claude/skills/uicheck/scripts/check.py <url> --width 360 --a11y
+```
+
+| Rule | What it measures | WCAG |
+|------|------------------|------|
+| A1 | `maximum-scale=1` or `user-scalable=no` in the viewport meta | 1.4.4 |
+| A2 | A positive `tabindex` | 2.4.3 |
+| A3 | A click target the keyboard cannot reach: `onclick`, a click listener, or `cursor: pointer` on an element that takes no focus | 2.1.1 |
+| A4 | A Tab stop whose outline, shadow, border, background, and color all stay the same when focused | 2.4.7 |
+| A5 | A Tab stop covered by other content, such as a sticky bar | 2.4.11 |
+| A6 | Focusable elements exist but Tab reaches none of them | 2.1.1 |
+
+Reflow (1.4.10) is the overflow check at `--width 320`. Names, roles, and screen-reader announcements are not measured: read them from the code with `/impeccable` R7, and report them as not verified.
+
+A3 finds listeners added with `addEventListener` on the element itself. A framework that delegates every click to the root (React does) leaves only the `cursor: pointer` signal, so a fake button styled without a pointer cursor is missed there. The findings are warnings; `--a11y-strict` fails the run.
+
+The rules live in `scripts/a11y_rules.py`, the browser part in `scripts/a11y_probe.js`. Tests: `python -m unittest uicheck/scripts/test_a11y_rules.py -v`, with `fixtures/a11y-clean.html` and `fixtures/a11y-broken.html`. The rule set follows better-accessibility by Jakub Krehel (MIT); the measurements are this repo's own.
+
+## 5. Serving a static file
 
 For a static file, serve it first — a `file://` URL blocks some requests:
 
@@ -86,7 +113,7 @@ python -m http.server 8000 --directory src
 python ~/.claude/skills/uicheck/scripts/check.py http://localhost:8000/index.html --width 360
 ```
 
-## 5. What each finding means
+## 6. What each finding means
 
 | Finding | What to do |
 |---------|-----------|
@@ -94,8 +121,11 @@ python ~/.claude/skills/uicheck/scripts/check.py http://localhost:8000/index.htm
 | Console errors | A failing request, a bad import, an undefined variable. Read the message — it names the file. |
 | Input without a label | Add a `<label for=...>`, an `aria-label`, or wrap the control. Placeholder text is not a label; it disappears on focus. |
 | Image without `alt` | `alt=""` for decorative images, a description for meaningful ones. |
+| A3 click target | Make it a `<button>`, or `<a href>` when it navigates. A `div` with a handler is invisible to the keyboard. |
+| A4 no visible focus | Remove `outline: none`, or style `:focus-visible` with a ring that reaches 3:1. |
+| A5 covered focus | Add `scroll-padding-top` equal to the sticky bar's height, or move the bar out of the way. |
 
-## 6. In the HANDOFF entry
+## 7. In the HANDOFF entry
 
 Add one line so the gate can check it:
 
@@ -114,9 +144,15 @@ taste: 2 findings (warn)
 - T14 gradient fill: h1
 ```
 
+When the run used `--a11y`, add an `a11y:` line the same way:
+
+```text
+a11y: clean, tab stops 9 of 9 focusable
+```
+
 A `uicheck:` line is required when the change touches UI and the project could be served. When it could not be served, write `uicheck: skipped — <reason>` and list it under `Open:`. A missing line is a blocking finding for Dina, exactly like a missing `TDD:` line.
 
-## 7. When not to use it
+## 8. When not to use it
 
 - A library, CLI, or API with no rendered page. There is nothing to render.
 - A design decision. That is `/impeccable` — this skill checks the build, not the taste.

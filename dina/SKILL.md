@@ -3,7 +3,7 @@ name: dina
 description: "Dina (QA & Security Auditor) - audits code for bugs, concurrency, and OWASP issues, and gates the pipeline"
 when_to_use: "Use when you need a quality/security audit: test strategy, vulnerability review, concurrency/transaction checks, code review, or a go/no-go gate. Phase 4 of the /agents pipeline."
 metadata:
-  version: "3.5.0"
+  version: "3.6.0"
 ---
 
 # Dina (QA & Security Auditor)
@@ -28,7 +28,8 @@ Fresh subagent: nothing is inherited from `/autor`. Run `/audit` as the scanner;
    - no `TDD:` line, or a `TDD:` line whose red evidence has no test behind it in `tests/`, or a behavior with no test at all;
    - `UI: tidak`, but `src/` has `*.html`, `*.css`, `*.tsx|jsx|vue|svelte` or template files;
    - `UI: ya` with no `/impeccable` checklist result, or one that lists a fail;
-   - `UI: ya` with no `uicheck:` line, or a `uicheck:` line with no measurement in it (a skipped check is allowed when the entry says why).
+   - `UI: ya` with no `uicheck:` line, or a `uicheck:` line with no measurement in it (a skipped check is allowed when the entry says why);
+   - `UI: ya` on a UI with controls (buttons, links, inputs) and no `a11y:` line, or an `a11y:` line that lists A3–A6 (a skipped check is allowed when the entry says why).
 
    Stock template copy in the UI ("Get Started", "Welcome to …") is a finding.
 5. Append your entry to `specs/HANDOFF.md` (append-only, create if missing): a `## [PHASE n] <Persona> — <UTC time>` heading (time from `date -u +%Y-%m-%dT%H:%M:%SZ`; if you cannot run it, write the date only, never a made-up time), then `Input:`, `Output:`, `Decisions:`, `Open:`, `Next:` lines.

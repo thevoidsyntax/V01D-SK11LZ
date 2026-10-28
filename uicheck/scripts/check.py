@@ -11,9 +11,13 @@ With --taste it also measures house style (type scale, eyebrow labels, hairline
 rules, gradients and the rest) and reports the findings. Those are warnings by
 default; --taste-strict makes them fail the run.
 
+With --a11y it walks the page with Tab and checks zoom lock, tab order, click
+targets the keyboard cannot reach, visible focus, and focus hidden behind other
+content. Warnings by default; --a11y-strict makes them fail the run.
+
 Usage:
     python scripts/check.py <url> [--width 360] [--height 800] [--shot out.png] [--wait selector]
-    python scripts/check.py <url> --taste
+    python scripts/check.py <url> --taste --a11y
 
 Example:
     python scripts/check.py http://localhost:5173 --width 360 --shot 360.png
@@ -26,6 +30,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 from taste_rules import evaluate as evaluate_taste  # noqa: E402
+from a11y_rules import evaluate as evaluate_a11y  # noqa: E402
 
 try:
     from playwright.sync_api import sync_playwright
@@ -34,6 +39,38 @@ except ImportError:
 
 
 PROBE = Path(__file__).with_name("taste_probe.js")
+A11Y_PROBE = Path(__file__).with_name("a11y_probe.js")
+MAX_TAB_STOPS = 30
+
+
+def measure_a11y(page):
+    """Static scan, then a Tab walk until focus leaves the page or comes back round."""
+    source = A11Y_PROBE.read_text(encoding="utf-8")
+    page.evaluate(f"window.__a11y = ({source})")
+    m = page.evaluate("window.__a11y.scan()")
+    stops, seen = [], set()
+    for _ in range(MAX_TAB_STOPS):
+        page.keyboard.press("Tab")
+        stop = page.evaluate("window.__a11y.stop()")
+        if stop is None:
+            if stops:
+                break
+            continue
+        if stop["id"] in seen:
+            break
+        seen.add(stop["id"])
+        stops.append(stop)
+    m["focusStops"] = stops
+    return m
+
+
+def report(label, findings):
+    if not findings:
+        print(f"{label}: clean")
+        return
+    print(f"{label}: {len(findings)} finding(s)")
+    for f in findings:
+        print(f"  {f['id']} {f['title']}: {f['detail']}")
 
 
 def main():
@@ -48,7 +85,12 @@ def main():
                     help="also measure house style and report the findings as warnings")
     ap.add_argument("--taste-strict", action="store_true",
                     help="make house-style findings fail the run")
+    ap.add_argument("--a11y", action="store_true",
+                    help="also walk the page with Tab and report accessibility findings as warnings")
+    ap.add_argument("--a11y-strict", action="store_true",
+                    help="make accessibility findings fail the run")
     args = ap.parse_args()
+    a11y = args.a11y or args.a11y_strict
 
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -61,6 +103,8 @@ def main():
         page = browser.new_page(viewport={"width": args.width, "height": args.height})
         page.on("console", lambda m: console.append((m.type, m.text)) if m.type in ("error", "warning") else None)
         page.on("pageerror", lambda e: problems.append(f"page error: {e}"))
+        if a11y:
+            page.add_init_script(f"({A11Y_PROBE.read_text(encoding='utf-8')}).hook()")
 
         try:
             page.goto(args.url, wait_until="networkidle", timeout=args.timeout)
@@ -127,6 +171,10 @@ def main():
         if args.shot:
             page.screenshot(path=args.shot, full_page=True)
 
+        # Last: the Tab walk moves focus and scroll, which the other checks must not see.
+        a11y_m = measure_a11y(page) if a11y else {}
+        a11y_findings = evaluate_a11y(a11y_m) if a11y else []
+
         browser.close()
 
     errors = [t for t in console if t[0] == "error"]
@@ -156,12 +204,10 @@ def main():
             print(f"  {text}")
 
     if args.taste or args.taste_strict:
-        if taste_findings:
-            print(f"house style: {len(taste_findings)} finding(s)")
-            for f in taste_findings:
-                print(f"  {f['id']} {f['title']}: {f['detail']}")
-        else:
-            print("house style: clean")
+        report("house style", taste_findings)
+    if a11y:
+        print(f"tab stops: {len(a11y_m['focusStops'])} of {a11y_m['focusable']} focusable")
+        report("accessibility", a11y_findings)
 
     fails = []
     if result["overflow"] > 1:
@@ -172,12 +218,12 @@ def main():
         fails.append(f"{len(result['unlabelled'])} input(s) without a label")
     if result["noAlt"]:
         fails.append(f"{len(result['noAlt'])} image(s) without alt text")
-    if args.taste_strict:
-        for f in taste_findings:
-            fails.append(f"{f['id']} {f['title']}: {f['detail']}")
+    strict = (taste_findings if args.taste_strict else []) + (a11y_findings if args.a11y_strict else [])
+    fails += [f"{f['id']} {f['title']}: {f['detail']}" for f in strict]
 
     print()
-    print(json.dumps({"fails": fails, "pass": not fails, "taste": taste_findings}, indent=2))
+    print(json.dumps({"fails": fails, "pass": not fails, "taste": taste_findings, "a11y": a11y_findings},
+                     indent=2))
     sys.exit(1 if fails else 0)
 
 
