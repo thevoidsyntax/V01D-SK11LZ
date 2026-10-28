@@ -1,13 +1,13 @@
 # V01D-SK11LZ — Panduan Claude Code
 
-Repo ini adalah **ekosistem skill** untuk Claude Code (14 skill; tiap subfolder level atas berisi `SKILL.md`). Claude Code memuat skill ini otomatis dari `~/.claude/skills` — repo ini memang di-clone ke sana.
+Repo ini adalah **ekosistem skill** untuk Claude Code (15 skill; tiap subfolder level atas berisi `SKILL.md`). Claude Code memuat skill ini otomatis dari `~/.claude/skills` — repo ini memang di-clone ke sana.
 
 ## Cara kerja
 
 - **`autor`**: health scan proyek, wizard proyek baru, dan rekomendasi pipeline persona.
 - **Mulai project**: `/autor new` → PRD (`/satria`, berhenti untuk approval) → scaffold → deteksi stack → rekomendasi pipeline. Scaffold dan deteksi dikerjakan autor sendiri, tanpa skill tambahan.
 - **Pipeline 6 persona** (`/agents`): Satria (PM) → Athena (Architect) → Hexa (Coder) → Dina (QA/Security) → Frans (DevOps) → Vika (Writer). Tiap fase dijalankan sebagai **subagent dengan model sendiri** (Opus utk Satria; Haiku utk Vika; Athena/Hexa/Dina/Frans Sonnet dengan effort high) lewat Agent tool — persona tetap skill di repo, handoff via berkas artefak (`specs/*`, `src/*`, `docs/*`). Satu-satunya eskalasi ke Opus: setelah Dina `REJECTED` dua kali, putaran berikutnya (Hexa + Dina) memakai Opus effort high.
-- **Rute**: `/agents` memilih rute terpendek (fitur baru KLIEN = 6 fase; fitur baru PRIBADI = Hexa → Dina, persona lain hanya bila perlu atau diminta; bugfix = Hexa → Dina; infra = Frans → Dina; docs = Vika; epic roadmap KLIEN = Athena → Hexa → Dina → Frans → Vika, PRIBADI = Hexa → Dina) dan mencetaknya sebelum mulai. Kode berubah → Dina selalu ikut.
+- **Rute**: `/agents` memilih rute terpendek (fitur baru KLIEN = 6 fase; fitur baru PRIBADI = Hexa → Dina, persona lain hanya bila perlu atau diminta; bugfix = Hexa → Dina; kode lama tanpa spec = Athena (legacy mode) → Hexa → Dina; infra = Frans → Dina; docs = Vika; epic roadmap KLIEN = Athena → Hexa → Dina → Frans → Vika, PRIBADI = Hexa → Dina) dan mencetaknya sebelum mulai. Kode berubah → Dina selalu ikut.
 - **Jeda & commit**: berhenti untuk approval user setelah fase desain (PRIBADI: setelah Athena; KLIEN: setelah Satria dan Athena), pass akhir Dina atas hasil Frans/Vika, lalu commit hanya setelah user setuju. Di `main`/`master` rute bertanya branch dulu (KLIEN wajib branch); setelah commit `/agents` menawarkan push + PR (`/code-review` pada PR, tanpa merge otomatis). Push selalu minta approval (hook global).
 - **CHANGELOG**: rute tanpa Vika tetap menulis baris `[Unreleased]` dari HANDOFF.
 - **Hooks user-level**: `cache-guard.js`, `ask-on-git-push.js`, dan `changelog-on-commit.js` ada di `hooks/` (sumber, bukan skill). Hook global `changelog-on-commit` **menolak** (deny, berlaku juga di auto mode) commit `feat`/`fix`/breaking, tanpa tipe, atau yang menyentuh Dockerfile/compose/`migrations/` tidak menyertakan `CHANGELOG.md` (di repo yang punya CHANGELOG); `SKIP_CHANGELOG=1` hanya setelah user setuju. `docs`/`test`/`chore`/`ci` dikecualikan. Hook push menolak push yang memakai opsi global git (`-C`, `-c`) supaya ask rule `git push` selalu menanyai user.
@@ -16,7 +16,7 @@ Repo ini adalah **ekosistem skill** untuk Claude Code (14 skill; tiap subfolder 
 - **Release**: `/autor release` memotong blok `[Unreleased]` jadi versi baru — bump semver dari commit sejak tag `v*` terakhir, catatan rollback wajib, tag `v<x.y.z>`, lalu push. Setiap langkah yang menulis/menag/push minta approval.
 - **`CLAUDE.md` proyek**: dibuat saat scaffold (`Scale:`, stack, perintah, layout); Athena menambah bagian Conventions dari ADR. Persona membaca konvensi stack dari sana.
 - **Persona**: `/satria` (PM), `/athena` (System Architect), `/hexa` (Feature Coder), `/dina` (QA + Security), `/frans` (DevOps), `/vika` (Technical Writer).
-- **Pendukung**: `/audit` (dipakai Dina), `/ponytail` (sebelum menulis kode), `/tdd` (test-first: test yang gagal ditulis lebih dulu; checklist dijalankan Hexa, buktinya dicek Dina), `/anti-slop` (teks), `/impeccable` (UI tanpa tampilan template AI; checklist dijalankan Hexa, buktinya dicek Dina), `/uicheck` (UI dirender di browser sungguhan: overflow 360px, error konsol, label input, alt gambar, house style; baris `uicheck:` di HANDOFF dicek Dina).
+- **Pendukung**: `/audit` (dipakai Dina), `/ponytail` (sebelum menulis kode), `/tdd` (test-first: test yang gagal ditulis lebih dulu; checklist dijalankan Hexa, buktinya dicek Dina), `/anti-slop` (teks), `/impeccable` (UI tanpa tampilan template AI; checklist dijalankan Hexa, buktinya dicek Dina), `/uicheck` (UI dirender di browser sungguhan: overflow 360px, error konsol, label input, alt gambar, house style; baris `uicheck:` di HANDOFF dicek Dina), `/fool` (menguji rencana/desain sebelum dibangun: 5 mode, tidak memblokir, tidak menulis ke proyek; bisa dipakai di jeda desain `/agents`).
 
 ## Konvensi repo
 
@@ -31,10 +31,10 @@ Jalankan dari root repo; tidak boleh ada output selain baris `warning:` dari git
 ```bash
 # 1. setiap /nama = folder skill di repo ini atau perintah bawaan Claude Code
 BUILTIN='code-review|security-review|simplify|init|review|loop|schedule|run|hooks|config|model|help|clear|compact|permissions|plugin|memory|context|login|logout|effort'
-grep -ohE '(^|[ `("])/[a-z][a-z0-9-]+([` ,.:)"]|$)' */SKILL.md agents/*.md autor/*.md | sed -E 's/^[ `("]*\///; s/[` ,.:)"]*$//' | sort -u |
+grep -ohE '(^|[ `("])/[a-z][a-z0-9-]+([` ,.:)"]|$)' */SKILL.md agents/*.md autor/*.md athena/*.md fool/*.md | sed -E 's/^[ `("]*\///; s/[` ,.:)"]*$//' | sort -u |
   while read -r n; do [ -d "$n" ] || echo "$n" | grep -qxE "$BUILTIN" || echo "unknown command: /$n"; done
 # 2. tidak ada ``` di dalam blok ``` (pakai ~~~ untuk blok luar)
-awk 'FNR==1{b=0;t=0} /^[[:space:]]*~~~/{t=!t;next} t{next} /^[[:space:]]*```/{ if(b && $0 ~ /```[A-Za-z]/) print FILENAME":"FNR": nested code fence"; b=!b }' */SKILL.md agents/*.md autor/*.md README.md CLAUDE.md
+awk 'FNR==1{b=0;t=0} /^[[:space:]]*~~~/{t=!t;next} t{next} /^[[:space:]]*```/{ if(b && $0 ~ /```[A-Za-z]/) print FILENAME":"FNR": nested code fence"; b=!b }' */SKILL.md agents/*.md autor/*.md athena/*.md fool/*.md README.md CLAUDE.md
 # 3. frontmatter hanya field yang dibaca Claude Code (version ditaruh di metadata.version)
 OK='name|description|when_to_use|effort|metadata|argument-hint|arguments|disable-model-invocation|user-invocable|allowed-tools|disallowed-tools|model|context|agent|background|hooks|paths|shell|license|compatibility'
 for f in */SKILL.md; do awk 'NR==1&&!/^---/{exit} NR>1&&/^---/{exit} NR>1&&/^[A-Za-z_-]+:/{sub(/:.*/,"");print}' "$f" | grep -vxE "$OK" | sed "s|^|$f: unknown frontmatter field |"; done

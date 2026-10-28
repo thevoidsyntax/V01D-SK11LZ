@@ -3,7 +3,7 @@ name: agents
 description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model, routes for small changes, an epic route for roadmaps, approval pauses, and artifact handoff"
 when_to_use: "Use when you want the persona pipeline to build or change something end-to-end (Satria, Athena, Hexa, Dina, Frans, Vika). Trigger with /agents or a request ending in 'mulai pipeline'. Also to build one epic from specs/ROADMAP.md ('kerjakan E2', 'lanjut roadmap'). For single-persona help, call that persona directly."
 metadata:
-  version: "4.7.0"
+  version: "4.8.0"
 ---
 
 # 👥 PERSONA PIPELINE — SATRIA · ATHENA · HEXA · DINA · FRANS · VIKA
@@ -34,6 +34,7 @@ Before spawning anything, choose the shortest route that covers the change. Your
 | New feature or module, KLIEN | Satria → Athena → Hexa → Dina → Frans → Vika |
 | New feature or module, PRIBADI | Hexa → Dina (Satria, Athena, Frans, Vika join only as the rules below say) |
 | Change to an existing feature, contracts unchanged | Hexa → Dina (→ Vika if the API or user-facing docs change) |
+| Existing codebase with no spec, ADR, or docs | Athena (legacy mode) → Hexa → Dina |
 | Bugfix | Hexa (failing test first) → Dina |
 | Infra or deploy only | Frans → Dina |
 | Docs only | Vika |
@@ -42,6 +43,7 @@ Before spawning anything, choose the shortest route that covers the change. Your
 
 Rules that override the table:
 - A contract, schema, or public API change adds Athena before Hexa, unless the request already defines it.
+- A request about code that already exists but was never written down (no PRD, no ADR, no tests) routes through **Athena in legacy mode**: she reconstructs the observed behavior into `specs/LEGACY.md` first, then designs against that evidence.
 - PRIBADI new work, epics included, stays Hexa → Dina. Satria joins only when the request has no acceptance criteria; Athena only when the request leaves the contract or schema undefined; Frans and Vika only when the request asks for Docker, CI, migrations, or docs.
 - A migration adds Frans.
 - Any code change keeps Dina. Dina is never skipped when code changed.
@@ -128,9 +130,10 @@ Design mistakes cost the most once code exists, so the pipeline stops for the us
 | PRIBADI | Athena (PRD and ADR reviewed together) |
 | KLIEN | Satria, and again after Athena |
 
-At a pause, print a summary of at most 12 lines (PRD scope, assumptions, open questions; ADR decisions and rejected alternatives), then ask with AskUserQuestion with exactly these options: **Lanjut** / **Revisi PRD** / **Revisi ADR** / **Stop**. On a revision, ask for the notes with one more AskUserQuestion (suggested notes plus Other for free text), re-run that persona with them, then pause again.
+At a pause, print a summary of at most 12 lines (PRD scope, assumptions, open questions; ADR decisions and rejected alternatives; every OPEN item from Athena's `Assumptions:` line, verbatim), then ask with AskUserQuestion with exactly these options: **Lanjut** / **Revisi PRD** / **Revisi ADR** / **Stop**. On a revision, ask for the notes with one more AskUserQuestion (suggested notes plus Other for free text), re-run that persona with them, then pause again.
 
 - "tanpa jeda" in the request skips the design pauses. The commit approval (section 7) always stays.
+- At a pause the user can run `/fool` to stress-test the PRD or ADR before approving. It is not part of the route: it never spawns a phase, never blocks, and never writes to the project.
 - If you cannot ask (headless) or get no answer, stop at the pause and say where the run stopped.
 - Routes without Satria or Athena have no design pause.
 - On the epic route there is no Satria phase, so KLIEN pauses after Athena only.
