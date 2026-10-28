@@ -15,6 +15,8 @@ Dibaca `autor/SKILL.md` saat `/autor new` dijalankan. Section 4 di sana = rekome
 6. 🎮 Game
 ```
 
+**Step 1b:** Ask the UI language with one question: Indonesian, English, or both. The product's language is the user's call. Never ask the code language: it is English by the user's global rules, and only user-facing text follows the UI language.
+
 **Step 2:** Run `/satria` to turn the idea into `specs/PRD.md`, then end your turn: summarize the PRD and its assumptions and ask for approval. For a product with several features, Satria uses roadmap mode and writes `specs/ROADMAP.md` with one PRD per epic — summarize the roadmap and the first epic instead. Plan mode may not hold in a headless or auto session, so the stop is yours to make. Do not run Step 3 or invoke `/athena` in the same turn; Satria's `[HANDOFF]` line is not a trigger here.
 
 **Step 3:** Scaffold the project yourself; there is no scaffolding skill. Use the stack from the approved PRD and the folder layout from the user's global `CLAUDE.md` rules. Create: `git init` if needed, `.gitignore`, `.env.example` (no secrets), a manifest with start/test scripts, one passing test, a README stub, and the **project `CLAUDE.md`**:
@@ -22,6 +24,8 @@ Dibaca `autor/SKILL.md` saat `/autor new` dijalankan. Section 4 di sana = rekome
 ```markdown
 # <project> — Claude Code guide
 Scale: PRIBADI | KLIEN
+UI language: <language of labels, messages, and copy, from Step 1b>
+Code language: English (identifiers, comments, file names, DB columns, enums, API fields)
 Stack: <language + version, framework, database>
 Commands: <install>, <run>, <test>, <lint if any>
 Layout: <top folders and what lives where>
