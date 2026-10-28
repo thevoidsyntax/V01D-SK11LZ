@@ -64,11 +64,15 @@ class RuleTest(unittest.TestCase):
 @unittest.skipUnless(HAVE_PLAYWRIGHT, "playwright is not installed")
 class PageTest(unittest.TestCase):
     def run_check(self, fixture, *flags):
-        return subprocess.run(
+        r = subprocess.run(
             [sys.executable, str(CHECK), (FIXTURES / fixture).as_uri(), "--width", "360",
-             "--timeout", "5000", *flags],
+             "--timeout", "30000", *flags],
             capture_output=True, text=True,
         )
+        # Exit code 1 means a fail and also "could not load"; only a measured page counts.
+        if "url=" not in r.stdout:
+            self.fail(f"check.py never measured the page (exit {r.returncode}):\n{r.stderr[-800:]}")
+        return r
 
     def test_clean_page_reports_no_finding(self):
         r = self.run_check("a11y-clean.html", "--a11y")
@@ -84,7 +88,7 @@ class PageTest(unittest.TestCase):
 
     def test_strict_mode_fails_the_run(self):
         r = self.run_check("a11y-broken.html", "--a11y-strict")
-        self.assertEqual(r.returncode, 1, r.stdout)
+        self.assertEqual(r.returncode, 1, r.stdout + r.stderr)
         self.assertIn('"pass": false', r.stdout)
 
 

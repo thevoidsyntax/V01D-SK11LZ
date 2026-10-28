@@ -22,11 +22,15 @@ class CheckTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             page = Path(tmp) / "index.html"
             page.write_text(f"<!doctype html><title>t</title><body>{body}</body>", encoding="utf-8")
-            return self.run_url(page.as_uri(), width)
+            r = self.run_url(page.as_uri(), width)
+        # Exit code 1 means a fail and also "could not load"; only a measured page counts.
+        if "url=" not in r.stdout:
+            self.fail(f"check.py never measured the page (exit {r.returncode}):\n{r.stderr[-800:]}")
+        return r
 
     def run_url(self, url, width=360):
         return subprocess.run(
-            [sys.executable, str(CHECK), url, "--width", str(width), "--timeout", "5000"],
+            [sys.executable, str(CHECK), url, "--width", str(width), "--timeout", "30000"],
             capture_output=True, text=True,
         )
 
@@ -36,17 +40,17 @@ class CheckTest(unittest.TestCase):
 
     def test_wide_element_fails_and_is_named(self):
         r = self.run_check('<div style="width:900px">wide</div>')
-        self.assertEqual(r.returncode, 1, r.stdout)
+        self.assertEqual(r.returncode, 1, r.stdout + r.stderr)
         self.assertIn("div width=900", r.stdout)
 
     def test_input_without_label_fails(self):
         r = self.run_check('<input name="email">')
-        self.assertEqual(r.returncode, 1, r.stdout)
+        self.assertEqual(r.returncode, 1, r.stdout + r.stderr)
         self.assertIn("inputs without a label", r.stdout)
 
     def test_placeholder_is_not_a_label(self):
         r = self.run_check('<input name="email" placeholder="Email">')
-        self.assertEqual(r.returncode, 1, "placeholder-only input passed:\n" + r.stdout)
+        self.assertEqual(r.returncode, 1, "placeholder-only input passed:\n" + r.stdout + r.stderr)
 
     def test_label_for_wrapping_and_aria_label_pass(self):
         r = self.run_check(
@@ -67,12 +71,12 @@ class CheckTest(unittest.TestCase):
 
     def test_image_without_alt_attribute_fails(self):
         r = self.run_check(f'<img src="{PIXEL}">')
-        self.assertEqual(r.returncode, 1, r.stdout)
+        self.assertEqual(r.returncode, 1, r.stdout + r.stderr)
         self.assertIn("images without alt", r.stdout)
 
     def test_decorative_image_with_empty_alt_passes(self):
         r = self.run_check(f'<img src="{PIXEL}" alt="">')
-        self.assertEqual(r.returncode, 0, "alt=\"\" flagged as missing:\n" + r.stdout)
+        self.assertEqual(r.returncode, 0, "alt=\"\" flagged as missing:\n" + r.stdout + r.stderr)
 
     def test_image_with_alt_text_passes(self):
         r = self.run_check(f'<img src="{PIXEL}" alt="a cat">')

@@ -73,7 +73,43 @@ def report(label, findings):
         print(f"  {f['id']} {f['title']}: {f['detail']}")
 
 
-def main():
+BASIC_PROBE = """(vw) => {
+    const doc = document.documentElement;
+    const overflow = Math.max(doc.scrollWidth, document.body.scrollWidth) - vw;
+    const wide = [];
+    for (const el of document.querySelectorAll('body *')) {
+        const r = el.getBoundingClientRect();
+        if (r.width > vw + 1 && r.height > 0) {
+            wide.push({
+                tag: el.tagName.toLowerCase(),
+                cls: (el.className && el.className.toString().slice(0, 60)) || '',
+                width: Math.round(r.width),
+            });
+        }
+    }
+    const unlabelled = [];
+    for (const el of document.querySelectorAll('input,select,textarea')) {
+        if (['hidden', 'submit', 'button', 'reset'].includes(el.type)) continue;
+        const id = el.id;
+        const hasLabel = id && document.querySelector(`label[for="${id}"]`);
+        const wrapped = el.closest('label');
+        const aria = el.getAttribute('aria-label') || el.getAttribute('aria-labelledby');
+        if (!hasLabel && !wrapped && !aria) {
+            unlabelled.push(el.tagName.toLowerCase() + (el.name ? `[name=${el.name}]` : ''));
+        }
+    }
+    const noAlt = [...document.querySelectorAll('img')]
+        .filter((i) => !i.hasAttribute('alt'))
+        .map((i) => i.getAttribute('src') || '(no src)');
+    const overflowX = getComputedStyle(doc).overflowX;
+    return {
+        overflow, wide: wide.slice(0, 12), unlabelled, noAlt: noAlt.slice(0, 12),
+        overflowX, title: document.title,
+    };
+}"""
+
+
+def parse_args():
     ap = argparse.ArgumentParser()
     ap.add_argument("url")
     ap.add_argument("--width", type=int, default=360)
@@ -90,140 +126,114 @@ def main():
     ap.add_argument("--a11y-strict", action="store_true",
                     help="make accessibility findings fail the run")
     args = ap.parse_args()
-    a11y = args.a11y or args.a11y_strict
+    args.taste = args.taste or args.taste_strict
+    args.a11y = args.a11y or args.a11y_strict
+    return args
 
+
+def load(page, args, problems):
+    """Navigate and wait until the document is fully parsed; exit when the page never loads."""
+    try:
+        page.goto(args.url, wait_until="networkidle", timeout=args.timeout)
+    except Exception as exc:
+        sys.exit(f"could not load {args.url}: {exc}")
+
+    if args.wait:
+        try:
+            page.wait_for_selector(args.wait, timeout=args.timeout)
+        except Exception:
+            problems.append(f"selector never appeared: {args.wait}")
+
+    # The document must be fully parsed before the DOM is measured: a query that
+    # runs mid-parse misses every element below the parser's current position.
+    page.wait_for_load_state("load")
+    page.wait_for_function("() => document.readyState === 'complete'")
+    page.wait_for_timeout(100)
+
+
+def measure(args):
+    """Render the page once and return everything the report needs."""
+    out = {"console": [], "problems": [], "taste": [], "a11y": [], "a11y_m": {}}
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        try:
+            page = browser.new_page(viewport={"width": args.width, "height": args.height})
+            page.on("console", lambda m: out["console"].append((m.type, m.text))
+                    if m.type in ("error", "warning") else None)
+            page.on("pageerror", lambda e: out["problems"].append(f"page error: {e}"))
+            if args.a11y:
+                page.add_init_script(f"({A11Y_PROBE.read_text(encoding='utf-8')}).hook()")
+
+            load(page, args, out["problems"])
+            out["basic"] = page.evaluate(BASIC_PROBE, args.width)
+            if args.taste:
+                out["taste"] = evaluate_taste(page.evaluate(f"({PROBE.read_text(encoding='utf-8')})()"))
+            if args.shot:
+                page.screenshot(path=args.shot, full_page=True)
+            # Last: the Tab walk moves focus and scroll, which the other checks must not see.
+            if args.a11y:
+                out["a11y_m"] = measure_a11y(page)
+                out["a11y"] = evaluate_a11y(out["a11y_m"])
+        finally:
+            browser.close()
+    return out
+
+
+def print_list(heading, lines):
+    if not lines:
+        return
+    print(heading)
+    for line in lines:
+        print(f"  {line}")
+
+
+def print_basic(args, m, errors, warnings):
+    r = m["basic"]
+    print(f"url={args.url} viewport={args.width}x{args.height} title={r['title']!r}")
+    print(f"horizontal overflow: {r['overflow']}px (overflow-x: {r['overflowX']})")
+    print_list("elements wider than the viewport:",
+               [f"{w['tag']} width={w['width']} class={w['cls']!r}" for w in r["wide"]])
+    if r["unlabelled"]:
+        print(f"inputs without a label: {', '.join(r['unlabelled'])}")
+    if r["noAlt"]:
+        print(f"images without alt: {', '.join(r['noAlt'])}")
+    print_list(f"console errors ({len(errors)}):", errors)
+    print_list(f"console warnings ({len(warnings)}):", warnings)
+    print_list("page errors:", m["problems"])
+
+
+def collect_fails(args, m, errors):
+    r = m["basic"]
+    checks = [
+        (r["overflow"] > 1, f"horizontal scroll of {r['overflow']}px at {args.width}px wide"),
+        (errors or m["problems"], f"{len(errors) + len(m['problems'])} console/page error(s)"),
+        (r["unlabelled"], f"{len(r['unlabelled'])} input(s) without a label"),
+        (r["noAlt"], f"{len(r['noAlt'])} image(s) without alt text"),
+    ]
+    fails = [msg for hit, msg in checks if hit]
+    strict = (m["taste"] if args.taste_strict else []) + (m["a11y"] if args.a11y_strict else [])
+    return fails + [f"{f['id']} {f['title']}: {f['detail']}" for f in strict]
+
+
+def main():
+    args = parse_args()
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-    console = []
-    problems = []
+    m = measure(args)
+    errors = [text for kind, text in m["console"] if kind == "error"]
+    warnings = [text for kind, text in m["console"] if kind == "warning"]
 
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page(viewport={"width": args.width, "height": args.height})
-        page.on("console", lambda m: console.append((m.type, m.text)) if m.type in ("error", "warning") else None)
-        page.on("pageerror", lambda e: problems.append(f"page error: {e}"))
-        if a11y:
-            page.add_init_script(f"({A11Y_PROBE.read_text(encoding='utf-8')}).hook()")
+    print_basic(args, m, errors, warnings)
+    if args.taste:
+        report("house style", m["taste"])
+    if args.a11y:
+        print(f"tab stops: {len(m['a11y_m']['focusStops'])} of {m['a11y_m']['focusable']} focusable")
+        report("accessibility", m["a11y"])
 
-        try:
-            page.goto(args.url, wait_until="networkidle", timeout=args.timeout)
-        except Exception as exc:
-            browser.close()
-            sys.exit(f"could not load {args.url}: {exc}")
-
-        if args.wait:
-            try:
-                page.wait_for_selector(args.wait, timeout=args.timeout)
-            except Exception:
-                problems.append(f"selector never appeared: {args.wait}")
-
-        # The document must be fully parsed before the DOM is measured: a query that
-        # runs mid-parse misses every element below the parser's current position.
-        page.wait_for_load_state("load")
-        page.wait_for_function("() => document.readyState === 'complete'")
-        page.wait_for_timeout(100)
-
-        result = page.evaluate(
-            """(vw) => {
-                const doc = document.documentElement;
-                const overflow = Math.max(doc.scrollWidth, document.body.scrollWidth) - vw;
-                const wide = [];
-                for (const el of document.querySelectorAll('body *')) {
-                    const r = el.getBoundingClientRect();
-                    if (r.width > vw + 1 && r.height > 0) {
-                        wide.push({
-                            tag: el.tagName.toLowerCase(),
-                            cls: (el.className && el.className.toString().slice(0, 60)) || '',
-                            width: Math.round(r.width),
-                        });
-                    }
-                }
-                const unlabelled = [];
-                for (const el of document.querySelectorAll('input,select,textarea')) {
-                    if (['hidden', 'submit', 'button', 'reset'].includes(el.type)) continue;
-                    const id = el.id;
-                    const hasLabel = id && document.querySelector(`label[for="${id}"]`);
-                    const wrapped = el.closest('label');
-                    const aria = el.getAttribute('aria-label') || el.getAttribute('aria-labelledby');
-                    if (!hasLabel && !wrapped && !aria) {
-                        unlabelled.push(el.tagName.toLowerCase() + (el.name ? `[name=${el.name}]` : ''));
-                    }
-                }
-                const noAlt = [...document.querySelectorAll('img')]
-                    .filter((i) => !i.hasAttribute('alt'))
-                    .map((i) => i.getAttribute('src') || '(no src)');
-                const overflowX = getComputedStyle(doc).overflowX;
-                return {
-                    overflow, wide: wide.slice(0, 12), unlabelled, noAlt: noAlt.slice(0, 12),
-                    overflowX, title: document.title,
-                };
-            }""",
-            args.width,
-        )
-
-        taste_findings = []
-        if args.taste or args.taste_strict:
-            source = PROBE.read_text(encoding="utf-8")
-            measurement = page.evaluate(f"({source})()")
-            taste_findings = evaluate_taste(measurement)
-
-        if args.shot:
-            page.screenshot(path=args.shot, full_page=True)
-
-        # Last: the Tab walk moves focus and scroll, which the other checks must not see.
-        a11y_m = measure_a11y(page) if a11y else {}
-        a11y_findings = evaluate_a11y(a11y_m) if a11y else []
-
-        browser.close()
-
-    errors = [t for t in console if t[0] == "error"]
-    warnings = [t for t in console if t[0] == "warning"]
-
-    print(f"url={args.url} viewport={args.width}x{args.height} title={result['title']!r}")
-    print(f"horizontal overflow: {result['overflow']}px (overflow-x: {result['overflowX']})")
-    if result["wide"]:
-        print("elements wider than the viewport:")
-        for w in result["wide"]:
-            print(f"  {w['tag']} width={w['width']} class={w['cls']!r}")
-    if result["unlabelled"]:
-        print(f"inputs without a label: {', '.join(result['unlabelled'])}")
-    if result["noAlt"]:
-        print(f"images without alt: {', '.join(result['noAlt'])}")
-    if errors:
-        print(f"console errors ({len(errors)}):")
-        for _, text in errors:
-            print(f"  {text}")
-    if warnings:
-        print(f"console warnings ({len(warnings)}):")
-        for _, text in warnings:
-            print(f"  {text}")
-    if problems:
-        print("page errors:")
-        for text in problems:
-            print(f"  {text}")
-
-    if args.taste or args.taste_strict:
-        report("house style", taste_findings)
-    if a11y:
-        print(f"tab stops: {len(a11y_m['focusStops'])} of {a11y_m['focusable']} focusable")
-        report("accessibility", a11y_findings)
-
-    fails = []
-    if result["overflow"] > 1:
-        fails.append(f"horizontal scroll of {result['overflow']}px at {args.width}px wide")
-    if errors or problems:
-        fails.append(f"{len(errors) + len(problems)} console/page error(s)")
-    if result["unlabelled"]:
-        fails.append(f"{len(result['unlabelled'])} input(s) without a label")
-    if result["noAlt"]:
-        fails.append(f"{len(result['noAlt'])} image(s) without alt text")
-    strict = (taste_findings if args.taste_strict else []) + (a11y_findings if args.a11y_strict else [])
-    fails += [f"{f['id']} {f['title']}: {f['detail']}" for f in strict]
-
+    fails = collect_fails(args, m, errors)
     print()
-    print(json.dumps({"fails": fails, "pass": not fails, "taste": taste_findings, "a11y": a11y_findings},
-                     indent=2))
+    print(json.dumps({"fails": fails, "pass": not fails, "taste": m["taste"], "a11y": m["a11y"]}, indent=2))
     sys.exit(1 if fails else 0)
 
 
