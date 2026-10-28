@@ -3,7 +3,7 @@ name: agents
 description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model, routes for small changes, an epic route for roadmaps, approval pauses, and artifact handoff"
 when_to_use: "Use when you want the persona pipeline to build or change something end-to-end (Satria, Athena, Hexa, Dina, Frans, Vika). Trigger with /agents or a request ending in 'mulai pipeline'. Also to build one epic from specs/ROADMAP.md ('kerjakan E2', 'lanjut roadmap'). For single-persona help, call that persona directly."
 metadata:
-  version: "4.9.0"
+  version: "4.9.1"
 ---
 
 # 👥 PERSONA PIPELINE — SATRIA · ATHENA · HEXA · DINA · FRANS · VIKA
@@ -14,11 +14,11 @@ Six specialists run as a sequential, artifact-handoff pipeline. Each phase runs 
 
 | # | Persona | Role | Model | Skills | Output artifact |
 |---|---------|------|-------|--------|-----------------|
-| 1 | **Satria** | Product Manager | Opus (medium; high for large/ambiguous) | — | `specs/PRD.md` |
-| 2 | **Athena** | System Architect | Sonnet (high) | — (ADR format is in her skill) | `specs/ADR.md`, `specs/contracts.*`, conventions in `CLAUDE.md` |
-| 3 | **Hexa** | Feature Coder | Sonnet (high)* | ponytail; impeccable + anti-slop for UI/copy | `src/*`, `tests/*` |
+| 1 | **Satria** | Product Manager | Opus (medium; high for large/ambiguous) | anti-slop | `specs/PRD.md` |
+| 2 | **Athena** | System Architect | Sonnet (high) | ponytail, anti-slop (ADR format is in her skill) | `specs/ADR.md`, `specs/contracts.*`, conventions in `CLAUDE.md` |
+| 3 | **Hexa** | Feature Coder | Sonnet (high)* | ponytail, tdd; impeccable + anti-slop + uicheck for UI/copy | `src/*`, `tests/*` |
 | 4 | **Dina** | QA & Security | Sonnet (high)* | audit | `specs/AUDIT.md` + `STATUS:` |
-| 5 | **Frans** | Platform & DevOps | Sonnet (high) | — | `Dockerfile`, `migrations/*`, `ci.yml` |
+| 5 | **Frans** | Platform & DevOps | Sonnet (high) | ponytail | `Dockerfile`, `migrations/*`, `ci.yml` |
 | 6 | **Vika** | Technical Writer | Haiku (low)* | anti-slop | `docs/openapi.*`, `CHANGELOG.md`, README |
 
 Every persona also appends an entry to `specs/HANDOFF.md` (see below). Stack, security, and testing knowledge come from the model and the project's `CLAUDE.md`, not from skills.

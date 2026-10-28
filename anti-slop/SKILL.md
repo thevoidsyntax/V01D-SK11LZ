@@ -1,9 +1,9 @@
 ---
 name: anti-slop
 description: "Writing that does not read as AI-generated: the tells to remove, plain replacements, rules for UI copy, comments and docs, and a self-check"
-when_to_use: "Use when writing anything a person will read: UI copy, docs, README, CHANGELOG, commit messages, code comments, or replies. Hexa loads it for UI copy, Vika for all docs."
+when_to_use: "Use when writing anything a person will read: UI copy, docs, README, CHANGELOG, commit messages, code comments, or replies. Satria loads it for the PRD, Athena for the ADR, Hexa for UI copy, Vika for all docs."
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
 ---
 
 # Anti-slop: writing that does not read as AI-generated

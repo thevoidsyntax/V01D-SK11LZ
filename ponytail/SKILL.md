@@ -1,9 +1,9 @@
 ---
 name: ponytail
 description: "Code-less philosophy - 'The best code is the code you never wrote.' Minimizes code written by checking need, existing, stdlib, and native solutions first."
-when_to_use: "Use when you want to minimize code written. Invoke before writing any code to check if it's necessary."
+when_to_use: "Use when you want to minimize code written. Invoke before writing any code to check if it's necessary. Hexa runs it before code, Athena before adding a component to the design, Frans before adding infrastructure."
 metadata:
-  version: "1.1.0"
+  version: "1.1.1"
 ---
 
 # PONYTAIL v1.1
