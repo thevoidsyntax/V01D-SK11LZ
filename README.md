@@ -58,7 +58,7 @@ Pendukung:
 /tdd         Test-first: tulis test yang gagal dulu, catat bukti red → green
 /anti-slop   Teks tanpa gaya AI: copy UI, dokumentasi, komentar
 /impeccable  UI tanpa tampilan template AI: keputusan dari brief produk + checklist
-/uicheck     Verifikasi UI di browser sungguhan: overflow 360px, error konsol, label input
+/uicheck     Verifikasi UI di browser sungguhan: overflow 360px, error konsol, label input, house style
 ```
 
 Tiap fase menambah satu entri ke `specs/HANDOFF.md` di proyek target: input, output, keputusan, isu terbuka, fase berikutnya. Vika menyusun CHANGELOG dan README dari log itu.
@@ -90,7 +90,7 @@ Sebuah skill hanya dipertahankan kalau mengubah perilaku default model:
 
 Pengetahuan stack, security, testing, dan git sudah dikuasai model. Yang belum dikuasai adalah kebiasaannya: disiplin test-first, kode minimal, dan keputusan UI yang tidak berbau AI. Konvensi proyek ditaruh di `CLAUDE.md` dan ADR proyek itu sendiri. Pada 2026-10-21 repo dipangkas dari 139 skill: 73 belum pernah dipanggil, dan daftar skill yang terpotong membuat ~60 skill tampil tanpa deskripsi.
 
-`/uicheck` menambah satu skill pada 2026-10-27, setelah pengukuran: `/impeccable` meminta halaman "bekerja di 360px tanpa scroll horizontal", dan itu fakta tentang render, bukan tentang markup.
+`/uicheck` menambah satu skill pada 2026-10-27, setelah pengukuran: `/impeccable` meminta halaman "bekerja di 360px tanpa scroll horizontal", dan itu fakta tentang render, bukan tentang markup. Pada 2026-10-28 flag `--taste` menambah pengukuran house style di render yang sama (type scale, eyebrow, hairline, gradient), jadi keputusan seleranya pun bisa diukur, bukan hanya diklaim.
 
 Semua skill lama ada di tag `skills-v1-full`. Untuk memulihkan satu skill:
 

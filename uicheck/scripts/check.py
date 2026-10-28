@@ -7,8 +7,13 @@ Checks, in order of how often they actually fail:
   3. unlabelled form inputs and images without alt text
   4. elements wider than the viewport (names the culprits, not just the count)
 
+With --taste it also measures house style (type scale, eyebrow labels, hairline
+rules, gradients and the rest) and reports the findings. Those are warnings by
+default; --taste-strict makes them fail the run.
+
 Usage:
     python scripts/check.py <url> [--width 360] [--height 800] [--shot out.png] [--wait selector]
+    python scripts/check.py <url> --taste
 
 Example:
     python scripts/check.py http://localhost:5173 --width 360 --shot 360.png
@@ -17,11 +22,18 @@ Example:
 import argparse
 import json
 import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+from taste_rules import evaluate as evaluate_taste  # noqa: E402
 
 try:
     from playwright.sync_api import sync_playwright
 except ImportError:
     sys.exit("playwright is not installed: pip install playwright && python -m playwright install chromium")
+
+
+PROBE = Path(__file__).with_name("taste_probe.js")
 
 
 def main():
@@ -32,7 +44,14 @@ def main():
     ap.add_argument("--shot", help="write a screenshot to this path")
     ap.add_argument("--wait", help="CSS selector to wait for before measuring")
     ap.add_argument("--timeout", type=int, default=30000)
+    ap.add_argument("--taste", action="store_true",
+                    help="also measure house style and report the findings as warnings")
+    ap.add_argument("--taste-strict", action="store_true",
+                    help="make house-style findings fail the run")
     args = ap.parse_args()
+
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
     console = []
     problems = []
@@ -99,6 +118,12 @@ def main():
             args.width,
         )
 
+        taste_findings = []
+        if args.taste or args.taste_strict:
+            source = PROBE.read_text(encoding="utf-8")
+            measurement = page.evaluate(f"({source})()")
+            taste_findings = evaluate_taste(measurement)
+
         if args.shot:
             page.screenshot(path=args.shot, full_page=True)
 
@@ -130,6 +155,14 @@ def main():
         for text in problems:
             print(f"  {text}")
 
+    if args.taste or args.taste_strict:
+        if taste_findings:
+            print(f"house style: {len(taste_findings)} finding(s)")
+            for f in taste_findings:
+                print(f"  {f['id']} {f['title']}: {f['detail']}")
+        else:
+            print("house style: clean")
+
     fails = []
     if result["overflow"] > 1:
         fails.append(f"horizontal scroll of {result['overflow']}px at {args.width}px wide")
@@ -139,9 +172,12 @@ def main():
         fails.append(f"{len(result['unlabelled'])} input(s) without a label")
     if result["noAlt"]:
         fails.append(f"{len(result['noAlt'])} image(s) without alt text")
+    if args.taste_strict:
+        for f in taste_findings:
+            fails.append(f"{f['id']} {f['title']}: {f['detail']}")
 
     print()
-    print(json.dumps({"fails": fails, "pass": not fails}, indent=2))
+    print(json.dumps({"fails": fails, "pass": not fails, "taste": taste_findings}, indent=2))
     sys.exit(1 if fails else 0)
 
 
