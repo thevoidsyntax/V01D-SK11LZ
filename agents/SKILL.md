@@ -3,7 +3,7 @@ name: agents
 description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model, routes for small changes, an epic route for roadmaps, approval pauses, and artifact handoff"
 when_to_use: "Use when you want the persona pipeline to build or change something end-to-end (Satria, Athena, Hexa, Dina, Frans, Vika). Trigger with /agents or a request ending in 'mulai pipeline'. Also to build one epic from specs/ROADMAP.md ('kerjakan E2', 'lanjut roadmap'). For single-persona help, call that persona directly."
 metadata:
-  version: "4.11.1"
+  version: "4.11.2"
 ---
 
 # 👥 PERSONA PIPELINE — SATRIA · ATHENA · HEXA · DINA · FRANS · VIKA
@@ -127,7 +127,7 @@ On the epic route, "PRD" means the epic PRD `specs/prd/<epic>.md`. Pass its path
 
 Two cases run several agents at once. Put all their Agent calls in **one message** (still foreground); calls sent one per message run one after another.
 
-1. **Hexa work units.** Only when `specs/ADR.md` has a `Work units` table; Athena writes it only for work above about 8 endpoints or screens (the size at which the layer split in `agents/epic.md` already applies), with 3 or more units or a backend plus a UI. Spawn one Hexa per unit whose `Depends on` units are done (the first wave has none), each with `Unit: <name>` and its owned files in the prompt; repeat per wave; then one last Hexa with `Unit: integration`. No table: one Hexa. Below that size parallel is slower: a 3-module spec (about 14 endpoints) took 906 s and $2.63 with one Hexa against 972 s and $3.10 with four, because each agent pays about 2 minutes of startup and the integration agent runs alone after the wave. At the large size the split already costs the same spawns; running them together removes the waiting (VentroPoS E1: 11 Hexa spawns ran one after another, 6.2 hours).
+1. **Hexa work units.** Only when `specs/ADR.md` has a `Work units` table; Athena writes it only for work above about 8 endpoints or screens (the size at which the layer split in `agents/epic.md` already applies), with 3 or more units or a backend plus a UI. Spawn one Hexa per unit whose `Depends on` units are done (the first wave has none), each with `Unit: <name>` and its owned files in the prompt; repeat per wave; then one last Hexa with `Unit: integration`. No table: one Hexa. Below that size parallel is slower: a 3-module spec (about 14 endpoints) took 906 s and 2.63 USD with one Hexa against 972 s and 3.10 USD with four, because each agent pays about 2 minutes of startup and the integration agent runs alone after the wave. At the large size the split already costs the same spawns; running them together removes the waiting (VentroPoS E1: 11 Hexa spawns ran one after another, 6.2 hours).
 2. **Frans and Vika**, when the route has both. Their outputs are disjoint and both read only what exists after the gate. Vika's prompt adds "Frans runs at the same time: do not document the Dockerfile, CI, or migrations". The final Dina pass (section 6) starts after both return.
 
 Rules for a parallel batch:
@@ -153,7 +153,7 @@ The repo must answer "where are we" at any moment, not only at the end of an epi
      | Frans | the build is verified (an unverified build under `Open:` is not green) |
      | Vika | the docs match the real routes |
 
-  3. Green: print `[PROGRES] <epic> · <Persona> ✅ · berikutnya <Persona>` and start the next phase. Not green (a red test or a dropped test count, `REJECTED`, an `Open:` item that needs a decision from the user): print `[PROGRES] <epic> · <Persona> ❌`, stop, show the findings, and ask with AskUserQuestion: **Lanjut** (start the patch loop or the next phase) / **Revisi** / **Stop**. If you cannot ask (headless), stop and say where.
+  3. Green: print `[PROGRES] <epic> · <Persona> ✅ · berikutnya <Persona>` and start the next phase. Not green (a red test or a dropped test count, `REJECTED`, an `Open:` item the next phase or the commit depends on): print `[PROGRES] <epic> · <Persona> ❌`, stop, show the findings, and ask with AskUserQuestion: **Lanjut** (start the patch loop or the next phase) / **Revisi** / **Stop**. If you cannot ask (headless), stop and say where. A decision that can wait for a later epic, such as Dina's MEDIUM and lower findings (section 5), is carried in `Open:` and does not stop the run.
 - The design pauses of section 4, the commit approval of section 7, and the push rule are unchanged.
 
 ## 4. Approval pauses
@@ -189,7 +189,7 @@ When Frans or Vika ran after the gate, spawn Dina once more in **final pass** mo
 
 After the last phase:
 0. If the route had no Vika (bugfix, infra, short routes) and the project has a `CHANGELOG.md`, add an entry under `## [Unreleased]` yourself, built from this run's HANDOFF entries: what changed for the user and why, in one or two lines. Every committed change gets a CHANGELOG line, not only full-pipeline runs.
-0b. On the epic route, set the epic's `Status` to `done` in `specs/ROADMAP.md` before the commit proposal, so the roadmap update lands in the same commit, and archive that epic's HANDOFF entries as step 6 of `agents/epic.md` says. If the commit is declined, set it back to `in progress` and undo the archive (step 6 says how).
+0b. On the epic route, set the epic's `Status` to `done` in `specs/ROADMAP.md` before the commit proposal, so the roadmap update lands in the same commit, and archive that epic's HANDOFF entries as step 6 of `agents/epic.md` says. If the commit is declined, set it back to `in progress` and undo the archive and the `Current PRD:` pointer (step 6 says how).
 1. Show `git status --short` and a Conventional Commit message. End the message with one `Co-Authored-By: <Persona>` line per persona that produced an artifact in this run. These persona trailers are the user's attribution rule for this workflow: they replace Claude Code's default `Co-Authored-By: Claude …` line, so do not add that line.
 2. Ask with AskUserQuestion: **Commit** / **Ubah pesan** / **Lewati**.
 3. Commit only on **Commit**.
