@@ -3,7 +3,7 @@ name: ponytail
 description: "Code-less philosophy - 'The best code is the code you never wrote.' Minimizes code written by checking need, existing, stdlib, and native solutions first."
 when_to_use: "Use when you want to minimize code written. Invoke before writing any code to check if it's necessary. Hexa runs it before code, Athena before adding a component to the design, Frans before adding infrastructure."
 metadata:
-  version: "1.2.0"
+  version: "1.2.1"
 ---
 
 # PONYTAIL — the best code is the code you never wrote
@@ -14,7 +14,9 @@ Before writing code, ask in this order and stop at the first YES:
 2. **EXISTING** — Does the code base or an already-installed dependency do it? Search before writing. YES → reuse it.
 3. **STDLIB** — Does the language's standard library cover it (Python `itertools`/`collections`, JS `Array`/`Object`/`Intl`, Go std, Rust std)? A third-party library is not stdlib; add one only when it clearly beats a few lines. YES → use it.
 4. **NATIVE** — Does the platform do it (CSS instead of JS, `<input type="date">`, SQL constraint or function instead of app code, a shell tool, Node built-ins `fs`/`path`/`crypto`)? YES → use it.
-5. Only then **write the minimum**, nothing for hypothetical futures.
+5. Only then **write the minimum**, nothing for hypothetical futures. A shortcut with a known limit gets a one-line comment: `shortcut: <the limit>, <when to upgrade>`.
+
+Before step 1, list every place the change must reach: callers, tests, fixtures, config, exports. Skipping an extra feature is the goal; skipping a caller is a bug. For a bugfix, grep every caller of the function first and fix the cause once in the shared code.
 
 ## What it never trims
 
