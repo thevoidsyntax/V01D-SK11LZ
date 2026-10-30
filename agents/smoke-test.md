@@ -46,6 +46,6 @@ Record per run: cost, duration, and turns from the `result` line; Dina's last `S
 3. Hexa's entry has `Ponytail:`, `TDD:` with red evidence, and exactly `UI: tidak`.
 4. The orchestrator writes nothing under `src/` or `tests/`.
 5. Each persona row in the ROADMAP ends with `<n>K token, <m> menit`.
-6. On `APPROVED`: the epic is `done`, its entries moved to `specs/handoff/E1.md`, the `[SCAFFOLD]` entry stayed. On `REJECTED`: the run stopped with Lanjut / Revisi / Stop and no patch round started.
+6. On `APPROVED`: no commit can be approved headless, so the epic stays `in progress`, `specs/handoff/E1.md` does not exist, and `Current PRD:` still points at E1. On `REJECTED`: the run stopped with Lanjut / Revisi / Stop and no patch round started.
 
-Headless runs cannot answer the branch or commit questions, so those paths need an interactive run.
+Headless runs cannot answer the branch or commit questions, so the archive on **Commit** and its undo on **Lewati** need an interactive run.
