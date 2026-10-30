@@ -3,246 +3,36 @@ name: ponytail
 description: "Code-less philosophy - 'The best code is the code you never wrote.' Minimizes code written by checking need, existing, stdlib, and native solutions first."
 when_to_use: "Use when you want to minimize code written. Invoke before writing any code to check if it's necessary. Hexa runs it before code, Athena before adding a component to the design, Frans before adding infrastructure."
 metadata:
-  version: "1.1.1"
+  version: "1.2.0"
 ---
 
-# PONYTAIL v1.1
+# PONYTAIL — the best code is the code you never wrote
 
-**Code-Less Philosophy for AI Coding Agents**
+Before writing code, ask in this order and stop at the first YES:
 
-> "The best code is the code you never wrote."
+1. **NEED** — Is it required? Can it be skipped, deferred, or simplified (must-have vs nice-to-have)? YES → skip or shrink it.
+2. **EXISTING** — Does the code base or an already-installed dependency do it? Search before writing. YES → reuse it.
+3. **STDLIB** — Does the language's standard library cover it (Python `itertools`/`collections`, JS `Array`/`Object`/`Intl`, Go std, Rust std)? A third-party library is not stdlib; add one only when it clearly beats a few lines. YES → use it.
+4. **NATIVE** — Does the platform do it (CSS instead of JS, `<input type="date">`, SQL constraint or function instead of app code, a shell tool, Node built-ins `fs`/`path`/`crypto`)? YES → use it.
+5. Only then **write the minimum**, nothing for hypothetical futures.
 
----
+## What it never trims
 
-## Overview
-
-Ponytail teaches AI coding agents to minimize code written by checking existing solutions before implementing new ones.
-
-### Key Metrics
-
-| Metric | Without Ponytail | With Ponytail |
-|--------|-----------------|----------------|
-| Lines of code | 100% | ~47% |
-| Development time | 100% | ~59% |
-| Cost | 100% | ~74% |
-| Tokens | 100% | ~55% |
-
----
-
-## Core Philosophy
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│  BEFORE WRITING CODE, ASK:                                    │
-│                                                              │
-│  1. NEED     → Apakah perlu ada?                            │
-│  2. EXISTING → Apakah sudah ada?                           │
-│  3. STDLIB   → Apakah stdlib sudah cukup?                 │
-│  4. NATIVE    → Apakah platform native sudah cukup?         │
-└─────────────────────────────────────────────────────────────┘
-```
-
----
-
-## Decision Flow
-
-```
-START: Need to solve a problem
-       │
-       ▼
-┌─────────────────┐
-│ 1. NEED?        │
-│ Can skip/simplify?│
-└────────┬────────┘
-         │
-    ┌────┴────┐
-    │ YES      │ NO
-    ▼          ▼
-  SKIP      ┌─────────────────┐
-            │ 2. EXISTING?    │
-            │ Reuse code/lib?  │
-            └────────┬────────┘
-                     │
-                ┌────┴────┐
-                │ YES      │ NO
-                ▼          ▼
-              REUSE    ┌─────────────────┐
-                       │ 3. STDLIB?      │
-                       │ Built-in enough?  │
-                       └────────┬────────┘
-                               │
-                          ┌────┴────┐
-                          │ YES      │ NO
-                          ▼          ▼
-                       USE STDLIB  ┌─────────────────┐
-                                  │ 4. NATIVE?       │
-                                  │ OS/browser APIs?  │
-                                  └────────┬────────┘
-                                          │
-                                     ┌────┴────┐
-                                     │ YES      │ NO
-                                     ▼          ▼
-                                  USE NATIVE  WRITE CODE
-                                             (minimal)
-```
-
----
-
-## Checklist (Before Writing Code)
-
-### 1. NEED - Can it be skipped?
-- [ ] Is this feature truly required?
-- [ ] Can the user accept "no" or "later"?
-- [ ] Is this a nice-to-have vs must-have?
-
-### 2. EXISTING - Can it be reused?
-- [ ] Existing function in codebase?
-- [ ] Existing library/package?
-- [ ] Similar implementation elsewhere?
-
-### 3. STDLIB - Is built-in enough?
-
-| Language | Useful stdlib |
-|----------|--------------|
-| Python | itertools, functools, collections, builtins |
-| JS/TS | lodash methods, Array/String methods, Object.\* |
-| Go | standard library packages |
-| Rust | std crate |
-| Java | java.util, java.stream |
-
-### 4. NATIVE - Is platform native enough?
-
-| Platform | Native APIs |
-|----------|-----------|
-| Browser | CSS, Web APIs, Platform APIs |
-| Node.js | fs, path, crypto (built-in) |
-| OS | Shell commands, system tools |
-| Database | SQL functions, stored procedures |
-
----
+Ponytail removes needless code, not required behavior. These are requirements, never "code to minimize": input validation, authorization, security checks, accessibility, error handling at boundaries, audit trails, idempotency, money and rounding correctness, transaction boundaries, and tests for behavior. If a rule in the project's `CLAUDE.md` or ADR demands it, it stays.
 
 ## Examples
 
-### Example 1: Remove Duplicates
-
-**Before (Write new):**
-```python
-def remove_duplicates(items):
-    result = []
-    for item in items:
-        if item not in result:
-            result.append(item)
-    return result
-```
-
-**After (Use stdlib):**
-```python
-# Python 3.7+: dict preserves order
-def remove_duplicates(items):
-    return list(dict.fromkeys(items))
-```
-
-**After (Use built-in if available):**
-```python
-# Or simpler
-return list(set(items))  # if order doesn't matter
-```
-
-### Example 2: Group By
-
-**Before (Write new):**
-```typescript
-function groupBy(arr: any[], key: string): Record<string, any[]> {
-  const result = {};
-  for (const item of arr) {
-    const group = item[key];
-    if (!result[group]) result[group] = [];
-    result[group].push(item);
-  }
-  return result;
-}
-```
-
-**After (Use stdlib):**
-```typescript
-// Lodash (if already using)
-// or native:
-const groupBy = (arr, key) => arr.reduce((acc, item) => {
-  const group = item[key];
-  (acc[group] ??= []).push(item);
-  return acc;
-}, {});
-```
-
-### Example 3: Debounce Function
-
-**Before (Write new):**
-```typescript
-function debounce(fn: Function, delay: number) {
-  let timeoutId;
-  return function(...args) {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => fn.apply(this, args), delay);
-  };
-}
-```
-
-**After (Check if needed):**
-```typescript
-// Question: Does the project already have lodash?
-// If yes: import debounce from 'lodash'
-// If no: Is the native implementation minimal enough?
-```
-
----
-
-## Anti-Patterns
-
-### DON'T:
-
-```
-❌ Write code before checking if needed
-❌ Duplicate existing functionality
-❌ Reinvent the wheel (stdlib exists)
-❌ Over-engineer for hypothetical future
-❌ Add features "just in case"
-```
-
-### DO:
-
-```
-✅ Ask: "Can this be simpler?"
-✅ Ask: "Does this already exist?"
-✅ Ask: "Is stdlib sufficient?"
-✅ Ask: "Can platform native handle it?"
-✅ Write minimal code only when necessary
-```
-
----
+- Dedupe preserving order: `list(dict.fromkeys(items))`, not a loop with `not in`.
+- Group by key: one `reduce` with `??=`, or the library already in the project, not a new helper.
+- Debounce: first check whether the project already imports one; write the 6-line version only if not.
+- Authentication: NextAuth (or the project's existing auth) already present → use it, write no new auth code.
 
 ## Reviewing existing code
 
-There are no sub-commands. To review a diff or a module, run the same checklist over each added function, file, and dependency: is it needed, does the code base or stdlib already do it, is there a native platform feature. List what can be deleted or replaced, with file:line.
+No sub-commands. To review a diff or module, run the same questions over each added function, file, and dependency: needed? already done by the code base, stdlib, or platform? List what can be deleted or replaced, with `file:line`.
 
----
+## Output
 
-## Workflow
-
-```
-USER: "Add user authentication"
-       │
-       ▼
-Ponytail Check:
-       │
-       ├── 1. NEED? → Auth truly needed? YES
-       ├── 2. EXISTING? → NextAuth already exists? YES → USE IT
-       └── └── └── → No new code written!
-```
-
----
-
-**Invoke:** `/ponytail` | **Version:** 1.0.0
-
----
+When you decide to skip or reuse instead of write, say so in one line (this is the `Ponytail:` line in the HANDOFF entry): what was considered, and what you used instead.
 
 *Based on: https://github.com/DietrichGebert/ponytail*
