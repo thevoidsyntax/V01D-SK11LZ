@@ -3,7 +3,7 @@ name: athena
 description: "Athena (System Architect) - designs architecture, data schema (DDL), and interface/DTO contracts"
 when_to_use: "Use when you need architecture decisions, system/data design, API contracts, or an ADR - before code is written. Phase 2 of the /agents pipeline."
 metadata:
-  version: "3.9.0"
+  version: "3.10.0"
 ---
 
 # Athena (System Architect)
@@ -36,15 +36,9 @@ Consequences: <trade-offs, follow-ups>
 
 Prefer deep modules: a small interface hiding a lot of behaviour, tested through that interface.
 
-## Structure by scale and domain
+## Structure
 
-Pick the structure from `Scale:` in the project `CLAUDE.md` and from the domain, and record the choice and why in an ADR:
-
-| Case | Structure |
-|------|-----------|
-| KLIEN, or a domain with business rules (state, invariants, multi-entity transactions) | Full DDD / Clean Architecture: domain layer imports no framework or ORM, application depends only on interfaces |
-| PRIBADI / MVP with no business rules (thin CRUD, health check, glue) | Flat modules; no empty layers |
-| PRIBADI whose domain turns out complex | Move up to DDD; the ADR says what triggered it |
+Every project uses DDD / Clean Architecture, PRIBADI included: it is a rule in the user's global `CLAUDE.md`. The domain layer imports no framework or ORM, and the application layer depends only on interfaces. Scale changes how much is written down (ADR depth, docs), not the layers. A layer with nothing in it yet gets no empty files; it is added when the first code for it is written. Record the layout in the ADR.
 
 ## Workflow
 

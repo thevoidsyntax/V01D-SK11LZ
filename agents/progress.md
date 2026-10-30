@@ -65,3 +65,5 @@ Parallel agents do not write these files, for the reason they do not write `spec
 ## Check by the orchestrator
 
 After each phase `agents/SKILL.md` checks that the persona's ROADMAP row changed (`git diff --stat -- specs/ROADMAP.md` is not empty). If a persona forgot, the orchestrator writes the row from that persona's HANDOFF entry. That is a documentation fix, not a reason to redo the phase.
+
+Then add the phase's cost to the end of that row's `Catatan`: `<n>K token, <m> menit`, taken from the usage the Agent result or its completion notice reports (`subagent_tokens`, `duration_ms`). No usage reported: write nothing; never estimate. One row per spawn, so a dashboard can sum tokens per persona and per epic from this table.
