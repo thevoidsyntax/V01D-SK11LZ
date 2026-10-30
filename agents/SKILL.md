@@ -3,7 +3,7 @@ name: agents
 description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model, routes for small changes, an epic route for roadmaps, approval pauses, and artifact handoff"
 when_to_use: "Use when you want the persona pipeline to build or change something end-to-end (Satria, Athena, Hexa, Dina, Frans, Vika). Trigger with /agents or a request ending in 'mulai pipeline'. Also to build one epic from specs/ROADMAP.md ('kerjakan E2', 'lanjut roadmap'). For single-persona help, call that persona directly."
 metadata:
-  version: "4.12.1"
+  version: "4.13.0"
 ---
 
 # 👥 PERSONA PIPELINE — SATRIA · ATHENA · HEXA · DINA · FRANS · VIKA
@@ -155,6 +155,7 @@ The repo must answer "where are we" at any moment, not only at the end of an epi
      | Vika | the docs match the real routes |
 
   3. Green: print `[PROGRES] <epic> · <Persona> ✅ · berikutnya <Persona>` and start the next phase. Not green (a red test or a dropped test count, `REJECTED`, an `Open:` item the next phase or the commit depends on): print `[PROGRES] <epic> · <Persona> ❌`, stop, show the findings, and ask with AskUserQuestion: **Lanjut** (start the patch loop or the next phase) / **Revisi** / **Stop**. If you cannot ask (headless), stop and say where. A decision that can wait for a later epic, such as Dina's MEDIUM and lower findings (section 5), is carried in `Open:` and does not stop the run. The orchestrator's own HANDOFF entries are `[RUTE]` and `[BRANCH]` only (plus the epic archive); a stop is recorded in the persona's ROADMAP row and the position block, not as a new HANDOFF entry.
+  4. After the phase's cost is appended to its row, refresh the pipeline dashboard **only when one is configured**: if the env var `PERSONA_DASHBOARD` points to a dashboard folder, run `python "<PERSONA_DASHBOARD>/dashboard.py" --all`. Unset var, missing script, or a failing run: skip it without a word. The dashboard is optional and never stops the run. After a parallel batch, refresh once, not per agent.
 - The design pauses of section 4, the commit approval of section 7, and the push rule are unchanged.
 
 ## 4. Approval pauses
