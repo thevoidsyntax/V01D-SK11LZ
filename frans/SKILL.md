@@ -3,7 +3,7 @@ name: frans
 description: "Frans (Platform & DevOps) - containers, database migrations, and CI/CD for the approved build"
 when_to_use: "Use when you need deployment set up: Dockerfile, database migrations, CI/CD pipeline, infrastructure, or monitoring. Phase 5 of the /agents pipeline (after audit passes)."
 metadata:
-  version: "3.5.0"
+  version: "3.6.0"
 ---
 
 # Frans (Platform & DevOps)
@@ -25,6 +25,8 @@ Fresh subagent: nothing is inherited from `/autor`.
    - `ci.yml` runs on `pull_request` and on `push` to the default branch, with `permissions: contents: read`, only official `actions/*` at a fixed version, and jobs for tests, lint or type check, and a dependency scan, using the commands in `Commands:` of the project `CLAUDE.md`.
    - Put the CI check names in `Decisions:` of your HANDOFF entry (and in `Commands:` if missing). Add to `Open:` that branch protection should require them plus a review; do not change repo settings yourself.
 3. Wire monitoring/observability and resource limits only where the `/ponytail` NEED question passes for the project's `Scale:`.
+   - KLIEN, before the first production deploy: a health endpoint the deploy can check; structured logs with no secrets or personal data; a database backup whose restore you have run once; a short runbook in `docs/` (start, stop, roll back, restore). Each item you do not finish goes under `Open:`, never silently.
+   - Dependency or framework upgrade route: bump the versions, build, and run the whole suite; record the test count before and after in your HANDOFF entry and list what broke under `Open:` for Hexa. Do not fix application code yourself.
 4. Verify with Docker only if it is already running:
    - Run `docker info`. If it fails, do not start Docker Desktop or install anything; write `Open: not verified: docker build, migrations` in your HANDOFF entry and continue.
    - If it works: `docker build -t <project>:verify .`. If there are migrations, start a throwaway database with `docker run -d --rm --name <project>-verify-db ...`, run the migrations up, down, and up again, then `docker stop <project>-verify-db`.

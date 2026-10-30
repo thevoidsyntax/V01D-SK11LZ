@@ -3,7 +3,7 @@ name: agents
 description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model, routes for small changes, an epic route for roadmaps, approval pauses, and artifact handoff"
 when_to_use: "Use when you want the persona pipeline to build or change something end-to-end (Satria, Athena, Hexa, Dina, Frans, Vika). Trigger with /agents or a request ending in 'mulai pipeline'. Also to build one epic from specs/ROADMAP.md ('kerjakan E2', 'lanjut roadmap'). For single-persona help, call that persona directly."
 metadata:
-  version: "4.11.3"
+  version: "4.12.0"
 ---
 
 # 👥 PERSONA PIPELINE — SATRIA · ATHENA · HEXA · DINA · FRANS · VIKA
@@ -37,6 +37,7 @@ Before spawning anything, choose the shortest route that covers the change. Your
 | Existing codebase with no spec, ADR, or docs | Athena (legacy mode) → Hexa → Dina |
 | Bugfix | Hexa (failing test first) → Dina |
 | Infra or deploy only | Frans → Dina |
+| Dependency or framework upgrade | Frans (bump, build, run the suite) → Hexa (fix only what the upgrade broke) → Dina; the test count may not drop |
 | Docs only | Vika |
 | Next epic from a roadmap, KLIEN | Athena → Hexa → Dina → Frans → Vika (see `/agents epic`) |
 | Next epic from a roadmap, PRIBADI | Hexa → Dina, plus the phases the rules below add (see `/agents epic`) |
