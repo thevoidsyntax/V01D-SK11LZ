@@ -30,7 +30,7 @@ Stack: <language + version, framework, database>
 Commands: <install>, <run>, <test>, <lint if any>
 Layout: <top folders and what lives where>
 Conventions: <what is fixed so far; Athena adds the rest from the ADR>
-Specs: specs/PRD.md, specs/ADR.md, specs/HANDOFF.md
+Specs: specs/PRD.md, specs/ADR.md, specs/HANDOFF.md (add `, specs/handoff/ (archive of closed epics)` once Satria writes a `specs/ROADMAP.md`)
 ```
 
 Install nothing from the internet unless the user allowed it. No feature code.

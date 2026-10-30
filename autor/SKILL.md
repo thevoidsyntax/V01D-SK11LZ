@@ -3,10 +3,10 @@ name: autor
 description: "Project intelligence: health scan, new-project wizard, roadmap progress, release cutting, and the 6-persona pipeline recommendation"
 when_to_use: "Use when starting a new project, analyzing existing codebase, cutting a release, or needing project intelligence. Run /autor scan for project health check, /autor new for fresh projects, /autor release to cut a version."
 metadata:
-  version: "3.11.0"
+  version: "3.12.0"
 ---
 
-# AUTOR v3.11.0 - PROJECT INTELLIGENCE
+# AUTOR v3.12.0 - PROJECT INTELLIGENCE
 
 ## 🚀 SKILLS
 
@@ -26,7 +26,7 @@ Do not preload them; load one when the current step needs it.
 **On `/autor`, first respond with:**
 
 ```
-AUTOR v3.11.0
+AUTOR v3.12.0
 
 Available Commands:
   /autor              # Analyze current project
@@ -53,7 +53,7 @@ Run these checks:
 - Package.json / requirements detection
 - Test coverage measurement
 - CI/CD configuration check
-- `specs/ROADMAP.md`: when it exists, report roadmap progress (see section 5). DEFICIENT when an epic is `in progress` but the file has no `Posisi sekarang` block or no pipeline table for it, or when the commit the block names is behind HEAD by commits that touched `src/` or `tests/` (`git log <commit>..HEAD -- src tests` is not empty): the status is stale (fix: the next phase updates it per `agents/progress.md`)
+- `specs/ROADMAP.md`: when it exists, report roadmap progress (see section 5). DEFICIENT when an epic is `in progress` but the file has no `Posisi sekarang` block or no pipeline table for it, or when the commit the block names is behind HEAD by commits that touched `src/` or `tests/` (`git log <commit>..HEAD -- src tests` is not empty): the status is stale (fix: the next phase updates it per `agents/progress.md`). Also DEFICIENT when an epic is `done` in the ROADMAP but `specs/HANDOFF.md` still holds its `Epic: <id>` entry (fix: archive it to `specs/handoff/<epic>.md` per `agents/epic.md` step 6; unarchived, personas read the whole log)
 
 ### 2. DISPLAY PROJECT STATE
 
@@ -87,6 +87,7 @@ End every analysis with a pipeline recommendation built from the findings. Recom
 |---------|---------|
 | Requirements unclear, no PRD or acceptance criteria | `/satria` |
 | Architecture decision pending, no ADR, API/data contract undefined | `/athena` |
+| Code exists but was never written down (no PRD, ADR, or tests) | `/athena` in legacy mode, before `/hexa` |
 | Feature missing, no tests or low coverage | `/hexa` |
 | No audit yet, security or concurrency findings | `/dina` (gate) |
 | No CI/CD, Dockerfile, or migrations where the project needs them | `/frans` |

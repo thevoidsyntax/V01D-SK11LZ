@@ -34,6 +34,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `/autor` lists `/fool` among the support skills. `/autor` 3.9.0.
 - **`/impeccable` gained five banned tells and a page/app-screen split.** B15–B19 cover the eyebrow label, the pill badge above a headline, the cream-and-terracotta palette, the bento grid, and glass/aurora offered as the shortcut to "premium". A new §3b splits the house style of a page (read and scrolled) from an app screen (worked in): quiet borders and compact rows are normal in a dashboard, invented vanity numbers and gradients are not in either. The checklist count moves from 20 to 25 items.
 - **`/agents` survives a phase that hits an output limit.** A Hexa spawn given a whole epic (18 endpoints, 6 screens, three test layers) died on `max_output_tokens`, one response over 128,000 tokens, before writing any code, and the run was restarted from nothing. The spawn prompt now asks for one file per step and a clean stop with the leftovers in the HANDOFF entry. A new "Limit or error" rule continues the same agent with SendMessage before spawning a new one. `agents/epic.md` splits the Hexa phase by layer when an epic has more than about 8 endpoints or screens. Observed in a VentroPoS E1 run; after the split, eight Hexa spawns on the same model and effort finished, and three were continued with SendMessage. `/agents` 4.7.0.
+- **`/autor` knows the legacy route and the archive.** `/agents` sends code with no PRD, ADR, or tests to Athena in legacy mode, but the `/autor` recommendation table only said `/athena`, and the README route list left the route out. Both now name it. `/autor scan` and `status` also mark an epic that is `done` in the ROADMAP while `specs/HANDOFF.md` still holds its `Epic: <id>` entry as DEFICIENT, since personas read the whole log until it is archived (VentroPoS E1: 340 KB). `autor/new.md` adds `specs/handoff/` to the project `CLAUDE.md` `Specs:` line once a ROADMAP exists. `/autor` 3.12.0.
+- Doc counts caught up with `/fool`: README heading "Kenapa hanya 14" → 15, and the skill table at the bottom of this file lists `fool` (Discipline 2, total 15). The `/audit` heading read `v6.2` against `6.2.1` in its frontmatter.
+
+### Fixed
+- **A declined commit left the HANDOFF archived.** The archive step added in `/agents` 4.11.0 ran before the commit proposal, while the epic status goes back to `in progress` when the commit is declined. The next phase then found an empty `specs/HANDOFF.md` and the entries in `specs/handoff/<epic>.md`. Step 6 of `agents/epic.md` now says to put the entries back and delete the archive on a decline, and which entries move: from the `[RUTE]` entry carrying `Epic: <id>` to the end of the file; the `/autor new` PRD and scaffold entries above it stay. Found by reading the step against step 5, not by a run. `/agents` 4.11.1.
 
 ### Rollback
 - No schema change. Go back to 4.3.1: `git checkout v4.3.1`, or `git revert` this commit.
@@ -443,10 +448,10 @@ Found by the Sonnet harness run of this release:
 |----------|-------|--------|
 | Core | 3 | autor, agents, audit |
 | Personas | 6 | satria, athena, hexa, dina, frans, vika |
-| Discipline | 1 | tdd |
+| Discipline | 2 | tdd, fool |
 | Taste | 3 | ponytail, anti-slop, impeccable |
 | Capability | 1 | uicheck |
-| **Total** | **14** | The 127 other skills are archived at tag `skills-v1-full` |
+| **Total** | **15** | The 127 other skills are archived at tag `skills-v1-full` |
 
 ---
 

@@ -66,7 +66,7 @@ Tiap fase menambah satu entri ke `specs/HANDOFF.md` di proyek target: input, out
 
 Cara `/agents` berjalan:
 
-- **Rute.** Perubahan kecil tidak melewati 6 fase. Bugfix: Hexa → Dina. Infra: Frans → Dina. Docs: Vika. Fitur baru skala PRIBADI: Hexa → Dina; Satria, Athena, Frans, dan Vika ikut hanya bila permintaan membutuhkannya. Uji banding pemendek URL: 6 fase $6.26, rute pendek satu prompt $1.10, keduanya 29/29 pada cek hitam-kotak.
+- **Rute.** Perubahan kecil tidak melewati 6 fase. Bugfix: Hexa → Dina. Infra: Frans → Dina. Docs: Vika. Kode lama tanpa PRD, ADR, atau tes: Athena (legacy mode) → Hexa → Dina. Fitur baru skala PRIBADI: Hexa → Dina; Satria, Athena, Frans, dan Vika ikut hanya bila permintaan membutuhkannya. Uji banding pemendek URL: 6 fase $6.26, rute pendek satu prompt $1.10, keduanya 29/29 pada cek hitam-kotak.
 - **Model.** Satria Opus; Vika Haiku; Athena, Hexa, Dina, Frans Sonnet effort high. Opus effort high hanya untuk putaran gate setelah Dina `REJECTED` dua kali. Rute dicetak sebelum mulai dan bisa diganti ("pipeline penuh", "mulai dari Athena").
 - **Jeda.** Pipeline berhenti untuk persetujuanmu setelah fase desain: proyek PRIBADI setelah Athena, proyek KLIEN setelah Satria dan setelah Athena. Bilang "tanpa jeda" untuk melewatinya. Di luar jeda desain, pipeline berhenti di fase yang tidak hijau (test merah, jumlah test turun, keputusan terbuka, Dina `REJECTED`) dan menunggu Lanjut / Revisi / Stop; fase hijau lanjut sendiri dengan baris `[PROGRES]`.
 - **Pass akhir.** Kalau Frans atau Vika ikut, Dina memeriksa hasil mereka (migration, Dockerfile, CI, OpenAPI) sebelum selesai.
@@ -81,7 +81,7 @@ Saat scaffold, `/autor new` membuat `CLAUDE.md` proyek (skala, stack, perintah, 
 
 Folder `hooks/` menyimpan tiga hook Claude Code yang berjalan di luar skill: `cache-guard.js` (menandai cache miss saat konteks besar atau model berganti), `ask-on-git-push.js` (menolak `git push` dengan opsi global), dan `changelog-on-commit.js` (menolak commit tanpa entri CHANGELOG). Bukan skill dan tidak dimuat otomatis — pasangnya manual ke `~/.claude/hooks/`, caranya di `hooks/README.md`.
 
-### Kenapa hanya 14
+### Kenapa hanya 15
 
 Sebuah skill hanya dipertahankan kalau mengubah perilaku default model:
 

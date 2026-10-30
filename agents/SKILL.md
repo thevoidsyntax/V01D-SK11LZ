@@ -3,7 +3,7 @@ name: agents
 description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model, routes for small changes, an epic route for roadmaps, approval pauses, and artifact handoff"
 when_to_use: "Use when you want the persona pipeline to build or change something end-to-end (Satria, Athena, Hexa, Dina, Frans, Vika). Trigger with /agents or a request ending in 'mulai pipeline'. Also to build one epic from specs/ROADMAP.md ('kerjakan E2', 'lanjut roadmap'). For single-persona help, call that persona directly."
 metadata:
-  version: "4.11.0"
+  version: "4.11.1"
 ---
 
 # 👥 PERSONA PIPELINE — SATRIA · ATHENA · HEXA · DINA · FRANS · VIKA
@@ -189,7 +189,7 @@ When Frans or Vika ran after the gate, spawn Dina once more in **final pass** mo
 
 After the last phase:
 0. If the route had no Vika (bugfix, infra, short routes) and the project has a `CHANGELOG.md`, add an entry under `## [Unreleased]` yourself, built from this run's HANDOFF entries: what changed for the user and why, in one or two lines. Every committed change gets a CHANGELOG line, not only full-pipeline runs.
-0b. On the epic route, set the epic's `Status` to `done` in `specs/ROADMAP.md` before the commit proposal, so the roadmap update lands in the same commit, and archive that epic's HANDOFF entries as step 6 of `agents/epic.md` says. If the commit is declined, set it back to `in progress`.
+0b. On the epic route, set the epic's `Status` to `done` in `specs/ROADMAP.md` before the commit proposal, so the roadmap update lands in the same commit, and archive that epic's HANDOFF entries as step 6 of `agents/epic.md` says. If the commit is declined, set it back to `in progress` and undo the archive (step 6 says how).
 1. Show `git status --short` and a Conventional Commit message. End the message with one `Co-Authored-By: <Persona>` line per persona that produced an artifact in this run. These persona trailers are the user's attribution rule for this workflow: they replace Claude Code's default `Co-Authored-By: Claude …` line, so do not add that line.
 2. Ask with AskUserQuestion: **Commit** / **Ubah pesan** / **Lewati**.
 3. Commit only on **Commit**.

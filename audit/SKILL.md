@@ -7,7 +7,7 @@ metadata:
   version: "6.2.1"
 ---
 
-# /audit v6.2
+# /audit v6.2.1
 
 Read each file once and check every angle in that read. The only tool step is a dependency scan: a vulnerability published after the model's training is the one thing a careful read cannot find.
 
