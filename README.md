@@ -80,7 +80,7 @@ Saat scaffold, `/autor new` membuat `CLAUDE.md` proyek (skala, stack, perintah, 
 
 ## Dashboard biaya
 
-Biaya token tiap fase pipeline bisa dilihat di satu layar. Alatnya opsional dan tinggal di luar repo ini: variabel `PERSONA_DASHBOARD` di `~/.claude/settings.json` menunjuk folder yang berisi `dashboard.py`.
+Biaya token tiap fase pipeline bisa dilihat di satu layar. Alatnya opsional, di luar repo ini: variabel `PERSONA_DASHBOARD` di `~/.claude/settings.json` menunjuk folder yang berisi `dashboard.py`.
 
 - `/agents` memuat ulang dashboard setelah tiap fase kalau variabel itu terisi; variabel kosong atau skrip hilang → dilewati diam-diam, pipeline tetap jalan.
 - `/autor dashboard` menyegarkan dashboard, membukanya di browser, dan mencetak ringkasannya. Baris `PERINGATAN` berarti ada epic yang lewat batas token (`budgets.json` di folder dashboard).

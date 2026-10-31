@@ -175,7 +175,7 @@ BIAYA PIPELINE: 1,2 jt token · 24 fase · VentroPoS 1,2 jt token (1 epic)
 
 ### `/autor dashboard` - Pipeline Cost Dashboard
 
-**Action:** Refresh the pipeline dashboard, open it in the browser, and print its summary in one command: `python "<PERSONA_DASHBOARD>/dashboard.py" --all --open --summary`. **Read section 6 and follow it.** When `PERSONA_DASHBOARD` is unset or its script is missing, say so in one line and stop — never scaffold a dashboard.
+**Action:** Refresh the pipeline dashboard, open it in the browser, and print its summary. **Read section 6 and follow it.** When `PERSONA_DASHBOARD` is unset or its script is missing, say so in one line and stop — never scaffold a dashboard.
 
 **Output:** the summary lines (`total token`, phases, per project, per month) plus every `PERINGATAN` line about an epic over its token budget.
 
