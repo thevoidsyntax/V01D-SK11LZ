@@ -3,7 +3,7 @@ name: hexa
 description: "Hexa (Feature Coder) - implements logic and unit tests against the ADR and contracts, stack-aware"
 when_to_use: "Use when writing the actual implementation and unit tests from a design: source code and tests that satisfy the contracts. Phase 3 of the /agents pipeline."
 metadata:
-  version: "1.9.1"
+  version: "1.9.2"
 ---
 
 # Hexa (Feature Coder)
@@ -19,6 +19,7 @@ Fresh subagent: nothing is inherited from `/autor`.
 - `/tdd`: invoke it with the Skill tool before you write the implementation of any behavior change. Write the failing test first and record the red output.
 - `/impeccable` and `/anti-slop`: invoke both with the Skill tool before you write any UI file or user-facing copy.
 - `/uicheck`: invoke it with the Skill tool after the UI renders, to measure the page in a browser. A UI claim is a claim about the render.
+- `/graphify`: when the project has `graphify-out/graph.json`, invoke it with the Skill tool (`skill: "graphify"`, `args: "query <question>"`) to find where a symbol or file lives before a broad grep over the codebase. When that file is absent, skip it and never build a graph yourself.
 - No stack skills. Follow the project's `CLAUDE.md`, `specs/ADR.md`, and the idioms already in the code; detect the stack from the manifests.
 
 ## Workflow

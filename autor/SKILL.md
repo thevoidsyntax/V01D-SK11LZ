@@ -3,10 +3,10 @@ name: autor
 description: "Project intelligence: health scan, new-project wizard, roadmap progress, release cutting, and the 6-persona pipeline recommendation"
 when_to_use: "Use when starting a new project, analyzing existing codebase, cutting a release, or needing project intelligence. Run /autor scan for project health check, /autor new for fresh projects, /autor release to cut a version."
 metadata:
-  version: "3.12.1"
+  version: "3.12.2"
 ---
 
-# AUTOR v3.12.1 - PROJECT INTELLIGENCE
+# AUTOR v3.12.2 - PROJECT INTELLIGENCE
 
 ## 🚀 SKILLS
 
@@ -23,10 +23,12 @@ Stack, security, testing, git, and docs knowledge come from the model itself plu
 
 Do not preload them; load one when the current step needs it.
 
+Graphify is not one of them: it is a local third-party tool installed outside this repo. When the project has `graphify-out/graph.json`, the scan uses it to map the codebase; when it does not, the scan skips it and never builds a graph.
+
 **On `/autor`, first respond with:**
 
 ```
-AUTOR v3.12.1
+AUTOR v3.12.2
 
 Available Commands:
   /autor              # Analyze current project
@@ -53,6 +55,7 @@ Run these checks:
 - Package.json / requirements detection
 - Test coverage measurement
 - CI/CD configuration check
+- `graphify-out/graph.json`: when it exists, map the codebase with `/graphify` (Skill tool, `skill: "graphify"`, `args: "query <question>"`) instead of a broad grep over the tree; when it is absent, skip it and never build a graph
 - `specs/ROADMAP.md`: when it exists, report roadmap progress (see section 5). DEFICIENT when an epic is `in progress` but the file has no `Posisi sekarang` block or no pipeline table for it, or when the commit the block names is behind HEAD by commits that touched `src/` or `tests/` (`git log <commit>..HEAD -- src tests` is not empty): the status is stale (fix: the next phase updates it per `agents/progress.md`). Also DEFICIENT when an epic is `done` in the ROADMAP but `specs/HANDOFF.md` still holds its `Epic: <id>` entry (fix: archive it to `specs/handoff/<epic>.md` per `agents/epic.md` step 6; unarchived, personas read the whole log)
 
 ### 2. DISPLAY PROJECT STATE
@@ -138,7 +141,7 @@ The epic route is `/agents epic`: one epic per run (KLIEN: Athena → Hexa → D
 - Documentation audit
 - Dependency audit
 
-**Output:** Full health report with prioritized remediation, ending with the persona pipeline recommendation (section 4). When `specs/ROADMAP.md` exists, include the roadmap progress block (section 5) before the recommendation.
+**Output:** Full health report with prioritized remediation, ending with the persona pipeline recommendation (section 4). When `specs/ROADMAP.md` exists, include the roadmap progress block (section 5) before the recommendation. When Graphify is installed but the project has no `graphify-out/graph.json`, list `graphify extract .` as a remediation step (the scan never builds a graph itself).
 
 ### `/autor new` - New Project Wizard
 

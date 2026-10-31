@@ -23,27 +23,31 @@ Repo ini adalah **ekosistem skill** untuk Claude Code (15 skill; tiap subfolder 
 - **Aturan pertahankan:** skill baru hanya ditambah kalau mengubah perilaku default model (proses atau selera user). Pengetahuan stack/domain tidak dijadikan skill; konvensi proyek masuk `CLAUDE.md`/ADR proyek. Skill lama ada di tag `skills-v1-full` (`git checkout skills-v1-full -- <nama>`).
 - Isi repo = skill + `README.md` + `CHANGELOG.md` + `CLAUDE.md` + `hooks/`. **Tidak ada installer/skrip otomatis** — pasang = clone, sync = git biasa. Folder `hooks/` hanya menyimpan sumber hook user-level (bukan skill, tidak dimuat Claude Code) supaya tidak hilang; pasangnya manual ke `~/.claude/hooks/`.
 - Skill yang diambil dari repo luar ditulis ulang sampai mandiri: tidak boleh membawa perintah, sub-perintah (`/x init`), skrip, atau rujukan skill yang tidak ada di repo ini. Dulu `impeccable`, `ponytail`, dan `anti-slop` membawa perintah fiktif seperti itu.
+- **Graphify** (https://github.com/Graphify-Labs/graphify) adalah alat lokal pihak ketiga, dipasang di luar repo ini (`uv tool install graphifyy` + `graphify install`, skill global di `~/.claude/skills/graphify/`). Folder `graphify/` ada di `.gitignore` supaya tidak ikut git, dan `/graphify` masuk daftar `BUILTIN` di cek 1 karena perintahnya ada di mesin, bukan di repo. Athena, Hexa, dan `/autor scan` memakainya hanya bila proyek punya `graphify-out/graph.json`; tanpa itu dilewati dan tidak pernah membangun graf sendiri.
 
 ## Sebelum commit
 
 Jalankan dari root repo; tidak boleh ada output selain baris `warning:` dari git:
 
 ```bash
+# cek hanya file yang di-track: folder lokal yang di-ignore (graphify/, synced/) bukan bagian repo ini
+FILES=$(git ls-files '*/SKILL.md' 'agents/*.md' 'autor/*.md' 'athena/*.md' 'fool/*.md' 'impeccable/*.md')
 # 1. setiap /nama = folder skill di repo ini atau perintah bawaan Claude Code
-BUILTIN='code-review|security-review|simplify|init|review|loop|schedule|run|hooks|config|model|help|clear|compact|permissions|plugin|memory|context|login|logout|effort'
-grep -ohE '(^|[ `("])/[a-z][a-z0-9-]+([` ,.:)"]|$)' */SKILL.md agents/*.md autor/*.md athena/*.md fool/*.md impeccable/*.md | sed -E 's/^[ `("]*\///; s/[` ,.:)"]*$//' | sort -u |
+# graphify = alat lokal pihak ketiga, skill-nya di ~/.claude/skills/graphify/ (diabaikan git), bukan di repo ini
+BUILTIN='code-review|security-review|simplify|init|review|loop|schedule|run|hooks|config|model|help|clear|compact|permissions|plugin|memory|context|login|logout|effort|graphify'
+grep -ohE '(^|[ `("])/[a-z][a-z0-9-]+([` ,.:)"]|$)' $FILES | sed -E 's/^[ `("]*\///; s/[` ,.:)"]*$//' | sort -u |
   while read -r n; do [ -d "$n" ] || echo "$n" | grep -qxE "$BUILTIN" || echo "unknown command: /$n"; done
 # 2. tidak ada ``` di dalam blok ``` (pakai ~~~ untuk blok luar)
-awk 'FNR==1{b=0;t=0} /^[[:space:]]*~~~/{t=!t;next} t{next} /^[[:space:]]*```/{ if(b && $0 ~ /```[A-Za-z]/) print FILENAME":"FNR": nested code fence"; b=!b }' */SKILL.md agents/*.md autor/*.md athena/*.md fool/*.md impeccable/*.md README.md CLAUDE.md
+awk 'FNR==1{b=0;t=0} /^[[:space:]]*~~~/{t=!t;next} t{next} /^[[:space:]]*```/{ if(b && $0 ~ /```[A-Za-z]/) print FILENAME":"FNR": nested code fence"; b=!b }' $FILES README.md CLAUDE.md
 # 3. frontmatter hanya field yang dibaca Claude Code (version ditaruh di metadata.version)
 OK='name|description|when_to_use|effort|metadata|argument-hint|arguments|disable-model-invocation|user-invocable|allowed-tools|disallowed-tools|model|context|agent|background|hooks|paths|shell|license|compatibility'
-for f in */SKILL.md; do awk 'NR==1&&!/^---/{exit} NR>1&&/^---/{exit} NR>1&&/^[A-Za-z_-]+:/{sub(/:.*/,"");print}' "$f" | grep -vxE "$OK" | sed "s|^|$f: unknown frontmatter field |"; done
+for f in $(git ls-files '*/SKILL.md'); do awk 'NR==1&&!/^---/{exit} NR>1&&/^---/{exit} NR>1&&/^[A-Za-z_-]+:/{sub(/:.*/,"");print}' "$f" | grep -vxE "$OK" | sed "s|^|$f: unknown frontmatter field |"; done
 # 4. perubahan skill disertai entri CHANGELOG
 git diff HEAD --name-only | grep -q 'SKILL.md' && ! git diff HEAD --name-only | grep -qx 'CHANGELOG.md' && echo "CHANGELOG.md not updated"
 # 4b. test skrip uicheck (melewati dirinya sendiri kalau playwright tidak ada)
 python -m unittest uicheck/scripts/test_check.py uicheck/scripts/test_taste_rules.py uicheck/scripts/test_a11y_rules.py >/dev/null 2>&1 || echo "uicheck tests failed"
 # 5. setiap sub-perintah `/skill sub` punya heading sendiri di skill itu, mis. "### `/autor scan`"
-grep -ohE '`/[a-z][a-z0-9-]+ [a-z][a-z0-9-]*' */SKILL.md README.md CLAUDE.md | tr -d '`' | sort -u |
+grep -ohE '`/[a-z][a-z0-9-]+ [a-z][a-z0-9-]*' $FILES README.md CLAUDE.md | tr -d '`' | sort -u |
   while read -r s sub; do n=${s#/}; [ -d "$n" ] || continue; grep -qE "^#+ .*\`/$n $sub\`" "$n/SKILL.md" || echo "unhandled sub-command: /$n $sub"; done
 ```
 
