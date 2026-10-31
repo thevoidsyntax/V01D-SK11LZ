@@ -41,7 +41,6 @@ Tiap subfolder level atas = satu skill (berisi `SKILL.md`).
 ```text
 /autor       Analisis proyek yang sudah ada (health check + rekomendasi)
 /autor new   Mulai proyek baru (PRD → scaffold → deteksi stack → rekomendasi pipeline)
-/autor dashboard  Biaya token pipeline (dashboard opsional; lihat "Dashboard biaya")
 /autor release  Potong versi dari CHANGELOG (bump semver, catatan, tag, push)
 /agents      Jalankan pipeline 6 persona (plan → design → code → QA → deploy → docs)
 
@@ -63,7 +62,7 @@ Pendukung:
 /fool        Uji rencana sebelum dibangun: 5 mode (asumsi, kontra-argumen, failure mode, red team, audit bukti)
 ```
 
-Tiap fase menambah satu entri ke `specs/HANDOFF.md` di proyek target: input, output, keputusan, isu terbuka, fase berikutnya. Vika menyusun CHANGELOG dan README dari log itu. Tiap fase juga memperbarui dokumen progres (`agents/progress.md`): posisi dan tabel pipeline di `specs/ROADMAP.md`, kartu `specs/RESUME.md`, baris `[Unreleased]`, dan baris status README, supaya posisi proyek terbaca dalam satu layar. Angka biaya tiap fase (`<n>K token, <m> menit`) ikut masuk ke baris pipeline itu, dan `/agents` memuat ulang dashboard biaya setelah tiap fase kalau variabel `PERSONA_DASHBOARD` di `~/.claude/settings.json` menunjuk ke folder dashboard.
+Tiap fase menambah satu entri ke `specs/HANDOFF.md` di proyek target: input, output, keputusan, isu terbuka, fase berikutnya. Vika menyusun CHANGELOG dan README dari log itu. Tiap fase juga memperbarui dokumen progres (`agents/progress.md`): posisi dan tabel pipeline di `specs/ROADMAP.md`, kartu `specs/RESUME.md`, baris `[Unreleased]`, dan baris status README, supaya posisi proyek terbaca dalam satu layar.
 
 Cara `/agents` berjalan:
 
@@ -77,14 +76,6 @@ Cara `/agents` berjalan:
 - **Roadmap.** Untuk produk besar, Satria memecahnya jadi epik: `specs/ROADMAP.md` berisi tabel epik, milestone, dependensi, dan status; tiap epik punya PRD sendiri di `specs/prd/<epic>.md`; `specs/PRD.md` jadi index produk plus penunjuk epik aktif. `/agents` mengerjakan satu epik per jalan (KLIEN: Athena → Hexa → Dina → Frans → Vika; PRIBADI: Hexa → Dina, persona lain hanya bila perlu; Satria dilewati karena PRD epik sudah ada), dan memperbarui tabel pipeline epik di roadmap setelah tiap fase serta menandai epik `done` setelah audit terakhir. Saat epik ditutup, entri HANDOFF epik itu pindah ke `specs/handoff/<epic>.md`, jadi `specs/HANDOFF.md` tidak membengkak tanpa batas. `/autor scan` dan `/autor status` melaporkan posisi dan pipeline itu.
 
 Saat scaffold, `/autor new` membuat `CLAUDE.md` proyek (skala, stack, perintah, layout). Athena menambahkan konvensi dari ADR ke file itu, dan persona membaca konvensi stack dari sana.
-
-## Dashboard biaya
-
-Biaya token tiap fase pipeline bisa dilihat di satu layar. Alatnya opsional, di luar repo ini: variabel `PERSONA_DASHBOARD` di `~/.claude/settings.json` menunjuk folder yang berisi `dashboard.py`.
-
-- `/agents` memuat ulang dashboard setelah tiap fase kalau variabel itu terisi; variabel kosong atau skrip hilang → dilewati diam-diam, pipeline tetap jalan.
-- `/autor dashboard` menyegarkan dashboard, membukanya di browser, dan mencetak ringkasannya. Baris `PERINGATAN` berarti ada epic yang lewat batas token (`budgets.json` di folder dashboard).
-- `/autor status` menambahkan satu baris biaya dari `dashboard.json`; kalau biayanya belum tercatat, tulis "biaya belum tercatat", bukan "0 token".
 
 ## Hooks user-level
 
