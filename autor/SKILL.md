@@ -1,12 +1,12 @@
 ---
 name: autor
-description: "Project intelligence: health scan, new-project wizard, roadmap progress, release cutting, and the 6-persona pipeline recommendation"
-when_to_use: "Use when starting a new project, analyzing existing codebase, cutting a release, or needing project intelligence. Run /autor scan for project health check, /autor new for fresh projects, /autor release to cut a version."
+description: "Project intelligence: health scan, new-project wizard, roadmap progress, release cutting, pipeline cost dashboard, and the 6-persona pipeline recommendation"
+when_to_use: "Use when starting a new project, analyzing existing codebase, cutting a release, checking pipeline token cost, or needing project intelligence. Run /autor scan for project health check, /autor new for fresh projects, /autor release to cut a version, /autor dashboard for pipeline cost."
 metadata:
-  version: "3.12.0"
+  version: "3.13.0"
 ---
 
-# AUTOR v3.12.0 - PROJECT INTELLIGENCE
+# AUTOR v3.13.0 - PROJECT INTELLIGENCE
 
 ## 🚀 SKILLS
 
@@ -26,13 +26,14 @@ Do not preload them; load one when the current step needs it.
 **On `/autor`, first respond with:**
 
 ```
-AUTOR v3.12.0
+AUTOR v3.13.0
 
 Available Commands:
   /autor              # Analyze current project
   /autor scan         # Full health check with recommendations
   /autor new          # New project wizard
   /autor status       # Quick status overview
+  /autor dashboard    # Pipeline cost dashboard (tokens per persona, epic, budget)
   /autor release      # Cut a release (version, notes, tag, push)
 
 Available Personas:
@@ -122,6 +123,21 @@ Name the next epic as the first row with `todo` whose `Depends on` epics are all
 
 The epic route is `/agents epic`: one epic per run (KLIEN: Athena → Hexa → Dina → Frans → Vika; PRIBADI: Hexa → Dina plus what the route rules add).
 
+## 6. PIPELINE COST
+
+Biaya token pipeline diukur dashboard opsional di luar repo ini: variabel lingkungan `PERSONA_DASHBOARD` menunjuk folder yang berisi `dashboard.py`. Variabel kosong atau skrip hilang → satu kalimat fakta ("dashboard belum dikonfigurasi") lalu berhenti; jangan membangun dashboard baru.
+
+Ketika variabel terisi:
+- **Segarkan:** `python "<PERSONA_DASHBOARD>/dashboard.py" --all` menulis `dashboard.html` dan `dashboard.json` di folder itu. Baris `PERINGATAN` di keluaran berarti ada epic yang lewat batas token — tampilkan apa adanya ke user.
+- **`/autor dashboard`:** satu perintah — `python "<PERSONA_DASHBOARD>/dashboard.py" --all --open --summary` — menyegarkan dashboard, membukanya di browser, dan mencetak ringkasannya (total token, jumlah fase, per proyek, per bulan).
+- **`/autor status`:** baca `<PERSONA_DASHBOARD>/dashboard.json` yang sudah ada; jangan jalankan parser lagi. Ambil `totals.tokens`, `totals.phases`, dan `totals.comparison`. File hilang atau total token 0 → tulis "biaya belum tercatat", jangan "0 token".
+
+Ringkasan yang dicetak:
+
+```text
+BIAYA PIPELINE: 1,2 jt token · 24 fase · VentroPoS 1,2 jt token (1 epic)
+```
+
 ## 🎯 COMMAND HANDLERS
 
 ### `/autor` - Default Analysis
@@ -155,6 +171,13 @@ The epic route is `/agents epic`: one epic per run (KLIEN: Athena → Hexa → D
 - Running processes
 - Recent changes
 - Roadmap position: the `Posisi sekarang` block and the running epic's pipeline (section 5), when `specs/ROADMAP.md` exists
+- Pipeline cost: one line from section 6 (`dashboard.json`), or "biaya belum tercatat"
+
+### `/autor dashboard` - Pipeline Cost Dashboard
+
+**Action:** Refresh the pipeline dashboard, open it in the browser, and print its summary in one command: `python "<PERSONA_DASHBOARD>/dashboard.py" --all --open --summary`. **Read section 6 and follow it.** When `PERSONA_DASHBOARD` is unset or its script is missing, say so in one line and stop — never scaffold a dashboard.
+
+**Output:** the summary lines (`total token`, phases, per project, per month) plus every `PERINGATAN` line about an epic over its token budget.
 
 ### `/autor release` - Cut a Release
 
