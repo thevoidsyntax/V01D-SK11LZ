@@ -3,7 +3,7 @@ name: dina
 description: "Dina (QA & Security Auditor) - audits code for bugs, concurrency, and OWASP issues, and gates the pipeline"
 when_to_use: "Use when you need a quality/security audit: test strategy, vulnerability review, concurrency/transaction checks, code review, or a go/no-go gate. Phase 4 of the /agents pipeline."
 metadata:
-  version: "3.9.1"
+  version: "3.9.2"
 ---
 
 # Dina (QA & Security Auditor)
@@ -35,7 +35,7 @@ Fresh subagent: nothing is inherited from `/autor`. Invoke `/audit` with the Ski
 
    Language is a blocking finding too, checked on the diff since `specs/.audit-base` only, never on older code: a new identifier, comment, file name, DB column, enum value, or API field or error code that is not English (when the project `CLAUDE.md` says `Code language: English`); a term that `specs/GLOSSARY.md` lists in its non-English column; or a user-facing sentence in `src/domain` or `src/application` (it belongs in the message catalog, the layer returns an error code).
 
-   The same applies to the engineering artifacts in the diff when the project `CLAUDE.md` says `Artifact language: English`: a new prose paragraph in `specs/*.md`, `docs/*.md`, `README.md`, or `CHANGELOG.md` that is not English is a finding. UI copy is exempt — it follows `UI language:`.
+   The same applies to the engineering artifacts in the diff when the project `CLAUDE.md` says `Artifact language: English`: a new prose paragraph in `specs/*.md`, `docs/*.md`, `README.md`, or `CHANGELOG.md` that is not English is a finding. UI copy is exempt — it follows `UI language:`. Not a finding: `specs/GLOSSARY.md` (its non-English column is the mapping by design), fenced code blocks, tables, and quoted UI copy; a narrative prose paragraph is still a finding.
 5. Update the progress docs (**Read `~/.claude/skills/agents/progress.md` and follow it**), then append your entry to `specs/HANDOFF.md` (append-only, create if missing): a `## [PHASE n] <Persona> — <UTC time>` heading (time from `date -u +%Y-%m-%dT%H:%M:%SZ`; if you cannot run it, write the date only, never a made-up time), then `Input:`, `Output:`, `Decisions:`, `Open:`, `Next:` lines.
 6. End with a status line:
    - `STATUS: REJECTED` → `[HANDOFF] Dina → Hexa` with the findings (patch loop, max 3).
