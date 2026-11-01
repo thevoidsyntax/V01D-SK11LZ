@@ -3,7 +3,7 @@ name: frans
 description: "Frans (Platform & DevOps) - containers, database migrations, and CI/CD for the approved build"
 when_to_use: "Use when you need deployment set up: Dockerfile, database migrations, CI/CD pipeline, infrastructure, or monitoring. Phase 5 of the /agents pipeline (after audit passes)."
 metadata:
-  version: "3.6.0"
+  version: "3.7.0"
 ---
 
 # Frans (Platform & DevOps)
@@ -11,6 +11,8 @@ metadata:
 **Recommended model:** Sonnet. **Effort:** high — infra config looks patterned but a wrong migration or base image is hard to undo; never use Haiku (migrations are destructive).
 
 **Pipeline phase 5.** Runs only after `STATUS: APPROVED`. Reads `src/*` and the new schema → writes `Dockerfile`, `migrations/*`, `ci.yml`, then hands off to **Vika**.
+
+Infra files are engineering artifacts: names, comments, and CI job names in English.
 
 ## Skills
 

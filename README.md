@@ -54,7 +54,7 @@ Persona:
 
 Pendukung:
 /audit       Audit repo: tool dulu, review terarah, baseline inkremental (dipakai Dina)
-/ponytail    Tulis kode sesedikit mungkin: cek perlu, yang sudah ada, stdlib, native
+/ponytail    Tulis kode sesedikit mungkin: cek perlu, yang sudah ada, stdlib, native; edit harus surgical
 /tdd         Test-first: tulis test yang gagal dulu, catat bukti red → green
 /anti-slop   Teks tanpa gaya AI: copy UI, dokumentasi, komentar
 /impeccable  UI tanpa tampilan template AI: keputusan dari brief produk + checklist
@@ -76,6 +76,20 @@ Cara `/agents` berjalan:
 - **Roadmap.** Untuk produk besar, Satria memecahnya jadi epik: `specs/ROADMAP.md` berisi tabel epik, milestone, dependensi, dan status; tiap epik punya PRD sendiri di `specs/prd/<epic>.md`; `specs/PRD.md` jadi index produk plus penunjuk epik aktif. `/agents` mengerjakan satu epik per jalan (KLIEN: Athena → Hexa → Dina → Frans → Vika; PRIBADI: Hexa → Dina, persona lain hanya bila perlu; Satria dilewati karena PRD epik sudah ada), dan memperbarui tabel pipeline epik di roadmap setelah tiap fase serta menandai epik `done` setelah audit terakhir. Saat epik ditutup, entri HANDOFF epik itu pindah ke `specs/handoff/<epic>.md`, jadi `specs/HANDOFF.md` tidak membengkak tanpa batas. `/autor scan` dan `/autor status` melaporkan posisi dan pipeline itu.
 
 Saat scaffold, `/autor new` membuat `CLAUDE.md` proyek (skala, stack, perintah, layout). Athena menambahkan konvensi dari ADR ke file itu, dan persona membaca konvensi stack dari sana.
+
+## Bahasa
+
+Semua artifact engineering ditulis dalam Bahasa Inggris: kode (identifier, komentar, nama file, kolom DB, enum, field API), PRD, ADR, HANDOFF, ROADMAP, RESUME, docs, commit message, dan isi PR. Copy UI mengikuti bahasa produk (`UI language:` di `CLAUDE.md` proyek); jawaban chat mengikuti bahasa user. Proyek lama tidak dirombak — kalau sebuah file sudah memakai bahasa lain, ikuti bahasa file itu.
+
+## Prinsip kerja
+
+Tiga prinsip yang menutup kebiasaan bawaan model, diturunkan dari [andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills):
+
+- **Think before coding** — sebut asumsi, tawarkan interpretasi lain kalau ambigu, stop kalau tidak jelas (`/ponytail`).
+- **Surgical changes** — hanya ubah yang diminta; jangan perbaiki kode sebelahnya, jangan refactor yang tidak rusak, ikut style yang ada (`/ponytail`).
+- **Goal-driven** — sukses = terverifikasi; tulis langkah lalu cek dengan command (`/tdd`, gate pipeline).
+
+`global-CLAUDE.md` di repo ini adalah snapshot dari `~/.claude/CLAUDE.md` (isi Master Rules, versi 9.4) sebagai jejak audit: file aslinya tinggal di luar repo, jadi kalau hilang atau di-restore dari backup, salinan ini yang jadi rujukan.
 
 ## Hooks user-level
 

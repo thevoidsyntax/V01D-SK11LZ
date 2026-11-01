@@ -1,6 +1,6 @@
 # Smoke-test `/agents`
 
-Untuk manusia; tidak dimuat otomatis.
+For humans; not loaded automatically.
 
 Full route, in an interactive session:
 
@@ -43,7 +43,7 @@ Record per run: cost, duration, and turns from the `result` line; Dina's last `S
 
 1. The orchestrator's first write is the `[RUTE]` entry with `Epic: E1`, before any Agent call.
 2. `specs/ROADMAP.md` gets the pipeline table with `☐` rows before Hexa starts.
-3. Hexa's entry has `Ponytail:`, `TDD:` with red evidence, and exactly `UI: tidak`.
+3. Hexa's entry has `Ponytail:`, `TDD:` with red evidence, and a `UI:` line saying no (`UI: no` or `UI: tidak`).
 4. The orchestrator writes nothing under `src/` or `tests/`.
 5. Each persona row in the ROADMAP ends with `<n>K token, <m> menit`.
 6. On `APPROVED`: no commit can be approved headless, so the epic stays `in progress`, `specs/handoff/E1.md` does not exist, and `Current PRD:` still points at E1. On `REJECTED`: the run stopped with Lanjut / Revisi / Stop and no patch round started.

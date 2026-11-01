@@ -3,7 +3,7 @@ name: agents
 description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model, routes for small changes, an epic route for roadmaps, approval pauses, and artifact handoff"
 when_to_use: "Use when you want the persona pipeline to build or change something end-to-end (Satria, Athena, Hexa, Dina, Frans, Vika). Trigger with /agents or a request ending in 'mulai pipeline'. Also to build one epic from specs/ROADMAP.md ('kerjakan E2', 'lanjut roadmap'). For single-persona help, call that persona directly."
 metadata:
-  version: "4.12.2"
+  version: "4.13.1"
 ---
 
 # 👥 PERSONA PIPELINE — SATRIA · ATHENA · HEXA · DINA · FRANS · VIKA
@@ -52,8 +52,8 @@ Rules that override the table:
 
 ```text
 [RUTE] Bugfix: Hexa → Dina
-  alasan: satu endpoint, kontrak dan skema tidak berubah
-  ubah: "pipeline penuh" atau "mulai dari <persona>"
+  reason: one endpoint, contract and schema unchanged
+  change: "full pipeline" or "start from <persona>"
 ```
 
 Your first tool call is the Write or Edit that appends the route to `specs/HANDOFF.md` (create it if missing), before any Agent call:
@@ -66,7 +66,7 @@ Scale: <PRIBADI | KLIEN | KLIEN (assumed)>
 Branch: <current branch, or "-" outside a git repo>
 ```
 
-On the epic route add one line, `Epic: <id> — <judul>`.
+On the epic route add one line, `Epic: <id> — <title>`.
 
 Then print the `[RUTE]` block. The phase checks in section 3 count this entry, so a run without it is incomplete. If the user names a route ("pipeline penuh", "mulai dari Athena", "hanya Hexa dan Dina"), use theirs. Start the first phase without waiting, unless the branch step below applies.
 
@@ -106,7 +106,7 @@ The orchestrator coordinates; it does not write the work itself. Never edit `src
 
 For each phase in the route, spawn with the **Agent tool**, always in the foreground so progress is visible:
 - `subagent_type: "general-purpose"`, `model:` = the persona's model and `effort:` = its effort from the table (the user asked for these levels; the gate loop in section 5 is the only escalation), `run_in_background: false` (each phase needs the previous artifact).
-- `prompt`: "You are **<Persona>** (<role>). Invoke the `/<persona>` skill and follow its whole workflow. Read only these artifacts: <inputs>. Produce: <output artifact>, plus everything your workflow writes (the `specs/HANDOFF.md` entry; for Dina also `specs/.audit-base`). Keep your reply to a one-line handoff summary. Write one file per step and never put several large files in one turn. If you are running low on room, finish the file in hand, append your HANDOFF entry listing what is left, and stop."
+- `prompt`: "You are **<Persona>** (<role>). Invoke the `/<persona>` skill and follow its whole workflow. Read only these artifacts: <inputs>. Produce: <output artifact>, plus everything your workflow writes (the `specs/HANDOFF.md` entry; for Dina also `specs/.audit-base`). Write artifacts in English (PRD, ADR, HANDOFF, ROADMAP, docs, commit message, PR body); UI copy follows the project's `UI language:`. Keep your reply to a one-line handoff summary. Write one file per step and never put several large files in one turn. If you are running low on room, finish the file in hand, append your HANDOFF entry listing what is left, and stop."
 - Pass artifact paths, never the prior transcript.
 - **Limit or error.** If a phase ends early on an output limit (`max_output_tokens`) or an API error, check `git status` and the files already written, then continue **the same agent** with SendMessage to its agent id ("continue from where you stopped, do not rewrite finished files, keep replies short"). Spawn a new agent only if SendMessage fails, and list the files already on disk in its prompt. Never resume an agent whose scope was given to another agent.
 - **Async launch.** If the Agent result says the agent was launched async (the harness moves a foreground agent to the background after a while; 3 of 12 Hexa spawns in VentroPoS E1), print `[FASE n/N] <Persona> berjalan di background`, then wait for its completion notice. Do not start a phase that depends on it, and do not poll.
@@ -149,7 +149,7 @@ The repo must answer "where are we" at any moment, not only at the end of an epi
      | Phase | Green when |
      |-------|------------|
      | Satria, Athena | the design pause of section 4 approves |
-     | Hexa | the project's test command passes with no drop in test count against the ROADMAP position block, type check is clean, and the entry has `Ponytail:`, `TDD:`, and `UI: ya` or `UI: tidak` (any other value is not green: send it back to Hexa before Dina) |
+     | Hexa | the project's test command passes with no drop in test count against the ROADMAP position block, type check is clean, and the entry has `Ponytail:`, `TDD:`, and a `UI:` line reading `yes` or `no` (`ya`/`tidak` from an entry written before the language rule is accepted; any other value is not green: send it back to Hexa before Dina) |
      | Dina | `STATUS: APPROVED` |
      | Frans | the build is verified (an unverified build under `Open:` is not green) |
      | Vika | the docs match the real routes |
