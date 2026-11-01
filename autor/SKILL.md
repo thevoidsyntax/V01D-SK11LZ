@@ -3,7 +3,7 @@ name: autor
 description: "Project intelligence: health scan, new-project wizard, roadmap progress, release cutting, and the 6-persona pipeline recommendation"
 when_to_use: "Use when starting a new project, analyzing existing codebase, cutting a release, or needing project intelligence. Run /autor scan for project health check, /autor new for fresh projects, /autor release to cut a version."
 metadata:
-  version: "3.13.0"
+  version: "3.14.0"
 ---
 
 # AUTOR v3.12.2 - PROJECT INTELLIGENCE
@@ -49,7 +49,7 @@ When `/autor` is invoked:
 
 ### 1. SCAN PROJECT
 Run these checks:
-- Project `CLAUDE.md`: missing, or without stack, run/test commands, `Scale:`, or `UI language:`, is DEFICIENT (fix: create or complete it; personas read their conventions from it)
+- Project `CLAUDE.md`: missing, or without stack, run/test commands, `Scale:`, `UI language:`, `Code language:`, or `Artifact language:`, is DEFICIENT (fix: create or complete it; personas read their conventions from it). The two language lines record the language the project already uses: an old project keeps its language and is never converted, a new project defaults to English for both
 - Directory structure analysis
 - Git status check
 - Package.json / requirements detection

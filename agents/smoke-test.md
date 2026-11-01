@@ -25,7 +25,7 @@ One run proves little: on 2026-10-30 the same prompt on the same fixture gave `A
 
 Fixture: a new empty folder outside this repo, `git init -b main`, these five files, one commit.
 
-- `CLAUDE.md`: `Scale: PRIBADI`, `UI language: English`, `Code language: English`, `Stack: Python 3 (stdlib only), unittest`, `Commands: python -m unittest`, `Layout: src/, tests/, specs/`.
+- `CLAUDE.md`: `Scale: PRIBADI`, `UI language: English`, `Code language: English`, `Artifact language: English`, `Stack: Python 3 (stdlib only), unittest`, `Commands: python -m unittest`, `Layout: src/, tests/, specs/`.
 - `specs/ROADMAP.md`: an epic table with `E1 | Slugify | M1 | - | specs/prd/E1-slugify.md | todo` and `E2 | Truncate and join | M1 | E1 | | todo`.
 - `specs/PRD.md`: a product index with `Current PRD: specs/prd/E1-slugify.md`.
 - `specs/prd/E1-slugify.md`: `slugify(text: str) -> str` in `src/slugkit/slugify.py`, requirements FR-SLUG-001..006 (lowercase; runs of spaces or punctuation become one `-`; no `-` at either end; accented Latin folds to ASCII; no letters or digits gives `""`; a non-string raises `TypeError`), each with one Given/When/Then.
