@@ -11,6 +11,7 @@ Repo ini adalah **ekosistem skill** untuk Claude Code (15 skill; tiap subfolder 
 - **Jeda & commit**: berhenti untuk approval user setelah fase desain (PRIBADI: setelah Athena; KLIEN: setelah Satria dan Athena) dan di tiap fase yang tidak hijau (test merah, jumlah test turun, keputusan terbuka, Dina `REJECTED`; fase hijau lanjut sendiri dan mencetak `[PROGRES]`), pass akhir Dina atas hasil Frans/Vika, lalu commit hanya setelah user setuju. Di `main`/`master` rute bertanya branch dulu (KLIEN wajib branch); setelah commit `/agents` menawarkan push + PR (`/code-review` pada PR, tanpa merge otomatis). Push selalu minta approval (hook global).
 - **CHANGELOG**: rute tanpa Vika tetap menulis baris `[Unreleased]` dari HANDOFF.
 - **Hooks user-level**: `cache-guard.js`, `ask-on-git-push.js`, dan `changelog-on-commit.js` ada di `hooks/` (sumber, bukan skill). Hook global `changelog-on-commit` **menolak** (deny, berlaku juga di auto mode) commit `feat`/`fix`/breaking, tanpa tipe, atau yang menyentuh Dockerfile/compose/`migrations/` tidak menyertakan `CHANGELOG.md` (di repo yang punya CHANGELOG); `SKIP_CHANGELOG=1` hanya setelah user setuju. `docs`/`test`/`chore`/`ci` dikecualikan. Hook push menolak push yang memakai opsi global git (`-C`, `-c`) supaya ask rule `git push` selalu menanyai user.
+- **Scope Hexa**: entri HANDOFF Hexa membawa baris `Files:`; orchestrator membandingkan baris itu dengan `git status` sebelum dan sesudah fase — berkas yang berubah di luar daftar mengembalikan fase ke Hexa sebelum Dina. Di batch paralel, daftar file milik unit yang jadi acuan (satu mekanisme, tidak dua).
 - **Handoff log**: tiap fase menambah entri ke `specs/HANDOFF.md` di proyek target; `/agents` memeriksa entri itu ada. Persona tidak pernah memanggil persona berikutnya sendiri — hanya `/agents` atau user. Tiap fase juga memperbarui dokumen progres lewat `agents/progress.md` (posisi dan tabel pipeline di `specs/ROADMAP.md`, kartu `specs/RESUME.md`, baris `[Unreleased]`, baris status README), supaya posisi proyek terbaca tanpa membaca seluruh log.
 - **Roadmap mode**: untuk produk besar Satria memecahnya jadi epik — `specs/ROADMAP.md` (tabel epik, milestone, dependensi, status), satu PRD per epik di `specs/prd/<epic>.md`, dan `specs/PRD.md` jadi index produk. `/agents` mengerjakan satu epik per jalan (Satria dilewati, PRD epik sudah ada) dan memperbarui tabel pipeline epik di ROADMAP setelah tiap fase serta menandai epik `done` setelah audit terakhir; saat epik ditutup, entri HANDOFF epik itu dipindahkan ke `specs/handoff/<epic>.md` supaya `specs/HANDOFF.md` hanya memuat epik yang sedang berjalan. `/autor scan` dan `/autor status` melaporkan posisi dan pipeline itu, dan menandai DEFICIENT epik `done` yang entri HANDOFF-nya belum diarsipkan. Tanpa roadmap, `specs/PRD.md` tetap PRD penuh seperti sebelumnya.
 - **Release**: `/autor release` memotong blok `[Unreleased]` jadi versi baru — bump semver dari commit sejak tag `v*` terakhir, catatan rollback wajib, tag `v<x.y.z>`, lalu push. Setiap langkah yang menulis/menag/push minta approval.
@@ -18,7 +19,7 @@ Repo ini adalah **ekosistem skill** untuk Claude Code (15 skill; tiap subfolder 
 - **Persona**: `/satria` (PM), `/athena` (System Architect), `/hexa` (Feature Coder), `/dina` (QA + Security), `/frans` (DevOps), `/vika` (Technical Writer).
 - **Pendukung**: `/audit` (dipakai Dina), `/ponytail` (sebelum menulis kode), `/tdd` (test-first: test yang gagal ditulis lebih dulu; checklist dijalankan Hexa, buktinya dicek Dina), `/anti-slop` (teks), `/impeccable` (UI tanpa tampilan template AI; checklist dijalankan Hexa, buktinya dicek Dina), `/uicheck` (UI dirender di browser sungguhan: overflow 360px, error konsol, label input, alt gambar, house style, dan dengan `--a11y` jalur Tab serta fokus terlihat; baris `uicheck:` dan `a11y:` di HANDOFF dicek Dina), `/fool` (menguji rencana/desain sebelum dibangun: 5 mode, tidak memblokir, tidak menulis ke proyek; bisa dipakai di jeda desain `/agents`).
 
-- **Bahasa artifact**: semua artefak engineering yang ditulis skill ke proyek target (PRD, ADR, HANDOFF, ROADMAP, RESUME, docs, commit message, isi PR) dalam Bahasa Inggris; copy UI mengikuti `UI language:` proyek. Token yang bocor ke artifact (blok posisi ROADMAP, marker `UI: yes|no`, blok `[ROUTE]`, heading body PR) sudah dibersihkan. Proyek lama tidak dirombak: kalau sebuah file sudah memakai bahasa lain, ikuti bahasa file itu. Dokumen repo ini sendiri tetap Bahasa Indonesia.
+- **Bahasa artifact**: semua artefak engineering yang ditulis skill ke proyek target (PRD, ADR, HANDOFF, ROADMAP, RESUME, docs, commit message, isi PR) dalam Bahasa Inggris; copy UI mengikuti `UI language:` proyek. Token yang bocor ke artifact (blok posisi ROADMAP, marker `UI: yes|no`, blok `[ROUTE]`, heading body PR) sudah dibersihkan. Proyek lama tidak dirombak: kalau sebuah file sudah memakai bahasa lain, ikuti bahasa file itu. Dokumen repo ini sendiri tetap Bahasa Indonesia. Gate bahasa diukur di `dina/eval.md` (tiga fixture, headless), bukan hanya ditulis.
 - **Prinsip kerja** (dari `andrej-karpathy-skills`, MIT): think before coding (sebut asumsi, stop kalau ambigu), surgical changes (hanya ubah yang diminta, jangan perbaiki kode sebelahnya), goal-driven (sukses = terverifikasi). Prinsip lengkap ada di `/ponytail` dan global `CLAUDE.md` §1.
 
 ## Konvensi repo
@@ -35,7 +36,7 @@ Jalankan dari root repo; tidak boleh ada output selain baris `warning:` dari git
 
 ```bash
 # cek hanya file yang di-track: folder lokal yang di-ignore (graphify/, synced/) bukan bagian repo ini
-FILES=$(git ls-files '*/SKILL.md' 'agents/*.md' 'autor/*.md' 'athena/*.md' 'fool/*.md' 'impeccable/*.md')
+FILES=$(git ls-files '*/SKILL.md' 'agents/*.md' 'autor/*.md' 'athena/*.md' 'dina/*.md' 'fool/*.md' 'impeccable/*.md')
 # 1. setiap /nama = folder skill di repo ini atau perintah bawaan Claude Code
 # graphify = alat lokal pihak ketiga, skill-nya di ~/.claude/skills/graphify/ (diabaikan git), bukan di repo ini
 BUILTIN='code-review|security-review|simplify|init|review|loop|schedule|run|hooks|config|model|help|clear|compact|permissions|plugin|memory|context|login|logout|effort|graphify'
@@ -53,12 +54,23 @@ python -m unittest uicheck/scripts/test_check.py uicheck/scripts/test_taste_rule
 # 5. setiap sub-perintah `/skill sub` punya heading sendiri di skill itu, mis. "### `/autor scan`"
 grep -ohE '`/[a-z][a-z0-9-]+ [a-z][a-z0-9-]*' $FILES README.md CLAUDE.md global-CLAUDE.md | tr -d '`' | sort -u |
   while read -r s sub; do n=${s#/}; [ -d "$n" ] || continue; grep -qE "^#+ .*\`/$n $sub\`" "$n/SKILL.md" || echo "unhandled sub-command: /$n $sub"; done
+# 6. global-CLAUDE.md harus sama dengan file user-level ~/.claude/CLAUDE.md (hanya repo ini; dilewati kalau file live tidak ada)
+LIVE="$HOME/.claude/CLAUDE.md"
+if [ -f "$LIVE" ]; then
+  trim() { awk '{ if ($0 ~ /[^[:space:]]/) buf[++n]=$0 } END { s=1; for(i=1;i<=n;i++) if (buf[i] ~ /[^[:space:]]/) { s=i; break } for(i=s;i<=n;i++) print buf[i] }'; }
+  body() { awk 'BEGIN{started=0} { if (!started && /^\*\*/) started=1; if (started) print }'; }
+  SNAP=$(body < global-CLAUDE.md | tr -d '\r' | trim)
+  CUR=$(awk '/^# graphify/{exit} {print}' "$LIVE" | tr -d '\r' | body | trim)
+  [ "$SNAP" = "$CUR" ] || echo "global-CLAUDE.md differs from $LIVE - mirror the change into global-CLAUDE.md in the same commit"
+else
+  echo "warning: $LIVE not found - global-CLAUDE.md drift check skipped"
+fi
 ```
 
 Lalu cek manual yang tidak bisa di-grep:
 
 - `README.md` (daftar skill) dan bagian "Cara kerja" di file ini masih sesuai isi skill.
-- `global-CLAUDE.md` masih sama dengan `~/.claude/CLAUDE.md` (versi, isi, tanpa blok `# graphify` yang ditulis mesin). Kalau file user-level berubah, salin ke sini dalam commit yang sama.
+- `global-CLAUDE.md` vs `~/.claude/CLAUDE.md`: cek 6 membandingkannya otomatis (header snapshot dan blok `# graphify` yang ditulis mesin diabaikan). Yang masih manual: pastikan blok `# graphify` tidak ikut ter-copy ke snapshot, dan kalau file user-level berubah, salin ke sini dalam commit yang sama.
 - Sub-perintah ditulis dalam backtick (`` `/autor scan` ``) dan punya heading sendiri di skill-nya; cek 5 hanya melihat bentuk itu.
 - Commit hanya setelah user setuju, dengan `Co-Authored-By: <persona>`.
 - Skill **wajib** di `<nama>/SKILL.md` level atas (nama file persis `SKILL.md`). Claude Code tidak memuat folder bersarang seperti `kategori/<nama>/SKILL.md`; dulu 16 skill di `conditional/`, `docs/`, `system/` tidak pernah termuat karena ini.

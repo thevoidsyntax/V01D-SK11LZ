@@ -70,6 +70,7 @@ Cara `/agents` berjalan:
 - **Model.** Satria Opus; Vika Haiku; Athena, Hexa, Dina, Frans Sonnet effort high. Opus effort high hanya untuk putaran gate setelah Dina `REJECTED` dua kali. Rute dicetak sebelum mulai dan bisa diganti ("pipeline penuh", "mulai dari Athena").
 - **Jeda.** Pipeline berhenti untuk persetujuanmu setelah fase desain: proyek PRIBADI setelah Athena, proyek KLIEN setelah Satria dan setelah Athena. Bilang "tanpa jeda" untuk melewatinya. Di luar jeda desain, pipeline berhenti di fase yang tidak hijau (test merah, jumlah test turun, keputusan terbuka, Dina `REJECTED`) dan menunggu Lanjut / Revisi / Stop; fase hijau lanjut sendiri dengan baris `[PROGRES]`.
 - **Pass akhir.** Kalau Frans atau Vika ikut, Dina memeriksa hasil mereka (migration, Dockerfile, CI, OpenAPI) sebelum selesai.
+- **Scope Hexa.** Hexa menulis baris `Files:` di entri HANDOFF, dan orchestrator membandingkannya dengan `git status` sebelum dan sesudah fase. Berkas yang berubah di luar daftar itu mengembalikan fase ke Hexa sebelum Dina. Di batch paralel, daftar file milik unit yang jadi acuan.
 - **Docker.** Frans hanya memakai Docker kalau Docker Desktop sudah menyala. Kalau mati, verifikasi ditandai "not verified" di HANDOFF.
 - **Commit.** Commit diusulkan di akhir dengan `Co-Authored-By: <persona>` dan baru dijalankan setelah kamu setuju. Push selalu minta approval.
 - **Branch dan PR.** Di `main`/`master`, pipeline menawarkan branch `feat|fix|chore|docs/<slug>` sebelum mulai (proyek KLIEN wajib). Setelah commit, kamu bisa memilih push + PR: isi PR dari HANDOFF dan CHANGELOG, lalu `/code-review` dijalankan pada PR. Pipeline tidak pernah merge.
@@ -80,6 +81,8 @@ Saat scaffold, `/autor new` membuat `CLAUDE.md` proyek (skala, stack, perintah, 
 ## Bahasa
 
 Semua artifact engineering ditulis dalam Bahasa Inggris: kode (identifier, komentar, nama file, kolom DB, enum, field API), PRD, ADR, HANDOFF, ROADMAP, RESUME, docs, commit message, dan isi PR. Copy UI mengikuti bahasa produk (`UI language:` di `CLAUDE.md` proyek); jawaban chat mengikuti bahasa user. Proyek lama tidak dirombak — kalau sebuah file sudah memakai bahasa lain, ikuti bahasa file itu.
+
+Gate bahasa diukur, bukan hanya ditulis: `dina/eval.md` menjalankan Dina sendiri (bukan pipeline penuh) pada tiga fixture — paragraf prosa non-Inggris di `specs/*.md` harus ditolak, ejaan lama `UI: tidak` harus diterima, dan `specs/GLOSSARY.md` dengan istilah non-Inggris tidak boleh kena.
 
 ## Prinsip kerja
 
