@@ -20,6 +20,7 @@ all of them:
     ### HIGH                     then a bolded entry: **H-1 `file` — title**
     ## MEDIUM                   then a bullet entry: - MEDIUM `file` — title
     ### SEV HIGH — `file` — …    the heading carries the finding itself
+    | HIGH | `file` | evidence |  a table row whose first cell is the severity
 
 Exit code 0 when the case passes, 1 when it fails, 2 on a usage error.
 """
@@ -42,6 +43,9 @@ LANGUAGE_WORDS = (
 HEADING = re.compile(r"^(#{2,3})\s+(.*)$")
 SEVERITY = re.compile(
     r"^(?:sev\s+)?(critical|blocking|high|medium|low)\b", re.IGNORECASE
+)
+TABLE_ROW = re.compile(
+    r"^\s*\|\s*\**(critical|blocking|high|medium|low)\**\s*\|", re.IGNORECASE
 )
 STATUS_LINE = re.compile(r"STATUS:\s*(APPROVED|REJECTED)", re.IGNORECASE)
 
@@ -69,9 +73,19 @@ def severity_sections(text):
     return out
 
 
+def table_findings(text):
+    """Return [(severity, row)] for every table row that starts with a severity."""
+    out = []
+    for line in text.splitlines():
+        match = TABLE_ROW.match(line)
+        if match:
+            out.append((match.group(1).lower(), line.strip()))
+    return out
+
+
 def findings(text):
     """Return [(severity, entry)] for every finding in the report."""
-    out = []
+    out = table_findings(text)
     for severity, body in severity_sections(text):
         entries = [
             line.strip()

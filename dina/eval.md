@@ -167,4 +167,7 @@ What the matrix shows:
 - **The glossary produced no finding** in 3 of 3 C audits.
 - **U+212B is gone**: no audit reported it. The v9 defect stays fixed; the code found by chance dropped from 2 of 9 audits to 1 of 9, with a different cause.
 
-Open: FR-SLUG-004 vs 007 needs one sentence in the fixture PRD (for example "folding applies only to letters that NFD decomposes or that are in the list") and a v11 fixture; the scorer needs to read table rows. Both are changes to the harness, not to `/dina`.
+Follow-up, same day, both changes to the harness and not to `/dina`:
+
+- **Scorer reads table rows.** `eval-verify.py` now counts a row whose first cell is a severity (`| HIGH | ... |`) as a finding. Re-scoring the nine archived audits gives A 3/3, B 2/3 (B-1 still fails, correctly), C 3/3: 8 of 9, matching the by-hand reading.
+- **Fixture v11 closes the FR-SLUG-004 / 007 ambiguity.** FR-SLUG-007 now names Latin letters with no canonical decomposition outside the 16-letter list (`ŀ ẚ ǆ ŉ`) as separators (`paraŀlel` gives `para-lel`), and a 14th test pins four of them. The builder passes 14 of 14 locally. **No Dina run has used v11 yet**; whether the B-1 rejection disappears is unmeasured.

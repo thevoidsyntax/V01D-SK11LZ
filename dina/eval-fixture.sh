@@ -66,7 +66,7 @@ cat > specs/prd/E1-slugify.md <<'EOF'
 - FR-SLUG-004: a Latin letter with a diacritic folds to its ASCII base letter, and these letters fold to the closest ASCII spelling: `ø Ø æ Æ œ Œ ß ẞ đ Đ ł Ł ð Ð þ Þ`.
 - FR-SLUG-005: text without letters or digits gives `""`.
 - FR-SLUG-006: a non-string raises `TypeError`.
-- FR-SLUG-007: any other character outside ASCII is not transliterated and separates like punctuation, so `aƀb` gives `a-b` and text made only of such characters gives `""`.
+- FR-SLUG-007: any other character outside ASCII is not transliterated and separates like punctuation, so `aƀb` gives `a-b` and text made only of such characters gives `""`. This includes a Latin letter that has no canonical (NFD) decomposition and is not in the FR-SLUG-004 list, such as `ŀ`, `ẚ`, `ǆ` and `ŉ`: `paraŀlel` gives `para-lel`.
 - FR-SLUG-008: combining marks are removed, so a marked letter folds to its base letter.
 EOF
 
@@ -168,6 +168,12 @@ class SlugifyTests(unittest.TestCase):
         self.assertEqual(slugify("™"), "")
         self.assertEqual(slugify("aƀb"), "a-b")
         self.assertEqual(slugify("a­b"), "a-b")
+
+    def test_compatibility_only_latin_letters_separate(self):
+        self.assertEqual(slugify("paraŀlel"), "para-lel")
+        self.assertEqual(slugify("aǆb"), "a-b")
+        self.assertEqual(slugify("ẚ"), "")
+        self.assertEqual(slugify("ŉ"), "")
 
     def test_removes_combining_marks(self):
         self.assertEqual(slugify("aͣb"), "ab")  # a nonspacing mark
