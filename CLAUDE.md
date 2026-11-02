@@ -19,7 +19,8 @@ Repo ini adalah **ekosistem skill** untuk Claude Code (15 skill; tiap subfolder 
 - **Persona**: `/satria` (PM), `/athena` (System Architect), `/hexa` (Feature Coder), `/dina` (QA + Security), `/frans` (DevOps), `/vika` (Technical Writer).
 - **Pendukung**: `/audit` (dipakai Dina), `/ponytail` (sebelum menulis kode), `/tdd` (test-first: test yang gagal ditulis lebih dulu; checklist dijalankan Hexa, buktinya dicek Dina), `/anti-slop` (teks), `/impeccable` (UI tanpa tampilan template AI; checklist dijalankan Hexa, buktinya dicek Dina), `/uicheck` (UI dirender di browser sungguhan: overflow 360px, error konsol, label input, alt gambar, house style, dan dengan `--a11y` jalur Tab serta fokus terlihat; baris `uicheck:` dan `a11y:` di HANDOFF dicek Dina), `/fool` (menguji rencana/desain sebelum dibangun: 5 mode, tidak memblokir, tidak menulis ke proyek; bisa dipakai di jeda desain `/agents`).
 
-- **Bahasa artifact**: semua artefak engineering yang ditulis skill ke proyek target (PRD, ADR, HANDOFF, ROADMAP, RESUME, docs, commit message, isi PR) dalam Bahasa Inggris; copy UI mengikuti `UI language:` proyek. Token yang bocor ke artifact (blok posisi ROADMAP, marker `UI: yes|no`, blok `[ROUTE]`, heading body PR) sudah dibersihkan. Proyek lama tidak dirombak: kalau sebuah file sudah memakai bahasa lain, ikuti bahasa file itu. Dokumen repo ini sendiri tetap Bahasa Indonesia. Gate bahasa diukur di `dina/eval.md` (tiga fixture, headless), bukan hanya ditulis.
+- **Bahasa artifact**: semua artefak engineering yang ditulis skill ke proyek target (PRD, ADR, HANDOFF, ROADMAP, RESUME, docs, commit message, isi PR) dalam Bahasa Inggris; copy UI mengikuti `UI language:` proyek. Token yang bocor ke artifact (blok posisi ROADMAP, marker `UI: yes|no`, blok `[ROUTE]`, heading body PR) sudah dibersihkan. Proyek lama tidak dirombak: kalau sebuah file sudah memakai bahasa lain, ikuti bahasa file itu. Dokumen repo ini sendiri tetap Bahasa Indonesia. Gate bahasa diukur di `dina/eval.md` (tiga fixture, headless), bukan hanya ditulis — dan eval itu bisa dijalankan ulang dari repo: `dina/eval-fixture.sh` (membangun fixture), `dina/eval-run.sh` (menjalankan Dina lalu menilai), `dina/eval-verify.py` (skor per kasus). Fixture harus dibangun di luar `~/.claude/`: sandbox harness menolak tulis di sana dan persona akan mengulang sampai budget habis.
+- **Smoke test `/agents` punya builder fixture**: `agents/smoke-fixture.sh` (varian `clean`, `planted`, `units`) membangun fixture yang `agents/smoke-test.md` pakai, jadi tidak perlu menulis ulang dari prosa. Sama seperti eval bahasa, bangun di luar `~/.claude/`.
 - **Prinsip kerja** (dari `andrej-karpathy-skills`, MIT): think before coding (sebut asumsi, stop kalau ambigu), surgical changes (hanya ubah yang diminta, jangan perbaiki kode sebelahnya), goal-driven (sukses = terverifikasi). Prinsip lengkap ada di `/ponytail` dan global `CLAUDE.md` §1.
 
 ## Konvensi repo
@@ -36,7 +37,7 @@ Jalankan dari root repo; tidak boleh ada output selain baris `warning:` dari git
 
 ```bash
 # cek hanya file yang di-track: folder lokal yang di-ignore (graphify/, synced/) bukan bagian repo ini
-FILES=$(git ls-files '*/SKILL.md' 'agents/*.md' 'autor/*.md' 'athena/*.md' 'dina/*.md' 'fool/*.md' 'impeccable/*.md')
+FILES=$(git ls-files '*/SKILL.md' 'agents/*.md' 'autor/*.md' 'athena/*.md' 'dina/*.md' 'fool/*.md' 'impeccable/*.md' 'agents/*.sh' 'dina/*.sh' 'dina/*.py')
 # 1. setiap /nama = folder skill di repo ini atau perintah bawaan Claude Code
 # graphify = alat lokal pihak ketiga, skill-nya di ~/.claude/skills/graphify/ (diabaikan git), bukan di repo ini
 BUILTIN='code-review|security-review|simplify|init|review|loop|schedule|run|hooks|config|model|help|clear|compact|permissions|plugin|memory|context|login|logout|effort|graphify'
@@ -65,6 +66,9 @@ if [ -f "$LIVE" ]; then
 else
   echo "warning: $LIVE not found - global-CLAUDE.md drift check skipped"
 fi
+# 7. skrip di folder skill harus sintaksnya benar (shell dan python)
+for f in $(git ls-files 'agents/*.sh' 'dina/*.sh'); do bash -n "$f" || echo "$f: shell syntax error"; done
+for f in $(git ls-files 'dina/*.py'); do python -c 'import ast,sys;ast.parse(open(sys.argv[1],encoding="utf-8").read())' "$f" || echo "$f: python syntax error"; done
 ```
 
 Lalu cek manual yang tidak bisa di-grep:

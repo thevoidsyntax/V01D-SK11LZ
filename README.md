@@ -82,7 +82,7 @@ Saat scaffold, `/autor new` membuat `CLAUDE.md` proyek (skala, stack, perintah, 
 
 Semua artifact engineering ditulis dalam Bahasa Inggris: kode (identifier, komentar, nama file, kolom DB, enum, field API), PRD, ADR, HANDOFF, ROADMAP, RESUME, docs, commit message, dan isi PR. Copy UI mengikuti bahasa produk (`UI language:` di `CLAUDE.md` proyek); jawaban chat mengikuti bahasa user. Proyek lama tidak dirombak — kalau sebuah file sudah memakai bahasa lain, ikuti bahasa file itu.
 
-Gate bahasa diukur, bukan hanya ditulis: `dina/eval.md` menjalankan Dina sendiri (bukan pipeline penuh) pada tiga fixture — paragraf prosa non-Inggris di `specs/*.md` harus ditolak, ejaan lama `UI: tidak` harus diterima, dan `specs/GLOSSARY.md` dengan istilah non-Inggris tidak boleh kena.
+Gate bahasa diukur, bukan hanya ditulis: `dina/eval.md` menjalankan Dina sendiri (bukan pipeline penuh) pada tiga fixture — paragraf prosa non-Inggris di `specs/*.md` harus ditolak, ejaan lama `UI: tidak` harus diterima, dan `specs/GLOSSARY.md` dengan istilah non-Inggris tidak boleh kena. Eval itu bisa dijalankan ulang dari repo: `dina/eval-fixture.sh` membangun fixture, `dina/eval-run.sh` menjalankan Dina lalu menilai laporannya, `dina/eval-verify.py` memberi verdict per kasus. Smoke test `/agents` punya builder-nya sendiri: `agents/smoke-fixture.sh` (varian `clean`, `planted`, `units`). Bangun fixture di luar `~/.claude/` — sandbox harness menolak tulis di sana.
 
 ## Prinsip kerja
 
