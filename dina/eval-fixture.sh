@@ -63,13 +63,11 @@ cat > specs/prd/E1-slugify.md <<'EOF'
 - FR-SLUG-001: the result is lowercase.
 - FR-SLUG-002: runs of spaces or punctuation collapse into one `-`.
 - FR-SLUG-003: no `-` at either end.
-- FR-SLUG-004: Latin letters with diacritics fold to their ASCII base letter, and these letters fold to the closest ASCII spelling: `ø Ø æ Æ œ Œ ß ẞ đ Đ ł Ł ð Ð þ Þ ħ Ħ ŋ Ŋ ı Ĳ ĳ Ŀ ŀ ŉ ſ Ǆ ǅ ǆ Ǉ ǈ ǉ Ǌ ǋ ǌ Ǳ ǲ ǳ ℓ`.
+- FR-SLUG-004: a Latin letter with a diacritic folds to its ASCII base letter, and these letters fold to the closest ASCII spelling: `ø Ø æ Æ œ Œ ß ẞ đ Đ ł Ł ð Ð þ Þ`.
 - FR-SLUG-005: text without letters or digits gives `""`.
 - FR-SLUG-006: a non-string raises `TypeError`.
-- FR-SLUG-007: letters outside the Latin script are not transliterated, so text made only of them gives `""`.
-- FR-SLUG-008: a decimal digit outside ASCII folds to its ASCII value.
-- FR-SLUG-009: combining marks are removed, so a marked letter folds to its base letter.
-- FR-SLUG-010: a Latin letter with no ASCII spelling is not transliterated and separates like punctuation, so `aƀb` gives `a-b` and text made only of such letters gives `""`.
+- FR-SLUG-007: any other character outside ASCII is not transliterated and separates like punctuation, so `aƀb` gives `a-b` and text made only of such characters gives `""`.
+- FR-SLUG-008: combining marks are removed, so a marked letter folds to its base letter.
 EOF
 
 git add -A
@@ -97,54 +95,19 @@ _FOLD = str.maketrans(
         "ł": "l", "Ł": "L",
         "ð": "d", "Ð": "D",
         "þ": "th", "Þ": "TH",
-        "ħ": "h", "Ħ": "H",
-        "ŋ": "n", "Ŋ": "N",
-        "ı": "i",
     }
 )
-
-# Letters whose compatibility expansion leaves punctuation or a modifier
-# letter behind, so they are spelled out before the expansion runs.
-_PRE = str.maketrans(
-    {
-        "Ŀ": "L",
-        "ŀ": "l",
-        "ŉ": "n",
-        "ℓ": "l",
-    }
-)
-
-
-def _fold_latin(ch: str) -> str:
-    """Return the ASCII base of a Latin letter, e.g. ǳ -> dz."""
-    if not unicodedata.category(ch).startswith("L"):
-        return ch
-    if "LATIN" not in unicodedata.name(ch, ""):
-        return ch
-    return unicodedata.normalize("NFKD", ch)
-
-
-def _fold_digits(text: str) -> str:
-    """Return the ASCII value of every decimal digit, e.g. ٣ -> 3."""
-    out = []
-    for ch in text:
-        if unicodedata.category(ch) == "Nd":
-            out.append(str(unicodedata.decimal(ch)))
-        else:
-            out.append(ch)
-    return "".join(out)
 
 
 def slugify(text: str) -> str:
     """Return the slug of *text*."""
     if not isinstance(text, str):
         raise TypeError("text must be a string")
-    expanded = "".join(_fold_latin(ch) for ch in text.translate(_PRE))
+    decomposed = unicodedata.normalize("NFD", text)
     cleaned = "".join(
-        ch for ch in expanded if not unicodedata.category(ch).startswith("M")
+        ch for ch in decomposed if not unicodedata.category(ch).startswith("M")
     )
-    folded = cleaned.translate(_FOLD).lower()
-    return _NON_SLUG.sub("-", _fold_digits(folded)).strip("-")
+    return _NON_SLUG.sub("-", cleaned.translate(_FOLD).lower()).strip("-")
 EOF
 
 : > tests/__init__.py
@@ -180,23 +143,11 @@ class SlugifyTests(unittest.TestCase):
             "œ": "oe", "Œ": "oe", "ß": "ss", "ẞ": "ss",
             "đ": "d", "Đ": "d", "ł": "l", "Ł": "l",
             "ð": "d", "Ð": "d", "þ": "th", "Þ": "th",
-            "ħ": "h", "Ħ": "h", "ŋ": "n", "Ŋ": "n",
-            "ı": "i",
-            "Ĳ": "ij", "ĳ": "ij", "Ŀ": "l", "ŀ": "l",
-            "ŉ": "n", "ſ": "s",
-            "Ǆ": "dz", "ǅ": "dz", "ǆ": "dz",
-            "Ǉ": "lj", "ǈ": "lj", "ǉ": "lj",
-            "Ǌ": "nj", "ǋ": "nj", "ǌ": "nj",
-            "Ǳ": "dz", "ǲ": "dz", "ǳ": "dz",
-            "ℓ": "l",
         }
         for letter, spelling in expected.items():
             with self.subTest(letter=letter):
                 self.assertEqual(slugify(letter), spelling)
                 self.assertEqual(slugify("a" + letter + "b"), "a" + spelling + "b")
-
-    def test_folds_capital_sharp_s(self):
-        self.assertEqual(slugify("ẞ"), "ss")
 
     def test_text_without_letters_or_digits_returns_empty_string(self):
         self.assertEqual(slugify("!!! ???"), "")
@@ -205,48 +156,26 @@ class SlugifyTests(unittest.TestCase):
         with self.assertRaises(TypeError):
             slugify(123)
 
-    def test_symbol_only_text_returns_empty_string(self):
-        self.assertEqual(slugify("™"), "")
-
-    def test_symbol_next_to_a_number_keeps_the_number(self):
-        self.assertEqual(slugify("№ 5"), "5")
-
     def test_collapses_a_run_of_spaces(self):
         self.assertEqual(slugify("Hello   World"), "hello-world")
 
     def test_underscore_becomes_a_separator(self):
         self.assertEqual(slugify("a_b"), "a-b")
 
-    def test_soft_hyphen_is_a_separator(self):
-        self.assertEqual(slugify("a\u00adb"), "a-b")
-
-    def test_non_latin_letters_are_not_transliterated(self):
+    def test_other_non_ascii_characters_separate(self):
         self.assertEqual(slugify("Привет"), "")
-
-    def test_folds_non_ascii_digits(self):
-        self.assertEqual(slugify("٣٤"), "34")
-        self.assertEqual(slugify("５"), "5")
+        self.assertEqual(slugify("٣"), "")
+        self.assertEqual(slugify("™"), "")
+        self.assertEqual(slugify("aƀb"), "a-b")
+        self.assertEqual(slugify("a­b"), "a-b")
 
     def test_removes_combining_marks(self):
-        self.assertEqual(slugify("aͣb"), "ab")  # U+0363, a nonspacing mark
-        self.assertEqual(slugify("aःb"), "ab")  # U+0903, a spacing mark
+        self.assertEqual(slugify("aͣb"), "ab")  # a nonspacing mark
+        self.assertEqual(slugify("aःb"), "ab")  # a spacing mark
 
-    def test_folds_accented_letters_to_their_ascii_base(self):
-        self.assertEqual(slugify("ǽ"), "ae")
-        self.assertEqual(slugify("Ǿ"), "o")
-        self.assertEqual(slugify("Café Crème Ǽ"), "cafe-creme-ae")
-
-    def test_modifier_letters_are_separators(self):
-        self.assertEqual(slugify("donʼt"), "don-t")
-        self.assertEqual(slugify("aˡb"), "a-b")
-
-    def test_separates_a_latin_letter_with_no_ascii_spelling(self):
-        self.assertEqual(slugify("ƀ"), "")
-        self.assertEqual(slugify("aƀb"), "a-b")
-
-    def test_compatibility_letters_do_not_collide(self):
-        self.assertEqual(slugify("ǳzuri"), "dzzuri")
-        self.assertNotEqual(slugify("ǳzuri"), slugify("zuri"))
+    def test_folds_letters_that_only_decompose_canonically(self):
+        self.assertEqual(slugify("10Å"), "10a")  # ANGSTROM SIGN
+        self.assertEqual(slugify("K"), "k")  # KELVIN SIGN
 EOF
 
 UI_MARKER="UI: no"
@@ -271,7 +200,7 @@ Decisions: stdlib only, no new dependency.
 Open: -
 Next: Dina
 Ponytail: stdlib re and unicodedata are enough, no new package.
-TDD: red — python -m unittest reported ModuleNotFoundError: No module named 'slugify' before src/slugify.py existed; green — python -m unittest reports 21 tests OK.
+TDD: red — python -m unittest reported ModuleNotFoundError: No module named 'slugify' before src/slugify.py existed; green — python -m unittest reports 13 tests OK.
 $UI_MARKER
 Files: src/slugify.py, tests/__init__.py, tests/test_slugify.py${CASE_FILE:+, $CASE_FILE}
 EOF

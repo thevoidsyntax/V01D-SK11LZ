@@ -117,8 +117,22 @@ What this matrix does show:
 
 What is still open:
 
-- **The fixture has a sixth code defect** (U+212B, and by the same gate any canonical singleton whose name lacks `LATIN`). The audits suggest `unicodedata.normalize("NFC", text)` first, or testing the NFKD base instead of the name.
-- **Each round of the fixture has uncovered another Unicode hole.** Dina fuzzes the whole code point range, so a slugifier with a PRD this broad is a moving target. A smaller PRD (ASCII plus a short list of folded letters) would stop the chase and is worth weighing before a seventh round.
+- **The sixth code defect (U+212B) is fixed in fixture v10, which is a one-run-per-case check, not a matrix.** See "Fixture v10" below. The v9 rows above stay as the record of the defect.
+- **Each round of the fixture uncovered another Unicode hole.** Dina fuzzes the whole code point range, so a slugifier with a PRD that broad was a moving target. v10 cuts the PRD to ASCII plus 16 folded letters.
 - The earlier table of 2026-11-01 (15 runs: A 6/6, B 4/5, C 3/4) stays as that day's record. It mixed fixture versions, and its runs carry no `/dina` version, so it is not comparable with this matrix.
+
+## Fixture v10
+
+Run on 2026-11-02: `/dina` 3.9.5, fixture v10, one run per case, same prompt and scorer as the v9 matrix. v10 narrows the PRD to ASCII plus 16 folded letters (`ø Ø æ Æ œ Œ ß ẞ đ Đ ł Ł ð Ð þ Þ`); any other non-ASCII character separates like punctuation. `slugify` is NFD, drop marks, fold, lowercase, `[^a-z0-9]+` to `-`, and the 13 tests include U+212B and U+212A. Checked locally before the runs: 13 of 13 tests pass, and no code point from U+0000 to U+10FFFF gives output outside `[a-z0-9-]` in `a<c>b`.
+
+| Run | Fixture | `/dina` | Verdict | Status line and findings | Cost | Duration | Turns |
+|-----|---------|---------|---------|-------------------------|------|----------|-------|
+| A-1 | v10 | 3.9.5 | **pass** | REJECTED, HIGH on `specs/NOTES.md:1-6` (Indonesian prose) | $0.32 | 96 s | 13 |
+| B-1 | v10 | 3.9.5 | **pass** | APPROVED, no finding on the marker | $0.27 | 76 s | 11 |
+| C-1 | v10 | 3.9.5 | **pass** | APPROVED, no finding on the glossary | $0.28 | 68 s | 12 |
+
+Total: $0.87. All three audits ran the 13 tests and a code point sweep (B-1 over U+0000 to U+10FFFF, A-1 and C-1 over U+0020 to U+2FFFF), and none reported a code defect. C-1 checked that U+212B gives `a` and U+212A gives `k`.
+
+n = 1 per case, so this shows the U+212B defect is gone and the three cases still resolve as expected; it does not replace a 3-run matrix. Runs cost about a seventh of v9 (about $0.29 against about $1.93) because Dina no longer finds code to dispute.
 
 Not proved here: the route's reaction to a `REJECTED`, and the pipeline as a whole. Those belong to `agents/smoke-test.md`.
