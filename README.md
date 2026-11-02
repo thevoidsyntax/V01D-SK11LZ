@@ -41,7 +41,6 @@ Tiap subfolder level atas = satu skill (berisi `SKILL.md`).
 ```text
 /autor       Analisis proyek yang sudah ada (health check + rekomendasi)
 /autor new   Mulai proyek baru (PRD → scaffold → deteksi stack → rekomendasi pipeline)
-/autor dashboard  Biaya token pipeline (dashboard opsional; lihat "Dashboard biaya")
 /autor release  Potong versi dari CHANGELOG (bump semver, catatan, tag, push)
 /agents      Jalankan pipeline 6 persona (plan → design → code → QA → deploy → docs)
 
@@ -55,7 +54,7 @@ Persona:
 
 Pendukung:
 /audit       Audit repo: tool dulu, review terarah, baseline inkremental (dipakai Dina)
-/ponytail    Tulis kode sesedikit mungkin: cek perlu, yang sudah ada, stdlib, native
+/ponytail    Tulis kode sesedikit mungkin: cek perlu, yang sudah ada, stdlib, native; edit harus surgical
 /tdd         Test-first: tulis test yang gagal dulu, catat bukti red → green
 /anti-slop   Teks tanpa gaya AI: copy UI, dokumentasi, komentar
 /impeccable  UI tanpa tampilan template AI: keputusan dari brief produk + checklist
@@ -63,7 +62,7 @@ Pendukung:
 /fool        Uji rencana sebelum dibangun: 5 mode (asumsi, kontra-argumen, failure mode, red team, audit bukti)
 ```
 
-Tiap fase menambah satu entri ke `specs/HANDOFF.md` di proyek target: input, output, keputusan, isu terbuka, fase berikutnya. Vika menyusun CHANGELOG dan README dari log itu. Tiap fase juga memperbarui dokumen progres (`agents/progress.md`): posisi dan tabel pipeline di `specs/ROADMAP.md`, kartu `specs/RESUME.md`, baris `[Unreleased]`, dan baris status README, supaya posisi proyek terbaca dalam satu layar. Angka biaya tiap fase (`<n>K token, <m> menit`) ikut masuk ke baris pipeline itu, dan `/agents` memuat ulang dashboard biaya setelah tiap fase kalau variabel `PERSONA_DASHBOARD` di `~/.claude/settings.json` menunjuk ke folder dashboard.
+Tiap fase menambah satu entri ke `specs/HANDOFF.md` di proyek target: input, output, keputusan, isu terbuka, fase berikutnya. Vika menyusun CHANGELOG dan README dari log itu. Tiap fase juga memperbarui dokumen progres (`agents/progress.md`): posisi dan tabel pipeline di `specs/ROADMAP.md`, kartu `specs/RESUME.md`, baris `[Unreleased]`, dan baris status README, supaya posisi proyek terbaca dalam satu layar.
 
 Cara `/agents` berjalan:
 
@@ -71,6 +70,7 @@ Cara `/agents` berjalan:
 - **Model.** Satria Opus; Vika Haiku; Athena, Hexa, Dina, Frans Sonnet effort high. Opus effort high hanya untuk putaran gate setelah Dina `REJECTED` dua kali. Rute dicetak sebelum mulai dan bisa diganti ("pipeline penuh", "mulai dari Athena").
 - **Jeda.** Pipeline berhenti untuk persetujuanmu setelah fase desain: proyek PRIBADI setelah Athena, proyek KLIEN setelah Satria dan setelah Athena. Bilang "tanpa jeda" untuk melewatinya. Di luar jeda desain, pipeline berhenti di fase yang tidak hijau (test merah, jumlah test turun, keputusan terbuka, Dina `REJECTED`) dan menunggu Lanjut / Revisi / Stop; fase hijau lanjut sendiri dengan baris `[PROGRES]`.
 - **Pass akhir.** Kalau Frans atau Vika ikut, Dina memeriksa hasil mereka (migration, Dockerfile, CI, OpenAPI) sebelum selesai.
+- **Scope Hexa.** Hexa menulis baris `Files:` di entri HANDOFF, dan orchestrator membandingkannya dengan `git status` sebelum dan sesudah fase. Berkas yang berubah di luar daftar itu mengembalikan fase ke Hexa sebelum Dina. Di batch paralel, daftar file milik unit yang jadi acuan.
 - **Docker.** Frans hanya memakai Docker kalau Docker Desktop sudah menyala. Kalau mati, verifikasi ditandai "not verified" di HANDOFF.
 - **Commit.** Commit diusulkan di akhir dengan `Co-Authored-By: <persona>` dan baru dijalankan setelah kamu setuju. Push selalu minta approval.
 - **Branch dan PR.** Di `main`/`master`, pipeline menawarkan branch `feat|fix|chore|docs/<slug>` sebelum mulai (proyek KLIEN wajib). Setelah commit, kamu bisa memilih push + PR: isi PR dari HANDOFF dan CHANGELOG, lalu `/code-review` dijalankan pada PR. Pipeline tidak pernah merge.
@@ -78,13 +78,21 @@ Cara `/agents` berjalan:
 
 Saat scaffold, `/autor new` membuat `CLAUDE.md` proyek (skala, stack, perintah, layout). Athena menambahkan konvensi dari ADR ke file itu, dan persona membaca konvensi stack dari sana.
 
-## Dashboard biaya
+## Bahasa
 
-Biaya token tiap fase pipeline bisa dilihat di satu layar. Alatnya opsional, di luar repo ini: variabel `PERSONA_DASHBOARD` di `~/.claude/settings.json` menunjuk folder yang berisi `dashboard.py`.
+Semua artifact engineering ditulis dalam Bahasa Inggris: kode (identifier, komentar, nama file, kolom DB, enum, field API), PRD, ADR, HANDOFF, ROADMAP, RESUME, docs, commit message, dan isi PR. Copy UI mengikuti bahasa produk (`UI language:` di `CLAUDE.md` proyek); jawaban chat mengikuti bahasa user. Proyek lama tidak dirombak — kalau sebuah file sudah memakai bahasa lain, ikuti bahasa file itu.
 
-- `/agents` memuat ulang dashboard setelah tiap fase kalau variabel itu terisi; variabel kosong atau skrip hilang → dilewati diam-diam, pipeline tetap jalan.
-- `/autor dashboard` menyegarkan dashboard, membukanya di browser, dan mencetak ringkasannya. Baris `PERINGATAN` berarti ada epic yang lewat batas token (`budgets.json` di folder dashboard).
-- `/autor status` menambahkan satu baris biaya dari `dashboard.json`; kalau biayanya belum tercatat, tulis "biaya belum tercatat", bukan "0 token".
+Gate bahasa diukur, bukan hanya ditulis: `dina/eval.md` menjalankan Dina sendiri (bukan pipeline penuh) pada tiga fixture — paragraf prosa non-Inggris di `specs/*.md` harus ditolak, ejaan lama `UI: tidak` harus diterima, dan `specs/GLOSSARY.md` dengan istilah non-Inggris tidak boleh kena. Eval itu bisa dijalankan ulang dari repo: `dina/eval-fixture.sh` membangun fixture, `dina/eval-run.sh` menjalankan Dina lalu menilai laporannya, `dina/eval-verify.py` memberi verdict per kasus. Smoke test `/agents` punya builder-nya sendiri: `agents/smoke-fixture.sh` (varian `clean`, `planted`, `units`). Bangun fixture di luar `~/.claude/` — sandbox harness menolak tulis di sana.
+
+## Prinsip kerja
+
+Tiga prinsip yang menutup kebiasaan bawaan model, diturunkan dari [andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills):
+
+- **Think before coding** — sebut asumsi, tawarkan interpretasi lain kalau ambigu, stop kalau tidak jelas (`/ponytail`).
+- **Surgical changes** — hanya ubah yang diminta; jangan perbaiki kode sebelahnya, jangan refactor yang tidak rusak, ikut style yang ada (`/ponytail`).
+- **Goal-driven** — sukses = terverifikasi; tulis langkah lalu cek dengan command (`/tdd`, gate pipeline).
+
+`global-CLAUDE.md` di repo ini adalah snapshot dari `~/.claude/CLAUDE.md` (isi Master Rules, versi 9.4) sebagai jejak audit: file aslinya tinggal di luar repo, jadi kalau hilang atau di-restore dari backup, salinan ini yang jadi rujukan.
 
 ## Hooks user-level
 

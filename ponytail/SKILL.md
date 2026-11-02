@@ -1,9 +1,9 @@
 ---
 name: ponytail
-description: "Code-less philosophy - 'The best code is the code you never wrote.' Minimizes code written by checking need, existing, stdlib, and native solutions first."
-when_to_use: "Use when you want to minimize code written. Invoke before writing any code to check if it's necessary. Hexa runs it before code, Athena before adding a component to the design, Frans before adding infrastructure."
+description: "Code-less philosophy - 'The best code is the code you never wrote.' Minimizes code written by checking need, existing, stdlib, and native solutions first, and keeps edits surgical."
+when_to_use: "Use when you want to minimize code written, or when editing existing code and must not touch what was not asked for. Invoke before writing any code to check if it's necessary. Hexa runs it before code, Athena before adding a component to the design, Frans before adding infrastructure."
 metadata:
-  version: "1.2.1"
+  version: "1.3.0"
 ---
 
 # PONYTAIL — the best code is the code you never wrote
@@ -29,9 +29,23 @@ Ponytail removes needless code, not required behavior. These are requirements, n
 - Debounce: first check whether the project already imports one; write the 6-line version only if not.
 - Authentication: NextAuth (or the project's existing auth) already present → use it, write no new auth code.
 
+## Surgical changes
+
+When editing code that already exists, the same discipline applies to the lines you do not need to change.
+
+- Touch only what the request needs. Every changed line traces back to it.
+- Do not improve adjacent code, comments, or formatting while you are in the file.
+- Do not refactor what is not broken. Match the style already there, even if you would write it differently.
+- Remove the imports, variables, and functions **your** change made unused. Leave pre-existing dead code alone; mention it instead.
+- When a change touches a shared function, fix the cause in the shared place, not in every caller.
+
 ## Reviewing existing code
 
 No sub-commands. To review a diff or module, run the same questions over each added function, file, and dependency: needed? already done by the code base, stdlib, or platform? List what can be deleted or replaced, with `file:line`.
+
+## Think before coding
+
+State the assumption you are making before you write the code. If the request admits two readings, name both and pick one, or ask. If what is needed is genuinely unclear, stop and say what is unclear — a wrong guess costs more than the question.
 
 ## Output
 

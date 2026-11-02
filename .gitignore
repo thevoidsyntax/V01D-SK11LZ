@@ -34,6 +34,9 @@ pnpm-lock.yaml
 # Claude Code's synced skills/plugins (managed by Claude Code, not part of this pack)
 /synced/
 
+# Third-party local tool (Graphify), installed outside this repo
+/graphify/
+
 # Python bytecode
 __pycache__/
 *.pyc

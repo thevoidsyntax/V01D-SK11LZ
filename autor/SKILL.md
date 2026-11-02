@@ -1,12 +1,12 @@
 ---
 name: autor
-description: "Project intelligence: health scan, new-project wizard, roadmap progress, release cutting, pipeline cost dashboard, and the 6-persona pipeline recommendation"
-when_to_use: "Use when starting a new project, analyzing existing codebase, cutting a release, checking pipeline token cost, or needing project intelligence. Run /autor scan for project health check, /autor new for fresh projects, /autor release to cut a version, /autor dashboard for pipeline cost."
+description: "Project intelligence: health scan, new-project wizard, roadmap progress, release cutting, and the 6-persona pipeline recommendation"
+when_to_use: "Use when starting a new project, analyzing existing codebase, cutting a release, or needing project intelligence. Run /autor scan for project health check, /autor new for fresh projects, /autor release to cut a version."
 metadata:
-  version: "3.13.0"
+  version: "3.14.0"
 ---
 
-# AUTOR v3.13.0 - PROJECT INTELLIGENCE
+# AUTOR v3.12.2 - PROJECT INTELLIGENCE
 
 ## 🚀 SKILLS
 
@@ -23,17 +23,18 @@ Stack, security, testing, git, and docs knowledge come from the model itself plu
 
 Do not preload them; load one when the current step needs it.
 
+Graphify is not one of them: it is a local third-party tool installed outside this repo. When the project has `graphify-out/graph.json`, the scan uses it to map the codebase; when it does not, the scan skips it and never builds a graph.
+
 **On `/autor`, first respond with:**
 
 ```
-AUTOR v3.13.0
+AUTOR v3.12.2
 
 Available Commands:
   /autor              # Analyze current project
   /autor scan         # Full health check with recommendations
   /autor new          # New project wizard
   /autor status       # Quick status overview
-  /autor dashboard    # Pipeline cost dashboard (tokens per persona, epic, budget)
   /autor release      # Cut a release (version, notes, tag, push)
 
 Available Personas:
@@ -48,13 +49,14 @@ When `/autor` is invoked:
 
 ### 1. SCAN PROJECT
 Run these checks:
-- Project `CLAUDE.md`: missing, or without stack, run/test commands, `Scale:`, or `UI language:`, is DEFICIENT (fix: create or complete it; personas read their conventions from it)
+- Project `CLAUDE.md`: missing, or without stack, run/test commands, `Scale:`, `UI language:`, `Code language:`, or `Artifact language:`, is DEFICIENT (fix: create or complete it; personas read their conventions from it). The two language lines record the language the project already uses: an old project keeps its language and is never converted, a new project defaults to English for both
 - Directory structure analysis
 - Git status check
 - Package.json / requirements detection
 - Test coverage measurement
 - CI/CD configuration check
-- `specs/ROADMAP.md`: when it exists, report roadmap progress (see section 5). DEFICIENT when an epic is `in progress` but the file has no `Posisi sekarang` block or no pipeline table for it, or when the commit the block names is behind HEAD by commits that touched `src/` or `tests/` (`git log <commit>..HEAD -- src tests` is not empty): the status is stale (fix: the next phase updates it per `agents/progress.md`). Also DEFICIENT when an epic is `done` in the ROADMAP but `specs/HANDOFF.md` still holds its `Epic: <id>` entry (fix: archive it to `specs/handoff/<epic>.md` per `agents/epic.md` step 6; unarchived, personas read the whole log)
+- `graphify-out/graph.json`: when it exists, map the codebase with `/graphify` (Skill tool, `skill: "graphify"`, `args: "query <question>"`) instead of a broad grep over the tree; when it is absent, skip it and never build a graph
+- `specs/ROADMAP.md`: when it exists, report roadmap progress (see section 5). DEFICIENT when an epic is `in progress` but the file has no position block (the `## Current position` block, or `## Posisi sekarang` in a roadmap written before the English default) or no pipeline table for it, or when the commit the block names is behind HEAD by commits that touched `src/` or `tests/` (`git log <commit>..HEAD -- src tests` is not empty): the status is stale (fix: the next phase updates it per `agents/progress.md`). Also DEFICIENT when an epic is `done` in the ROADMAP but `specs/HANDOFF.md` still holds its `Epic: <id>` entry (fix: archive it to `specs/handoff/<epic>.md` per `agents/epic.md` step 6; unarchived, personas read the whole log)
 
 ### 2. DISPLAY PROJECT STATE
 
@@ -119,24 +121,9 @@ ROADMAP: 1/3 epic selesai
 Berikutnya: E3 Reporting — specs/prd/E3-reporting.md
 ```
 
-Name the next epic as the first row with `todo` whose `Depends on` epics are all `done`. If none is ready, say which epic is blocking. When the roadmap has a `Posisi sekarang` block, print its summary, verified, and next lines, then the pipeline table of the epic that is `in progress` as one line per phase (`✅ Build · Hexa`, `☐ Gerbang ronde 2 · Dina`). Read the state from there; never rebuild it from `specs/HANDOFF.md`. End with the epic route: `Run: "mulai epic E3" or /agents epic`.
+Name the next epic as the first row with `todo` whose `Depends on` epics are all `done`. If none is ready, say which epic is blocking. When the roadmap has a position block, print its summary, verified, and next lines, then the pipeline table of the epic that is `in progress` as one line per phase (`✅ Build · Hexa`, `☐ Gate round 2 · Dina`). Read the state from there; never rebuild it from `specs/HANDOFF.md`. End with the epic route: `Run: "mulai epic E3" or /agents epic`.
 
 The epic route is `/agents epic`: one epic per run (KLIEN: Athena → Hexa → Dina → Frans → Vika; PRIBADI: Hexa → Dina plus what the route rules add).
-
-## 6. PIPELINE COST
-
-Biaya token pipeline diukur dashboard opsional di luar repo ini: variabel lingkungan `PERSONA_DASHBOARD` menunjuk folder yang berisi `dashboard.py`. Variabel kosong atau skrip hilang → satu kalimat fakta ("dashboard belum dikonfigurasi") lalu berhenti; jangan membangun dashboard baru.
-
-Ketika variabel terisi:
-- **Segarkan:** `python "<PERSONA_DASHBOARD>/dashboard.py" --all` menulis `dashboard.html` dan `dashboard.json` di folder itu. Baris `PERINGATAN` di keluaran berarti ada epic yang lewat batas token — tampilkan apa adanya ke user.
-- **`/autor dashboard`:** satu perintah — `python "<PERSONA_DASHBOARD>/dashboard.py" --all --open --summary` — menyegarkan dashboard, membukanya di browser, dan mencetak ringkasannya (total token, jumlah fase, per proyek, per bulan).
-- **`/autor status`:** baca `<PERSONA_DASHBOARD>/dashboard.json` yang sudah ada; jangan jalankan parser lagi. Ambil `totals.tokens`, `totals.phases`, dan `totals.comparison`. File hilang atau total token 0 → tulis "biaya belum tercatat", jangan "0 token".
-
-Ringkasan yang dicetak:
-
-```text
-BIAYA PIPELINE: 1,2 jt token · 24 fase · VentroPoS 1,2 jt token (1 epic)
-```
 
 ## 🎯 COMMAND HANDLERS
 
@@ -154,7 +141,7 @@ BIAYA PIPELINE: 1,2 jt token · 24 fase · VentroPoS 1,2 jt token (1 epic)
 - Documentation audit
 - Dependency audit
 
-**Output:** Full health report with prioritized remediation, ending with the persona pipeline recommendation (section 4). When `specs/ROADMAP.md` exists, include the roadmap progress block (section 5) before the recommendation.
+**Output:** Full health report with prioritized remediation, ending with the persona pipeline recommendation (section 4). When `specs/ROADMAP.md` exists, include the roadmap progress block (section 5) before the recommendation. When Graphify is installed but the project has no `graphify-out/graph.json`, list `graphify extract .` as a remediation step (the scan never builds a graph itself).
 
 ### `/autor new` - New Project Wizard
 
@@ -170,14 +157,7 @@ BIAYA PIPELINE: 1,2 jt token · 24 fase · VentroPoS 1,2 jt token (1 epic)
 - Dependencies status
 - Running processes
 - Recent changes
-- Roadmap position: the `Posisi sekarang` block and the running epic's pipeline (section 5), when `specs/ROADMAP.md` exists
-- Pipeline cost: one line from section 6 (`dashboard.json`), or "biaya belum tercatat"
-
-### `/autor dashboard` - Pipeline Cost Dashboard
-
-**Action:** Refresh the pipeline dashboard, open it in the browser, and print its summary. **Read section 6 and follow it.** When `PERSONA_DASHBOARD` is unset or its script is missing, say so in one line and stop — never scaffold a dashboard.
-
-**Output:** the summary lines (`total token`, phases, per project, per month) plus every `PERINGATAN` line about an epic over its token budget.
+- Roadmap position: the position block and the running epic's pipeline (section 5), when `specs/ROADMAP.md` exists
 
 ### `/autor release` - Cut a Release
 

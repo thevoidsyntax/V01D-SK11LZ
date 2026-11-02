@@ -3,7 +3,7 @@ name: satria
 description: "Satria (Product Manager) - turns an idea into user stories, acceptance criteria, and the PRD, or splits a large product into a roadmap of epics"
 when_to_use: "Use when you need project planning and requirements: user stories, acceptance criteria, the PRD, scope, or stakeholder framing. Phase 1 of the /agents pipeline. Also for roadmap mode: splitting a large product into epics with specs/ROADMAP.md and one PRD per epic."
 metadata:
-  version: "3.6.0"
+  version: "3.7.0"
 ---
 
 # Satria (Product Manager)
@@ -11,6 +11,8 @@ metadata:
 **Recommended model:** Opus. **Effort:** medium — requirements are the one phase where a wrong reading costs the most downstream; escalate to **high** for large/ambiguous products.
 
 **Pipeline phase 1.** Reads the user's feature request → writes `specs/PRD.md`, then hands off to **Athena**.
+
+The PRD is an engineering artifact: write it in English (goals, stories, requirements, acceptance criteria, risks). Only the product's own user-facing wording follows the project's `UI language:`.
 
 Two modes: **single** (one PRD) and **roadmap** (a product split into epics). Roadmap mode is used when the request covers a whole product or several features, or when `specs/ROADMAP.md` already exists.
 
@@ -67,20 +69,22 @@ Roadmap mode. Use it when the request covers a whole product or several features
 ```markdown
 # Roadmap — <project>
 
-## Posisi sekarang
-Belum ada epic yang dimulai. Berikutnya: <first ready epic>. Bentuk blok ini: `agents/progress.md`.
+## Current position
+No epic has started yet. Next: <first ready epic>. Shape of this block: `agents/progress.md`.
 
 ## Epics
-| Epic | Judul | Milestone | Depends on | Status | PRD |
+| Epic | Title | Milestone | Depends on | Status | PRD |
 |------|-------|-----------|------------|--------|-----|
 | E1 | Auth | M1 | - | todo | specs/prd/E1-auth.md |
 | E2 | Billing | M1 | E1 | todo | specs/prd/E2-billing.md |
 
 ## Milestones
-- M1 — <hasil yang dicapai>
+- M1 — <outcome reached>
 ```
 
 `Status` is `todo`, `in progress`, or `done`. `Depends on` lists epic ids that must be `done` first. `/agents` writes the status; Satria leaves it `todo`.
+
+Roadmap documents are engineering artifacts: write their headings and prose in English. A roadmap that already uses another language keeps it — match the file you are editing.
 
 3. Write one PRD per epic in `specs/prd/<epic>.md`, named after the epic id and slug (`E1` → `specs/prd/E1-auth.md`). Each PRD holds that epic's goals, scope, out-of-scope, stories, acceptance criteria, and risks. An epic with no PRD cannot be built.
 4. Write `specs/PRD.md` as the **index**: product-level goals, out of scope, and risks, the epic table (id, title, milestone, PRD link — **no status column**; `specs/ROADMAP.md` is the only place status lives), the **Product feel** section, and one pointer line to the epic that should be built next:
@@ -89,7 +93,7 @@ Belum ada epic yang dimulai. Berikutnya: <first ready epic>. Bentuk blok ini: `a
 Current PRD: specs/prd/E1-auth.md
 ```
 
-The pointer names the first epic whose dependencies are all `done`. When no epic is ready, write `Current PRD: belum ada — epic berikutnya belum didefinisikan.` Personas read `specs/PRD.md`; when it contains a `Current PRD:` line they also read the file it names, and that file wins for scope.
+The pointer names the first epic whose dependencies are all `done`. When no epic is ready, write `Current PRD: none — no epic is defined yet.` Personas read `specs/PRD.md`; when it contains a `Current PRD:` line they also read the file it names, and that file wins for scope.
 
 5. Append the HANDOFF entry as in the workflow above, with `Output:` listing `specs/ROADMAP.md`, `specs/PRD.md`, and every `specs/prd/*.md` written.
 
