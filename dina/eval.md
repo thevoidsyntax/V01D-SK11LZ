@@ -170,4 +170,40 @@ What the matrix shows:
 Follow-up, same day, both changes to the harness and not to `/dina`:
 
 - **Scorer reads table rows.** `eval-verify.py` now counts a row whose first cell is a severity (`| HIGH | ... |`) as a finding. Re-scoring the nine archived audits gives A 3/3, B 2/3 (B-1 still fails, correctly), C 3/3: 8 of 9, matching the by-hand reading.
-- **Fixture v11 closes the FR-SLUG-004 / 007 ambiguity.** FR-SLUG-007 now names Latin letters with no canonical decomposition outside the 16-letter list (`ŀ ẚ ǆ ŉ`) as separators (`paraŀlel` gives `para-lel`), and a 14th test pins four of them. The builder passes 14 of 14 locally. **No Dina run has used v11 yet**; whether the B-1 rejection disappears is unmeasured.
+- **Fixture v11 closes the FR-SLUG-004 / 007 ambiguity.** FR-SLUG-007 now names Latin letters with no canonical decomposition outside the 16-letter list (`ŀ ẚ ǆ ŉ`) as separators (`paraŀlel` gives `para-lel`), and a 14th test pins four of them. The builder passes 14 of 14 locally. The v11 matrix below measures it: the B-1 rejection is gone.
+
+## Fixture v11 matrix
+
+Run on 2026-11-02 at 13:31: `/dina` 3.9.5, fixture v11 (14 tests, 8 requirements), the same prompt and scorer as the v9 and v10 matrices, nine runs started together, work dirs under the system temp dir. Scored by `dina/eval-verify.py` from each `specs/AUDIT.md`.
+
+| Run | Fixture | `/dina` | Verdict | Status line and findings | Cost | Duration | Turns |
+|-----|---------|---------|---------|-------------------------|------|----------|-------|
+| A-1 | v11 | 3.9.5 | **pass** | REJECTED, HIGH on `specs/NOTES.md:1-5` (Indonesian prose); LOW on the stale test count | $0.23 | 72 s | 10 |
+| A-2 | v11 | 3.9.5 | **pass** | REJECTED, HIGH on `specs/NOTES.md:1-6`; MEDIUM on the stale test count | $0.22 | 68 s | 11 |
+| A-3 | v11 | 3.9.5 | **pass** | REJECTED, HIGH on `specs/NOTES.md:1-6`; LOW on the stale test count | $0.23 | 69 s | 11 |
+| B-1 | v11 | 3.9.5 | **pass** | APPROVED, no finding on the marker; LOW on the stale test count | $0.43 | 98 s | 12 |
+| B-2 | v11 | 3.9.5 | **pass** | APPROVED, no finding on the marker; MEDIUM on the stale test count | $0.38 | 111 s | 15 |
+| B-3 | v11 | 3.9.5 | **pass** | APPROVED, no finding on the marker; LOW on the stale test count, LOW on invisible literals in the tests | $0.25 | 82 s | 11 |
+| C-1 | v11 | 3.9.5 | **pass** | APPROVED, no finding on the glossary; MEDIUM on the stale test count | $4.47 | 1572 s | 32 |
+| C-2 | v11 | 3.9.5 | **pass** | APPROVED, no finding on the glossary; LOW on the stale test count | $0.33 | 105 s | 12 |
+| C-3 | v11 | 3.9.5 | **pass** | APPROVED, no finding on the glossary; MEDIUM on the stale test count | $3.28 | 697 s | 30 |
+
+**9 of 9 pass: A 3/3, B 3/3, C 3/3.** Total $9.82, but the cost is not representative: C-1 alone was $4.47 over 26 minutes, and C-3 $3.28 over 12 minutes, because both probed the code point range one character at a time. The six cheap runs average $0.28 and 85 seconds. A run that fusses over Unicode is expensive, and that is the fixture's own breadth talking.
+
+What the matrix shows:
+
+- **A held in 3 of 3**, graded HIGH every time, never MEDIUM.
+- **The marker was never flagged**, in 3 of 3 B audits.
+- **The glossary produced no finding** in 3 of 3 C audits.
+- **No audit reported a HIGH against the fixture code.** The U+212B hole of v9 and the `ŀ ẚ ǆ ŉ` hole of v10 are both gone, and FR-SLUG-007 now says which side those letters fall on.
+- **One finding appeared in every audit: the stale test count.** The HANDOFF's green evidence said "13 tests OK" while the suite held 14 tests, because the 14th test came with v11. Five audits graded it MEDIUM, three LOW, one none. It never blocked. The builder now says 14.
+- **B-3 also flagged the invisible literals** in the test file: a soft hyphen and two combining marks written as raw characters, which an editor or a reformat could silently change. They are now written as `­`, `ͣ` and `ः`.
+
+Two harness fixes came out of this matrix, both in the scorer and both needed before the numbers above mean anything:
+
+- **Findings written as plain paragraphs.** A-1 and A-2 wrote the HIGH as a paragraph under a `## Findings` heading, with the severity as the first word of the line. The scorer read only severity headings, bold entries and table rows, so it counted zero findings and called two correct REJECTED audits failures. It now reads a paragraph whose first word is a severity and whose line names a file.
+- **Findings written as table rows.** From the v10 matrix: a row whose first cell is the severity. Also now read.
+
+Both fixes were verified by re-scoring the archived audits of the earlier matrices: the v10 matrix goes from 7/9 to 8/9 (B-1 still fails, correctly), and the v11 matrix scores 9/9.
+
+What this matrix does not prove: the route's reaction to a `REJECTED`, and the pipeline as a whole. Those belong to `agents/smoke-test.md`. And it measures `/dina` 3.9.5 on one fixture; it says nothing about any other version.

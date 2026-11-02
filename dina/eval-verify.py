@@ -47,6 +47,11 @@ SEVERITY = re.compile(
 TABLE_ROW = re.compile(
     r"^\s*\|\s*\**(critical|blocking|high|medium|low)\**\s*\|", re.IGNORECASE
 )
+PARAGRAPH = re.compile(
+    r"^\s*(?:[-*]\s*)?\**(critical|blocking|high|medium|low)\**\s+\S", re.IGNORECASE
+)
+FINDINGS_HEADING = re.compile(r"^#{2,3}\s+.*finding", re.IGNORECASE)
+FILENAME = re.compile(r"`[^`]+`|\b[\w][\w./-]*\.[A-Za-z]{1,5}\b")
 STATUS_LINE = re.compile(r"STATUS:\s*(APPROVED|REJECTED)", re.IGNORECASE)
 
 
@@ -83,9 +88,42 @@ def table_findings(text):
     return out
 
 
+def paragraph_findings(text):
+    """Return [(severity, line)] for findings written as plain paragraphs.
+
+    A report may open a `## Findings` section and then write each finding as
+    a paragraph that starts with its severity, instead of using a severity
+    heading, a bold entry or a table row. The severity is then only in the
+    first word of the line, so the line has to name a file to count as a
+    finding and not as a sentence about counts.
+    """
+    out = []
+    in_findings = False
+    for line in text.splitlines():
+        heading = HEADING.match(line)
+        if heading:
+            in_findings = bool(FINDINGS_HEADING.match(line))
+            continue
+        if not in_findings:
+            continue
+        match = PARAGRAPH.match(line)
+        if match and FILENAME.search(line):
+            out.append((match.group(1).lower(), line.strip()))
+    return out
+
+
 def findings(text):
     """Return [(severity, entry)] for every finding in the report."""
     out = table_findings(text)
+    out.extend(paragraph_findings(text))
+    seen = set()
+    unique = []
+    for severity, entry in out:
+        key = (severity, entry[:200])
+        if key not in seen:
+            seen.add(key)
+            unique.append((severity, entry))
+    out = unique
     for severity, body in severity_sections(text):
         entries = [
             line.strip()

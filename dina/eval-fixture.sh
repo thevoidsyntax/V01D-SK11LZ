@@ -167,7 +167,7 @@ class SlugifyTests(unittest.TestCase):
         self.assertEqual(slugify("٣"), "")
         self.assertEqual(slugify("™"), "")
         self.assertEqual(slugify("aƀb"), "a-b")
-        self.assertEqual(slugify("a­b"), "a-b")
+        self.assertEqual(slugify("a\u00adb"), "a-b")  # SOFT HYPHEN
 
     def test_compatibility_only_latin_letters_separate(self):
         self.assertEqual(slugify("paraŀlel"), "para-lel")
@@ -176,8 +176,8 @@ class SlugifyTests(unittest.TestCase):
         self.assertEqual(slugify("ŉ"), "")
 
     def test_removes_combining_marks(self):
-        self.assertEqual(slugify("aͣb"), "ab")  # a nonspacing mark
-        self.assertEqual(slugify("aःb"), "ab")  # a spacing mark
+        self.assertEqual(slugify("a\u0363b"), "ab")  # a nonspacing mark
+        self.assertEqual(slugify("a\u0903b"), "ab")  # a spacing mark
 
     def test_folds_letters_that_only_decompose_canonically(self):
         self.assertEqual(slugify("10Å"), "10a")  # ANGSTROM SIGN
@@ -206,7 +206,7 @@ Decisions: stdlib only, no new dependency.
 Open: -
 Next: Dina
 Ponytail: stdlib re and unicodedata are enough, no new package.
-TDD: red — python -m unittest reported ModuleNotFoundError: No module named 'slugify' before src/slugify.py existed; green — python -m unittest reports 13 tests OK.
+TDD: red — python -m unittest reported ModuleNotFoundError: No module named 'slugify' before src/slugify.py existed; green — python -m unittest reports 14 tests OK.
 $UI_MARKER
 Files: src/slugify.py, tests/__init__.py, tests/test_slugify.py${CASE_FILE:+, $CASE_FILE}
 EOF
