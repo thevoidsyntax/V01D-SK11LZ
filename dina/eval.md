@@ -136,3 +136,35 @@ Total: $0.87. All three audits ran the 13 tests and a code point sweep (B-1 over
 n = 1 per case, so this shows the U+212B defect is gone and the three cases still resolve as expected; it does not replace a 3-run matrix. Runs cost about a seventh of v9 (about $0.29 against about $1.93) because Dina no longer finds code to dispute.
 
 Not proved here: the route's reaction to a `REJECTED`, and the pipeline as a whole. Those belong to `agents/smoke-test.md`.
+
+### Matrix on fixture v10
+
+Run on 2026-11-02 right after the three single runs: `/dina` 3.9.5, fixture v10, 3 runs per case (9 total), same prompt and scorer, in parallel, work dirs under the temp dir. No run was lost to an API error or a denial loop.
+
+| Run | Verdict | Status line and findings | Cost | Duration | Turns |
+|-----|---------|--------------------------|------|----------|-------|
+| A-1 | **pass** | REJECTED, HIGH on `specs/NOTES.md:1-6` | $0.27 | 108 s | 12 |
+| A-2 | **pass** | REJECTED, HIGH on `specs/NOTES.md:1-6` | $0.24 | 88 s | 10 |
+| A-3 | **fail (scorer)** | REJECTED, HIGH on `specs/NOTES.md:1-5`; the scorer counted 0 findings | $0.25 | 80 s | 10 |
+| B-1 | **fail** | REJECTED, HIGH on `src/slugify.py:26` (see below); no finding on the marker | $0.29 | 91 s | 12 |
+| B-2 | **pass** | APPROVED, no finding on the marker | $0.30 | 99 s | 12 |
+| B-3 | **pass** | APPROVED, no finding on the marker | $0.29 | 115 s | 11 |
+| C-1 | **pass** | APPROVED, no finding on the glossary | $0.25 | 97 s | 12 |
+| C-2 | **pass** | APPROVED, no finding on the glossary | $0.30 | 99 s | 11 |
+| C-3 | **pass** | APPROVED, no finding on the glossary | $0.26 | 87 s | 12 |
+
+Total: $2.44, about $0.27 a run. Scorer result: 7 of 9 pass (A 2/3, B 2/3, C 3/3). Read by hand, the language rule held in 9 of 9 audits, because the A-3 failure is the scorer's, not the rule's.
+
+The two failures:
+
+- **A-3 is a scorer false negative.** The audit is correct: STATUS REJECTED, and a HIGH on `specs/NOTES.md:1-5` for the Indonesian paragraph. Dina wrote the finding as a table row (`| HIGH | specs/NOTES.md:1-5 | ... |`) under a `## Findings` heading. `eval-verify.py` reads findings only under severity headings, so it saw none. The scorer's docstring lists three report shapes; this is a fourth. Not fixed here.
+- **B-1 is a code rejection, and a seventh hole in the fixture.** HIGH on `src/slugify.py:26`: `ŀ` (U+0140), `ẚ` (U+1E9A), `ǆ`, `ǅ`, `ŉ` and similar letters decompose only under NFKD, so NFD leaves them and they separate or vanish (`slugify("paraŀlel")` gives `para-lel`). Dina reads FR-SLUG-004 ("a Latin letter with a diacritic folds to its ASCII base letter") as covering them. FR-SLUG-007 ("any other character outside ASCII ... separates") says they separate, and the 13 tests follow 007. The PRD is ambiguous on exactly these code points, so the rejection is defensible. The other eight audits did not report it. The audit has no finding on the marker or the language.
+
+What the matrix shows:
+
+- **A held in 3 of 3 by reading**: HIGH every time, never MEDIUM.
+- **The marker was never flagged** (3 of 3; B-1 was rejected for code).
+- **The glossary produced no finding** in 3 of 3 C audits.
+- **U+212B is gone**: no audit reported it. The v9 defect stays fixed; the code found by chance dropped from 2 of 9 audits to 1 of 9, with a different cause.
+
+Open: FR-SLUG-004 vs 007 needs one sentence in the fixture PRD (for example "folding applies only to letters that NFD decomposes or that are in the list") and a v11 fixture; the scorer needs to read table rows. Both are changes to the harness, not to `/dina`.
