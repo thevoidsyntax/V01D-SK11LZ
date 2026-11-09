@@ -92,7 +92,7 @@ Tiga prinsip yang menutup kebiasaan bawaan model, diturunkan dari [andrej-karpat
 - **Surgical changes** — hanya ubah yang diminta; jangan perbaiki kode sebelahnya, jangan refactor yang tidak rusak, ikut style yang ada (`/ponytail`).
 - **Goal-driven** — sukses = terverifikasi; tulis langkah lalu cek dengan command (`/tdd`, gate pipeline).
 
-`global-CLAUDE.md` di repo ini adalah snapshot dari `~/.claude/CLAUDE.md` (isi Master Rules, versi 9.4) sebagai jejak audit: file aslinya tinggal di luar repo, jadi kalau hilang atau di-restore dari backup, salinan ini yang jadi rujukan.
+`global-CLAUDE.md` di repo ini adalah snapshot dari `~/.claude/CLAUDE.md` (isi Master Rules, versi 9.6) sebagai jejak audit: file aslinya tinggal di luar repo, jadi kalau hilang atau di-restore dari backup, salinan ini yang jadi rujukan.
 
 ## Hooks user-level
 

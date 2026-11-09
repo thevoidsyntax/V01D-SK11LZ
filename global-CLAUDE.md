@@ -1,6 +1,6 @@
-# Master Rules v9.4 - Streamlined
+# Master Rules v9.6 - Streamlined
 
-> Snapshot of the user-level `~/.claude/CLAUDE.md`, version 9.4, taken 2026-11-01.
+> Snapshot of the user-level `~/.claude/CLAUDE.md`, version 9.6, taken 2026-11-09.
 > The live file stays outside this repo, so this copy is the audit trail: if the live file is lost or restored from a backup, this is what it said.
 > The `# graphify` block at the end is written by `graphify install` on the machine and is not part of the maintained rules.
 
@@ -55,9 +55,18 @@ Bahasa artifact mengikuti §3b, bukan skala proyek.
 - **Chat** (jawaban ke user) mengikuti bahasa user.
 - Proyek lama yang sudah pakai bahasa lain tidak dirombak — ikuti bahasa file yang sedang diedit.
 
+### 3c. Project Layout
+- Konvensi framework menang (Next.js `app/`, Laravel, Unity, dll.); aturan di bawah untuk sisanya
+- Fitur dulu, layer di dalamnya: `orders/` memegang domain/application/infra miliknya; tanpa folder global `controllers/`, `services/`, `models/`
+- Mulai datar: satu file per fitur/tahap; pecah jadi folder saat file punya tanggung jawab kedua (sinyal kasar ~300 baris)
+- Tanpa folder kosong; tanpa `utils/`/`helpers/` — helper tinggal di samping pemakainya
+- Entry point tipis: wiring saja, tanpa logika
+- Output runtime masuk `.gitignore`: `logs/`, `data/`, vector store, file model
+- AI/RAG: prompt sebagai file; `evals/` (golden set) dibuat sebelum tuning chunking/retrieval/prompt
+
 ### 4. Backend Standards
 - **UTC First** - datetime selalu UTC/ISO 8601
-- **Idempotency** - POST/PUT/PATCH butuh idempotency key
+- **Idempotency** - POST butuh idempotency key; PATCH butuh key kalau operasi tidak idempotent; PUT idempotent by definition, key opsional
 - **ACID** - multi-table dalam transaction
 
 ### 5. API & Breaking Changes
@@ -70,7 +79,7 @@ Bahasa artifact mengikuti §3b, bukan skala proyek.
 feat: add login | fix: resolve bug | refactor: cleanup
 ```
 - Repo V01D-SK11LZ dan pipeline `/agents`: akhiri dengan `Co-Authored-By: <Persona>`. Repo lain: tanpa trailer. Tidak pernah `Co-Authored-By: Claude`.
-- Commit hanya setelah user setuju; push selalu minta approval (hook `ask-on-git-push`)
+- Commit hanya setelah user setuju; push selalu minta approval (izin `ask` untuk `git push` + hook `ask-on-git-push` menolak push dengan opsi global git)
 
 ### 7. Output Style
 - No boilerplate comments
@@ -102,14 +111,12 @@ DEPENDENCY - EVALUASI DULU:
 
 ## Anti-Patterns
 ```
-❌ Boilerplate comments
-❌ AI phrases
-❌ Arrow anti-pattern (nested if)
-❌ Hardcoded secrets
 ❌ God object
 ❌ Premature optimization
 ```
+Baris lain (boilerplate comment, AI phrase, arrow anti-pattern, hardcoded secret) sudah diatur di §3 dan §7.
 
 ---
 
-**Versi:** 9.4
+**Versi:** 9.6
+
