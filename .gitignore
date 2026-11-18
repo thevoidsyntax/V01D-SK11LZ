@@ -23,6 +23,9 @@ desktop.ini
 # Claude local config (machine-specific, not part of repo)
 .claude/
 
+# Session resume state (ephemeral, rewritten on every compaction; not repo content)
+/RESUME.md
+
 # Node modules
 node_modules/
 
@@ -36,6 +39,8 @@ pnpm-lock.yaml
 
 # Third-party local tool (Graphify), installed outside this repo
 /graphify/
+# Discarded skill copies (may include proprietary vendor skills)
+/.trash/
 
 # Python bytecode
 __pycache__/

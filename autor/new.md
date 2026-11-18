@@ -36,7 +36,7 @@ Specs: specs/PRD.md, specs/ADR.md, specs/HANDOFF.md (add `, specs/handoff/ (arch
 
 Install nothing from the internet unless the user allowed it. No feature code.
 
-**Step 4:** Detect the stack from the manifests (`package.json`, `*.csproj`, `go.mod`, `pyproject.toml`, ...). Append a `specs/HANDOFF.md` entry for the scaffold: a `## [SCAFFOLD] autor — <UTC time from date -u>` heading, then `Input:`, `Output:`, `Decisions:`, `Open:`, `Next:` lines covering stack, layout, scripts, and what is not verified yet. Never invent a time; write the date only if you cannot run `date`.
+**Step 4:** Detect the stack from the manifests (`package.json`, `*.csproj`, `go.mod`, `pyproject.toml`, ...). Append a `specs/HANDOFF.md` entry for the scaffold: a `## [SCAFFOLD] autor — <UTC time from date -u>` heading, then `Input:`, `Output:`, `Decisions:`, `Open:`, `Next:` lines covering stack, layout, scripts, and what is not verified yet. Never invent a time; write the date only if you cannot run `date`. No CI file here — `ci.yml` belongs to Frans (see `frans/SKILL.md`); add one line to `Open:` instead, e.g. `CI belum ada; minta Frans ("tambah CI") saat repo sudah punya remote dan lockfile.`
 
 **Step 5:** Offer a commit of the scaffold: show `git status --short` and the message (`chore: scaffold <project>` with `Co-Authored-By: Satria`; this persona trailer is the user's attribution rule and replaces Claude Code's default `Co-Authored-By: Claude …` line), then ask **Commit** / **Ubah pesan** / **Lewati**. Commit only on **Commit**; if you cannot ask (headless), leave it uncommitted and say so. Never push.
 
