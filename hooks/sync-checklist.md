@@ -4,21 +4,32 @@ Bukan skill, tidak dimuat Claude Code — referensi langkah seperti `settings.re
 
 ## 1. Baca state dulu, jangan ubah apa pun
 
+Baris pertama `git status -sb` sudah bilang branch mana yang aktif dan tracking-nya — baca itu dulu sebelum lanjut, karena langkah 2 di bawah hanya berlaku untuk branch **ini sendiri** vs upstream-nya sendiri, bukan selalu `main`.
+
 ```bash
 cd ~/.claude/skills
 git status -sb
 git stash list
 git log --oneline -3
 git fetch origin --prune --tags
-git rev-list --left-right --count HEAD...origin/main   # "<lokal-saja> <remote-saja>"
-git log --oneline origin/main..HEAD                     # commit yang belum sampai ke origin dari mesin ini
-git log --oneline HEAD..origin/main                      # commit baru dari mesin lain yang belum ditarik
+BR=$(git branch --show-current)
+git rev-list --left-right --count HEAD...origin/$BR   # "<lokal-saja> <remote-saja>" vs upstream BRANCH INI SENDIRI
+git log --oneline origin/$BR..HEAD                      # commit yang belum sampai ke origin dari mesin ini
+git log --oneline HEAD..origin/$BR                       # commit baru dari mesin lain yang belum ditarik, branch ini
 git status --porcelain                                   # '??' = file/skill baru yang hanya ada di mesin ini
 git diff --stat
 git diff --ignore-cr-at-eol --stat                        # kosong = bedanya cuma EOL, bukan isi beneran
 ```
 
-## 2. Putuskan tindakan dari hasil di atas
+**Kalau `BR` bukan `main`**, baris-baris di atas sudah cukup untuk menilai branch ini sendiri. Untuk tahu seberapa jauh ketinggalan dari `main` (tanpa checkout, tanpa menyentuh WIP):
+
+```bash
+git rev-list --left-right --count HEAD...origin/main
+```
+
+Angka `<remote-saja>` di sini **wajar besar dan bukan sinyal masalah** — itu cuma histori `main` yang belum di-merge ke branch fitur ini, bukan divergensi yang perlu "diperbaiki" seperti pada tabel langkah 2 (tabel itu untuk kasus branch ini vs upstream-nya sendiri). Kalau mesin ini juga butuh hook/`permissions.deny` terbaru dari `main` sementara masih ada WIP belum commit di branch ini, lanjut ke bagian **3b**, bukan tabel di bawah.
+
+## 2. Putuskan tindakan dari hasil di atas (branch ini vs upstream-nya sendiri)
 
 | lokal-saja | worktree | tindakan |
 |---|---|---|
@@ -43,9 +54,38 @@ Untuk tiap file yang beda, `diff -u ~/.claude/skills/hooks/$f.js ~/.claude/hooks
 
 `claude-resume-on-precompact.ps1` dan `_lib.ps1` tidak ikut dicek di atas: keduanya milik ekstensi VSCode "Claude Notifier" yang terpisah, bukan bagian repo ini, dan tidak pernah tersinkron lewat `git pull`. Kalau mesin baru itu juga menjalankan ekstensi itu, bandingkan manual.
 
+### 3b. Branch aktif bukan `main` dan ada WIP belum commit
+
+Jangan `checkout main` kalau worktree-nya kotor — itu memaksa commit/stash WIP duluan padahal yang dibutuhkan cuma file hook dan `settings.reference.json` dari `main`, bukan `main` di-checkout. Pakai worktree sementara di luar `~/.claude/skills` supaya branch aktif dan WIP-nya tidak tersentuh sama sekali:
+
+```bash
+cd ~/.claude/skills
+git worktree add ~/skills-main origin/main
+
+for f in ask-on-git-push changelog-on-commit destructive-guard gitleaks-guard cache-guard claude-resume-on-sessionstart; do
+  cmp -s ~/skills-main/hooks/$f.js ~/.claude/hooks/$f.js || echo "BEDA/BARU: $f.js"
+done
+# untuk tiap yang BEDA (bukan cuma BARU): diff -u ~/.claude/hooks/$f.js ~/skills-main/hooks/$f.js dulu,
+# dan kalau salinan aktif punya perubahan unik, bawa itu ke repo sebelum ditimpa.
+
+for f in ask-on-git-push changelog-on-commit destructive-guard gitleaks-guard cache-guard claude-resume-on-sessionstart; do
+  cp ~/skills-main/hooks/$f.js ~/.claude/hooks/
+done
+
+cd ~/skills-main/hooks/_tests && node --test *.test.js   # harus 81 lolos
+cd - >/dev/null
+
+# merge ~/skills-main/hooks/settings.reference.json ke settings.json manual (lihat bagian 4)
+
+git worktree remove ~/skills-main
+git fetch origin main:main   # majukan main lokal tanpa checkout, tetap ff-only
+```
+
+Saat branch fitur ini nanti siap digabung: commit WIP dulu, baru `git merge origin/main` (jangan rebase kalau branch itu sudah di-push dan dipakai di lebih dari satu mesin — rebase berarti force-push).
+
 ## 4. Setelah hook tersinkron
 
-- Merge `hooks/settings.reference.json` ke `settings.json` mesin itu dengan tangan (atau tempel isinya ke Claude Code dan minta tolong di-merge).
+- Merge `hooks/settings.reference.json` ke `settings.json` mesin itu dengan tangan (atau tempel isinya ke Claude Code dan minta tolong di-merge). Di Windows, tiap command hook pakai path absolut (`C:\\Users\\<kamu>\\.claude\\hooks\\...`), bukan `~/...`.
 - Pasang gitleaks kalau belum (`winget install --id Gitleaks.Gitleaks` di Windows) — tanpa itu `gitleaks-guard.js` fail-open.
-- `node --test "$HOME/.claude/skills/hooks/_tests/*.test.js"` — harus 81 lolos.
+- Jalankan test dari dalam folder `_tests` dengan glob tak di-quote, bukan path ter-quote dari luar (path ter-quote diam-diam cocok 0 file, hasilnya "0 lolos" tanpa error): `cd ~/.claude/skills/hooks/_tests && node --test *.test.js`. Harus 81 lolos.
 - Restart Claude Code supaya `settings.json` dan hook baru benar-benar terbaca.
