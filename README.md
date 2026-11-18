@@ -34,7 +34,7 @@ git -C $HOME\.claude\skills push
 > git -C $HOME\.claude\skills config user.email "323514556+thevoidsyntax@users.noreply.github.com"
 > ```
 
-## Isi (17 skill)
+## Isi (18 skill)
 
 Tiap subfolder level atas = satu skill (berisi `SKILL.md`).
 
@@ -51,6 +51,7 @@ Persona:
 /dina     QA + Security        → specs/AUDIT.md + STATUS (gate)
 /frans    Platform & DevOps    → Dockerfile, migrations/*, ci.yml
 /vika     Technical Writer     → docs/openapi.*, CHANGELOG.md, README
+/sven     Escalation Advisor   → specs/SVEN.md (off-route: dipanggil saat persona buntu)
 
 Pendukung:
 /audit       Audit repo: tool dulu, review terarah, baseline inkremental (dipakai Dina)

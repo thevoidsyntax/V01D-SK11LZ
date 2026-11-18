@@ -1,6 +1,6 @@
 # Master Rules v9.6 - Streamlined
 
-> Snapshot of the user-level `~/.claude/CLAUDE.md`, version 9.6, taken 2026-11-09.
+> Snapshot of the user-level `~/.claude/CLAUDE.md`, version 9.6, taken 2026-11-18.
 > The live file stays outside this repo, so this copy is the audit trail: if the live file is lost or restored from a backup, this is what it said.
 > The `# graphify` block at the end is written by `graphify install` on the machine and is not part of the maintained rules.
 
@@ -10,11 +10,13 @@
 
 ## 🚀 Skills System
 
-15 skill (proses + selera + alat). Pengetahuan stack/security/testing dari model + `CLAUDE.md` proyek.
+18 skill (proses + selera + alat). Pengetahuan stack/security/testing dari model + `CLAUDE.md` proyek.
 - `/autor` → health scan, `/autor new` wizard, rekomendasi pipeline
 - `/agents` → pipeline 6 persona, handoff log `specs/HANDOFF.md`
 - Persona: `/satria` PM · `/athena` SE · `/hexa` Coder · `/dina` QA & Security · `/frans` DevOps · `/vika` Writer
+- `/sven` → escalation advisor (di luar rute): dipanggil saat persona buntu menulis `Open: needs Sven`; read-only, Opus xhigh, hanya menulis `specs/SVEN.md`
 - `/audit` → audit repo (gate Dina)
+- `/handover` → serah-terima sesi: snapshot otomatis `specs/.state.md` (hook, tiap turn) + section baru di `specs/RESUME.md`
 - `/ponytail` → sebelum menulis kode
 - `/anti-slop` → semua teks: copy UI, docs, komentar
 - `/impeccable` → semua UI: tidak boleh terlihat template AI
@@ -119,4 +121,3 @@ Baris lain (boilerplate comment, AI phrase, arrow anti-pattern, hardcoded secret
 ---
 
 **Versi:** 9.6
-

@@ -1,9 +1,9 @@
 ---
 name: agents
-description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model, routes for small changes, an epic route for roadmaps, approval pauses, and artifact handoff"
+description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model, routes for small changes, an epic route for roadmaps, approval pauses, artifact handoff, and an off-route escalation advisor (Sven) for a persona that is stuck"
 when_to_use: "Use when you want the persona pipeline to build or change something end-to-end (Satria, Athena, Hexa, Dina, Frans, Vika). Trigger with /agents or a request ending in 'mulai pipeline'. Also to build one epic from specs/ROADMAP.md ('kerjakan E2', 'lanjut roadmap'). For single-persona help, call that persona directly."
 metadata:
-  version: "4.15.1"
+  version: "4.16.0"
 ---
 
 # 👥 PERSONA PIPELINE — SATRIA · ATHENA · HEXA · DINA · FRANS · VIKA
@@ -20,10 +20,13 @@ Six specialists run as a sequential, artifact-handoff pipeline. Each phase runs 
 | 4 | **Dina** | QA & Security | Sonnet (high)* | audit | `specs/AUDIT.md` + `STATUS:` |
 | 5 | **Frans** | Platform & DevOps | Sonnet (high) | ponytail | `Dockerfile`, `migrations/*`, `ci.yml` |
 | 6 | **Vika** | Technical Writer | Haiku (low)* | anti-slop | `docs/openapi.*`, `CHANGELOG.md`, README |
+| 7 | **Sven** | Escalation Advisor (off-route) | Opus (xhigh) | — | `specs/SVEN.md` + a `[CONSULT]` HANDOFF entry |
 
 Every persona also appends an entry to `specs/HANDOFF.md` (see below). Stack, security, and testing knowledge come from the model and the project's `CLAUDE.md`, not from skills.
 
-\* **Models (user policy, 2026-10-27):** Opus only for Satria; Haiku for Vika; Athena, Hexa, Dina, and Frans run on Sonnet at effort high. The one Opus escalation is the gate loop: once Dina has returned `REJECTED` twice, the later rounds run Hexa and Dina on Opus at effort high (section 5). Vika → Sonnet (effort medium) for a large API surface. Frans is never Haiku (migrations are destructive). Evidence: CHANGELOG 4.3.0.
+Sven is **not** a pipeline phase: he is in no route table and never appears in the ROADMAP pipeline table. He is spawned only when a blocked persona asks for him (section 8).
+
+\* **Models (user policy, 2026-10-27):** Opus only for Satria; Haiku for Vika; Athena, Hexa, Dina, and Frans run on Sonnet at effort high. The one Opus escalation is the gate loop: once Dina has returned `REJECTED` twice, the later rounds run Hexa and Dina on Opus at effort high (section 5). Vika → Sonnet (effort medium) for a large API surface. Frans is never Haiku (migrations are destructive). Evidence: CHANGELOG 4.3.0. Sven, the off-route escalation, runs on Opus at effort xhigh (section 8) — the second Opus in the pack, and the only one a persona can call by name.
 
 ## 1. Pick the route
 
@@ -200,6 +203,22 @@ After the last phase:
 ### Push and pull request
 
 After a commit, only when the branch is not `main`/`master`, remote `origin` exists, and `gh auth status` succeeds; otherwise print one line saying why and stop, never push. **Read `~/.claude/skills/agents/push-pr.md` and follow it** (offer, push, PR body, `/code-review`, `gh pr checks`). The pipeline never merges.
+
+## 8. Escalation to Sven
+
+Sven is **off-route**: he is not in any route table, not in the ROADMAP pipeline table, and not counted in the phase numbers. He runs only when a persona is blocked on a decision it should not make alone.
+
+**Trigger.** A persona that cannot decide writes `Open: needs Sven — <the question>` in its HANDOFF entry and ends the phase as not green. The orchestrator sees that line, stops the run, shows the question, and asks with AskUserQuestion: **Panggil Sven** / **Lanjut tanpa Sven** / **Stop**. The user may also call `/sven` directly, or say "panggil Sven" at any point.
+
+**Spawning.** One spawn, `subagent_type: "general-purpose"`, `model: "opus"`, `effort: "xhigh"`, `run_in_background: false`. The prompt: "You are **Sven** (Escalation Advisor). Invoke the `/sven` skill and follow its whole workflow. Read only these artifacts: <the blocked persona's HANDOFF entry, the specs it names, the code the decision touches>. Produce: `specs/SVEN.md` (one `[CONSULT]` section) and your `[CONSULT] Sven` HANDOFF entry. You are read-only: write nothing else. Keep your reply to a one-line handoff summary."
+
+**After Sven returns.** Print `[HANDOFF] Sven → <persona>: <the decision in one line>` and hand the decision back to the blocked persona as another phase — the same persona, with Sven's `Decision:` and `Do next:` in the prompt. The persona implements it. The orchestrator never implements it.
+
+Rules:
+- **One consult per blocker.** Sven does not review the same blocker twice; if the persona is still blocked after his decision, the question goes to the user.
+- **Not a gate.** Sven returns no `STATUS:` line. He cannot reject a phase, and a `[CONSULT]` entry is not a phase entry — the phase checks of section 3 ignore it.
+- **No progress-doc writes.** Sven writes `specs/SVEN.md` and his HANDOFF entry only; the ROADMAP row of the blocked persona stays as it was.
+- **Cost.** Opus at xhigh is the most expensive spawn in the pack. Offer it, never take it by default: a blocker the user can answer in one line goes to the user.
 
 
 ## Handoff log (`specs/HANDOFF.md`)
