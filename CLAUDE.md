@@ -82,17 +82,18 @@ Co-Authored-By: [PERSONA]
 git clone https://github.com/thevoidsyntax/V01D-SK11LZ.git $HOME/.claude/skills
 
 # update dari mesin lain
-git -C $HOME/.claude/skills pull
+git -C $HOME/.claude/skills pull --ff-only
 
-# kirim perubahan
+# kirim perubahan (push lewat -C ditolak oleh hook ask-on-git-push.js sendiri, jadi cd dulu)
 git -C $HOME/.claude/skills add -A
 git -C $HOME/.claude/skills commit -m "update"
-git -C $HOME/.claude/skills push
+cd $HOME/.claude/skills && git push
 ```
 
-Sekali per mesin (agar push tidak ditolak GitHub karena email privat):
+Sekali per mesin (agar push tidak ditolak GitHub karena email privat, dan `pull` tidak diam-diam membuat merge commit kalau sudah divergen):
 
 ```bash
 git -C $HOME/.claude/skills config user.name  "thevoidsyntax"
 git -C $HOME/.claude/skills config user.email "323514556+thevoidsyntax@users.noreply.github.com"
+git -C $HOME/.claude/skills config pull.ff only
 ```

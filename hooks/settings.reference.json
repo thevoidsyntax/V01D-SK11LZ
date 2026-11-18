@@ -1,5 +1,5 @@
 {
-  "_readme": "Not loaded by Claude Code. Reference only: the ~/.claude/settings.json fragments needed on a machine after pulling this repo, so the 5 hooks in hooks/ actually run. settings.json itself is user-level config and is not tracked in this repo. Merge these into your own settings.json (keep whatever else is already there) rather than overwriting the whole file.",
+  "_readme": "Not loaded by Claude Code. Reference only: the ~/.claude/settings.json fragments needed on a machine after pulling this repo, so the 6 hooks in hooks/ actually run. settings.json itself is user-level config and is not tracked in this repo. Merge these into your own settings.json (keep whatever else is already there) rather than overwriting the whole file. Note: claude-resume-on-precompact.ps1 is a 7th hook that runs on this machine, but it belongs to a separate 'Claude Notifier' VSCode extension, not this repo -- it is not covered here and does not sync via git pull.",
 
   "permissions": {
     "ask": [
@@ -44,12 +44,20 @@
           { "type": "command", "command": "node \"~/.claude/hooks/cache-guard.js\"" }
         ]
       }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "compact",
+        "hooks": [
+          { "type": "command", "command": "node \"~/.claude/hooks/claude-resume-on-sessionstart.js\"" }
+        ]
+      }
     ]
   },
 
   "_steps": [
     "1. git pull (or clone) this repo into ~/.claude/skills.",
-    "2. Copy hooks/{ask-on-git-push,changelog-on-commit,destructive-guard,gitleaks-guard,cache-guard}.js from ~/.claude/skills/hooks/ into ~/.claude/hooks/ (the active, non-tracked location).",
+    "2. Copy hooks/{ask-on-git-push,changelog-on-commit,destructive-guard,gitleaks-guard,cache-guard,claude-resume-on-sessionstart}.js from ~/.claude/skills/hooks/ into ~/.claude/hooks/ (the active, non-tracked location).",
     "3. On Windows, use the literal absolute path in each command string (e.g. C:\\\\Users\\\\<you>\\\\.claude\\\\hooks\\\\destructive-guard.js); ~ is written here only for portability of this reference.",
     "4. Merge permissions.ask (append any entries you don't already have) and hooks.PreToolUse's 'Bash|PowerShell' matcher (add the command entries you don't already have, keep any matcher/notifier entries already in your settings.json) into your settings.json by hand, or paste your current settings.json to Claude Code and ask it to merge this file in.",
     "5. Install gitleaks (e.g. `winget install --id Gitleaks.Gitleaks` on Windows) so gitleaks-guard.js actually scans instead of failing open.",

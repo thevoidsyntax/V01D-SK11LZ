@@ -1,6 +1,6 @@
 # Hooks user-level
 
-Lima hook Claude Code untuk user-level (`~/.claude/hooks/`). Repo ini menyimpan sumbernya supaya tidak hilang; masih tidak ada installer. Pasang manual.
+Enam hook Claude Code untuk user-level (`~/.claude/hooks/`). Repo ini menyimpan sumbernya supaya tidak hilang; masih tidak ada installer. Pasang manual.
 
 | Hook | Event | Fungsi |
 |---|---|---|
@@ -9,6 +9,9 @@ Lima hook Claude Code untuk user-level (`~/.claude/hooks/`). Repo ini menyimpan 
 | `changelog-on-commit.js` | `PreToolUse` (Bash\|PowerShell) | Menolak commit `feat`/`fix`/breaking tanpa `CHANGELOG.md`, dan commit yang menyentuh Dockerfile, compose, atau `migrations/` |
 | `destructive-guard.js` | `PreToolUse` (Bash\|PowerShell) | Minta konfirmasi untuk `git reset --hard`, `git clean -f`, `git branch -D`, `git checkout --`/`git restore` yang membuang perubahan worktree, `gh repo delete`, `rm -rf`, dan setara PowerShell-nya (`Remove-Item`/`ri`/`rd`/... `-Recurse -Force`); menolak kalau dibungkus opsi global git (`-C`, `-c`, ...) yang bisa diam-diam mengganti target |
 | `gitleaks-guard.js` | `PreToolUse` (Bash\|PowerShell) | Menjalankan `gitleaks protect --staged` sebelum `git commit`; menolak commit kalau ketemu secret, fail-open kalau gitleaks tidak terpasang atau errornya bukan temuan leak |
+| `claude-resume-on-sessionstart.js` | `SessionStart` (matcher `compact`) | Setelah context di-compact, kasih tahu sesi baru file resume mana yang harus diupdate: `specs/RESUME.md` kalau proyek pakai konvensi pipeline `/agents`, kalau tidak `RESUME.md` di root proyek |
+
+`claude-resume-on-precompact.ps1` (chime + instruksi singkat ke summarizer compaction) **bukan bagian repo ini** — itu dikelola ekstensi VSCode "Claude Notifier" terpisah (dot-source `_lib.ps1`-nya) dan hanya ada di `~/.claude/hooks/`. Perubahan di situ tidak ikut sync lewat `git pull` repo ini; sinkronkan manual, dan sadari update ekstensinya bisa menimpa balik edit manual itu.
 
 ## Pasang manual
 
@@ -24,6 +27,11 @@ Salin ke `~/.claude/hooks/`, lalu daftarkan di `~/.claude/settings.json`:
         { "type": "command", "command": "node ~/.claude/hooks/changelog-on-commit.js" },
         { "type": "command", "command": "node ~/.claude/hooks/destructive-guard.js" },
         { "type": "command", "command": "node ~/.claude/hooks/gitleaks-guard.js" }
+      ]}
+    ],
+    "SessionStart": [
+      { "matcher": "compact", "hooks": [
+        { "type": "command", "command": "node ~/.claude/hooks/claude-resume-on-sessionstart.js" }
       ]}
     ]
   }
@@ -41,7 +49,7 @@ Salin ke `~/.claude/hooks/`, lalu daftarkan di `~/.claude/settings.json`:
 ## Tes
 
 ```bash
-node --test "$HOME/.claude/hooks/_tests/*.test.js"
+node --test "$HOME/.claude/skills/hooks/_tests/*.test.js"
 ```
 
-Node 22 butuh glob, bukan nama folder. 77 kasus (pipe test: JSON hook input, bukan perintah shell).
+Tes menguji salinan di repo ini (`__dirname/..`), bukan salinan aktif di `~/.claude/hooks/` — path itu, bukan `~/.claude/hooks/_tests/`, yang sebenarnya ada. Node 22 butuh glob, bukan nama folder. 81 kasus (pipe test: JSON hook input, bukan perintah shell).

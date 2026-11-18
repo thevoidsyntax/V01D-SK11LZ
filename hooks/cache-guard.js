@@ -12,6 +12,14 @@ const MARKER_MAX_AGE_MS = 7 * 24 * 3_600_000;
 // 3x what a new session costs to start with this setup (~50K since the 2026-10-20 plugin
 // cleanup). Not measured per session: old sessions started bigger and would raise it.
 const CTX_THRESHOLD = 150_000;
+// Cost note each time the context passes another NUDGE_STEP. Independent of the
+// auto-compact window (autoCompactWindow, /autocompact, --autocompact,
+// CLAUDE_CODE_AUTO_COMPACT_WINDOW) -- do not derive one from the other, the window has
+// more sources than this hook can read and varies per model/session. Where the window
+// is <= NUDGE_STEP (e.g. 200K on this machine's settings.json), compaction happens
+// first and this note never fires; that's fine, CTX_THRESHOLD's cold block still
+// applies there. It fires on sessions where nothing caps the window (e.g. a 1M-context
+// model with no autoCompactWindow set, compacting around ~967K).
 const NUDGE_STEP = 200_000;
 // $/M fitted from real runs: Sonnet 5.5 write $4.00, read $0.10; Opus 5.5 write about $8.
 // Opus read is not measured; assume the same 2x ratio.
