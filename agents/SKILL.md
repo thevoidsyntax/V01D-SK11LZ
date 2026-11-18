@@ -3,7 +3,7 @@ name: agents
 description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model, routes for small changes, an epic route for roadmaps, approval pauses, and artifact handoff"
 when_to_use: "Use when you want the persona pipeline to build or change something end-to-end (Satria, Athena, Hexa, Dina, Frans, Vika). Trigger with /agents or a request ending in 'mulai pipeline'. Also to build one epic from specs/ROADMAP.md ('kerjakan E2', 'lanjut roadmap'). For single-persona help, call that persona directly."
 metadata:
-  version: "4.15.0"
+  version: "4.15.1"
 ---
 
 # 👥 PERSONA PIPELINE — SATRIA · ATHENA · HEXA · DINA · FRANS · VIKA
@@ -106,7 +106,7 @@ The orchestrator coordinates; it does not write the work itself. Never edit `src
 
 For each phase in the route, spawn with the **Agent tool**, always in the foreground so progress is visible:
 - `subagent_type: "general-purpose"`, `model:` = the persona's model and `effort:` = its effort from the table (the user asked for these levels; the gate loop in section 5 is the only escalation), `run_in_background: false` (each phase needs the previous artifact).
-- `prompt`: "You are **<Persona>** (<role>). Invoke the `/<persona>` skill and follow its whole workflow. Read only these artifacts: <inputs>. Produce: <output artifact>, plus everything your workflow writes (the `specs/HANDOFF.md` entry; for Dina also `specs/.audit-base`). Write artifacts in English (PRD, ADR, HANDOFF, ROADMAP, docs, commit message, PR body); UI copy follows the project's `UI language:`. Keep your reply to a one-line handoff summary. Write one file per step and never put several large files in one turn. If you are running low on room, finish the file in hand, append your HANDOFF entry listing what is left, and stop."
+- `prompt`: "You are **<Persona>** (<role>). Invoke the `/<persona>` skill and follow its whole workflow. Read only these artifacts: <inputs>. Produce: <output artifact>, plus everything your workflow writes (the `specs/HANDOFF.md` entry; for Dina also `specs/.audit-base`). Write artifacts in English (PRD, ADR, HANDOFF, ROADMAP, docs, commit message, PR body); UI copy follows the project's `UI language:`. Keep your reply to a one-line handoff summary. Write one file per step and never put several large files in one turn. If you are running low on room, finish the file in hand, append your HANDOFF entry listing what is left, and stop. If a command is denied twice, do not retry it: note it under `Open:` in your HANDOFF entry and end the phase."
 - Pass artifact paths, never the prior transcript.
 - **Limit or error.** If a phase ends early on an output limit (`max_output_tokens`) or an API error, check `git status` and the files already written, then continue **the same agent** with SendMessage to its agent id ("continue from where you stopped, do not rewrite finished files, keep replies short"). Spawn a new agent only if SendMessage fails, and list the files already on disk in its prompt. Never resume an agent whose scope was given to another agent.
 - **Async launch.** If the Agent result says the agent was launched async (the harness moves a foreground agent to the background after a while; 3 of 12 Hexa spawns in VentroPoS E1), print `[FASE n/N] <Persona> berjalan di background`, then wait for its completion notice. Do not start a phase that depends on it, and do not poll.
@@ -179,7 +179,7 @@ At a pause, print a summary of at most 12 lines (PRD scope, assumptions, open qu
 
 Dina ends `specs/AUDIT.md` with a status line:
 - `STATUS: APPROVED` → continue with the route.
-- `STATUS: REJECTED` → record `❌` and stop with the findings (section 3, "Progress docs and stops"); on **Lanjut** hand back to **Hexa** with the findings; Hexa patches, Dina re-audits. **Max 3 loops** (print `[LOOP k/3]`); if still rejected, stop and surface the blocking findings to the user. Loop 1 runs on Sonnet at effort high. After the second `REJECTED`, loops 2 and 3 run Hexa and Dina on Opus at effort high (`model: "opus"`, `effort: "high"`). The final-pass loops in section 6 do not escalate.
+- `STATUS: REJECTED` → record `❌` and stop with the findings (section 3, "Progress docs and stops"); on **Lanjut** hand back to **Hexa** with the findings; Hexa patches, Dina re-audits. **Max 3 loops** (print `[LOOP k/3]`); if still rejected, stop and surface the blocking findings to the user. If the blocking findings of loop k match loop k-1, say so in the stop message and do not start the Opus round unless the user chooses **Lanjut**. Loop 1 runs on Sonnet at effort high. After the second `REJECTED`, loops 2 and 3 run Hexa and Dina on Opus at effort high (`model: "opus"`, `effort: "high"`). The final-pass loops in section 6 do not escalate.
 
 Dina's non-blocking findings (MEDIUM and below) are not a loop trigger and do not need a fix before the route continues. The orchestrator does not patch them either — carry them in the commit message and, on the epic route, in the epic's `Open:` items.
 
