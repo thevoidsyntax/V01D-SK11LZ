@@ -37,6 +37,8 @@ pnpm-lock.yaml
 # Claude Code's synced skills/plugins (managed by Claude Code, not part of this pack)
 /synced/
 
+# Third-party local tool (Graphify), installed outside this repo
+/graphify/
 # Discarded skill copies (may include proprietary vendor skills)
 /.trash/
 

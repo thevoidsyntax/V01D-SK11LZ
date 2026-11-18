@@ -26,6 +26,7 @@ Dibaca `autor/SKILL.md` saat `/autor new` dijalankan. Section 4 di sana = rekome
 Scale: PRIBADI | KLIEN
 UI language: <language of labels, messages, and copy, from Step 1b>
 Code language: English (identifiers, comments, file names, DB columns, enums, API fields)
+Artifact language: English (PRD, ADR, HANDOFF, ROADMAP, docs, commit messages, PR bodies)
 Stack: <language + version, framework, database>
 Commands: <install>, <run>, <test>, <lint if any>
 Layout: <top folders and what lives where>

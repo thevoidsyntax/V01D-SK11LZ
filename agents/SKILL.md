@@ -1,9 +1,9 @@
 ---
 name: agents
-description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model, routes for small changes, an epic route for roadmaps, approval pauses, and artifact handoff"
+description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model, routes for small changes, an epic route for roadmaps, approval pauses, artifact handoff, and an off-route escalation advisor (Sven) for a persona that is stuck"
 when_to_use: "Use when you want the persona pipeline to build or change something end-to-end (Satria, Athena, Hexa, Dina, Frans, Vika). Trigger with /agents or a request ending in 'mulai pipeline'. Also to build one epic from specs/ROADMAP.md ('kerjakan E2', 'lanjut roadmap'). For single-persona help, call that persona directly."
 metadata:
-  version: "4.12.2"
+  version: "4.16.0"
 ---
 
 # 👥 PERSONA PIPELINE — SATRIA · ATHENA · HEXA · DINA · FRANS · VIKA
@@ -20,10 +20,13 @@ Six specialists run as a sequential, artifact-handoff pipeline. Each phase runs 
 | 4 | **Dina** | QA & Security | Sonnet (high)* | audit | `specs/AUDIT.md` + `STATUS:` |
 | 5 | **Frans** | Platform & DevOps | Sonnet (high) | ponytail | `Dockerfile`, `migrations/*`, `ci.yml` |
 | 6 | **Vika** | Technical Writer | Haiku (low)* | anti-slop | `docs/openapi.*`, `CHANGELOG.md`, README |
+| 7 | **Sven** | Escalation Advisor (off-route) | Opus (xhigh) | — | `specs/SVEN.md` + a `[CONSULT]` HANDOFF entry |
 
 Every persona also appends an entry to `specs/HANDOFF.md` (see below). Stack, security, and testing knowledge come from the model and the project's `CLAUDE.md`, not from skills.
 
-\* **Models (user policy, 2026-10-27):** Opus only for Satria; Haiku for Vika; Athena, Hexa, Dina, and Frans run on Sonnet at effort high. The one Opus escalation is the gate loop: once Dina has returned `REJECTED` twice, the later rounds run Hexa and Dina on Opus at effort high (section 5). Vika → Sonnet (effort medium) for a large API surface. Frans is never Haiku (migrations are destructive). Evidence: CHANGELOG 4.3.0.
+Sven is **not** a pipeline phase: he is in no route table and never appears in the ROADMAP pipeline table. He is spawned only when a blocked persona asks for him (section 8).
+
+\* **Models (user policy, 2026-10-27):** Opus only for Satria; Haiku for Vika; Athena, Hexa, Dina, and Frans run on Sonnet at effort high. The one Opus escalation is the gate loop: once Dina has returned `REJECTED` twice, the later rounds run Hexa and Dina on Opus at effort high (section 5). Vika → Sonnet (effort medium) for a large API surface. Frans is never Haiku (migrations are destructive). Evidence: CHANGELOG 4.3.0. Sven, the off-route escalation, runs on Opus at effort xhigh (section 8) — the second Opus in the pack, and the only one a persona can call by name.
 
 ## 1. Pick the route
 
@@ -52,8 +55,8 @@ Rules that override the table:
 
 ```text
 [RUTE] Bugfix: Hexa → Dina
-  alasan: satu endpoint, kontrak dan skema tidak berubah
-  ubah: "pipeline penuh" atau "mulai dari <persona>"
+  reason: one endpoint, contract and schema unchanged
+  change: "full pipeline" or "start from <persona>"
 ```
 
 Your first tool call is the Write or Edit that appends the route to `specs/HANDOFF.md` (create it if missing), before any Agent call:
@@ -66,7 +69,7 @@ Scale: <PRIBADI | KLIEN | KLIEN (assumed)>
 Branch: <current branch, or "-" outside a git repo>
 ```
 
-On the epic route add one line, `Epic: <id> — <judul>`.
+On the epic route add one line, `Epic: <id> — <title>`.
 
 Then print the `[RUTE]` block. The phase checks in section 3 count this entry, so a run without it is incomplete. If the user names a route ("pipeline penuh", "mulai dari Athena", "hanya Hexa dan Dina"), use theirs. Start the first phase without waiting, unless the branch step below applies.
 
@@ -106,11 +109,12 @@ The orchestrator coordinates; it does not write the work itself. Never edit `src
 
 For each phase in the route, spawn with the **Agent tool**, always in the foreground so progress is visible:
 - `subagent_type: "general-purpose"`, `model:` = the persona's model and `effort:` = its effort from the table (the user asked for these levels; the gate loop in section 5 is the only escalation), `run_in_background: false` (each phase needs the previous artifact).
-- `prompt`: "You are **<Persona>** (<role>). Invoke the `/<persona>` skill and follow its whole workflow. Read only these artifacts: <inputs>. Produce: <output artifact>, plus everything your workflow writes (the `specs/HANDOFF.md` entry; for Dina also `specs/.audit-base`). Keep your reply to a one-line handoff summary. Write one file per step and never put several large files in one turn. If you are running low on room, finish the file in hand, append your HANDOFF entry listing what is left, and stop."
+- `prompt`: "You are **<Persona>** (<role>). Invoke the `/<persona>` skill and follow its whole workflow. Read only these artifacts: <inputs>. Produce: <output artifact>, plus everything your workflow writes (the `specs/HANDOFF.md` entry; for Dina also `specs/.audit-base`). Write artifacts in English (PRD, ADR, HANDOFF, ROADMAP, docs, commit message, PR body); UI copy follows the project's `UI language:`. Keep your reply to a one-line handoff summary. Write one file per step and never put several large files in one turn. If you are running low on room, finish the file in hand, append your HANDOFF entry listing what is left, and stop. If a command is denied twice, do not retry it: note it under `Open:` in your HANDOFF entry and end the phase."
 - Pass artifact paths, never the prior transcript.
 - **Limit or error.** If a phase ends early on an output limit (`max_output_tokens`) or an API error, check `git status` and the files already written, then continue **the same agent** with SendMessage to its agent id ("continue from where you stopped, do not rewrite finished files, keep replies short"). Spawn a new agent only if SendMessage fails, and list the files already on disk in its prompt. Never resume an agent whose scope was given to another agent.
 - **Async launch.** If the Agent result says the agent was launched async (the harness moves a foreground agent to the background after a while; 3 of 12 Hexa spawns in VentroPoS E1), print `[FASE n/N] <Persona> berjalan di background`, then wait for its completion notice. Do not start a phase that depends on it, and do not poll.
 - **Phase size.** Scope each Hexa spawn to about one layer or one screen group (roughly 10-15 files), so it returns within about 15 minutes and the `[FASE]` and `[HANDOFF]` lines show progress. VentroPoS E1 spawns ran 16-63 minutes each, and the user saw nothing in between.
+- **Scope of a Hexa phase.** Before the Hexa spawn, save the output of `git status --short` as the phase baseline; after it returns, run `git status --short` again. The tracked files whose status differs from the baseline are the files the phase changed. Compare that set with the `Files:` line of Hexa's HANDOFF entry: a tracked file changed outside the list is a scope violation and the phase is not green (send it back to Hexa before Dina). An untracked new file outside the list is reported but does not stop the run, because a generated file is often not gitignored yet. The progress artifacts — `specs/HANDOFF.md`, `specs/ROADMAP.md`, `specs/RESUME.md`, `CHANGELOG.md`, `README.md` — are owned by the orchestrator and the personas, so they are never part of this check. The project is not a git repo: skip the check and say so.
 - Before **every** spawn, the first one included, print `[FASE n/N] <Persona> (<model>) mulai — baca <inputs>`, where N is the number of phases in the route. After it returns, check the artifact exists **and** `specs/HANDOFF.md` gained that persona's entry, then print `[HANDOFF] <A> → <B> selesai: <artifact> (ada)`. If either is missing, stop and inspect that phase.
 
 ```text
@@ -134,7 +138,7 @@ Two cases run several agents at once. Put all their Agent calls in **one message
 Rules for a parallel batch:
 - The agents do not write `specs/HANDOFF.md`: `Write` replaces the whole file, so two writers lose an entry. The same goes for the progress docs (`agents/progress.md`): each agent ends its reply with its ROADMAP row, and the orchestrator applies the rows. The prompt says "Do not write specs/HANDOFF.md. End your reply with your full HANDOFF entry" (this replaces the one-line reply). The orchestrator appends the entries one after another, in route order, then runs the phase check on the artifacts.
 - Print one `[FASE n/N]` line per agent before the batch, counting each agent as a phase.
-- After the batch compare `git status --short` with the owned files. A file written by two units, or outside its unit's list, stops the run: report it, do not merge by hand.
+- After the batch compare `git status --short` with the owned files. A file written by two units, or outside its unit's list, stops the run: report it, do not merge by hand. This is the scope check for a parallel batch — the unit's owned list plays the role of the `Files:` line, so do not run the single-phase scope check on top of it.
 - The "Limit or error" rule applies per agent.
 
 ### Progress docs and stops
@@ -149,7 +153,7 @@ The repo must answer "where are we" at any moment, not only at the end of an epi
      | Phase | Green when |
      |-------|------------|
      | Satria, Athena | the design pause of section 4 approves |
-     | Hexa | the project's test command passes with no drop in test count against the ROADMAP position block, type check is clean, and the entry has `Ponytail:`, `TDD:`, and `UI: ya` or `UI: tidak` (any other value is not green: send it back to Hexa before Dina) |
+     | Hexa | the project's test command passes with no drop in test count against the ROADMAP position block, type check is clean, the entry has `Ponytail:`, `TDD:`, and a `UI:` line reading `yes` or `no` (`ya`/`tidak` from an entry written before the language rule is accepted; any other value is not green: send it back to Hexa before Dina), and the entry's `Files:` line names every tracked file the phase changed (scope check above, in a git repo; a file changed outside the list is not green) |
      | Dina | `STATUS: APPROVED` |
      | Frans | the build is verified (an unverified build under `Open:` is not green) |
      | Vika | the docs match the real routes |
@@ -178,7 +182,7 @@ At a pause, print a summary of at most 12 lines (PRD scope, assumptions, open qu
 
 Dina ends `specs/AUDIT.md` with a status line:
 - `STATUS: APPROVED` → continue with the route.
-- `STATUS: REJECTED` → record `❌` and stop with the findings (section 3, "Progress docs and stops"); on **Lanjut** hand back to **Hexa** with the findings; Hexa patches, Dina re-audits. **Max 3 loops** (print `[LOOP k/3]`); if still rejected, stop and surface the blocking findings to the user. Loop 1 runs on Sonnet at effort high. After the second `REJECTED`, loops 2 and 3 run Hexa and Dina on Opus at effort high (`model: "opus"`, `effort: "high"`). The final-pass loops in section 6 do not escalate.
+- `STATUS: REJECTED` → record `❌` and stop with the findings (section 3, "Progress docs and stops"); on **Lanjut** hand back to **Hexa** with the findings; Hexa patches, Dina re-audits. **Max 3 loops** (print `[LOOP k/3]`); if still rejected, stop and surface the blocking findings to the user. If the blocking findings of loop k match loop k-1, say so in the stop message and do not start the Opus round unless the user chooses **Lanjut**. Loop 1 runs on Sonnet at effort high. After the second `REJECTED`, loops 2 and 3 run Hexa and Dina on Opus at effort high (`model: "opus"`, `effort: "high"`). The final-pass loops in section 6 do not escalate.
 
 Dina's non-blocking findings (MEDIUM and below) are not a loop trigger and do not need a fix before the route continues. The orchestrator does not patch them either — carry them in the commit message and, on the epic route, in the epic's `Open:` items.
 
@@ -199,6 +203,22 @@ After the last phase:
 ### Push and pull request
 
 After a commit, only when the branch is not `main`/`master`, remote `origin` exists, and `gh auth status` succeeds; otherwise print one line saying why and stop, never push. **Read `~/.claude/skills/agents/push-pr.md` and follow it** (offer, push, PR body, `/code-review`, `gh pr checks`). The pipeline never merges.
+
+## 8. Escalation to Sven
+
+Sven is **off-route**: he is not in any route table, not in the ROADMAP pipeline table, and not counted in the phase numbers. He runs only when a persona is blocked on a decision it should not make alone.
+
+**Trigger.** A persona that cannot decide writes `Open: needs Sven — <the question>` in its HANDOFF entry and ends the phase as not green. The orchestrator sees that line, stops the run, shows the question, and asks with AskUserQuestion: **Panggil Sven** / **Lanjut tanpa Sven** / **Stop**. The user may also call `/sven` directly, or say "panggil Sven" at any point.
+
+**Spawning.** One spawn, `subagent_type: "general-purpose"`, `model: "opus"`, `effort: "xhigh"`, `run_in_background: false`. The prompt: "You are **Sven** (Escalation Advisor). Invoke the `/sven` skill and follow its whole workflow. Read only these artifacts: <the blocked persona's HANDOFF entry, the specs it names, the code the decision touches>. Produce: `specs/SVEN.md` (one `[CONSULT]` section) and your `[CONSULT] Sven` HANDOFF entry. You are read-only: write nothing else. Keep your reply to a one-line handoff summary."
+
+**After Sven returns.** Print `[HANDOFF] Sven → <persona>: <the decision in one line>` and hand the decision back to the blocked persona as another phase — the same persona, with Sven's `Decision:` and `Do next:` in the prompt. The persona implements it. The orchestrator never implements it.
+
+Rules:
+- **One consult per blocker.** Sven does not review the same blocker twice; if the persona is still blocked after his decision, the question goes to the user.
+- **Not a gate.** Sven returns no `STATUS:` line. He cannot reject a phase, and a `[CONSULT]` entry is not a phase entry — the phase checks of section 3 ignore it.
+- **No progress-doc writes.** Sven writes `specs/SVEN.md` and his HANDOFF entry only; the ROADMAP row of the blocked persona stays as it was.
+- **Cost.** Opus at xhigh is the most expensive spawn in the pack. Offer it, never take it by default: a blocker the user can answer in one line goes to the user.
 
 
 ## Handoff log (`specs/HANDOFF.md`)

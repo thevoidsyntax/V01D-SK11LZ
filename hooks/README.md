@@ -19,6 +19,9 @@ Salin ke `~/.claude/hooks/`, lalu daftarkan di `~/.claude/settings.json`:
 
 ```json
 {
+  "permissions": {
+    "ask": ["Bash(git push *)", "PowerShell(git push *)"]
+  },
   "hooks": {
     "UserPromptSubmit": [{ "hooks": [{ "type": "command", "command": "node ~/.claude/hooks/cache-guard.js" }] }],
     "PreToolUse": [
@@ -37,6 +40,8 @@ Salin ke `~/.claude/hooks/`, lalu daftarkan di `~/.claude/settings.json`:
   }
 }
 ```
+
+Blok `permissions.ask` wajib: `ask-on-git-push.js` hanya menolak push yang memakai opsi global git. Persetujuan push datang dari aturan izin itu, bukan dari hook.
 
 `cache-guard.js` menulis penanda di `~/.claude/hooks/cache-guard.d/`. Lokasi itu bisa diganti lewat env `CACHE_GUARD_DIR`.
 
