@@ -44,7 +44,9 @@ Salin ke `~/.claude/hooks/`, lalu daftarkan di `~/.claude/settings.json`:
 
 `destructive-guard.js` dan `ask-on-git-push.js` adalah lapisan "ask" lunak (auto mode menentukan sendiri). Konfirmasi manusia yang sesungguhnya datang dari `permissions.ask` di `settings.json` untuk ejaan literal yang umum (`Bash(git reset --hard*)`, `Bash(rm -rf *)`, `PowerShell(Remove-Item * -Recurse -Force*)`, dst).
 
-`settings.json` sendiri bukan bagian repo ini (konfigurasi user-level per mesin). `settings.reference.json` di folder ini berisi fragmen `permissions.ask` dan `hooks.PreToolUse` yang perlu di-merge manual ke `settings.json` di mesin baru setelah pull/clone, plus langkah-langkahnya.
+`settings.json` sendiri bukan bagian repo ini (konfigurasi user-level per mesin). `settings.reference.json` di folder ini berisi fragmen `permissions.deny`, `permissions.ask`, dan `hooks.PreToolUse` yang perlu di-merge manual ke `settings.json` di mesin baru setelah pull/clone, plus langkah-langkahnya.
+
+`permissions.deny` adalah lapisan defense-in-depth terpisah dari hook-hook di atas: menolak `Read`/`Edit`/`Write` pada `.env*` (kecuali `.env.example`, sengaja tidak masuk daftar) dan `.credentials.json` di mana pun lokasinya, berlaku lebih dulu daripada `allow`/`ask`/`defaultMode` dan tidak bisa dilewati. Ini hanya menutup jalur baca file lewat tool bawaan Claude Code (`Read`, dan `Bash` input-redirect `< .env` sejak Claude Code v2.1.257) — `Bash(cat .env)` dkk. tetap tidak ditutup karena deny rule untuk `Bash` cuma cocok teks literal, bukan batas keamanan sungguhan (lihat dokumentasi Claude Code sendiri).
 
 ## Tes
 
