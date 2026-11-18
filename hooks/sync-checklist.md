@@ -36,7 +36,7 @@ Angka `<remote-saja>` di sini **wajar besar dan bukan sinyal masalah** — itu c
 | 0 | bersih | `git pull --ff-only` |
 | 0 | cuma beda EOL | `git config core.autocrlf true`, lalu `git stash push -m eol`, `git pull --ff-only`, cek, `git stash drop` |
 | 0 | ada isi nyata | baca `git diff` dulu, `git stash push -u -m pc-wip`, `git pull --ff-only`, `git stash pop`, selesaikan konflik, commit |
-| > 0 | apa saja | `git branch backup/pc-$(date +%Y%m%d)` dulu, stash kalau kotor, `git rebase origin/main`, selesaikan konflik (`git diff --name-only --diff-filter=U`), jalankan checklist "Sebelum commit" di `CLAUDE.md`, lalu `git push` |
+| > 0 | apa saja | `git branch backup/pc-$(date +%Y%m%d)` dulu, stash kalau kotor, `git rebase origin/main`, selesaikan konflik (`git diff --name-only --diff-filter=U`), jalankan skill `pre-commit-check`, lalu `git push` |
 
 `git reset --hard`, clone ulang, atau menimpa folder secara manual **bukan langkah pertama** — itu hanya boleh dilakukan setelah isi unik mesin itu terbukti sudah ter-push atau sudah sengaja dibuang. Kalau `pull.ff only` belum pernah di-set di mesin ini (lihat blok "Sekali per mesin" di `CLAUDE.md`), pasang dulu supaya `pull` biasa tidak diam-diam membuat merge commit.
 

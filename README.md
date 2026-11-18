@@ -34,7 +34,7 @@ git -C $HOME\.claude\skills push
 > git -C $HOME\.claude\skills config user.email "323514556+thevoidsyntax@users.noreply.github.com"
 > ```
 
-## Isi (15 skill)
+## Isi (17 skill)
 
 Tiap subfolder level atas = satu skill (berisi `SKILL.md`).
 
@@ -60,6 +60,8 @@ Pendukung:
 /impeccable  UI tanpa tampilan template AI: keputusan dari brief produk + checklist
 /uicheck     Verifikasi UI di browser sungguhan: overflow 360px, error konsol, label input, house style, jalur keyboard dan fokus
 /fool        Uji rencana sebelum dibangun: 5 mode (asumsi, kontra-argumen, failure mode, red team, audit bukti)
+/handover    Serah-terima sesi: tulis section baru di specs/RESUME.md supaya sesi berikutnya lanjut dari state sebenarnya
+/pre-commit-check  Checklist sebelum commit ke repo skill ini (khusus V01D-SK11LZ)
 ```
 
 Tiap fase menambah satu entri ke `specs/HANDOFF.md` di proyek target: input, output, keputusan, isu terbuka, fase berikutnya. Vika menyusun CHANGELOG dan README dari log itu. Tiap fase juga memperbarui dokumen progres (`agents/progress.md`): posisi dan tabel pipeline di `specs/ROADMAP.md`, kartu `specs/RESUME.md`, baris `[Unreleased]`, dan baris status README, supaya posisi proyek terbaca dalam satu layar.
@@ -96,7 +98,7 @@ Tiga prinsip yang menutup kebiasaan bawaan model, diturunkan dari [andrej-karpat
 
 ## Hooks user-level
 
-Folder `hooks/` menyimpan tiga hook Claude Code yang berjalan di luar skill: `cache-guard.js` (menandai cache miss saat konteks besar atau model berganti), `ask-on-git-push.js` (menolak `git push` dengan opsi global), dan `changelog-on-commit.js` (menolak commit tanpa entri CHANGELOG). Bukan skill dan tidak dimuat otomatis — pasangnya manual ke `~/.claude/hooks/`, caranya di `hooks/README.md`.
+Folder `hooks/` menyimpan enam hook Claude Code yang berjalan di luar skill: `cache-guard.js` (menandai cache miss saat konteks besar atau model berganti), `ask-on-git-push.js` (menolak `git push` dengan opsi global), `changelog-on-commit.js` (menolak commit tanpa entri CHANGELOG), `destructive-guard.js` (minta konfirmasi untuk perintah yang membuang kerjaan, mis. `git reset --hard`), `gitleaks-guard.js` (menjalankan `gitleaks protect --staged` sebelum `git commit`), dan `claude-resume-on-sessionstart.js` (setelah compact, menunjuk file resume yang harus diupdate). Bukan skill dan tidak dimuat otomatis — pasangnya manual ke `~/.claude/hooks/`, caranya di `hooks/README.md`.
 
 ### Kenapa hanya 15
 
