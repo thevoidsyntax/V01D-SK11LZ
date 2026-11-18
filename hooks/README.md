@@ -36,6 +36,8 @@ Salin ke `~/.claude/hooks/`, lalu daftarkan di `~/.claude/settings.json`:
 
 `destructive-guard.js` dan `ask-on-git-push.js` adalah lapisan "ask" lunak (auto mode menentukan sendiri). Konfirmasi manusia yang sesungguhnya datang dari `permissions.ask` di `settings.json` untuk ejaan literal yang umum (`Bash(git reset --hard*)`, `Bash(rm -rf *)`, `PowerShell(Remove-Item * -Recurse -Force*)`, dst).
 
+`settings.json` sendiri bukan bagian repo ini (konfigurasi user-level per mesin). `settings.reference.json` di folder ini berisi fragmen `permissions.ask` dan `hooks.PreToolUse` yang perlu di-merge manual ke `settings.json` di mesin baru setelah pull/clone, plus langkah-langkahnya.
+
 ## Tes
 
 ```bash
