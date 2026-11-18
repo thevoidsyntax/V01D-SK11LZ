@@ -213,4 +213,4 @@ function main() {
 
 if (require.main === module) main();
 
-module.exports = { scanTokens, findGitCommands, findPushes, scanCode };
+module.exports = { scanTokens, findGitCommands, findPushes, scanCode, nestedCode, SEPARATORS, STRUCTURAL, WRAPPERS, isAssign };

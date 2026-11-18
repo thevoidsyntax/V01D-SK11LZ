@@ -92,6 +92,30 @@ test('a commit without a conventional type is denied, and the marker does not he
   assert.ok(denied(run(dir, 'SKIP_CHANGELOG=1 git commit -m "wip"')));
 });
 
+test('a docs commit via a bash heredoc -m "$(cat <<EOF ...)" needs no entry', () => {
+  const dir = fixture({ staged: ['docs/guide.md'] });
+  const cmd = 'git commit -m "$(cat <<\'EOF\'\ndocs: add guide\n\nBody line\nEOF\n)"';
+  assert.ok(allowed(run(dir, cmd)));
+});
+
+test('a feat commit via a bash heredoc -m "$(cat <<EOF ...)" is denied without an entry', () => {
+  const dir = fixture({ staged: ['src/app.js'] });
+  const cmd = 'git commit -m "$(cat <<\'EOF\'\nfeat: add app\n\nBody line\nEOF\n)"';
+  assert.ok(denied(run(dir, cmd)));
+});
+
+test('a docs commit via a PowerShell here-string -m @\'...\'@ needs no entry', () => {
+  const dir = fixture({ staged: ['docs/guide.md'] });
+  const cmd = "git commit -m @'\ndocs: add guide\n\nBody line\n'@";
+  assert.ok(allowed(run(dir, cmd)));
+});
+
+test('a feat commit via a PowerShell here-string -m @\'...\'@ is denied without an entry', () => {
+  const dir = fixture({ staged: ['src/app.js'] });
+  const cmd = "git commit -m @'\nfeat: add app\n\nBody line\n'@";
+  assert.ok(denied(run(dir, cmd)));
+});
+
 test('other commands are ignored', () => {
   const dir = fixture({ staged: ['src/app.js'] });
   assert.ok(allowed(run(dir, 'git status')));

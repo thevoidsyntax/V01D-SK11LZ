@@ -11,10 +11,24 @@ const commitRe = new RegExp(String.raw`(?:^|[\s;&|(])git(?:\.exe)?${globalOpt}*\
 const git = (dir, ...a) => execFileSync('git', ['-C', dir, ...a], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
 const unquote = (s) => s.replace(/^["']|["']$/g, '');
 
-// Conventional Commit subject from -m "..." or the first line of a -F - heredoc.
+// Conventional Commit subject from -m "...", a bash `-m "$(cat <<'EOF' ... EOF )"`,
+// a PowerShell `-m @'...'@` / `-m @"..."@` here-string, or a -F - heredoc.
 function commitSubject(cmd) {
-  const m = cmd.match(/\s-m\s+(["'])([\s\S]*?)\1/) || cmd.match(/<<-?\s*'?(\w+)'?\n([^\n]*)/);
-  return m ? m[2].split('\n')[0].trim() : '';
+  // bash: -m "$(cat <<'EOF'\nSubject\n...\nEOF\n)" (delimiter quoted or not, <<- allowed)
+  let m = cmd.match(/-m\s+(["'])\$\(cat\s+<<-?\s*(['"]?)(\w+)\2\s*\n([^\n]*)\n[\s\S]*?\n\3\s*\n?\)\1/);
+  if (m) return m[4].trim();
+
+  // PowerShell here-string: -m @'...'@ or -m @"..."@
+  m = cmd.match(/-m\s+@(['"])\s*\n([^\n]*)\n[\s\S]*?\n\1@/);
+  if (m) return m[2].trim();
+
+  // plain -m "..." or -m '...'
+  m = cmd.match(/\s-m\s+(["'])([\s\S]*?)\1/);
+  if (m) return m[2].split('\n')[0].trim();
+
+  // -F - heredoc
+  m = cmd.match(/<<-?\s*'?(\w+)'?\n([^\n]*)/);
+  return m ? m[2].trim() : '';
 }
 
 function changedFiles(dir, cmd) {
