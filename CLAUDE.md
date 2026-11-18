@@ -77,6 +77,8 @@ Co-Authored-By: [PERSONA]
 
 ## Pasang & sync (git biasa)
 
+Prosedur lengkap kalau mesin itu sudah punya commit/perubahan lokal sendiri (cek diagnostik read-only, tabel keputusan overwrite/merge, cek hook aktif vs sumber repo) ada di `hooks/sync-checklist.md`.
+
 ```bash
 # pasang di mesin baru, lalu restart Claude Code
 git clone https://github.com/thevoidsyntax/V01D-SK11LZ.git $HOME/.claude/skills
