@@ -109,6 +109,13 @@ DEPENDENCY - EVALUASI DULU:
 - CHANGELOG setiap release
 - README untuk setup
 
+### 11. Sven Gatekeeper & Telegram
+- Hook `sven-gatekeeper.js` menolak aksi tak-terpulihkan (`npm publish`, `docker compose down -v`, `prisma migrate reset`, force push, `vercel --prod`, `railway up`, DROP/TRUNCATE) dan bertanya sebelum edit file kritis (`.env*`, Dockerfile, compose, schema, migrations, auth/middleware, `CLAUDE.md`, `settings.json`)
+- Kena blokir `[SVEN GATEKEEPER]` → jalankan `/sven` untuk meninjau, jangan diulang buta
+- Sven `APPROVED`/`REVISED` → orchestrator menulis `~/.claude/hooks/.sven-approved.json` berisi `action_hash` dari pesan blokir, `session_id`, `expires_at` (+5 menit); sekali pakai, lalu ulangi aksi yang sama persis
+- Keputusan penting (`NEED_USER_DECISION`/`REJECTED`/`REVISED`) → `node ~/.claude/hooks/sven-telegram-notify.js`; tidak pernah memblokir. `AskUserQuestion` otomatis memicu notifikasi
+- Saklar: `SVEN_ADVISOR=off` (matikan hook), `SVEN_GATEKEEPER=dryrun` (hanya log), `SVEN_TELEGRAM=off`
+
 ---
 
 ## Anti-Patterns

@@ -1,6 +1,6 @@
 # Hooks user-level
 
-Enam hook Claude Code untuk user-level (`~/.claude/hooks/`). Repo ini menyimpan sumbernya supaya tidak hilang; masih tidak ada installer. Pasang manual.
+Delapan hook Claude Code untuk user-level (`~/.claude/hooks/`). Repo ini menyimpan sumbernya supaya tidak hilang; masih tidak ada installer. Pasang manual.
 
 | Hook | Event | Fungsi |
 |---|---|---|
@@ -10,6 +10,10 @@ Enam hook Claude Code untuk user-level (`~/.claude/hooks/`). Repo ini menyimpan 
 | `destructive-guard.js` | `PreToolUse` (Bash\|PowerShell) | Minta konfirmasi untuk `git reset --hard`, `git clean -f`, `git branch -D`, `git checkout --`/`git restore` yang membuang perubahan worktree, `gh repo delete`, `rm -rf`, dan setara PowerShell-nya (`Remove-Item`/`ri`/`rd`/... `-Recurse -Force`); menolak kalau dibungkus opsi global git (`-C`, `-c`, ...) yang bisa diam-diam mengganti target |
 | `gitleaks-guard.js` | `PreToolUse` (Bash\|PowerShell) | Menjalankan `gitleaks protect --staged` sebelum `git commit`; menolak commit kalau ketemu secret, fail-open kalau gitleaks tidak terpasang atau errornya bukan temuan leak |
 | `claude-resume-on-sessionstart.js` | `SessionStart` (matcher `compact`) | Setelah context di-compact, kasih tahu sesi baru file resume mana yang harus diupdate: `specs/RESUME.md` kalau proyek pakai konvensi pipeline `/agents`, kalau tidak `RESUME.md` di root proyek |
+| `sven-gatekeeper.js` | `PreToolUse` (Bash\|PowerShell\|Write\|Edit\|MultiEdit\|AskUserQuestion) | Menolak aksi tak-terpulihkan yang belum ditangani hook lain (`npm publish`, `docker compose down -v`, `prisma migrate reset`, force push, `vercel --prod`, `railway up`, DROP/TRUNCATE), bertanya sebelum edit file kritis (`.env*`, Dockerfile, compose, schema, migrations, auth/middleware, `CLAUDE.md`, `settings.json`), dan membingkai `AskUserQuestion` sebagai Sven. Pemblokiran dilepas per aksi lewat token `.sven-approved.json` (SHA-256 sesi + tool + target + isi, 5 menit, sekali pakai) |
+| `sven-telegram-notify.js` | dipanggil gatekeeper dan skill `/sven` (bukan event hook) | Kirim keputusan ke Telegram lewat Bot API: token dari `~/.claude/channels/telegram/.env`, chat id dari `access.json` plugin resmi; hanya `REJECTED`/`REVISED`/`NEED_USER_DECISION`, dedupe 5 menit, timeout 5 detik, selalu exit 0, kegagalan masuk `~/.claude/logs/sven-decisions.log` |
+
+Saklar: `SVEN_ADVISOR=off` mematikan gatekeeper, `SVEN_GATEKEEPER=dryrun` hanya mencatat ke `~/.claude/logs/sven-gatekeeper.log`, `SVEN_TELEGRAM=off` mematikan notifikasi.
 
 `claude-resume-on-precompact.ps1` (chime + instruksi singkat ke summarizer compaction) **bukan bagian repo ini** — itu dikelola ekstensi VSCode "Claude Notifier" terpisah (dot-source `_lib.ps1`-nya) dan hanya ada di `~/.claude/hooks/`. Perubahan di situ tidak ikut sync lewat `git pull` repo ini; sinkronkan manual, dan sadari update ekstensinya bisa menimpa balik edit manual itu.
 
@@ -59,4 +63,4 @@ Blok `permissions.ask` wajib: `ask-on-git-push.js` hanya menolak push yang memak
 node --test "$HOME/.claude/skills/hooks/_tests/*.test.js"
 ```
 
-Tes menguji salinan di repo ini (`__dirname/..`), bukan salinan aktif di `~/.claude/hooks/` — path itu, bukan `~/.claude/hooks/_tests/`, yang sebenarnya ada. Node 22 butuh glob, bukan nama folder. 81 kasus (pipe test: JSON hook input, bukan perintah shell).
+Tes menguji salinan di repo ini (`__dirname/..`), bukan salinan aktif di `~/.claude/hooks/` — path itu, bukan `~/.claude/hooks/_tests/`, yang sebenarnya ada. Node 22 butuh glob, bukan nama folder. 97 kasus (pipe test: JSON hook input, bukan perintah shell).
