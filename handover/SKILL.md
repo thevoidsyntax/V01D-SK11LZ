@@ -30,7 +30,7 @@ is the note that tells the next session where the task stands.
 
 ## What to write
 
-Append one section to `specs/RESUME.md`, in the format of the previous one:
+Replace the current handover section of `specs/RESUME.md` (do not append: the file is not a log). Move the previous handover sections to `specs/handoff/RESUME-history.md` first, so `RESUME.md` keeps only the standing sections and one current handover. Keep the format of the previous section:
 
 - **Keadaan** - branch, commit, what is committed and what is not, the test
   count from the last run, what is proven and what is not.

@@ -16,7 +16,7 @@ metadata:
 
 ## Skills
 
-Fresh subagent: nothing is inherited from `/autor`. Invoke `/audit` with the Skill tool as the scanner, every round and in final pass mode. Reading this line is not the check. Security, concurrency, and testing knowledge are the model's own. Dina does not judge visual design: that is Hexa's `/impeccable` checklist.
+Fresh subagent: nothing is inherited from `/autor`. Invoke `/audit` with the Skill tool as the scanner, every round and in final pass mode. Reading this line is not the check. Security, concurrency, and testing knowledge are the model's own. Dina does not judge visual design: that is Hexa's `/impeccable` checklist. She does measure the render: `/uicheck` (Skill tool) when Hexa's entry says `deferred to the gate`, see step 5.
 
 The language rules have a measured eval in `dina/eval.md`: three fixtures, run headless, scored on the status line and the findings. The fixture, the run and the score are scripts in this folder — `dina/eval-fixture.sh`, `dina/eval-run.sh`, `dina/eval-verify.py` — so a run needs no writing from scratch. Run it after changing a language rule: a rule that was only written down has not been proved.
 
@@ -30,7 +30,7 @@ The language rules have a measured eval in `dina/eval.md`: three fixtures, run h
    - no `TDD:` line, or a `TDD:` line whose red evidence has no test behind it in `tests/`, or a behavior with no test at all;
    - the `UI:` line says no, but `src/` has `*.html`, `*.css`, `*.tsx|jsx|vue|svelte` or template files;
    - the `UI:` line says yes with no `/impeccable` checklist result, or one that lists a fail;
-   - the `UI:` line says yes with no `uicheck:` line, or a `uicheck:` line with no measurement in it (a skipped check is allowed when the entry says why);
+   - the `UI:` line says yes with no `uicheck:` line, or a `uicheck:` line with no measurement in it (a skipped check is allowed when the entry says why; `deferred to the gate` is allowed and hands the measurement to Dina, step 5);
    - the `UI:` line says yes on a UI with controls (buttons, links, inputs) and no `a11y:` line, or an `a11y:` line that lists A3–A6 (a skipped check is allowed when the entry says why).
 
    Stock template copy in the UI ("Get Started", "Welcome to …") is a finding.
@@ -47,6 +47,8 @@ The language rules have a measured eval in `dina/eval.md`: three fixtures, run h
    - `STATUS: REJECTED` → `[HANDOFF] Dina → Hexa` with the findings (patch loop, max 3).
    - `STATUS: APPROVED` → `[HANDOFF] Dina → <next persona in the route, or done>`.
    - Print it and end your turn. Never invoke the next persona yourself: `/agents` or the user starts it.
+
+5. **Render check for deferred UI.** When a Hexa entry in this round says `uicheck: deferred to the gate`, and the routes it needs now exist, invoke `/uicheck --a11y` (Skill tool) on those screens at 360px: serve the app against a throwaway database (`ventropos_e2e`-style: migrate, roles, seed, then seed catalog and sales data over the API; `check.py` cannot log in, so use a Playwright script that logs in and reuses its measurement). Put the `uicheck:` and `a11y:` lines in `specs/AUDIT.md`. Blocking: horizontal overflow over 1px, a console error, an unlabelled input, an image without `alt`, A3 or A6. Backlog under `Open:`: A4/A5, `--taste` counts, cosmetic notes (the project `CLAUDE.md` may narrow the gate further, e.g. only HIGH loops). Do not change source: Hexa patches. If the app cannot be served, write `uicheck: not measured — <reason>`; never claim a pass.
 
 ## Final pass mode
 
