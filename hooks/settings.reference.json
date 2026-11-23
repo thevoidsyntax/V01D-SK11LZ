@@ -72,7 +72,7 @@
 
   "_steps": [
     "1. git pull (or clone) this repo into ~/.claude/skills.",
-    "2. Copy hooks/{ask-on-git-push,changelog-on-commit,destructive-guard,gitleaks-guard,cache-guard,claude-resume-on-sessionstart,sven-gatekeeper,sven-telegram-notify}.js from ~/.claude/skills/hooks/ into ~/.claude/hooks/ (the active, non-tracked location).",
+    "2. Copy hooks/{ask-on-git-push,changelog-on-commit,destructive-guard,gitleaks-guard,cache-guard,claude-resume-on-sessionstart,sven-gatekeeper,sven-telegram-notify,sven-ask}.js from ~/.claude/skills/hooks/ into ~/.claude/hooks/ (the active, non-tracked location).",
     "3. On Windows, use the literal absolute path in each command string (e.g. C:\\\\Users\\\\<you>\\\\.claude\\\\hooks\\\\destructive-guard.js); ~ is written here only for portability of this reference.",
     "4. Merge permissions.deny, permissions.ask (append any entries you don't already have), and hooks.PreToolUse's 'Bash|PowerShell' matcher (add the command entries you don't already have, keep any matcher/notifier entries already in your settings.json) into your settings.json by hand, or paste your current settings.json to Claude Code and ask it to merge this file in. permissions.deny blocks Read/Edit/Write on .env* and .credentials.json anywhere on the filesystem (the Bash tool is not covered -- Bash deny rules are prefix-matched text, not a real security boundary, per Claude Code's own docs); it cannot be overridden by allow/ask or defaultMode.",
     "5. Install gitleaks (e.g. `winget install --id Gitleaks.Gitleaks` on Windows) so gitleaks-guard.js actually scans instead of failing open.",
