@@ -75,7 +75,9 @@ For each issue, provide:
 
 End every analysis with a pipeline recommendation built from the findings. Recommend only; never start the pipeline without the user's go-ahead.
 
-`/agents` owns the route: read `agents/SKILL.md` section 1 ("Pick the route"), map each finding onto the change type that table keys on, and take the phases from its route column. Do not restate the route order or the persona table here — one owner, one table.
+`/agents` owns the route: read `~/.claude/skills/agents/SKILL.md` section 1 ("Pick the route"), map each finding onto the change type that table keys on, and take the phases from its route column. Section 1 also holds the rules for several findings at once — the union of their phases, and the skip when a PRD and an ADR already exist. Do not restate the route table or the phase order here — one owner, one table.
+
+When `specs/ROADMAP.md` exists and the next epic has a PRD, the epic route in section 5 applies instead of this block.
 
 Output one block:
 
@@ -104,7 +106,7 @@ Berikutnya: E3 Reporting — specs/prd/E3-reporting.md
 
 Name the next epic as the first row with `todo` whose `Depends on` epics are all `done`. If none is ready, say which epic is blocking. When the roadmap has a position block, print its summary, verified, and next lines, then the pipeline table of the epic that is `in progress` as one line per phase (`✅ Build · Hexa`, `☐ Gate round 2 · Dina`). Read the state from there; never rebuild it from `specs/HANDOFF.md`. End with the epic route: `Run: "mulai epic E3" or /agents epic`.
 
-The epic route is `/agents epic`; its phases come from `agents/SKILL.md` section 1.
+The epic route is `/agents epic`; its phases come from `~/.claude/skills/agents/SKILL.md` section 1.
 
 ## 🎯 COMMAND HANDLERS
 
