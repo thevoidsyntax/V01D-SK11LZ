@@ -1,5 +1,5 @@
 {
-  "_readme": "Not loaded by Claude Code. Reference only: the ~/.claude/settings.json fragments needed on a machine after pulling this repo, so the hooks in hooks/ actually run, plus a permissions.deny defense-in-depth rule for secret files. settings.json itself is user-level config and is not tracked in this repo. Merge these into your own settings.json (keep whatever else is already there) rather than overwriting the whole file. Note: claude-resume-on-precompact.ps1 is a 7th hook that runs on this machine, but it belongs to a separate 'Claude Notifier' VSCode extension, not this repo -- it is not covered here and does not sync via git pull.",
+  "_readme": "Not loaded by Claude Code. Reference only: the ~/.claude/settings.json fragments needed on a machine after pulling this repo, so the hooks in hooks/ actually run, plus a permissions.deny defense-in-depth rule for secret files. settings.json itself is user-level config and is not tracked in this repo. Merge these into your own settings.json (keep whatever else is already there) rather than overwriting the whole file. Note: claude-resume-on-precompact.ps1 is an extra hook that runs on this machine, but it belongs to a separate 'Claude Notifier' VSCode extension, not this repo -- it is not covered here and does not sync via git pull.",
 
   "permissions": {
     "deny": [

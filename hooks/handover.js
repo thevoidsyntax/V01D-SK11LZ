@@ -38,7 +38,7 @@ function readStdin() {
 
 function git(dir, ...a) {
   try {
-    return execFileSync('git', ['-C', dir, ...a], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+    return execFileSync('git', ['-C', dir, ...a], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trimEnd();
   } catch { return ''; }
 }
 
@@ -55,7 +55,10 @@ function contextOf(transcriptPath) {
     if (e.type !== 'assistant') continue;
     const u = e.message && e.message.usage;
     if (!u) continue;
-    tokens = (u.input_tokens || 0) + (u.cache_read_input_tokens || 0) + (u.cache_creation_input_tokens || 0);
+    const size = (u.input_tokens || 0) + (u.cache_read_input_tokens || 0) + (u.cache_creation_input_tokens || 0);
+    // An error entry carries zero usage; keep the last real request.
+    if (!size && !u.output_tokens) continue;
+    tokens = size;
     output = u.output_tokens || 0;
   }
   return { tokens, output };
@@ -71,7 +74,8 @@ function lastTestRun(transcriptPath) {
   for (const m of text.matchAll(/PASSED=(\d+)\s+FAILED=(\d+)/g)) {
     runs.push({ passed: Number(m[1]), failed: Number(m[2]) });
   }
-  for (const m of text.matchAll(/(\d+) passed \/ (\d+) failed/g)) {
+  // Not after the hook's own snapshot labels: SessionStart prints them into the transcript.
+  for (const m of text.matchAll(/(?<!Test terakhir: )(?<!Test terbaik di sesi ini: )(?<!\d)(\d+) passed \/ (\d+) failed/g)) {
     runs.push({ passed: Number(m[1]), failed: Number(m[2]) });
   }
   // Vitest summary: "Tests  1167 passed (1167)" or "Tests  1 failed | 722 passed (723)".

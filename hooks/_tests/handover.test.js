@@ -61,6 +61,36 @@ test('Stop reports the last test run and the best one when they differ', () => {
   assert.match(s, /- Test terbaik di sesi ini: 1167 passed \/ 0 failed/);
 });
 
+test('Stop ignores its own snapshot lines echoed into the transcript', () => {
+  const p = project('echo', {
+    transcript: [
+      { type: 'user', message: { content: 'Tests  10 passed (10)' } },
+      { type: 'user', message: { content: '- Test terakhir: 700 passed / 3 failed\n- Test terbaik di sesi ini: 1167 passed / 0 failed (run terakhir bisa dari salinan mutan)' } },
+    ],
+  });
+  run({ hook_event_name: 'Stop', cwd: p.dir, transcript_path: p.transcriptPath });
+  const s = fs.readFileSync(p.state, 'utf8');
+  assert.match(s, /- Test terakhir: 10 passed \/ 0 failed/);
+  assert.doesNotMatch(s, /Test terbaik/);
+});
+
+test('an assistant entry with zero usage does not reset the context size', () => {
+  const p = project('zero', { transcript: [assistant(1000, 2000, 40), assistant(0, 0, 0)] });
+  run({ hook_event_name: 'Stop', cwd: p.dir, transcript_path: p.transcriptPath });
+  assert.match(fs.readFileSync(p.state, 'utf8'), /- Context terakhir: 3000 token/);
+});
+
+test('Stop keeps the leading space of an unstaged change', () => {
+  const p = project('unstaged');
+  const f = path.join(p.dir, 'a.txt');
+  fs.writeFileSync(f, '1');
+  spawnSync('git', ['-C', p.dir, 'add', 'a.txt']);
+  spawnSync('git', ['-C', p.dir, '-c', 'user.name=t', '-c', 'user.email=t@t', 'commit', '-q', '-m', 'a']);
+  fs.writeFileSync(f, '2');
+  run({ hook_event_name: 'Stop', cwd: p.dir });
+  assert.match(fs.readFileSync(p.state, 'utf8'), /^ M a\.txt$/m);
+});
+
 test('Stop lists uncommitted files', () => {
   const p = project('dirty');
   fs.writeFileSync(path.join(p.dir, 'draft.txt'), 'x');
