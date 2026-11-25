@@ -3,7 +3,7 @@ name: agents
 description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model, routes for small changes, an epic route for roadmaps, approval pauses, artifact handoff, and an off-route escalation advisor (Sven) for a persona that is stuck"
 when_to_use: "Use when you want the persona pipeline to build or change something end-to-end (Satria, Athena, Hexa, Dina, Frans, Vika). Trigger with /agents or a request ending in 'mulai pipeline'. Also to build one epic from specs/ROADMAP.md ('kerjakan E2', 'lanjut roadmap'). For single-persona help, call that persona directly."
 metadata:
-  version: "4.16.4"
+  version: "4.16.5"
 ---
 
 # 👥 PERSONA PIPELINE — SATRIA · ATHENA · HEXA · DINA · FRANS · VIKA
@@ -51,6 +51,8 @@ Rules that override the table:
 - PRIBADI new work, epics included, stays Hexa → Dina. Satria joins only when the request has no acceptance criteria; Athena only when the request leaves the contract or schema undefined; Frans and Vika only when the request asks for Docker, CI, migrations, or docs.
 - A migration adds Frans.
 - Any code change keeps Dina. Dina is never skipped when code changed.
+- A scan that reports several findings maps each one to a row of the table, then unions the phases: drop the phases no finding needs and keep them in this order: Satria → Athena → Hexa → Dina → Frans → Vika.
+- A PRD and an ADR that already exist skip Satria and Athena: start at Hexa. The `/autor new` wizard stops after Satria writes the PRD, so its recommendation must not name Satria again.
 - Every Hexa phase runs `/tdd`: a behavior change starts with a failing test, and the HANDOFF entry carries the red-green evidence.
 
 ```text
