@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.4.0] - 2026-11-25
+
+This release adds the `/sven` escalation advisor, the Sven gatekeeper and Telegram hooks, destructive-command and secret guards, a DDD default and the epic archive in `/agents`, and a language gate measured by a repeatable Dina eval.
+
 ### Removed
 - **The persona pipeline dashboard is gone.** A separate Python script rendered the ROADMAP pipeline table and the token cost per phase into one HTML page; `/autor dashboard` refreshed it, `/autor status` read a cost line from it, and `/agents` re-ran it after every phase. The user does not want it, so the whole feature was reverted to the state before it existed (the dashboard script, its folder `D:\Project\persona-dashboard`, and the `PERSONA_DASHBOARD` variable in `~/.claude/settings.json` are all removed; the Claude Relay monitor lost its "Buka dashboard pipeline" menu entry). What stays is the cheap half: each phase still appends `<n>K token, <m> menit` to its row in `specs/ROADMAP.md`, read from the usage the Agent tool reports, so the cost is on record without any tool to read it. `/autor` 3.12.1, `/agents` 4.12.2.
 
@@ -89,7 +93,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`changelog-on-commit.js` misread the commit subject from a bash heredoc or PowerShell here-string `-m`.** `git commit -m "$(cat <<'EOF' ... EOF)"` and `git commit -m @'...'@` both got matched by the plain `-m "..."` branch first, which grabbed the literal `$(cat <<'EOF` / `@` text as the subject instead of the real first line, so the hook treated real `docs:`/`chore:` commits as typeless and denied them. `commitSubject()` now tries the bash heredoc-in-substitution form and the PowerShell here-string form before falling back to plain `-m` and `-F -`. 4 regression tests added (2 bash heredoc, 2 PowerShell here-string).
 
 ### Rollback
-- No schema change. Go back to 4.3.1: `git checkout v4.3.1`, or `git revert` this commit.
+- No schema change. Go back to 4.3.1: `git checkout v4.3.1`, or `git revert v4.3.1..HEAD`.
 
 ## [4.3.1] - 2026-10-27
 
@@ -473,7 +477,8 @@ Found by the Sonnet harness run of this release:
 
 | Version | Status |
 |---------|--------|
-| 4.3.1 | Current |
+| 4.4.0 | Current |
+| 4.3.1 | Previous |
 | 4.3.0 | Previous |
 | 4.2.0 | Previous |
 | 4.1.0 | Previous |
