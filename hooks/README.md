@@ -1,6 +1,6 @@
 # Hooks user-level
 
-Delapan hook Claude Code untuk user-level (`~/.claude/hooks/`). Repo ini menyimpan sumbernya supaya tidak hilang; masih tidak ada installer. Pasang manual.
+Hook Claude Code untuk user-level (`~/.claude/hooks/`). Repo ini menyimpan sumbernya supaya tidak hilang; masih tidak ada installer. Pasang manual.
 
 | Hook | Event | Fungsi |
 |---|---|---|
@@ -67,4 +67,4 @@ Blok `permissions.ask` wajib: `ask-on-git-push.js` hanya menolak push yang memak
 node --test "$HOME/.claude/skills/hooks/_tests/*.test.js"
 ```
 
-Tes menguji salinan di repo ini (`__dirname/..`), bukan salinan aktif di `~/.claude/hooks/` — path itu, bukan `~/.claude/hooks/_tests/`, yang sebenarnya ada. Node 22 butuh glob, bukan nama folder. 97 kasus (pipe test: JSON hook input, bukan perintah shell).
+Tes menguji salinan di repo ini (`__dirname/..`), bukan salinan aktif di `~/.claude/hooks/` — path itu, bukan `~/.claude/hooks/_tests/`, yang sebenarnya ada. Node 22 butuh glob, bukan nama folder. 118 kasus (pipe test: JSON hook input, bukan perintah shell).

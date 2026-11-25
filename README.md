@@ -99,9 +99,9 @@ Tiga prinsip yang menutup kebiasaan bawaan model, diturunkan dari [andrej-karpat
 
 ## Hooks user-level
 
-Folder `hooks/` menyimpan enam hook Claude Code yang berjalan di luar skill: `cache-guard.js` (menandai cache miss saat konteks besar atau model berganti), `ask-on-git-push.js` (menolak `git push` dengan opsi global), `changelog-on-commit.js` (menolak commit tanpa entri CHANGELOG), `destructive-guard.js` (minta konfirmasi untuk perintah yang membuang kerjaan, mis. `git reset --hard`), `gitleaks-guard.js` (menjalankan `gitleaks protect --staged` sebelum `git commit`), dan `claude-resume-on-sessionstart.js` (setelah compact, menunjuk file resume yang harus diupdate). Bukan skill dan tidak dimuat otomatis — pasangnya manual ke `~/.claude/hooks/`, caranya di `hooks/README.md`.
+Folder `hooks/` menyimpan hook Claude Code user-level yang berjalan di luar skill (penjaga cache, push, commit, perintah destruktif, secret, dan gatekeeper Sven, plus snapshot serah-terima). Tabel lengkap dan saklarnya ada di `hooks/README.md`. Bukan skill dan tidak dimuat otomatis — pasangnya manual ke `~/.claude/hooks/`, caranya di `hooks/README.md`.
 
-### Kenapa hanya 15
+### Kenapa hanya 18
 
 Sebuah skill hanya dipertahankan kalau mengubah perilaku default model:
 

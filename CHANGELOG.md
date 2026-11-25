@@ -70,6 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Doc counts caught up with `/fool`: README heading "Kenapa hanya 14" → 15, and the skill table at the bottom of this file lists `fool` (Discipline 2, total 15). The `/audit` heading read `v6.2` against `6.2.1` in its frontmatter.
 
 ### Fixed
+- **Counts, lists and tokens drifted apart across the docs.** The skill count read 15 in the CHANGELOG ecosystem table and the README heading while the README, `CLAUDE.md` and `global-CLAUDE.md` said 18; the table now lists all 18 (handover, sven and pre-commit-check were missing). The README named six hooks and `hooks/README.md` eight, against ten in `hooks/`; both stopped carrying a number, and the README points at the table. The hook test count read 97 and 81, now 118. `hooks/sync-checklist.md` looped over six hook names and skipped the Sven hooks and `handover.js`; it now loops over `hooks/*.js`. `settings.reference.json` wrote a quoted `~/...`, which a POSIX shell does not expand; it writes `$HOME`. `agents/SKILL.md` wrote the HANDOFF entry as `## [RUTE]` while `smoke-test.md` and the language rule expect `[ROUTE]`: the HANDOFF entry (an artifact) is `[ROUTE]`, the block printed to chat stays `[RUTE]`, and `epic.md` now says the same. `/agents` 4.16.2.
 - **`/sven` contradicted itself twice.** It told Sven to answer a gatekeeper block with `APPROVED`/`REVISED` while the hard rules said he never writes `APPROVED`, and to ask the owner through `sven-ask.js` and wait while another rule said he asks the user nothing mid-consult. The first rule now applies to the pipeline (no `STATUS:` in the HANDOFF entry; consult verdicts live in the memo and are advice), the second names the one exception (the closing step of `NEED_USER_DECISION`). `/sven` 1.2.1.
 - **`handover.js` ran on every turn but lived only in `~/.claude/hooks/`.** The hook behind `/handover` (snapshot to `specs/.state.md` on `Stop`, printed on `SessionStart`, a size warning on `UserPromptSubmit`) was wired in `settings.json` but absent from this repo: no source, no test, no mention in `hooks/README.md`, `CLAUDE.md` or `settings.reference.json`, so a fresh machine lost the handover without any sign why. It is now in `hooks/` byte for byte, with 7 tests (snapshot content, last test run, uncommitted files, `SessionStart` print and empty case, size warning, bad stdin), and listed in all three places. `/handover` also gained the `when_to_use` line every skill needs. 118 hook tests pass. `/handover` 1.0.1.
 - **The Sven gatekeeper did not guard the skills, and missed `Dockerfile` and `CLAUDE.md` off Windows.** It asked before editing `CLAUDE.md` because every agent reads it, but not before editing `~/.claude/skills/**`, which every persona is told to read; that is how project state reached `agents/progress.md`. Files under `.claude/skills/` now ask. Path matching was also lowercased only on win32 while the rules compare against `dockerfile` and `claude.md`, so on Linux and macOS `Dockerfile`, `CLAUDE.md` and `Docker-Compose.yml` passed unchecked; matching is now case-insensitive everywhere. 2 tests added (111 hook tests pass). The installed copy in `~/.claude/hooks/` needs the same file to take effect.
@@ -493,12 +494,12 @@ Found by the Sonnet harness run of this release:
 
 | Category | Count | Skills |
 |----------|-------|--------|
-| Core | 3 | autor, agents, audit |
-| Personas | 6 | satria, athena, hexa, dina, frans, vika |
+| Core | 4 | autor, agents, audit, handover |
+| Personas | 7 | satria, athena, hexa, dina, frans, vika, sven (off-route) |
 | Discipline | 2 | tdd, fool |
 | Taste | 3 | ponytail, anti-slop, impeccable |
-| Capability | 1 | uicheck |
-| **Total** | **15** | The 127 other skills are archived at tag `skills-v1-full` |
+| Capability | 2 | uicheck, pre-commit-check |
+| **Total** | **18** | The 127 other skills are archived at tag `skills-v1-full` |
 
 ---
 

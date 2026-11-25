@@ -45,7 +45,7 @@ Angka `<remote-saja>` di sini **wajar besar dan bukan sinyal masalah** — itu c
 `~/.claude/hooks/*.js` adalah salinan **aktif** yang benar-benar dijalankan Claude Code; `~/.claude/skills/hooks/*.js` adalah sumbernya di repo ini. `git pull` tidak pernah menyentuh yang aktif, jadi kalau isinya beda, salah satu sisi punya perubahan yang belum ikut tersinkron:
 
 ```bash
-for f in ask-on-git-push changelog-on-commit destructive-guard gitleaks-guard cache-guard claude-resume-on-sessionstart; do
+for f in $(cd ~/.claude/skills/hooks && ls *.js | sed "s/\.js$//"); do
   cmp -s ~/.claude/skills/hooks/$f.js ~/.claude/hooks/$f.js || echo "BEDA/TIDAK ADA: $f.js"
 done
 ```
@@ -62,17 +62,17 @@ Jangan `checkout main` kalau worktree-nya kotor — itu memaksa commit/stash WIP
 cd ~/.claude/skills
 git worktree add ~/skills-main origin/main
 
-for f in ask-on-git-push changelog-on-commit destructive-guard gitleaks-guard cache-guard claude-resume-on-sessionstart; do
+for f in $(cd ~/skills-main/hooks && ls *.js | sed "s/\.js$//"); do
   cmp -s ~/skills-main/hooks/$f.js ~/.claude/hooks/$f.js || echo "BEDA/BARU: $f.js"
 done
 # untuk tiap yang BEDA (bukan cuma BARU): diff -u ~/.claude/hooks/$f.js ~/skills-main/hooks/$f.js dulu,
 # dan kalau salinan aktif punya perubahan unik, bawa itu ke repo sebelum ditimpa.
 
-for f in ask-on-git-push changelog-on-commit destructive-guard gitleaks-guard cache-guard claude-resume-on-sessionstart; do
+for f in $(cd ~/skills-main/hooks && ls *.js | sed "s/\.js$//"); do
   cp ~/skills-main/hooks/$f.js ~/.claude/hooks/
 done
 
-cd ~/skills-main/hooks/_tests && node --test *.test.js   # harus 81 lolos
+cd ~/skills-main/hooks/_tests && node --test *.test.js   # harus 118 lolos
 cd - >/dev/null
 
 # merge ~/skills-main/hooks/settings.reference.json ke settings.json manual (lihat bagian 4)
@@ -87,5 +87,5 @@ Saat branch fitur ini nanti siap digabung: commit WIP dulu, baru `git merge orig
 
 - Merge `hooks/settings.reference.json` ke `settings.json` mesin itu dengan tangan (atau tempel isinya ke Claude Code dan minta tolong di-merge). Di Windows, tiap command hook pakai path absolut (`C:\\Users\\<kamu>\\.claude\\hooks\\...`), bukan `~/...`.
 - Pasang gitleaks kalau belum (`winget install --id Gitleaks.Gitleaks` di Windows) — tanpa itu `gitleaks-guard.js` fail-open.
-- Jalankan test dari dalam folder `_tests` dengan glob tak di-quote, bukan path ter-quote dari luar (path ter-quote diam-diam cocok 0 file, hasilnya "0 lolos" tanpa error): `cd ~/.claude/skills/hooks/_tests && node --test *.test.js`. Harus 81 lolos.
+- Jalankan test dari dalam folder `_tests` dengan glob tak di-quote, bukan path ter-quote dari luar (path ter-quote diam-diam cocok 0 file, hasilnya "0 lolos" tanpa error): `cd ~/.claude/skills/hooks/_tests && node --test *.test.js`. Harus 118 lolos.
 - Restart Claude Code supaya `settings.json` dan hook baru benar-benar terbaca.
