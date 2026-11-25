@@ -60,17 +60,10 @@ Status is `✅` done, `❌` failed or rejected, `☐` not done. The `Status` col
 
 ## Parallel batches
 
-Parallel agents do not write these files, for the reason they do not write `specs/HANDOFF.md`: two writers lose each other's edit. Each ends its reply with the ROADMAP row it would write (`| Stage | Persona | Status | Notes |`); the orchestrator applies the rows one after another, then updates the position block once.
+Parallel agents do not write these files, for the reason they do not write `specs/HANDOFF.md`: two writers lose each other's edit. Each writes the ROADMAP row it would write (`| Stage | Persona | Status | Notes |`) as the last line of its entry file in `specs/.pending/`; the orchestrator applies the rows one after another, then updates the position block once.
 
 ## Check by the orchestrator
 
 After each phase `agents/SKILL.md` checks that the persona's ROADMAP row changed (`git diff --stat -- specs/ROADMAP.md` is not empty). If a persona forgot, the orchestrator writes the row from that persona's HANDOFF entry. That is a documentation fix, not a reason to redo the phase.
 
 Then add the phase's cost to the end of that row's `Notes`: `<n>K token, <m> min`, taken from the usage the Agent result or its completion notice reports (`subagent_tokens`, `duration_ms`). No usage reported: write nothing; never estimate. One row per spawn, so the cost per persona and per epic can be read from this table.
-
-## 2026-11-23 — Dina gate E3 (PHASE 54)
-
-- ROADMAP W7 `✅`, Gerbang Dina `✅` (APPROVED).
-- Audit ronde 13: 0 CRITICAL, 0 HIGH baru, 3 MEDIUM (T-1 applyStock Error carry-over, T-2 next/postcss dependency, T-3 app-role.ts timing), 0 LOW baru, 0 INFO baru.
-- Test: typecheck 0, lint 0 error, unit 1171, component 674, integrasi 808, e2e 65/65.
-- Komit: `923f496` (CHANGELOG + AUDIT), `ca8ace8` (docs W7), `089503c` (feat W7).
