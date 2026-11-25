@@ -207,3 +207,15 @@ Two harness fixes came out of this matrix, both in the scorer and both needed be
 Both fixes were verified by re-scoring the archived audits of the earlier matrices: the v10 matrix goes from 7/9 to 8/9 (B-1 still fails, correctly), and the v11 matrix scores 9/9.
 
 What this matrix does not prove: the route's reaction to a `REJECTED`, and the pipeline as a whole. Those belong to `agents/smoke-test.md`. And it measures `/dina` 3.9.5 on one fixture; it says nothing about any other version.
+
+## Re-run on `/dina` 3.9.6
+
+Run on 2026-11-25: `/dina` 3.9.6, fixture v11, one run per case through `dina/eval-run.sh`, scored by `dina/eval-verify.py`.
+
+| Run | Verdict | Status line and findings | Cost | Duration | Turns |
+|-----|---------|--------------------------|------|----------|-------|
+| A | **pass** | REJECTED, HIGH on `specs/NOTES.md:1-6` (language gate) | $0.36 | 49 s | 13 |
+| B | **pass** | APPROVED, no finding on the old UI marker | $0.39 | 67 s | 13 |
+| C | **pass** | APPROVED, no finding on the glossary | $0.37 | 59 s | 16 |
+
+3 of 3 pass, $1.11 in total. One run per case, so this confirms 3.9.6 did not regress; it does not replace the 9-run matrix above.
