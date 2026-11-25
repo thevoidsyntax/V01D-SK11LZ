@@ -72,7 +72,7 @@ for f in $(cd ~/skills-main/hooks && ls *.js | sed "s/\.js$//"); do
   cp ~/skills-main/hooks/$f.js ~/.claude/hooks/
 done
 
-cd ~/skills-main/hooks/_tests && node --test *.test.js   # harus 121 lolos
+cd ~/skills-main/hooks/_tests && node --test *.test.js   # harus 123 lolos
 cd - >/dev/null
 
 # merge ~/skills-main/hooks/settings.reference.json ke settings.json manual (lihat bagian 4)

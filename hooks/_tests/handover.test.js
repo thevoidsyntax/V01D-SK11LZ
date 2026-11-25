@@ -80,6 +80,18 @@ test('an assistant entry with zero usage does not reset the context size', () =>
   assert.match(fs.readFileSync(p.state, 'utf8'), /- Context terakhir: 3000 token/);
 });
 
+test('a zero-input entry with output tokens does not reset the context size', () => {
+  const p = project('zero-out', { transcript: [assistant(1000, 2000, 40), assistant(0, 0, 7)] });
+  run({ hook_event_name: 'Stop', cwd: p.dir, transcript_path: p.transcriptPath });
+  assert.match(fs.readFileSync(p.state, 'utf8'), /- Context terakhir: 3000 token/);
+});
+
+test('a thousands separator does not turn 1,167 passed into 167 passed', () => {
+  const p = project('comma', { transcript: [{ type: 'user', message: { content: '1,167 passed / 0 failed' } }] });
+  run({ hook_event_name: 'Stop', cwd: p.dir, transcript_path: p.transcriptPath });
+  assert.match(fs.readFileSync(p.state, 'utf8'), /- Test terakhir: tidak diketahui/);
+});
+
 test('Stop keeps the leading space of an unstaged change', () => {
   const p = project('unstaged');
   const f = path.join(p.dir, 'a.txt');

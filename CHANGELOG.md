@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **A second review of the 4.4.0 fixes found five gaps; all are closed.** `hexa/SKILL.md` still told a parallel Hexa to end its reply with the full entry, against `agents/SKILL.md` (entry to `specs/.pending/<unit>.md`, reply in at most 5 lines); it now writes the entry and its ROADMAP row to the pending files. The prompt in `agents/SKILL.md` now names the `.row` file and what `<unit>` is for the Frans and Vika pair, and says the orchestrator appends the two missing `.gitignore` lines before the first parallel batch (nothing did, so the scope check would have flagged the pending files as strays). `handover.js` skipped only all-zero usage entries; one with output tokens but no input still reset the context size to 0, so it now skips any entry without input. A thousands separator turned `1,167 passed` into `167 passed`; the digits now need a non-digit, non-comma before them. 2 regression tests added (123 hook tests). Also dropped a project name from the example in `agents/progress.md`, and the `autor/SKILL.md` banner read v3.12.2 against version 3.14.x. `/hexa` 1.11.1, `/agents` 4.16.4, `/autor` 3.14.2.
+
 ## [4.4.0] - 2026-11-25
 
 This release adds the `/sven` escalation advisor, the Sven gatekeeper and Telegram hooks, destructive-command and secret guards, a DDD default and the epic archive in `/agents`, and a language gate measured by a repeatable Dina eval.

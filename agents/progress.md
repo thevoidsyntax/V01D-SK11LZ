@@ -1,6 +1,6 @@
 # `/agents` progress docs — where the project stands, after every phase
 
-Read by every persona before its HANDOFF entry, and by `agents/SKILL.md` around each phase. `specs/HANDOFF.md` is an append-only history: it cannot answer "where are we" without reading all of it (VentroPoS E1: 1,374 lines). The files below can, from one screen.
+Read by every persona before its HANDOFF entry, and by `agents/SKILL.md` around each phase. `specs/HANDOFF.md` is an append-only history: it cannot answer "where are we" without reading all of it. The files below can, from one screen.
 
 | File | Holds | How it changes |
 |------|-------|----------------|

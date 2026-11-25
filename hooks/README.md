@@ -67,4 +67,4 @@ Blok `permissions.ask` wajib: `ask-on-git-push.js` hanya menolak push yang memak
 node --test "$HOME/.claude/skills/hooks/_tests/*.test.js"
 ```
 
-Tes menguji salinan di repo ini (`__dirname/..`), bukan salinan aktif di `~/.claude/hooks/` — path itu, bukan `~/.claude/hooks/_tests/`, yang sebenarnya ada. Node 22 butuh glob, bukan nama folder. 121 kasus (pipe test: JSON hook input, bukan perintah shell).
+Tes menguji salinan di repo ini (`__dirname/..`), bukan salinan aktif di `~/.claude/hooks/` — path itu, bukan `~/.claude/hooks/_tests/`, yang sebenarnya ada. Node 22 butuh glob, bukan nama folder. 123 kasus (pipe test: JSON hook input, bukan perintah shell).
