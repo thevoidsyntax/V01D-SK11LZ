@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **`/autor` no longer keeps copies of state it does not own.** The version banner in `autor/SKILL.md` was a second copy of `metadata.version`, and three version bumps shipped with it stale (`b90dd57` 3.14.0, `d53d8af` 3.14.1, `b95c30b` 3.14.2, while the banner still read v3.12.2); both hardcoded copies are gone, so `metadata.version` is the only place the version lives and the printed banner reads it. The file also claimed that "only six skills exist" — a count that stopped being true when `pre-commit-check` and `handover` were added on 2026-11-18, and that `README.md` owns anyway; the inventory table is gone and the "do not preload" rule stays. Section 4 carried its own finding→persona table next to the authoritative route table in `agents/SKILL.md` section 1, and the two disagreed in three ways: `autor` had no scale dimension, it triggered Frans and Vika on project state where `/agents` triggers them on the request, and its legacy row dropped Dina. The table is now a pointer, and the epic route in section 5 lost its restated phases too, so `/agents` is the only owner of the route. No command was removed, no file was added, and `/autor scan` still reads `graphify-out/graph.json`. `/autor` 3.14.3.
+
 ## [4.4.1] - 2026-11-25
 
 The 4.4.0 fixes hold up under a second review, and the `sven-ask` test harness no longer flakes when the whole suite runs together.

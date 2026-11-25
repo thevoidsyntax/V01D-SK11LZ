@@ -3,32 +3,21 @@ name: autor
 description: "Project intelligence: health scan, new-project wizard, roadmap progress, release cutting, and the 6-persona pipeline recommendation"
 when_to_use: "Use when starting a new project, analyzing existing codebase, cutting a release, or needing project intelligence. Run /autor scan for project health check, /autor new for fresh projects, /autor release to cut a version."
 metadata:
-  version: "3.14.2"
+  version: "3.14.3"
 ---
 
-# AUTOR v3.14.2 - PROJECT INTELLIGENCE
+# AUTOR - PROJECT INTELLIGENCE
 
 ## 🚀 SKILLS
 
-Stack, security, testing, git, and docs knowledge come from the model itself plus the project's `CLAUDE.md` and `specs/`; there are no skills for them. Besides the personas, `/agents`, and `/audit`, only six skills exist, and each changes a default the model would otherwise get wrong:
-
-| Situation | Load |
-|-----------|------|
-| About to write new code | `/ponytail` |
-| Writing or changing behavior | `/tdd` |
-| Building or changing UI | `/impeccable` |
-| A UI change that must be proven in a browser | `/uicheck` |
-| Writing user-facing copy, docs, or comments | `/anti-slop` |
-| A plan or decision that must be stress-tested before it is built | `/fool` |
-
-Do not preload them; load one when the current step needs it.
+Stack, security, testing, git, and docs knowledge come from the model itself plus the project's `CLAUDE.md` and `specs/`; there are no skills for them. The other skills in this pack load themselves when their step comes: each skill's own `when_to_use` says when it applies, and `README.md` holds the list of what exists. Do not preload them; load one when the current step needs it.
 
 Graphify is not one of them: it is a local third-party tool installed outside this repo. When the project has `graphify-out/graph.json`, the scan uses it to map the codebase; when it does not, the scan skips it and never builds a graph.
 
-**On `/autor`, first respond with:**
+**On `/autor`, first respond with the banner below, taking the version from `metadata.version` above — do not write a second copy of it:**
 
 ```
-AUTOR v3.14.2
+AUTOR v<version from metadata.version>
 
 Available Commands:
   /autor              # Analyze current project
@@ -86,17 +75,9 @@ For each issue, provide:
 
 End every analysis with a pipeline recommendation built from the findings. Recommend only; never start the pipeline without the user's go-ahead.
 
-| Finding | Persona |
-|---------|---------|
-| Requirements unclear, no PRD or acceptance criteria | `/satria` |
-| Architecture decision pending, no ADR, API/data contract undefined | `/athena` |
-| Code exists but was never written down (no PRD, ADR, or tests) | `/athena` in legacy mode, before `/hexa` |
-| Feature missing, no tests or low coverage | `/hexa` |
-| No audit yet, security or concurrency findings | `/dina` (gate) |
-| No CI/CD, Dockerfile, or migrations where the project needs them | `/frans` |
-| README, CHANGELOG, or API docs missing or stale | `/vika` |
+`/agents` owns the route: read `agents/SKILL.md` section 1 ("Pick the route"), map each finding onto the change type that table keys on, and take the phases from its route column. Do not restate the route order or the persona table here — one owner, one table.
 
-Keep the order Satria → Athena → Hexa → Dina → Frans → Vika, skip personas with no matching finding, and skip Satria/Athena when an approved plan already covers PRD and ADR. Apply the route rules from `/agents`: a contract or schema change adds Athena, a migration adds Frans, and any code change keeps Dina. When `specs/ROADMAP.md` exists and the next epic has a PRD, the epic route applies instead (KLIEN: Athena → Hexa → Dina → Frans → Vika; PRIBADI: Hexa → Dina, plus the phases the findings add). Output one block:
+Output one block:
 
 ```text
 PIPELINE: Hexa → Dina → Vika
@@ -123,7 +104,7 @@ Berikutnya: E3 Reporting — specs/prd/E3-reporting.md
 
 Name the next epic as the first row with `todo` whose `Depends on` epics are all `done`. If none is ready, say which epic is blocking. When the roadmap has a position block, print its summary, verified, and next lines, then the pipeline table of the epic that is `in progress` as one line per phase (`✅ Build · Hexa`, `☐ Gate round 2 · Dina`). Read the state from there; never rebuild it from `specs/HANDOFF.md`. End with the epic route: `Run: "mulai epic E3" or /agents epic`.
 
-The epic route is `/agents epic`: one epic per run (KLIEN: Athena → Hexa → Dina → Frans → Vika; PRIBADI: Hexa → Dina plus what the route rules add).
+The epic route is `/agents epic`; its phases come from `agents/SKILL.md` section 1.
 
 ## 🎯 COMMAND HANDLERS
 
@@ -169,4 +150,4 @@ The epic route is `/agents epic`: one epic per run (KLIEN: Athena → Hexa → D
 
 ## Pipeline
 
-`/agents` runs the six personas (Satria → Athena → Hexa → Dina → Frans → Vika) and picks the shortest route; models, pauses, and the gate loop are defined in `agents/SKILL.md`.
+`/agents` runs the pipeline and picks the shortest route; its phases, models, pauses, and the gate loop are defined in `agents/SKILL.md`.
