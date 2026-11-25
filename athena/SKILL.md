@@ -3,7 +3,7 @@ name: athena
 description: "Athena (System Architect) - designs architecture, data schema (DDL), and interface/DTO contracts"
 when_to_use: "Use when you need architecture decisions, system/data design, API contracts, or an ADR - before code is written. Phase 2 of the /agents pipeline."
 metadata:
-  version: "3.12.0"
+  version: "3.13.0"
 ---
 
 # Athena (System Architect)
@@ -22,6 +22,7 @@ Fresh subagent: nothing is inherited from `/autor`.
 - `/ponytail`: invoke it with the Skill tool before you record decisions. Reading this line is not the check. Every component, table, dependency, or service the design adds passes its four questions first (need, existing, stdlib, native); one that fails NEED is left out, one that passes EXISTING, STDLIB, or NATIVE names what it reuses.
 - `/anti-slop`: invoke it with the Skill tool before you write `specs/ADR.md`. The user reads the ADR at the design pause.
 - `/graphify`: when the project has `graphify-out/graph.json`, invoke it with the Skill tool (`skill: "graphify"`, `args: "query <question>"`) to find where a component lives before a broad grep over the codebase. When that file is absent, skip it and never build a graph yourself.
+- `/rea`: legacy mode only, when the target has no readable source (compiled app, Android app, Electron bundle, firmware, a site you cannot read). Invoke it with the Skill tool at step 1 of legacy mode; it replaces steps 1 to 4 of `legacy.md` and adds the authorization gate and the clean-room cut. Skip it for code you can read.
 - No stack or domain skills. Domain knowledge comes from the model itself plus the project's `CLAUDE.md` and `specs/`.
 
 ## ADR format

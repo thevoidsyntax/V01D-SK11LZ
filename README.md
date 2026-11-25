@@ -34,7 +34,7 @@ git -C $HOME\.claude\skills push
 > git -C $HOME\.claude\skills config user.email "323514556+thevoidsyntax@users.noreply.github.com"
 > ```
 
-## Isi (18 skill)
+## Isi (19 skill)
 
 Tiap subfolder level atas = satu skill (berisi `SKILL.md`).
 
@@ -61,6 +61,7 @@ Pendukung:
 /impeccable  UI tanpa tampilan template AI: keputusan dari brief produk + checklist
 /uicheck     Verifikasi UI di browser sungguhan: overflow 360px, error konsol, label input, house style, jalur keyboard dan fokus
 /fool        Uji rencana sebelum dibangun: 5 mode (asumsi, kontra-argumen, failure mode, red team, audit bukti)
+/rea         Target tanpa source (aplikasi terkompilasi, aplikasi Android, Electron, situs): gerbang izin, observasi terbatas, spek clean-room di specs/LEGACY.md (dipanggil Athena di mode legacy)
 /handover    Serah-terima sesi: tulis section baru di specs/RESUME.md supaya sesi berikutnya lanjut dari state sebenarnya
 /pre-commit-check  Checklist sebelum commit ke repo skill ini (khusus V01D-SK11LZ)
 ```

@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **`/rea` 1.1.0: an evidence method for targets without source.** Legacy mode assumed readable code; a compiled app, Android app, Electron bundle, or website had no process. `/rea` adds an authorization gate (own, open source, authorized, or interoperability/education/preservation work; basis, target, and purpose recorded as a HANDOFF `Authorization:` line), a scoped observation workflow that records where and how each finding was shown and runs traces only in a sandbox the user confirms, and a clean-room cut: `specs/LEGACY.md` carries `OBS-*` items with `Evidence:` lines and an `## Excluded` section (code, identifiers, UI copy, assets), while raw tool output stays in a scratch folder outside the repo. It targets the REA MCP server (`morluto/rea`), which the user installs; the skill never installs it and never invents its tool names.
+
+### Changed
+- **Athena 3.13.0** invokes `/rea` in legacy mode when the target has no readable source; `athena/legacy.md` hands steps 1 to 4 to `/rea` and gains an optional `## Excluded` section.
+- **Dina 3.10.0** checks `/rea` output as a blocking finding: an `OBS-` item without `Evidence:`, a missing `## Excluded`, a missing `Authorization:` line, or a verbatim string, identifier, asset, or code fragment from the target found in `src/`, `specs/`, or `docs/` (HIGH). When the target cannot be compared, the entry says `clean-room: not measured` instead of passing.
+
+### Rollback
+- Delete `rea/`, remove the `/rea` line from `athena/SKILL.md`, and the hand-off sentence and the optional `## Excluded` section from `athena/legacy.md`, drop the `/rea` bullet from `dina/SKILL.md` step 4, and restore the skill count (18) in `README.md` and `CLAUDE.md`.
+
 ## [4.4.1] - 2026-11-25
 
 The 4.4.0 fixes hold up under a second review, and the `sven-ask` test harness no longer flakes when the whole suite runs together.

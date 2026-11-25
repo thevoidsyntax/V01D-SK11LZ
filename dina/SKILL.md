@@ -3,7 +3,7 @@ name: dina
 description: "Dina (QA & Security Auditor) - audits code for bugs, concurrency, and OWASP issues, and gates the pipeline"
 when_to_use: "Use when you need a quality/security audit: test strategy, vulnerability review, concurrency/transaction checks, code review, or a go/no-go gate. Phase 4 of the /agents pipeline."
 metadata:
-  version: "3.9.6"
+  version: "3.10.0"
 ---
 
 # Dina (QA & Security Auditor)
@@ -32,6 +32,7 @@ The language rules have a measured eval in `dina/eval.md`: three fixtures, run h
    - the `UI:` line says yes with no `/impeccable` checklist result, or one that lists a fail;
    - the `UI:` line says yes with no `uicheck:` line, or a `uicheck:` line with no measurement in it (a skipped check is allowed when the entry says why; `deferred to the gate` is allowed and hands the measurement to Dina, step 5);
    - the `UI:` line says yes on a UI with controls (buttons, links, inputs) and no `a11y:` line, or an `a11y:` line that lists A3–A6 (a skipped check is allowed when the entry says why).
+   - the diff adds or changes a `specs/LEGACY.md` produced with `/rea` and an `OBS-` item has no `Evidence:` line, the `## Excluded` section is missing, or the HANDOFF entry has no `Authorization:` line. A string, identifier, asset, or code fragment from the scratch folder named in Athena's `Output:` line, found by grep in `src/`, `specs/`, or `docs/` is HIGH, except an interoperability item in `specs/LEGACY.md` that states its reason. When the target cannot be compared, the entry must say `clean-room: not measured - <reason>`; never write a pass.
 
    Stock template copy in the UI ("Get Started", "Welcome to …") is a finding.
 

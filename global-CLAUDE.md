@@ -10,7 +10,7 @@
 
 ## 🚀 Skills System
 
-18 skill (proses + selera + alat). Pengetahuan stack/security/testing dari model + `CLAUDE.md` proyek.
+19 skill (proses + selera + alat). Pengetahuan stack/security/testing dari model + `CLAUDE.md` proyek.
 - `/autor` → health scan, `/autor new` wizard, rekomendasi pipeline
 - `/agents` → pipeline 6 persona, handoff log `specs/HANDOFF.md`
 - Persona: `/satria` PM · `/athena` SE · `/hexa` Coder · `/dina` QA & Security · `/frans` DevOps · `/vika` Writer
@@ -23,6 +23,7 @@
 - `/tdd` → test yang gagal ditulis dulu, sebelum implementasi
 - `/uicheck` → UI diverifikasi di browser sungguhan (overflow 360px, konsol, label, fokus)
 - `/fool` → uji rencana atau desain sebelum dibangun
+- `/rea` → target tanpa source (aplikasi terkompilasi, Android, Electron, situs): gerbang izin + spek clean-room ke `specs/LEGACY.md`; dipanggil Athena di mode legacy
 
 ---
 

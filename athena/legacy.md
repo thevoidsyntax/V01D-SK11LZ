@@ -6,7 +6,7 @@ Use it when: the request names an existing codebase, the PRD contradicts what th
 
 ## Workflow
 
-1. **Scope.** Bound the analysis: the whole project, or one module the request names. Write the boundary down first, so the gaps are visible.
+1. **Scope.** Bound the analysis: the whole project, or one module the request names. Write the boundary down first, so the gaps are visible. When the target has no readable source (compiled app, Android app, Electron bundle, firmware, a site you cannot read), invoke `/rea` (Skill tool) and let it replace steps 1 to 4; it adds `Evidence:` lines and an `## Excluded` section to the template below. Continue at step 5.
 2. **Map.** Structure, entry points, routes, data models, auth, external calls, config. The model's own knowledge of the stack does the reading; the map is what goes in the document.
 3. **Trace.** Follow the data flow of two or three real paths end to end, from request to storage and back. Two traced paths expose the rules that a file listing hides.
 4. **Extract.** Write the observed behavior as requirements in the same EARS shape Satria uses, but marked `OBS-<AREA>-<NNN>`. "Observed" means: this is what the code does today, not what it should do.
@@ -58,6 +58,9 @@ the system shall return a session token.
 
 ## Markers
 <TODO/FIXME found, with file and line>
+
+## Excluded
+<only with /rea: what the spec leaves out on purpose (code, identifiers, UI copy, assets), and what interoperability keeps in, with the reason>
 ```
 
 This file is an observation, not a decision. The ADR is where the decisions go; `specs/LEGACY.md` is the evidence those decisions rest on.
