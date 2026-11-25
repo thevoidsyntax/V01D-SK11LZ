@@ -1,8 +1,9 @@
 ---
 name: handover
 description: "Write the handover for the next session: phase state, first steps, open findings and lessons, so a session that dies (API error 400, full context, crash) costs nothing. Trigger: /handover, or before leaving a long task for a fresh session."
+when_to_use: "Use when the user says /handover, 'serah terima' or 'lanjut sesi baru', when the context passed 150k tokens, or when a subagent died on an API error with the work half done."
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # /handover
