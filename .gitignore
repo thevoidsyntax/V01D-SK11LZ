@@ -25,6 +25,7 @@ desktop.ini
 
 # Session resume state (ephemeral, rewritten on every compaction; not repo content)
 /RESUME.md
+/RESUME-history.md
 
 # Node modules
 node_modules/

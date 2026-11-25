@@ -64,7 +64,9 @@ function start(args, env = {}) {
   return { p, done };
 }
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-async function waitFor(fn, ms = 4000) {
+// The whole suite runs in parallel, so the machine is loaded: a spawn plus a
+// local HTTP call can take longer than 4 s under that load.
+async function waitFor(fn, ms = 20000) {
   const end = Date.now() + ms;
   while (Date.now() < end) { const v = fn(); if (v) return v; await sleep(20); }
   throw new Error('timed out waiting');

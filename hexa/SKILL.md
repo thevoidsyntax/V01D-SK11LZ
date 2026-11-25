@@ -3,7 +3,7 @@ name: hexa
 description: "Hexa (Feature Coder) - implements logic and unit tests against the ADR and contracts, stack-aware"
 when_to_use: "Use when writing the actual implementation and unit tests from a design: source code and tests that satisfy the contracts. Phase 3 of the /agents pipeline."
 metadata:
-  version: "1.11.0"
+  version: "1.11.1"
 ---
 
 # Hexa (Feature Coder)
@@ -40,7 +40,7 @@ Fresh subagent: nothing is inherited from `/autor`.
 The prompt may carry `Unit: <name>` with a list of owned files: you are one of several Hexa agents running at the same time, from the `Work units` table in `specs/ADR.md`.
 - Write only the owned files. Read anything, edit nothing else, and do not touch `specs/contracts.*`. A change you need outside your list goes under `Open:`.
 - Run only your unit's tests. `Unit: integration` wires the units together (entry point, router, shared config), then runs the whole suite.
-- Do not write `specs/HANDOFF.md` or the progress docs (`agents/progress.md`); the orchestrator applies your ROADMAP row from your reply. End your reply with your full entry, headed `## [PHASE n] Hexa (<unit>) — <UTC time>`, with the same `Ponytail:`, `TDD:`, and `UI:` lines as a normal entry, and a `Files:` line naming the files you wrote. Dina checks each unit's entry.
+- Do not write `specs/HANDOFF.md` or the progress docs (`agents/progress.md`); the orchestrator applies your ROADMAP row from `specs/.pending/<unit>.row`. Write your full entry to `specs/.pending/<unit>.md` and reply in at most 5 lines. The entry is headed `## [PHASE n] Hexa (<unit>) — <UTC time>`, with the same `Ponytail:`, `TDD:`, and `UI:` lines as a normal entry, and a `Files:` line naming the files you wrote. Dina checks each unit's entry.
 
 ## Output artifacts
 `src/*` (implementation) and `tests/*` (unit tests).

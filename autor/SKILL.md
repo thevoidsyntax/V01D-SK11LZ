@@ -3,10 +3,10 @@ name: autor
 description: "Project intelligence: health scan, new-project wizard, roadmap progress, release cutting, and the 6-persona pipeline recommendation"
 when_to_use: "Use when starting a new project, analyzing existing codebase, cutting a release, or needing project intelligence. Run /autor scan for project health check, /autor new for fresh projects, /autor release to cut a version."
 metadata:
-  version: "3.14.1"
+  version: "3.14.2"
 ---
 
-# AUTOR v3.12.2 - PROJECT INTELLIGENCE
+# AUTOR v3.14.2 - PROJECT INTELLIGENCE
 
 ## 🚀 SKILLS
 
@@ -28,7 +28,7 @@ Graphify is not one of them: it is a local third-party tool installed outside th
 **On `/autor`, first respond with:**
 
 ```
-AUTOR v3.12.2
+AUTOR v3.14.2
 
 Available Commands:
   /autor              # Analyze current project
