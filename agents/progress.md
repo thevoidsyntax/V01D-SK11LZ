@@ -60,7 +60,7 @@ Status is `✅` done, `❌` failed or rejected, `☐` not done. The `Status` col
 
 ## Parallel batches
 
-Parallel agents do not write these files, for the reason they do not write `specs/HANDOFF.md`: two writers lose each other's edit. Each ends its reply with the ROADMAP row it would write (`| Stage | Persona | Status | Notes |`); the orchestrator applies the rows one after another, then updates the position block once.
+Parallel agents do not write these files, for the reason they do not write `specs/HANDOFF.md`: two writers lose each other's edit. Each writes the ROADMAP row it would write (`| Stage | Persona | Status | Notes |`) to `specs/.pending/<unit>.row`, a file of its own beside its entry; the orchestrator applies the rows one after another, then updates the position block once.
 
 ## Check by the orchestrator
 

@@ -109,4 +109,4 @@ async function main() {
 
 if (require.main === module) main().catch(() => {}).finally(() => process.exit(0));
 
-module.exports = { parseArgs, clip };
+module.exports = { parseArgs, clip, readToken, readChatId, log };

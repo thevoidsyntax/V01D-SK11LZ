@@ -1,8 +1,9 @@
 ---
 name: handover
 description: "Write the handover for the next session: phase state, first steps, open findings and lessons, so a session that dies (API error 400, full context, crash) costs nothing. Trigger: /handover, or before leaving a long task for a fresh session."
+when_to_use: "Use when the user says /handover, 'serah terima' or 'lanjut sesi baru', when the context passed 150k tokens, or when a subagent died on an API error with the work half done."
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # /handover
@@ -30,7 +31,7 @@ is the note that tells the next session where the task stands.
 
 ## What to write
 
-Append one section to `specs/RESUME.md`, in the format of the previous one:
+Replace the current handover section of `specs/RESUME.md` (do not append: the file is not a log). Move the previous handover sections to `specs/handoff/RESUME-history.md` first, so `RESUME.md` keeps only the standing sections and one current handover. Keep the format of the previous section:
 
 - **Keadaan** - branch, commit, what is committed and what is not, the test
   count from the last run, what is proven and what is not.

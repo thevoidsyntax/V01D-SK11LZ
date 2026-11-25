@@ -3,7 +3,7 @@ name: autor
 description: "Project intelligence: health scan, new-project wizard, roadmap progress, release cutting, and the 6-persona pipeline recommendation"
 when_to_use: "Use when starting a new project, analyzing existing codebase, cutting a release, or needing project intelligence. Run /autor scan for project health check, /autor new for fresh projects, /autor release to cut a version."
 metadata:
-  version: "3.14.0"
+  version: "3.14.1"
 ---
 
 # AUTOR v3.12.2 - PROJECT INTELLIGENCE

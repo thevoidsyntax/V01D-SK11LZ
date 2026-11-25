@@ -107,7 +107,7 @@ function normalizedPath(p) {
   if (!p) return '';
   const abs = path.isAbsolute(p) ? p : path.resolve(process.cwd(), p);
   const norm = abs.replace(/\\/g, '/');
-  return process.platform === 'win32' ? norm.toLowerCase() : norm;
+  return norm.toLowerCase();
 }
 
 function criticalFileReason(filePath) {
@@ -123,6 +123,8 @@ function criticalFileReason(filePath) {
   if (base.startsWith('docker-compose')) return 'it defines the service topology';
   if (base === 'schema.prisma') return 'it is the database schema';
   if (base === 'claude.md') return 'it is the project instruction file every agent reads';
+  const dot = parts.indexOf('.claude');
+  if (dot !== -1 && parts[dot + 1] === 'skills') return 'it is a skill file every persona reads, in every project';
   if (parts.includes('migrations')) return 'it changes the database schema history';
   if (parts.includes('auth') || parts.includes('middleware') || base.startsWith('middleware.')) {
     return 'it sits on the authentication or request path';

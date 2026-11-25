@@ -1,5 +1,5 @@
 {
-  "_readme": "Not loaded by Claude Code. Reference only: the ~/.claude/settings.json fragments needed on a machine after pulling this repo, so the 6 hooks in hooks/ actually run, plus a permissions.deny defense-in-depth rule for secret files. settings.json itself is user-level config and is not tracked in this repo. Merge these into your own settings.json (keep whatever else is already there) rather than overwriting the whole file. Note: claude-resume-on-precompact.ps1 is a 7th hook that runs on this machine, but it belongs to a separate 'Claude Notifier' VSCode extension, not this repo -- it is not covered here and does not sync via git pull.",
+  "_readme": "Not loaded by Claude Code. Reference only: the ~/.claude/settings.json fragments needed on a machine after pulling this repo, so the hooks in hooks/ actually run, plus a permissions.deny defense-in-depth rule for secret files. settings.json itself is user-level config and is not tracked in this repo. Merge these into your own settings.json (keep whatever else is already there) rather than overwriting the whole file. Note: claude-resume-on-precompact.ps1 is an extra hook that runs on this machine, but it belongs to a separate 'Claude Notifier' VSCode extension, not this repo -- it is not covered here and does not sync via git pull.",
 
   "permissions": {
     "deny": [
@@ -40,23 +40,24 @@
       {
         "matcher": "Bash|PowerShell",
         "hooks": [
-          { "type": "command", "command": "node \"~/.claude/hooks/ask-on-git-push.js\"" },
-          { "type": "command", "command": "node \"~/.claude/hooks/changelog-on-commit.js\"" },
-          { "type": "command", "command": "node \"~/.claude/hooks/destructive-guard.js\"" },
-          { "type": "command", "command": "node \"~/.claude/hooks/gitleaks-guard.js\"" }
+          { "type": "command", "command": "node \"$HOME/.claude/hooks/ask-on-git-push.js\"" },
+          { "type": "command", "command": "node \"$HOME/.claude/hooks/changelog-on-commit.js\"" },
+          { "type": "command", "command": "node \"$HOME/.claude/hooks/destructive-guard.js\"" },
+          { "type": "command", "command": "node \"$HOME/.claude/hooks/gitleaks-guard.js\"" }
         ]
       },
       {
         "matcher": "Bash|PowerShell|Write|Edit|MultiEdit|AskUserQuestion",
         "hooks": [
-          { "type": "command", "command": "node \"~/.claude/hooks/sven-gatekeeper.js\"" }
+          { "type": "command", "command": "node \"$HOME/.claude/hooks/sven-gatekeeper.js\"" }
         ]
       }
     ],
     "UserPromptSubmit": [
       {
         "hooks": [
-          { "type": "command", "command": "node \"~/.claude/hooks/cache-guard.js\"" }
+          { "type": "command", "command": "node \"$HOME/.claude/hooks/cache-guard.js\"" },
+          { "type": "command", "command": "node \"$HOME/.claude/hooks/handover.js\"" }
         ]
       }
     ],
@@ -64,7 +65,19 @@
       {
         "matcher": "compact",
         "hooks": [
-          { "type": "command", "command": "node \"~/.claude/hooks/claude-resume-on-sessionstart.js\"" }
+          { "type": "command", "command": "node \"$HOME/.claude/hooks/claude-resume-on-sessionstart.js\"" }
+        ]
+      },
+      {
+        "hooks": [
+          { "type": "command", "command": "node \"$HOME/.claude/hooks/handover.js\"" }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node \"$HOME/.claude/hooks/handover.js\"" }
         ]
       }
     ]
@@ -72,8 +85,8 @@
 
   "_steps": [
     "1. git pull (or clone) this repo into ~/.claude/skills.",
-    "2. Copy hooks/{ask-on-git-push,changelog-on-commit,destructive-guard,gitleaks-guard,cache-guard,claude-resume-on-sessionstart,sven-gatekeeper,sven-telegram-notify}.js from ~/.claude/skills/hooks/ into ~/.claude/hooks/ (the active, non-tracked location).",
-    "3. On Windows, use the literal absolute path in each command string (e.g. C:\\\\Users\\\\<you>\\\\.claude\\\\hooks\\\\destructive-guard.js); ~ is written here only for portability of this reference.",
+    "2. Copy hooks/{ask-on-git-push,changelog-on-commit,destructive-guard,gitleaks-guard,cache-guard,claude-resume-on-sessionstart,sven-gatekeeper,sven-telegram-notify,sven-ask,handover}.js from ~/.claude/skills/hooks/ into ~/.claude/hooks/ (the active, non-tracked location).",
+    "3. On Windows, use the literal absolute path in each command string (e.g. C:\\\\Users\\\\<you>\\\\.claude\\\\hooks\\\\destructive-guard.js); $HOME is written here so the quoted path expands in a POSIX shell (a quoted ~ does not).",
     "4. Merge permissions.deny, permissions.ask (append any entries you don't already have), and hooks.PreToolUse's 'Bash|PowerShell' matcher (add the command entries you don't already have, keep any matcher/notifier entries already in your settings.json) into your settings.json by hand, or paste your current settings.json to Claude Code and ask it to merge this file in. permissions.deny blocks Read/Edit/Write on .env* and .credentials.json anywhere on the filesystem (the Bash tool is not covered -- Bash deny rules are prefix-matched text, not a real security boundary, per Claude Code's own docs); it cannot be overridden by allow/ask or defaultMode.",
     "5. Install gitleaks (e.g. `winget install --id Gitleaks.Gitleaks` on Windows) so gitleaks-guard.js actually scans instead of failing open.",
     "6. Validate: node -e \"JSON.parse(require('fs').readFileSync(process.env.USERPROFILE + '/.claude/settings.json'))\""

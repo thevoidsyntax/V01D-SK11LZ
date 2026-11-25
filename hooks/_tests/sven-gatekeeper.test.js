@@ -73,6 +73,29 @@ test('a mention inside a quoted string is prose, not a command', () => {
   assert(silent(run(bash('git commit -m "docker compose down -v docs"'))));
 });
 
+test('files under .claude/skills ask: every persona reads them', () => {
+  for (const f of ['.claude/skills/agents/progress.md', '.claude/skills/dina/SKILL.md', '.claude/skills/hooks/sven-gatekeeper.js']) {
+    const r = run(write(path.join(tmp, f)));
+    assert.strictEqual(decision(r), 'ask', f);
+    assert.match(r.json.hookSpecificOutput.permissionDecisionReason, /skill/i, f);
+  }
+});
+
+test('critical file names match whatever the platform casing is', () => {
+  const { criticalFileReason } = require(HOOK);
+  const real = Object.getOwnPropertyDescriptor(process, 'platform');
+  try {
+    for (const platform of ['linux', 'darwin', 'win32']) {
+      Object.defineProperty(process, 'platform', { value: platform });
+      for (const f of ['Dockerfile', 'Docker-Compose.yml', 'CLAUDE.md', 'Schema.prisma']) {
+        assert.ok(criticalFileReason(path.join(tmp, f)), `${platform} ${f}`);
+      }
+    }
+  } finally {
+    Object.defineProperty(process, 'platform', real);
+  }
+});
+
 test('critical files ask, with an ActionHash', () => {
   for (const f of ['.env', 'Dockerfile', 'docker-compose.yml', 'prisma/schema.prisma', 'CLAUDE.md', 'db/migrations/001.sql', 'src/auth/login.ts', 'src/middleware.ts']) {
     const r = run(write(path.join(tmp, f)));

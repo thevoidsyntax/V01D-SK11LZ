@@ -3,7 +3,7 @@ name: agents
 description: "Six-persona build pipeline (PM, Architect, Coder, QA/Security, DevOps, Writer) with per-phase model, routes for small changes, an epic route for roadmaps, approval pauses, artifact handoff, and an off-route escalation advisor (Sven) for a persona that is stuck"
 when_to_use: "Use when you want the persona pipeline to build or change something end-to-end (Satria, Athena, Hexa, Dina, Frans, Vika). Trigger with /agents or a request ending in 'mulai pipeline'. Also to build one epic from specs/ROADMAP.md ('kerjakan E2', 'lanjut roadmap'). For single-persona help, call that persona directly."
 metadata:
-  version: "4.16.0"
+  version: "4.16.3"
 ---
 
 # 👥 PERSONA PIPELINE — SATRIA · ATHENA · HEXA · DINA · FRANS · VIKA
@@ -16,8 +16,8 @@ Six specialists run as a sequential, artifact-handoff pipeline. Each phase runs 
 |---|---------|------|-------|--------|-----------------|
 | 1 | **Satria** | Product Manager | Opus (medium; high for large/ambiguous) | anti-slop | `specs/PRD.md` |
 | 2 | **Athena** | System Architect | Sonnet (high) | ponytail, anti-slop (ADR format is in her skill) | `specs/ADR.md`, `specs/contracts.*`, conventions in `CLAUDE.md` |
-| 3 | **Hexa** | Feature Coder | Sonnet (high)* | ponytail, tdd; impeccable + anti-slop + uicheck for UI/copy | `src/*`, `tests/*` |
-| 4 | **Dina** | QA & Security | Sonnet (high)* | audit | `specs/AUDIT.md` + `STATUS:` |
+| 3 | **Hexa** | Feature Coder | Sonnet (high)* | ponytail, tdd; impeccable + anti-slop for UI/copy; uicheck when the page can be served | `src/*`, `tests/*` |
+| 4 | **Dina** | QA & Security | Sonnet (high)* | audit; uicheck for UI that Hexa could not render | `specs/AUDIT.md` + `STATUS:` |
 | 5 | **Frans** | Platform & DevOps | Sonnet (high) | ponytail | `Dockerfile`, `migrations/*`, `ci.yml` |
 | 6 | **Vika** | Technical Writer | Haiku (low)* | anti-slop | `docs/openapi.*`, `CHANGELOG.md`, README |
 | 7 | **Sven** | Escalation Advisor (off-route) | Opus (xhigh) | — | `specs/SVEN.md` + a `[CONSULT]` HANDOFF entry |
@@ -62,7 +62,7 @@ Rules that override the table:
 Your first tool call is the Write or Edit that appends the route to `specs/HANDOFF.md` (create it if missing), before any Agent call:
 
 ```markdown
-## [RUTE] orchestrator — <UTC time from date -u>
+## [ROUTE] orchestrator — <UTC time from date -u>
 Route: Hexa → Dina
 Reason: <one line>
 Scale: <PRIBADI | KLIEN | KLIEN (assumed)>
@@ -84,7 +84,7 @@ Ask with AskUserQuestion, with `<tipe>/<slug>` built from the route (new feature
 | KLIEN | **Buat `<tipe>/<slug>`** / **Nama lain** / **Stop** |
 | PRIBADI | **Buat `<tipe>/<slug>`** / **Tetap di `<branch>`** / **Nama lain** |
 
-On approval run `git switch -c <name>`; uncommitted changes come along. If the name exists, offer **Nama lain**. Then append a new entry (the `[RUTE]` entry is never edited):
+On approval run `git switch -c <name>`; uncommitted changes come along. If the name exists, offer **Nama lain**. Then append a new entry (the `[ROUTE]` entry is never edited):
 
 ```markdown
 ## [BRANCH] orchestrator — <UTC time from date -u>
@@ -136,7 +136,7 @@ Two cases run several agents at once. Put all their Agent calls in **one message
 2. **Frans and Vika**, when the route has both. Their outputs are disjoint and both read only what exists after the gate. Vika's prompt adds "Frans runs at the same time: do not document the Dockerfile, CI, or migrations". The final Dina pass (section 6) starts after both return.
 
 Rules for a parallel batch:
-- The agents do not write `specs/HANDOFF.md`: `Write` replaces the whole file, so two writers lose an entry. The same goes for the progress docs (`agents/progress.md`): each agent ends its reply with its ROADMAP row, and the orchestrator applies the rows. The prompt says "Do not write specs/HANDOFF.md. End your reply with your full HANDOFF entry" (this replaces the one-line reply). The orchestrator appends the entries one after another, in route order, then runs the phase check on the artifacts.
+- The agents do not write `specs/HANDOFF.md`: `Write` replaces the whole file, so two writers lose an entry. The same goes for the progress docs (`agents/progress.md`): each agent writes its ROADMAP row to `specs/.pending/<unit>.row`, a file of its own, and the orchestrator applies the rows and deletes them; the row never reaches `specs/HANDOFF.md`. The prompt says "Do not write specs/HANDOFF.md. Write your full HANDOFF entry to `specs/.pending/<unit>.md` and reply in at most 5 lines" (a full entry in the reply costs 3-5K tokens of orchestrator context each, and the orchestrator then has to paste it). The orchestrator checks the `Ponytail:`, `TDD:`, `UI:` and `Files:` lines with `Select-String` and appends each file to `specs/HANDOFF.md` one after another, in route order, without reading it into the conversation, then deletes the pending file and runs the phase check on the artifacts. `specs/.pending/` and `specs/.state.md` (the snapshot `handover.js` rewrites every turn) are in the project's `.gitignore`: the scaffold writes them, and an older project gets them added before the first parallel batch.
 - Print one `[FASE n/N]` line per agent before the batch, counting each agent as a phase.
 - After the batch compare `git status --short` with the owned files. A file written by two units, or outside its unit's list, stops the run: report it, do not merge by hand. This is the scope check for a parallel batch — the unit's owned list plays the role of the `Files:` line, so do not run the single-phase scope check on top of it.
 - The "Limit or error" rule applies per agent.
