@@ -43,6 +43,9 @@ pnpm-lock.yaml
 # Discarded skill copies (may include proprietary vendor skills)
 /.trash/
 
+# Local draft for the next project (h3x4 Router mockup); written by another session
+/h3x4-router-mockup/
+
 # Python bytecode
 __pycache__/
 *.pyc
