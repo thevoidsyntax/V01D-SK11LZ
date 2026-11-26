@@ -63,10 +63,13 @@ Blok `permissions.ask` wajib: `ask-on-git-push.js` hanya menolak push yang memak
 
 `permissions.deny` adalah lapisan defense-in-depth terpisah dari hook-hook di atas: menolak `Read`/`Edit`/`Write` pada `.env*` (kecuali `.env.example`, sengaja tidak masuk daftar) dan `.credentials.json` di mana pun lokasinya, berlaku lebih dulu daripada `allow`/`ask`/`defaultMode` dan tidak bisa dilewati. Ini hanya menutup jalur baca file lewat tool bawaan Claude Code (`Read`, dan `Bash` input-redirect `< .env` sejak Claude Code v2.1.257) — `Bash(cat .env)` dkk. tetap tidak ditutup karena deny rule untuk `Bash` cuma cocok teks literal, bukan batas keamanan sungguhan (lihat dokumentasi Claude Code sendiri).
 
+`skill-usage.py` **bukan hook**: laporan pemakaian skill dari transkrip (`python -I skill-usage.py [--days 30] [--all] [--out FILE]`). Menghitung panggilan tool `Skill` dan perintah `/x` yang diketik, di sesi utama dan subagen. Skill terpasang yang tidak pernah dipakai tampil paling atas; itu bahan keputusan memangkas skill. `--all` ikut menghitung nama yang bukan skill terpasang (perintah bawaan, skill yang sudah dihapus).
+
 ## Tes
 
 ```bash
 node --test "$HOME/.claude/skills/hooks/_tests/*.test.js"
+python -I -m unittest discover -s "$HOME/.claude/skills/hooks/_tests" -p "test_*.py"
 ```
 
-Tes menguji salinan di repo ini (`__dirname/..`), bukan salinan aktif di `~/.claude/hooks/` — path itu, bukan `~/.claude/hooks/_tests/`, yang sebenarnya ada. Node 22 butuh glob, bukan nama folder. 123 kasus (pipe test: JSON hook input, bukan perintah shell).
+Tes menguji salinan di repo ini (`__dirname/..`), bukan salinan aktif di `~/.claude/hooks/` — path itu, bukan `~/.claude/hooks/_tests/`, yang sebenarnya ada. Node 22 butuh glob, bukan nama folder. 139 kasus (pipe test: JSON hook input, bukan perintah shell).
