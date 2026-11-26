@@ -34,7 +34,7 @@ git -C $HOME\.claude\skills push
 > git -C $HOME\.claude\skills config user.email "323514556+thevoidsyntax@users.noreply.github.com"
 > ```
 
-## Isi (19 skill)
+## Isi (20 skill)
 
 Tiap subfolder level atas = satu skill (berisi `SKILL.md`).
 
@@ -57,6 +57,7 @@ Pendukung:
 /audit       Audit repo: tool dulu, review terarah, baseline inkremental (dipakai Dina)
 /ponytail    Tulis kode sesedikit mungkin: cek perlu, yang sudah ada, stdlib, native; edit harus surgical
 /tdd         Test-first: tulis test yang gagal dulu, catat bukti red → green
+/debug       Cari akar masalah sebelum memperbaiki: reproduksi, hipotesis berbukti, verifikasi dengan repro awal; berhenti setelah 3 perbaikan gagal
 /anti-slop   Teks tanpa gaya AI: copy UI, dokumentasi, komentar
 /impeccable  UI tanpa tampilan template AI: keputusan dari brief produk + checklist
 /uicheck     Verifikasi UI di browser sungguhan: overflow 360px, error konsol, label input, house style, jalur keyboard dan fokus

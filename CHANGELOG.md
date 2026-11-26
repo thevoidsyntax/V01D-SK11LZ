@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **`/debug` 1.0.0: root cause before any fix.** No skill covered a bug with an unknown cause, so fixes started from a guess. `/debug` requires a real repro with captured output, an isolation step, at most three hypotheses that each name what would prove them wrong, a fix at the cause with the repro kept as a `/tdd` test, and a rerun of the original repro plus the full suite. After three failed fixes it stops, lists what was ruled out, and asks (inside `/agents`: `Open: needs Sven`).
 - **`/rea` 1.0.0: an evidence method for targets without source.** Legacy mode assumed readable code; a compiled app, Android app, Electron bundle, or website had no process. `/rea` adds an authorization gate (own, open source, authorized, or interoperability/education/preservation work; basis, target, and purpose recorded as a HANDOFF `Authorization:` line), a scoped observation workflow that records where and how each finding was shown and runs traces only in a sandbox the user confirms, and a clean-room cut: `specs/LEGACY.md` carries `OBS-*` items with `Evidence:` lines and an `## Excluded` section (code, identifiers, UI copy, assets), while raw tool output stays in a scratch folder outside the repo. It targets the REA MCP server (`morluto/rea`), which the user installs; the skill never installs it and never invents its tool names.
 
 ### Changed
