@@ -1,6 +1,6 @@
 ---
 name: uicheck
-description: "Render a web UI in a real browser and report what markup review cannot: horizontal overflow at narrow widths, console errors, unlabelled inputs, images without alt, and with --a11y a Tab walk for keyboard reach and visible focus. Use when a UI change must be verified in the browser, not read in the source."
+description: "Render a web UI in a real browser; report overflow at narrow widths, console errors, unlabelled inputs, missing alt, and (--a11y) keyboard focus."
 when_to_use: "Use when UI work needs proof it renders: after building or changing a page, component, or layout; before handing UI to Dina; when /impeccable asks about 360px width, overflow, console errors, form accessibility, keyboard paths, or focus. Needs a running dev server or a static file path."
 metadata:
   version: "1.2.0"

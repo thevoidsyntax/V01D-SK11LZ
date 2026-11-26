@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - **Athena 3.13.0** invokes `/rea` in legacy mode when the target has no readable source; `athena/legacy.md` hands steps 1 to 4 to `/rea` and gains an optional `## Excluded` section.
 - **Dina 3.10.0** checks `/rea` output as a blocking finding: an `OBS-` item without `Evidence:`, a missing `## Excluded`, an `Authorization:` line missing a basis, target, or purpose, or a hit from the scratch folder's `probe.txt` in `src/`, `specs/`, or `docs/` (HIGH). The check runs every round while the HANDOFF carries `Authorization:`, not only when the diff touches `specs/LEGACY.md`. When the target cannot be compared, the entry says `clean-room: not measured` instead of passing.
+- **Shorter skill descriptions** for `/agents`, `/handover`, `/sven`, `/uicheck`: `description` trimmed to one short sentence; `when_to_use` and all triggers unchanged.
 
 ### Rollback
 - `git revert` the commit that added `/rea`: it touches `rea/`, `athena/`, `dina/`, `README.md`, `CLAUDE.md`, `global-CLAUDE.md`, and this file. The live `~/.claude/CLAUDE.md` is not in git: set it back to 18 skills and drop its `/rea` line by hand.
