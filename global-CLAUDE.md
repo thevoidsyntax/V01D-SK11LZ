@@ -84,6 +84,7 @@ feat: add login | fix: resolve bug | refactor: cleanup
 ```
 - Repo V01D-SK11LZ dan pipeline `/agents`: akhiri dengan `Co-Authored-By: <Persona>`. Repo lain: tanpa trailer. Tidak pernah `Co-Authored-By: Claude`.
 - Commit hanya setelah user setuju; push selalu minta approval (izin `ask` untuk `git push` + hook `ask-on-git-push` menolak push dengan opsi global git)
+- Pengecualian: konteks ≥150k (peringatan hook `handover.js`) → selesaikan langkah berjalan, commit pekerjaan yang ada, lalu `/handover`, tanpa bertanya. Syarat: hook commit lolos (ditolak → berhenti, tulis handover tanpa commit), bukan di `main`/`master`, trailer sesuai aturan di atas. Push tetap minta approval
 
 ### 7. Output Style
 - No boilerplate comments
