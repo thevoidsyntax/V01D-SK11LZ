@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.5.0] - 2026-11-26
+
+Adds `/debug` and `/rea`, makes the pre-commit checks and the 150k handover run on their own, and removes state `/autor` kept but did not own.
+
 ### Added
 - **`/debug` 1.0.0: root cause before any fix.** No skill covered a bug with an unknown cause, so fixes started from a guess. `/debug` requires a real repro with captured output, an isolation step, at most three hypotheses that each name what would prove them wrong, a fix at the cause with the repro kept as a `/tdd` test, and a rerun of the original repro plus the full suite. After three failed fixes it stops, lists what was ruled out, and asks (inside `/agents`: `Open: needs Sven`).
 - **`/rea` 1.0.0: an evidence method for targets without source.** Legacy mode assumed readable code; a compiled app, Android app, Electron bundle, or website had no process. `/rea` adds an authorization gate (own, open source, authorized, or interoperability/education/preservation work; basis, target, and purpose recorded as a HANDOFF `Authorization:` line), a scoped observation workflow that records where and how each finding was shown and runs traces only in a sandbox the user confirms, and a clean-room cut: `specs/LEGACY.md` carries `OBS-*` items with `Evidence:` lines and an `## Excluded` section (code, identifiers, UI copy, assets), while raw tool output stays in a scratch folder outside the repo. It targets the REA MCP server (`morluto/rea`), which the user installs; the skill never installs it and never invents its tool names.
@@ -26,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`sven-ask.js` failed a question when the daemon read the pending record at the wrong moment.** On Windows a rename over a file another process has open fails with EPERM. The hook writes the record twice (before and after `sendMessage`), and the second write failed if a reader held the file; the catch then deleted the record after the question was already on Telegram, so the owner saw buttons that did nothing and the caller got `unavailable`. The rename now retries on EPERM/EBUSY/EACCES for up to 1 s. This was the real cause of the flake that 4.4.1 blamed on the test harness (`the product code was never at fault` was wrong): it hit 2 of 6 full runs, always the first test; 10 of 10 pass now, with a regression test that holds the record open (135 hook tests).
 
 ### Rollback
+- No schema change. Go back to 4.4.1: `git checkout v4.4.1`, or `git revert v4.4.1..HEAD`. Hooks are copied by hand, so copy `hooks/*.js` from `v4.4.1` back to `~/.claude/hooks/`.
 - `git revert` the commit that fixes `sven-ask.js`: it touches `hooks/sven-ask.js`, `hooks/_tests/sven-ask.test.js`, and this file. The live copy in `~/.claude/hooks/` is not in git: copy the reverted file over it.
 - `git revert` the commit that added `/rea`: it touches `rea/`, `athena/`, `dina/`, `README.md`, `CLAUDE.md`, `global-CLAUDE.md`, and this file. The live `~/.claude/CLAUDE.md` is not in git: set it back to 18 skills and drop its `/rea` line by hand.
 
@@ -514,7 +519,8 @@ Found by the Sonnet harness run of this release:
 
 | Version | Status |
 |---------|--------|
-| 4.4.1 | Current |
+| 4.5.0 | Current |
+| 4.4.1 | Previous |
 | 4.4.0 | Previous |
 | 4.3.1 | Previous |
 | 4.3.0 | Previous |
