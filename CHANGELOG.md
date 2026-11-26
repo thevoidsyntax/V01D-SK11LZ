@@ -9,9 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - **`sven-ask.js` sent its question through the wrong bot, so button taps never arrived.** The hook read the bot token from the Telegram plugin's state dir, but since 2026-11-23 the plugin runs its own bot (`@h3x4_Advisor_bot`) and only the h3x4 daemon polls `@h3x4_daemon_bot`. The message showed up in Telegram, the tap went to a bot nobody read, and every question timed out. The hook now reads `TELEGRAM_BOT_TOKEN` from the daemon's `.env` (`H3X4_CORE_DIR`), keeps the chat id from the plugin's `access.json`, and waits 10 s instead of 5 s for the send. Checked end to end: a tap on A came back as `{"kind":"button","key":"A"}`. Test updated to assert the daemon token in the URL. 13 sven-ask tests pass.
+- **`sven-telegram-notify.js` moved to the daemon bot too, so Sven uses one bot.** It still sent decisions through the Telegram plugin's bot (`@h3x4_Advisor_bot`) while `sven-ask.js` used the daemon's, which left two bots for one advisor. `readToken()` now reads `TELEGRAM_BOT_TOKEN` from the daemon's `.env`, and `sven-ask.js` imports it instead of keeping its own copy. The plugin's `access.json` still supplies the chat id. The plugin bot is no longer used by any Sven hook. 139 hook tests pass; the notify test now plants a different token in the plugin's `.env` and asserts the daemon's reaches the URL.
 
 ### Rollback
-- No schema change. `git revert` the commit that fixes `sven-ask.js` (it touches `hooks/sven-ask.js`, `hooks/_tests/sven-ask.test.js`, `hooks/README.md`, and this file), then copy `hooks/sven-ask.js` back to `~/.claude/hooks/`.
+- No schema change. `git revert` the commits that touch `hooks/sven-ask.js` and `hooks/sven-telegram-notify.js` (with their tests, `hooks/README.md`, and this file), then copy both hooks back to `~/.claude/hooks/`.
 
 ## [4.5.0] - 2026-11-26
 

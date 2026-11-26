@@ -10,6 +10,7 @@ const path = require('path');
 const HOOK = path.join(__dirname, '..', 'sven-telegram-notify.js');
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'sven-tg-'));
 const stateDir = path.join(tmp, 'telegram');
+const coreDir = path.join(tmp, 'core');
 const logDir = path.join(tmp, 'logs');
 const received = [];
 let server;
@@ -17,7 +18,10 @@ let api;
 
 before(async () => {
   fs.mkdirSync(stateDir, { recursive: true });
-  fs.writeFileSync(path.join(stateDir, '.env'), 'TELEGRAM_BOT_TOKEN=123456:FAKE-token_abc\n');
+  // The plugin's own token must be ignored: the daemon's bot is the one that receives taps.
+  fs.writeFileSync(path.join(stateDir, '.env'), 'TELEGRAM_BOT_TOKEN=111111:PLUGIN-token_abc\n');
+  fs.mkdirSync(coreDir, { recursive: true });
+  fs.writeFileSync(path.join(coreDir, '.env'), 'OTHER=1\nTELEGRAM_BOT_TOKEN="123456:FAKE-token_abc"\n');
   fs.writeFileSync(path.join(stateDir, 'access.json'), JSON.stringify({ allowFrom: ['999'] }));
   server = http.createServer((req, res) => {
     let body = '';
@@ -36,7 +40,7 @@ function run(args, env = {}) {
   return new Promise((resolve) => {
     const t0 = Date.now();
     const p = spawn('node', [HOOK, ...args], {
-      env: { ...process.env, SVEN_TELEGRAM_DIR: stateDir, SVEN_LOG_DIR: logDir, SVEN_TELEGRAM_API: api, ...env },
+      env: { ...process.env, SVEN_TELEGRAM_DIR: stateDir, H3X4_CORE_DIR: coreDir, SVEN_LOG_DIR: logDir, SVEN_TELEGRAM_API: api, ...env },
       stdio: 'ignore',
     });
     p.on('exit', (code) => resolve({ code, ms: Date.now() - t0 }));
@@ -44,7 +48,7 @@ function run(args, env = {}) {
 }
 const logText = () => { try { return fs.readFileSync(path.join(logDir, 'sven-decisions.log'), 'utf8'); } catch { return ''; } };
 
-test('NEED_USER_DECISION is sent with token and chat id read from the plugin state', async () => {
+test('NEED_USER_DECISION is sent with the daemon token and the plugin chat id',async () => {
   const r = await run(['--verdict', 'NEED_USER_DECISION', '--title', 'Pick a DB', '--risk', 'lock-in']);
   assert.strictEqual(r.code, 0);
   assert.strictEqual(received.length, 1);

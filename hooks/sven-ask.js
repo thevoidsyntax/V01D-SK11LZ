@@ -23,7 +23,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const crypto = require('crypto');
-const { readChatId, clip, log } = require('./sven-telegram-notify.js');
+const { readToken, readChatId, clip, log } = require('./sven-telegram-notify.js');
 
 const PENDING_DIR = process.env.SVEN_PENDING_DIR || path.join(os.homedir(), '.claude', 'hooks', '.sven-pending');
 const CORE_DIR = process.env.H3X4_CORE_DIR || path.join(os.homedir(), '.h3x4-core');
@@ -55,14 +55,6 @@ function parseOptions(raw) {
     if (options.length === MAX_OPTIONS) break;
   }
   return options;
-}
-
-// The question must go out through the bot the daemon polls: the daemon only receives taps on its own
-// bot. The Telegram plugin runs a separate bot, so its token in channels/telegram/.env is the wrong one.
-function readDaemonToken() {
-  const env = fs.readFileSync(path.join(CORE_DIR, '.env'), 'utf8');
-  const m = /^\s*TELEGRAM_BOT_TOKEN\s*=\s*(.+?)\s*$/m.exec(env);
-  return m ? m[1].replace(/^["']|["']$/g, '') : '';
 }
 
 function emit(obj) { process.stdout.write(`${JSON.stringify(obj)}\n`); }
@@ -141,7 +133,7 @@ async function main() {
   let chatId;
   let messageId = null;
   try {
-    token = readDaemonToken();
+    token = readToken();
     chatId = readChatId();
     if (!token || !chatId) throw new Error('missing daemon bot token (daemon .env) or chat id (plugin access.json)');
     fs.mkdirSync(PENDING_DIR, { recursive: true });

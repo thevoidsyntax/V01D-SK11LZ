@@ -5,11 +5,12 @@
 //        --risk "..." --next "..."
 //
 // Verdict-only: APPROVED is logged but not sent. The same message is sent at most once per
-// DEDUPE_MS. Credentials are read at run time from the official Telegram plugin's state dir
-// (.env for TELEGRAM_BOT_TOKEN, access.json for the first allowFrom id); nothing is stored here.
+// DEDUPE_MS. Credentials are read at run time: TELEGRAM_BOT_TOKEN from the h3x4 daemon's .env
+// (~/.h3x4-core), the chat id (first allowFrom) from the Telegram plugin's access.json; nothing is
+// stored here.
 //
-// Switches: SVEN_TELEGRAM=off disables. Test overrides: SVEN_TELEGRAM_DIR, SVEN_TELEGRAM_API,
-// SVEN_LOG_DIR.
+// Switches: SVEN_TELEGRAM=off disables. Test overrides: H3X4_CORE_DIR, SVEN_TELEGRAM_DIR,
+// SVEN_TELEGRAM_API, SVEN_LOG_DIR.
 'use strict';
 
 const fs = require('fs');
@@ -18,6 +19,7 @@ const path = require('path');
 const crypto = require('crypto');
 
 const STATE_DIR = process.env.SVEN_TELEGRAM_DIR || path.join(os.homedir(), '.claude', 'channels', 'telegram');
+const CORE_DIR = process.env.H3X4_CORE_DIR || path.join(os.homedir(), '.h3x4-core');
 const LOG_DIR = process.env.SVEN_LOG_DIR || path.join(os.homedir(), '.claude', 'logs');
 const API = process.env.SVEN_TELEGRAM_API || 'https://api.telegram.org';
 const TIMEOUT_MS = 5000;
@@ -41,8 +43,10 @@ function parseArgs(argv) {
   return out;
 }
 
+// The bot is the h3x4 daemon's: it is the only poller, so taps on its buttons are received. The Telegram
+// plugin runs a separate bot; its token in STATE_DIR/.env is not used.
 function readToken() {
-  const env = fs.readFileSync(path.join(STATE_DIR, '.env'), 'utf8');
+  const env = fs.readFileSync(path.join(CORE_DIR, '.env'), 'utf8');
   const m = /^\s*TELEGRAM_BOT_TOKEN\s*=\s*(.+?)\s*$/m.exec(env);
   return m ? m[1].replace(/^["']|["']$/g, '') : '';
 }
@@ -92,7 +96,7 @@ async function main() {
   try {
     const token = readToken();
     const chatId = readChatId();
-    if (!token || !chatId) throw new Error('missing bot token or chat id in the Telegram plugin state dir');
+    if (!token || !chatId) throw new Error('missing bot token (daemon .env) or chat id (plugin access.json)');
     const res = await fetch(`${API}/bot${token}/sendMessage`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
