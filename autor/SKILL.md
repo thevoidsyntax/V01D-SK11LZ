@@ -3,32 +3,23 @@ name: autor
 description: "Project intelligence: health scan, new-project wizard, roadmap progress, release cutting, and the 6-persona pipeline recommendation"
 when_to_use: "Use when starting a new project, analyzing existing codebase, cutting a release, or needing project intelligence. Run /autor scan for project health check, /autor new for fresh projects, /autor release to cut a version."
 metadata:
-  version: "3.14.2"
+  version: "3.14.3"
 ---
 
-# AUTOR v3.14.2 - PROJECT INTELLIGENCE
+# AUTOR - PROJECT INTELLIGENCE
 
 ## 🚀 SKILLS
 
-Stack, security, testing, git, and docs knowledge come from the model itself plus the project's `CLAUDE.md` and `specs/`; there are no skills for them. Besides the personas, `/agents`, and `/audit`, only six skills exist, and each changes a default the model would otherwise get wrong:
-
-| Situation | Load |
-|-----------|------|
-| About to write new code | `/ponytail` |
-| Writing or changing behavior | `/tdd` |
-| Building or changing UI | `/impeccable` |
-| A UI change that must be proven in a browser | `/uicheck` |
-| Writing user-facing copy, docs, or comments | `/anti-slop` |
-| A plan or decision that must be stress-tested before it is built | `/fool` |
+Stack, security, testing, git, and docs knowledge come from the model itself plus the project's `CLAUDE.md` and `specs/`; there are no skills for them. `README.md` lists the skills and each skill's `when_to_use` says when to load it.
 
 Do not preload them; load one when the current step needs it.
 
 Graphify is not one of them: it is a local third-party tool installed outside this repo. When the project has `graphify-out/graph.json`, the scan uses it to map the codebase; when it does not, the scan skips it and never builds a graph.
 
-**On `/autor`, first respond with:**
+**On `/autor`, first respond with this banner, printing the version from this file's `metadata.version`:**
 
 ```
-AUTOR v3.14.2
+AUTOR v<metadata.version>
 
 Available Commands:
   /autor              # Analyze current project
@@ -86,17 +77,17 @@ For each issue, provide:
 
 End every analysis with a pipeline recommendation built from the findings. Recommend only; never start the pipeline without the user's go-ahead.
 
-| Finding | Persona |
-|---------|---------|
-| Requirements unclear, no PRD or acceptance criteria | `/satria` |
-| Architecture decision pending, no ADR, API/data contract undefined | `/athena` |
-| Code exists but was never written down (no PRD, ADR, or tests) | `/athena` in legacy mode, before `/hexa` |
-| Feature missing, no tests or low coverage | `/hexa` |
-| No audit yet, security or concurrency findings | `/dina` (gate) |
-| No CI/CD, Dockerfile, or migrations where the project needs them | `/frans` |
-| README, CHANGELOG, or API docs missing or stale | `/vika` |
+`/agents` section 1 owns the routes and the scale rules; do not restate them here. Map each finding to the change type that section keys on, then take its route:
 
-Keep the order Satria → Athena → Hexa → Dina → Frans → Vika, skip personas with no matching finding, and skip Satria/Athena when an approved plan already covers PRD and ADR. Apply the route rules from `/agents`: a contract or schema change adds Athena, a migration adds Frans, and any code change keeps Dina. When `specs/ROADMAP.md` exists and the next epic has a PRD, the epic route applies instead (KLIEN: Athena → Hexa → Dina → Frans → Vika; PRIBADI: Hexa → Dina, plus the phases the findings add). Output one block:
+- Requirements unclear, no PRD or acceptance criteria: new feature
+- Code exists but was never written down (no PRD, ADR, or tests): existing codebase with no spec (legacy)
+- Feature missing, no tests or low coverage: new feature, or change to an existing feature
+- Failing behavior: bugfix
+- No CI/CD, Dockerfile, or migrations where the project needs them: infra
+- README, CHANGELOG, or API docs missing or stale: docs only
+- `specs/ROADMAP.md` exists and the next epic has a PRD: `/agents epic`
+
+When findings span several types, name the longest route and list each persona with the finding that put it there. Output one block:
 
 ```text
 PIPELINE: Hexa → Dina → Vika
@@ -169,4 +160,4 @@ The epic route is `/agents epic`: one epic per run (KLIEN: Athena → Hexa → D
 
 ## Pipeline
 
-`/agents` runs the six personas (Satria → Athena → Hexa → Dina → Frans → Vika) and picks the shortest route; models, pauses, and the gate loop are defined in `agents/SKILL.md`.
+`/agents` runs the six personas and picks the shortest route; models, pauses, and the gate loop are defined in `agents/SKILL.md`.
