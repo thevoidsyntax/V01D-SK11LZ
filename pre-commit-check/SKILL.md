@@ -42,6 +42,10 @@ fi
 # 7. skrip di folder skill harus sintaksnya benar (shell dan python)
 for f in $(git ls-files 'agents/*.sh' 'dina/*.sh'); do bash -n "$f" || echo "$f: shell syntax error"; done
 for f in $(git ls-files 'dina/*.py'); do python -c 'import ast,sys;ast.parse(open(sys.argv[1],encoding="utf-8").read())' "$f" || echo "$f: python syntax error"; done
+# 8. hook aktif di ~/.claude/hooks harus sama dengan sumbernya di hooks/ (hook yang belum dipasang dilewati; tanpa folder aktif dilewati)
+if [ -d "$HOME/.claude/hooks" ]; then
+  for f in $(git ls-files 'hooks/*.js'); do b=${f##*/}; [ -f "$HOME/.claude/hooks/$b" ] || continue; cmp -s "$f" "$HOME/.claude/hooks/$b" || echo "live hook differs from $f - diff -u both; commit the newer side to the repo first, then copy repo to live"; done
+fi
 ```
 
 Lalu cek manual yang tidak bisa di-grep:

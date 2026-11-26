@@ -45,9 +45,21 @@ function log(line) {
 
 const SQL_DESTRUCTIVE = /\b(drop\s+(table|database|schema)|truncate\s+table)\b/i;
 
-function classifyCommand(inv) {
+// Package runners execute another program: `npx prisma migrate reset` is `prisma migrate reset`.
+function unwrapRunner(name, args) {
+  let rest;
+  if (['npx', 'pnpx', 'bunx'].includes(name)) rest = args;
+  else if (['npm', 'pnpm', 'yarn', 'bun'].includes(name) && ['exec', 'dlx', 'x'].includes(String(args[0]).toLowerCase())) rest = args.slice(1);
+  else return null;
+  const i = rest.findIndex((x) => !String(x).startsWith('-'));
+  return i === -1 ? null : { name: String(rest[i]), args: rest.slice(i + 1) };
+}
+
+function classifyCommand(inv, depth = 0) {
   const name = inv.name;
   const args = inv.args;
+  const inner = depth < 3 ? unwrapRunner(name, args) : null;
+  if (inner) return classifyCommand(inner, depth + 1);
   const a = args.map((x) => String(x).toLowerCase());
 
   if (['npm', 'pnpm', 'yarn', 'bun'].includes(name) && a[0] === 'publish') {

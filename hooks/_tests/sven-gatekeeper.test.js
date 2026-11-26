@@ -68,6 +68,26 @@ test('irreversible commands are denied with an ActionHash', () => {
   }
 });
 
+test('a package runner is looked through: npx prisma migrate reset is prisma migrate reset', () => {
+  for (const cmd of [
+    'npx prisma migrate reset',
+    'npx --yes prisma migrate reset --force',
+    'pnpx prisma migrate reset',
+    'bunx prisma migrate reset',
+    'pnpm dlx prisma migrate reset',
+    'npm exec -- prisma migrate reset',
+    'yarn dlx vercel --prod',
+    'npx npm publish',
+  ]) {
+    const r = run(bash(cmd));
+    assert.strictEqual(decision(r), 'deny', cmd);
+    assert.match(r.json.hookSpecificOutput.permissionDecisionReason, /ActionHash: [0-9a-f]{64}/, cmd);
+  }
+  for (const cmd of ['npx prettier --write .', 'npx', 'npm exec', 'pnpm dlx create-vite', 'npx --yes']) {
+    assert(silent(run(bash(cmd))), cmd);
+  }
+});
+
 test('a mention inside a quoted string is prose, not a command', () => {
   assert(silent(run(bash('echo "npm publish"'))));
   assert(silent(run(bash('git commit -m "docker compose down -v docs"'))));
