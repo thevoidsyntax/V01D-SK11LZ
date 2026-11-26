@@ -7,6 +7,7 @@ Hook Claude Code untuk user-level (`~/.claude/hooks/`). Repo ini menyimpan sumbe
 | `cache-guard.js` | `UserPromptSubmit` | Menandai prompt sebagai cache miss ketika konteks besar atau model berganti, supaya biayanya tidak disamarkan sebagai prompt murah |
 | `ask-on-git-push.js` | `PreToolUse` (Bash\|PowerShell) | Menolak `git push` yang memakai opsi global (`-C`, `-c`, `--git-dir`) dan meminta `git push` biasa |
 | `changelog-on-commit.js` | `PreToolUse` (Bash\|PowerShell) | Menolak commit `feat`/`fix`/breaking tanpa `CHANGELOG.md`, dan commit yang menyentuh Dockerfile, compose, atau `migrations/` |
+| `pre-commit-check-on-commit.js` | `PreToolUse` (Bash\|PowerShell) | Sebelum `git commit` di repo yang punya `pre-commit-check/SKILL.md`, menjalankan blok bash skill itu dari root repo dan menolak commit kalau ada output selain baris `warning:`. Fail-open (tanpa bash, timeout 30 detik, atau SKILL.md tanpa blok). Lepas dengan `PRECOMMIT_CHECK=off` di perintah commit atau di env |
 | `destructive-guard.js` | `PreToolUse` (Bash\|PowerShell) | Minta konfirmasi untuk `git reset --hard`, `git clean -f`, `git branch -D`, `git checkout --`/`git restore` yang membuang perubahan worktree, `gh repo delete`, `rm -rf`, dan setara PowerShell-nya (`Remove-Item`/`ri`/`rd`/... `-Recurse -Force`); menolak kalau dibungkus opsi global git (`-C`, `-c`, ...) yang bisa diam-diam mengganti target |
 | `gitleaks-guard.js` | `PreToolUse` (Bash\|PowerShell) | Menjalankan `gitleaks protect --staged` sebelum `git commit`; menolak commit kalau ketemu secret, fail-open kalau gitleaks tidak terpasang atau errornya bukan temuan leak |
 | `claude-resume-on-sessionstart.js` | `SessionStart` (matcher `compact`) | Setelah context di-compact, kasih tahu sesi baru file resume mana yang harus diupdate: `specs/RESUME.md` kalau proyek pakai konvensi pipeline `/agents`, kalau tidak `RESUME.md` di root proyek |
@@ -34,6 +35,7 @@ Salin ke `~/.claude/hooks/`, lalu daftarkan di `~/.claude/settings.json`:
       { "matcher": "Bash|PowerShell", "hooks": [
         { "type": "command", "command": "node ~/.claude/hooks/ask-on-git-push.js" },
         { "type": "command", "command": "node ~/.claude/hooks/changelog-on-commit.js" },
+        { "type": "command", "command": "node ~/.claude/hooks/pre-commit-check-on-commit.js" },
         { "type": "command", "command": "node ~/.claude/hooks/destructive-guard.js" },
         { "type": "command", "command": "node ~/.claude/hooks/gitleaks-guard.js" }
       ]}
