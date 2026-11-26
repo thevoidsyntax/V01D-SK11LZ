@@ -139,3 +139,35 @@ test('garbage on stdin never fails the hook', () => {
   assert.strictEqual(r.status, 0);
   assert.strictEqual(r.stdout.trim(), '');
 });
+
+// Stop at >= 150k: one forced turn that commits and hands over (global CLAUDE.md §6).
+function forced(name, tokens, env = {}, extra = {}) {
+  const p = project(name, { transcript: [assistant(tokens)] });
+  const stateDir = path.join(root, `${name}-state`);
+  const payload = { hook_event_name: 'Stop', cwd: p.dir, transcript_path: p.transcriptPath, session_id: `s-${name}`, ...extra };
+  const go = () => run(payload, { HANDOVER_STATE_DIR: stateDir, ...env });
+  return { go, stateDir };
+}
+
+test('Stop over the threshold blocks once and tells Claude to commit and hand over', () => {
+  const { go } = forced('force', 160000);
+  const first = go();
+  assert.strictEqual(first.status, 0);
+  const out = JSON.parse(first.out);
+  assert.strictEqual(out.decision, 'block');
+  assert.match(out.reason, /160000/);
+  assert.match(out.reason, /\/handover/);
+  assert.match(out.reason, /commit/i);
+  assert.strictEqual(go().out.trim(), '');
+});
+
+test('Stop under the threshold, with the switch off, or while a stop hook runs does not block', () => {
+  assert.strictEqual(forced('small', 100000).go().out.trim(), '');
+  assert.strictEqual(forced('off', 160000, { HANDOVER_FORCE: 'off' }).go().out.trim(), '');
+  assert.strictEqual(forced('active', 160000, {}, { stop_hook_active: true }).go().out.trim(), '');
+});
+
+test('Stop without a session id never blocks', () => {
+  const { go } = forced('nosession', 160000, {}, { session_id: undefined });
+  assert.strictEqual(go().out.trim(), '');
+});

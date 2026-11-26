@@ -165,12 +165,37 @@ function snapshot(cwd, transcriptPath) {
   return { body, target, ctx };
 }
 
+// Past the threshold, the first Stop of a session blocks once: Claude gets one more turn to commit
+// and write the handover (global CLAUDE.md §6). A marker per session id keeps it from looping;
+// stop_hook_active is honoured as well. HANDOVER_FORCE=off disables.
+function forceHandover(payload, ctx) {
+  if (process.env.HANDOVER_FORCE === 'off' || payload.stop_hook_active) return;
+  if (ctx.tokens <= CONTEXT_WARN || !payload.session_id) return;
+  const dir = process.env.HANDOVER_STATE_DIR || path.join(os.homedir(), '.claude', 'state');
+  const marker = path.join(dir, `.forced-${String(payload.session_id).replace(/[^\w-]/g, '_')}`);
+  if (fs.existsSync(marker)) return;
+  try {
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(marker, new Date().toISOString());
+  } catch { return; } // no marker, no block: a loop is worse than a missed nudge
+  process.stdout.write(JSON.stringify({
+    decision: 'block',
+    reason: [
+      `Context ${ctx.tokens} token, di atas ambang ${CONTEXT_WARN}. Aturan §6, tanpa bertanya:`,
+      '1. Commit pekerjaan yang ada, hanya jika hook commit lolos, branch bukan main/master, dan trailer sesuai aturan. Ditolak: berhenti, jangan commit.',
+      '2. Jalankan /handover.',
+      '3. Jangan push. Setelah itu berhenti dan sarankan /clear.',
+    ].join('\n'),
+  }));
+}
+
 const input = readStdin().then((payload) => {
   const event = payload.hook_event_name || '';
   const cwd = payload.cwd || process.cwd();
 
   if (event === 'Stop') {
-    snapshot(cwd, payload.transcript_path);
+    const { ctx } = snapshot(cwd, payload.transcript_path);
+    forceHandover(payload, ctx);
     return;
   }
 
