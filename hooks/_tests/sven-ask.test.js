@@ -47,6 +47,8 @@ beforeEach(() => {
   fs.rmSync(coreDir, { recursive: true, force: true });
   fs.mkdirSync(coreDir, { recursive: true });
   fs.writeFileSync(path.join(coreDir, 'daemon.marker'), String(process.pid));
+  // The daemon polls its own bot; the plugin's token (stateDir/.env) belongs to another bot.
+  fs.writeFileSync(path.join(coreDir, '.env'), 'OTHER=1\nTELEGRAM_BOT_TOKEN="654321:DAEMON-token_xyz"\n');
 });
 
 function start(args, env = {}) {
@@ -92,7 +94,8 @@ test('a question goes out with buttons and the button answer comes back', async 
   assert.strictEqual(pending.message_id, 321);
   assert.deepStrictEqual(pending.options, [{ key: 'A', label: 'rollback dulu' }, { key: 'B', label: 'lanjut' }]);
   const sent = calls('sendMessage')[0];
-  assert.strictEqual(received[0].url, '/bot123456:FAKE-token_abc/sendMessage');
+  // Sent through the daemon's bot, the only one whose button taps the daemon receives.
+  assert.strictEqual(received[0].url, '/bot654321:DAEMON-token_xyz/sendMessage');
   assert.strictEqual(sent.body.chat_id, '999');
   assert.match(sent.body.text, /Gate A atau B\?/);
   assert.match(sent.body.text, /balas pesan ini/);

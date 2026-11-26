@@ -12,8 +12,8 @@
 //   {"kind":"unavailable","reason"}         the daemon is not running, the send failed, or it is off
 //   {"kind":"invalid","reason"}             no title
 //
-// On timeout, unavailable or invalid the caller asks in the terminal instead. Credentials come from
-// the Telegram plugin's state dir, like sven-telegram-notify.js; the token must be the daemon's.
+// On timeout, unavailable or invalid the caller asks in the terminal instead. The bot token comes from
+// the daemon's own .env (it polls that bot), the chat id from the Telegram plugin's access.json.
 //
 // Switches: SVEN_TELEGRAM=off disables. Test overrides: SVEN_PENDING_DIR, H3X4_CORE_DIR,
 // SVEN_TELEGRAM_DIR, SVEN_TELEGRAM_API, SVEN_LOG_DIR, SVEN_ASK_POLL_MS.
@@ -23,13 +23,13 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const crypto = require('crypto');
-const { readToken, readChatId, clip, log } = require('./sven-telegram-notify.js');
+const { readChatId, clip, log } = require('./sven-telegram-notify.js');
 
 const PENDING_DIR = process.env.SVEN_PENDING_DIR || path.join(os.homedir(), '.claude', 'hooks', '.sven-pending');
 const CORE_DIR = process.env.H3X4_CORE_DIR || path.join(os.homedir(), '.h3x4-core');
 const API = process.env.SVEN_TELEGRAM_API || 'https://api.telegram.org';
 const POLL_MS = Number(process.env.SVEN_ASK_POLL_MS) || 2000;
-const SEND_TIMEOUT_MS = 5000;
+const SEND_TIMEOUT_MS = 10000;
 const DEFAULT_TIMEOUT_S = 600;
 const MAX_TIMEOUT_S = 3600;
 const MAX_OPTIONS = 6;
@@ -55,6 +55,14 @@ function parseOptions(raw) {
     if (options.length === MAX_OPTIONS) break;
   }
   return options;
+}
+
+// The question must go out through the bot the daemon polls: the daemon only receives taps on its own
+// bot. The Telegram plugin runs a separate bot, so its token in channels/telegram/.env is the wrong one.
+function readDaemonToken() {
+  const env = fs.readFileSync(path.join(CORE_DIR, '.env'), 'utf8');
+  const m = /^\s*TELEGRAM_BOT_TOKEN\s*=\s*(.+?)\s*$/m.exec(env);
+  return m ? m[1].replace(/^["']|["']$/g, '') : '';
 }
 
 function emit(obj) { process.stdout.write(`${JSON.stringify(obj)}\n`); }
@@ -133,9 +141,9 @@ async function main() {
   let chatId;
   let messageId = null;
   try {
-    token = readToken();
+    token = readDaemonToken();
     chatId = readChatId();
-    if (!token || !chatId) throw new Error('missing bot token or chat id in the Telegram plugin state dir');
+    if (!token || !chatId) throw new Error('missing daemon bot token (daemon .env) or chat id (plugin access.json)');
     fs.mkdirSync(PENDING_DIR, { recursive: true });
     // The record exists before the message does: a tap that beats this script finds the question.
     await writePending(file, record);
