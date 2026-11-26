@@ -18,7 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Dina 3.10.0** checks `/rea` output as a blocking finding: an `OBS-` item without `Evidence:`, a missing `## Excluded`, an `Authorization:` line missing a basis, target, or purpose, or a hit from the scratch folder's `probe.txt` in `src/`, `specs/`, or `docs/` (HIGH). The check runs every round while the HANDOFF carries `Authorization:`, not only when the diff touches `specs/LEGACY.md`. When the target cannot be compared, the entry says `clean-room: not measured` instead of passing.
 - **Shorter skill descriptions** for `/agents`, `/handover`, `/sven`, `/uicheck`: `description` trimmed to one short sentence; `when_to_use` and all triggers unchanged.
 
+### Fixed
+- **`sven-ask.js` failed a question when the daemon read the pending record at the wrong moment.** On Windows a rename over a file another process has open fails with EPERM. The hook writes the record twice (before and after `sendMessage`), and the second write failed if a reader held the file; the catch then deleted the record after the question was already on Telegram, so the owner saw buttons that did nothing and the caller got `unavailable`. The rename now retries on EPERM/EBUSY/EACCES for up to 1 s. This was the real cause of the flake that 4.4.1 blamed on the test harness (`the product code was never at fault` was wrong): it hit 2 of 6 full runs, always the first test; 10 of 10 pass now, with a regression test that holds the record open (135 hook tests).
+
 ### Rollback
+- `git revert` the commit that fixes `sven-ask.js`: it touches `hooks/sven-ask.js`, `hooks/_tests/sven-ask.test.js`, and this file. The live copy in `~/.claude/hooks/` is not in git: copy the reverted file over it.
 - `git revert` the commit that added `/rea`: it touches `rea/`, `athena/`, `dina/`, `README.md`, `CLAUDE.md`, `global-CLAUDE.md`, and this file. The live `~/.claude/CLAUDE.md` is not in git: set it back to 18 skills and drop its `/rea` line by hand.
 
 ## [4.4.1] - 2026-11-25

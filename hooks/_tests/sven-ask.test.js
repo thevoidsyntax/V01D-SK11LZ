@@ -15,6 +15,7 @@ const logDir = path.join(tmp, 'logs');
 const pendingDir = path.join(tmp, 'pending');
 const coreDir = path.join(tmp, 'core');
 let received = [];
+let sendDelayMs = 0;
 let server;
 let api;
 const keepAlive = [];
@@ -28,7 +29,7 @@ before(async () => {
     req.on('data', (c) => { body += c; });
     req.on('end', () => {
       received.push({ url: req.url, body: JSON.parse(body) });
-      res.end(JSON.stringify({ ok: true, result: { message_id: 321 } }));
+      setTimeout(() => res.end(JSON.stringify({ ok: true, result: { message_id: 321 } })), sendDelayMs);
     });
   });
   await new Promise((r) => server.listen(0, '127.0.0.1', r));
@@ -41,6 +42,7 @@ after(() => {
 });
 beforeEach(() => {
   received = [];
+  sendDelayMs = 0;
   fs.rmSync(pendingDir, { recursive: true, force: true });
   fs.rmSync(coreDir, { recursive: true, force: true });
   fs.mkdirSync(coreDir, { recursive: true });
@@ -102,6 +104,21 @@ test('a question goes out with buttons and the button answer comes back', async 
   assert.strictEqual(r.code, 0);
   assert.deepStrictEqual(JSON.parse(r.out), { id: pending.id, kind: 'button', key: 'B', answer: 'lanjut' });
   assert.deepStrictEqual(fs.readdirSync(pendingDir), []);
+});
+
+// On Windows a rename over a file another process has open fails with EPERM. The daemon (and the
+// test's own polling) reads the pending record while the hook rewrites it with the message id.
+test('a reader holding the pending record open does not make the question fail', async () => {
+  sendDelayMs = 200;
+  const { done } = start(['--title', 'Dibaca daemon', '--options', 'A=ya;B=tidak']);
+  const name = await waitFor(pendingFile);
+  const fd = fs.openSync(path.join(pendingDir, name), 'r');
+  const release = sleep(350).then(() => fs.closeSync(fd));
+  const pending = await readPending();
+  await release;
+  assert.strictEqual(pending.message_id, 321);
+  answer(pending.id, { kind: 'button', key: 'A', answer: 'ya' });
+  assert.deepStrictEqual(JSON.parse((await done).out), { id: pending.id, kind: 'button', key: 'A', answer: 'ya' });
 });
 
 test('a text answer comes back and the buttons are taken off the message', async () => {

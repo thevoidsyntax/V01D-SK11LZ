@@ -82,10 +82,21 @@ function scrub(err) {
   return String(err && err.message ? err.message : err).replace(/bot[0-9]+:[A-Za-z0-9_-]+/g, 'bot<redacted>');
 }
 
-function writePending(file, data) {
+// On Windows a rename over a file another process has open fails with EPERM/EBUSY/EACCES until
+// the reader (the daemon) lets go; that is a lock, not a failure, so wait for it for up to 1 s.
+const LOCK_CODES = new Set(['EPERM', 'EBUSY', 'EACCES']);
+const RENAME_TRIES = 40;
+const RENAME_WAIT_MS = 25;
+
+async function writePending(file, data) {
   const tmp = `${file}.tmp`;
   fs.writeFileSync(tmp, JSON.stringify(data));
-  fs.renameSync(tmp, file);
+  for (let attempt = 1; ; attempt++) {
+    try { return fs.renameSync(tmp, file); } catch (err) {
+      if (!LOCK_CODES.has(err.code) || attempt === RENAME_TRIES) throw err;
+      await new Promise((r) => setTimeout(r, RENAME_WAIT_MS));
+    }
+  }
 }
 
 function cleanup(id) {
@@ -127,7 +138,7 @@ async function main() {
     if (!token || !chatId) throw new Error('missing bot token or chat id in the Telegram plugin state dir');
     fs.mkdirSync(PENDING_DIR, { recursive: true });
     // The record exists before the message does: a tap that beats this script finds the question.
-    writePending(file, record);
+    await writePending(file, record);
     const text = ['Sven butuh keputusanmu', title, ...options.map((o) => `${o.key} · ${o.label}`), '', 'Pilih tombol, atau balas pesan ini.'].join('\n');
     const body = { chat_id: chatId, text };
     if (options.length) {
@@ -136,7 +147,7 @@ async function main() {
     const sent = await telegram('sendMessage', token, body);
     messageId = sent && sent.result && sent.result.message_id;
     if (!messageId) throw new Error('Telegram gave no message id');
-    writePending(file, { ...record, message_id: messageId });
+    await writePending(file, { ...record, message_id: messageId });
   } catch (err) {
     cleanup(id);
     log(`ask: send failed :: ${scrub(err)}`);
