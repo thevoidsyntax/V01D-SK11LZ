@@ -23,7 +23,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const crypto = require('crypto');
-const { spawn } = require('child_process');
+const { spawn, spawnSync } = require('child_process');
 const { scanCode } = require('./destructive-guard.js');
 
 const HOOKS_DIR = process.env.SVEN_HOOKS_DIR || path.join(os.homedir(), '.claude', 'hooks');
@@ -208,6 +208,44 @@ function notify(args) {
   } catch {}
 }
 
+// A single-select question with 2-4 options goes to Telegram as buttons through sven-ask.js, and the
+// hook waits for the tap. The tool call is then denied with the answer as the reason: a hook cannot
+// fill in the tool's own answer, but the model reads the reason and continues from it. Returns null
+// when the question does not qualify, otherwise sven-ask's JSON plus `answer` (the deny reason) when
+// the owner answered. SVEN_ASK_WAIT=0 turns the wait off; the terminal question then runs as before.
+const ASK = path.join(HOOKS_DIR, 'sven-ask.js');
+const ASK_KEYS = ['A', 'B', 'C', 'D'];
+
+function askOnTelegram(qs) {
+  const wait = Number(process.env.SVEN_ASK_WAIT ?? 120);
+  const q = qs.length === 1 ? qs[0] : null;
+  const opts = Array.isArray(q?.options) ? q.options : [];
+  if (!(wait > 0) || process.env.SVEN_TELEGRAM === 'off' || !fs.existsSync(ASK)) return null;
+  if (!q.question || q.multiSelect || opts.length < 2 || opts.length > ASK_KEYS.length) return null;
+
+  const labels = opts.map((o) => String(o?.label || '').replace(/;/g, ','));
+  if (labels.some((l) => !l)) return null;
+  const r = spawnSync(process.execPath, [
+    ASK, '--title', String(q.question), '--timeout', String(wait),
+    '--options', labels.map((l, i) => `${ASK_KEYS[i]}=${l}`).join(';'),
+  ], { encoding: 'utf8', timeout: (wait + 30) * 1000, windowsHide: true });
+
+  let res = null;
+  try { res = JSON.parse(String(r.stdout || '').trim().split('\n').pop()); } catch {}
+  if (!res) return { kind: 'unavailable' };
+
+  const where = q.header ? ` (${q.header})` : '';
+  if (res.kind === 'button') {
+    const i = ASK_KEYS.indexOf(res.key);
+    if (i < 0) return { kind: 'unavailable' };
+    return { ...res, answer: `The user answered this question on Telegram${where}: "${opts[i].label}". Treat that as their answer and continue; do not ask it again.` };
+  }
+  if (res.kind === 'text') {
+    return { ...res, answer: `The user replied on Telegram${where} instead of choosing a button: "${String(res.answer || '').slice(0, 500)}". Treat that as their answer (Other) and continue; do not ask it again.` };
+  }
+  return res;
+}
+
 // --------------------------------------------------------------- output
 
 function emit(obj) {
@@ -241,8 +279,21 @@ function handle(input) {
     const qs = Array.isArray(input.tool_input?.questions) ? input.tool_input.questions : [];
     const heads = qs.map((q) => q?.header || q?.question || '').filter(Boolean).join(' | ');
     log(`question ${heads}`);
-    notify(['--verdict', 'NEED_USER_DECISION', '--title', 'Decision needed', '--domain', 'Decision', '--risk', heads.slice(0, 300), '--next', 'Waiting for your answer']);
-    if (dry) return;
+    if (dry) {
+      notify(['--verdict', 'NEED_USER_DECISION', '--title', 'Decision needed', '--domain', 'Decision', '--risk', heads.slice(0, 300), '--next', 'Waiting for your answer']);
+      return;
+    }
+    const asked = askOnTelegram(qs);
+    if (asked && asked.answer) {
+      log(`question answered on Telegram (${asked.kind})`);
+      decide('deny', asked.answer);
+      return;
+    }
+    // Not answered on Telegram: the question is asked in the terminal. A question the bot never
+    // got (several questions, multi-select, daemon down) still gets the one-way ping.
+    if (!asked || asked.kind === 'unavailable') {
+      notify(['--verdict', 'NEED_USER_DECISION', '--title', 'Decision needed', '--domain', 'Decision', '--risk', heads.slice(0, 300), '--next', 'Waiting for your answer']);
+    }
     emit({
       hookSpecificOutput: {
         hookEventName: 'PreToolUse',

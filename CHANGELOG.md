@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **`AskUserQuestion` can be answered from Telegram.** The gatekeeper only pinged the bot, so the owner read the question there but had to walk to the terminal to answer it. A single question with one choice and 2-4 options now goes out through `sven-ask.js` as buttons, and the hook waits for the tap (120 s, `SVEN_ASK_WAIT` seconds, `0` turns it off). A tap or a text reply denies the tool call with the answer as the reason, because a hook cannot fill in the tool's own answer; the model reads the reason and continues from it. No answer, a stopped daemon, several questions, or multi-select fall back to the terminal question as before. 4 gatekeeper tests added against a stand-in `sven-ask.js`.
+
 ## [4.5.1] - 2026-11-26
 
 Sven now asks and notifies through one Telegram bot, the h3x4 daemon's, so button taps reach the hook that waits for them.

@@ -157,6 +157,49 @@ test('AskUserQuestion gets Sven framing and is not blocked', () => {
   assert.strictEqual(decision(r), null);
 });
 
+// A stand-in for sven-ask.js: prints FAKE_ASK and records its arguments.
+const ARGS_LOG = path.join(tmp, 'ask-args.json');
+function fakeAsk(json) {
+  fs.writeFileSync(path.join(tmp, 'sven-ask.js'),
+    `require('fs').writeFileSync(${JSON.stringify(ARGS_LOG)}, JSON.stringify(process.argv.slice(2)));` +
+    `process.stdout.write(${JSON.stringify(JSON.stringify(json))} + '\\n');`);
+  fs.rmSync(ARGS_LOG, { force: true });
+}
+const ask = (q, env = {}) => run({ session_id: 's1', tool_name: 'AskUserQuestion', tool_input: { questions: [q] } }, { SVEN_TELEGRAM: '', ...env });
+const choice = { header: 'Push', question: 'Push now?', options: [{ label: 'Push (Recommended)' }, { label: 'Not now; later' }] };
+
+test('a Telegram button tap answers AskUserQuestion: the call is denied with the answer', () => {
+  fakeAsk({ id: 'x', kind: 'button', key: 'B', answer: 'Not now, later' });
+  const r = ask(choice);
+  assert.strictEqual(decision(r), 'deny');
+  assert.match(r.json.hookSpecificOutput.permissionDecisionReason, /answered this question on Telegram \(Push\): "Not now; later"/);
+  assert.deepStrictEqual(JSON.parse(fs.readFileSync(ARGS_LOG, 'utf8')).slice(-2), ['--options', 'A=Push (Recommended);B=Not now, later']);
+});
+
+test('a Telegram text reply is passed on as the answer', () => {
+  fakeAsk({ id: 'x', kind: 'text', answer: 'tunggu besok' });
+  const r = ask(choice);
+  assert.strictEqual(decision(r), 'deny');
+  assert.match(r.json.hookSpecificOutput.permissionDecisionReason, /tunggu besok/);
+});
+
+test('timeout falls back to the terminal question', () => {
+  fakeAsk({ id: 'x', kind: 'timeout' });
+  const r = ask(choice);
+  assert.strictEqual(decision(r), null);
+  assert.match(r.json.hookSpecificOutput.additionalContext, /Sven/);
+});
+
+test('questions that cannot be buttons skip the wait', () => {
+  fakeAsk({ id: 'x', kind: 'button', key: 'A', answer: 'x' });
+  assert.strictEqual(decision(ask({ ...choice, multiSelect: true })), null);
+  assert.strictEqual(decision(ask({ ...choice, options: [{ label: 'only one' }] })), null);
+  assert.strictEqual(decision(ask(choice, { SVEN_ASK_WAIT: '0' })), null);
+  assert.strictEqual(decision(ask(choice, { SVEN_TELEGRAM: 'off' })), null);
+  const two = run({ session_id: 's1', tool_name: 'AskUserQuestion', tool_input: { questions: [choice, choice] } }, { SVEN_TELEGRAM: '' });
+  assert.strictEqual(decision(two), null);
+});
+
 test('kill switch and dry run never block', () => {
   assert(silent(run(bash('npm publish'), { SVEN_ADVISOR: 'off' })));
   assert(silent(run(bash('npm publish'), { SVEN_GATEKEEPER: 'dryrun' })));
